@@ -1,0 +1,49 @@
+Data license: Creative Commons Attribution 4.0 International (CC BY 4.0)
+============================================================================
+
+The DATA files in this repository (the contents of the data/ directory) are
+licensed under the Creative Commons Attribution 4.0 International License.
+
+  Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+  Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+You are free to:
+  - Share: copy and redistribute the material in any medium or format.
+  - Adapt: remix, transform, and build upon the material for any purpose,
+    even commercially.
+
+Under the following terms:
+  - Attribution: You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made. You may do so in any
+    reasonable manner, but not in any way that suggests the licensor endorses
+    you or your use.
+  - No additional restrictions: You may not apply legal terms or
+    technological measures that legally restrict others from doing anything
+    the license permits.
+
+Suggested attribution
+---------------------
+Lipo, Carl P., and Robert J. DiNapoli. "Are the phases real?" data and code
+repository. https://github.com/clipo/phases
+
+Data provenance
+---------------
+These files re-distribute or are derived from previously published and
+public-domain sources. Credit the original compilers when you use them:
+
+  - data/raw/PFGData.xlsx, data/raw/pfg-cpl-frequency.xlsx
+        Decorated-ceramic type counts from the Lower Mississippi Survey of
+        Phillips, Ford, and Griffin (1951), as digitized for this and prior
+        work.
+  - data/raw/williams1954_cmv_counts.tsv, data/processed/williams1954_cmv_coords.tsv
+        Southeast-Missouri survey assemblages and site locations from
+        Williams (1954), digitized from the survey tables.
+  - data/raw/14CDatesFromMainfort2001.xls
+        Central-valley radiocarbon determinations compiled by Mainfort (2001).
+  - data/CMV/*, data/Shapefiles/*, data/*.xls(x)
+        Geospatial reference layers (Lower Mississippi Survey grid and
+        hydrology/geology base layers). Site coordinates derive from public
+        USGS topographic maps and the Lower Mississippi Survey site files.
+
+If any included file is governed by a more restrictive license held by its
+original publisher, that original license controls for that file.
