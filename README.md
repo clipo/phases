@@ -30,7 +30,8 @@ largely indistinguishable from drift on geography.
 ## Manuscript
 
 The paper is in `docs/manuscript/`: `MAIN_TEXT.md` (source), `references.bib`
-(bibliography), and the built `MAIN_TEXT.pdf` and `MAIN_TEXT.docx`. It is a
+(bibliography), and the built `MAIN_TEXT.pdf` and `MAIN_TEXT.docx`, with the Supplemental
+Text (`SUPPLEMENTAL_TEXT.md` and its built docx/PDF) alongside. It is a
 draft in progress. Rebuild it with pandoc:
 
 ```bash
