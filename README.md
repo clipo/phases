@@ -27,14 +27,28 @@ regions the structure is reproduced by neutral spatial drift and does not
 require bounded groups, so the phase, at the scale at which it is drawn, is
 largely indistinguishable from drift on geography.
 
+## Manuscript
+
+The paper is in `docs/manuscript/`: `MAIN_TEXT.md` (source), `references.bib`
+(bibliography), and the built `MAIN_TEXT.pdf` and `MAIN_TEXT.docx`. It is a
+draft in progress. Rebuild it with pandoc:
+
+```bash
+pandoc docs/manuscript/MAIN_TEXT.md -o docs/manuscript/MAIN_TEXT.pdf \
+  --citeproc --bibliography=docs/manuscript/references.bib \
+  --pdf-engine=xelatex -H docs/manuscript/_pdf_header.tex \
+  --resource-path=docs/manuscript:.
+```
+
 ## Repository layout
 
 ```
-analyses/    numbered analysis and figure scripts (each has a header docstring)
-src/         the mls_emergence package (transmission models, signatures, I/O)
-data/        source ceramic tables, radiocarbon, and geospatial reference layers
-output/      generated text/markdown results        (created by run_all.sh)
-figures/     generated figures                       (created by run_all.sh)
+analyses/         numbered analysis and figure scripts (each has a header docstring)
+src/              the mls_emergence package (transmission models, signatures, I/O)
+data/             source ceramic tables, radiocarbon, and geospatial reference layers
+docs/manuscript/  the manuscript (MAIN_TEXT.md, references.bib, built docx/PDF)
+figures/          manuscript figures (committed); run_all.sh regenerates them
+output/           generated text/markdown results       (created by run_all.sh)
 ```
 
 ## Installation

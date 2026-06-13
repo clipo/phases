@@ -1,6 +1,7 @@
 # Generated analysis artifacts (reproduced by run_all.sh)
 output/
-figures/
+# figures/ holds the manuscript's figures (committed); run_all.sh regenerates
+# them in place.
 
 # Python
 __pycache__/
