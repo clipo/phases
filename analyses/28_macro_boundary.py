@@ -19,7 +19,7 @@ here cannot separate a synchronic spatial boundary from early-CMV/late-LMV
 succession. Reported as spatial PATTERN, not as a demonstrated synchronic boundary.
 
 Read-only on the manuscript. Writes output/macro_boundary.md and
-figures/figX_macro_transect.png.
+figures/figS6_macro_transect.png.
 
 Usage: .venv/bin/python analyses/28_macro_boundary.py
 """
@@ -46,7 +46,7 @@ sd = importlib.import_module("23_phases_vs_spatial_drift")
 from mls_emergence.signatures.assortativity import similarity_matrix, mantel  # noqa: E402
 
 OUT_MD = ROOT / "output" / "macro_boundary.md"
-OUT_FIG = ROOT / "figures" / "figX_macro_transect.png"
+OUT_FIG = ROOT / "figures" / "figS6_macro_transect.png"
 MIN_DEC = 10
 C_CMV = "#0072B2"
 C_LMV = "#D55E00"

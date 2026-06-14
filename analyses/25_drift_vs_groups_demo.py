@@ -26,7 +26,7 @@ the residual, partition-dependent similarity that remains once the phases are
 not treated as real.
 
 Read-only on the manuscript. Writes output/drift_vs_groups_demo.md and
-figures/figX_drift_vs_groups.png.
+figures/figS5_drift_vs_groups.png.
 
 Usage: .venv/bin/python analyses/25_drift_vs_groups_demo.py
 """
@@ -50,7 +50,7 @@ sd = importlib.import_module("23_phases_vs_spatial_drift")
 from mls_emergence.signatures.assortativity import similarity_matrix  # noqa: E402
 
 OUT_MD = ROOT / "output" / "drift_vs_groups_demo.md"
-OUT_FIG = ROOT / "figures" / "figX_drift_vs_groups.png"
+OUT_FIG = ROOT / "figures" / "figS5_drift_vs_groups.png"
 
 # Okabe-Ito
 C_DRIFT = "#0072B2"
