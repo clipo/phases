@@ -29,18 +29,26 @@ repository. https://github.com/clipo/phases
 Data provenance
 ---------------
 These files re-distribute or are derived from previously published and
-public-domain sources. Credit the original compilers when you use them:
+public-domain sources. Credit the original compilers when you use them. The
+tabular files are provided as plain CSVs containing only the fields used by the
+analysis (no unused sheets or columns).
 
-  - data/raw/PFGData.xlsx, data/raw/pfg-cpl-frequency.xlsx
-        Decorated-ceramic type counts from the Lower Mississippi Survey of
-        Phillips, Ford, and Griffin (1951), as digitized for this and prior
-        work.
+  - data/raw/PFGData_sherds.csv, data/raw/PFGData_types.csv,
+    data/raw/pfg-cpl-frequency.csv, data/raw/mainfort-pfg-cpl.csv,
+    data/raw/mainfort-pfg-cplXY.txt
+        Decorated-ceramic type counts (and type attributes) from the Lower
+        Mississippi Survey of Phillips, Ford, and Griffin (1951), as digitized
+        for this and prior work.
+  - data/LMVData-22March2006.csv, data/LMVData_locations.csv
+        Lower Mississippi Valley site attributes and locations (mound metrics,
+        UTM coordinates, period assignments) compiled from the Lower
+        Mississippi Survey site files.
   - data/raw/williams1954_cmv_counts.tsv, data/processed/williams1954_cmv_coords.tsv
         Southeast-Missouri survey assemblages and site locations from
         Williams (1954), digitized from the survey tables.
-  - data/raw/14CDatesFromMainfort2001.xls
+  - data/raw/14CDatesFromMainfort2001.csv
         Central-valley radiocarbon determinations compiled by Mainfort (2001).
-  - data/CMV/*, data/Shapefiles/*, data/*.xls(x)
+  - data/CMV/*, data/Shapefiles/*
         Geospatial reference layers (Lower Mississippi Survey grid and
         hydrology/geology base layers). Site coordinates derive from public
         USGS topographic maps and the Lower Mississippi Survey site files.

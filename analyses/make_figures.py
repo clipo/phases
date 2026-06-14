@@ -154,8 +154,8 @@ def zscore_series(s: pd.Series) -> pd.Series:
 # Load shared curated data once
 # ---------------------------------------------------------------------------
 def _load_curated():
-    cur = pd.read_excel(
-        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
+    cur = pd.read_csv(
+        DATA / "raw" / "mainfort-pfg-cpl.csv"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
@@ -284,7 +284,7 @@ def fig3_ca_ordination() -> None:
     ca1, ca2, inertia_frac1 = correspondence_axis(M)
 
     # Orient CA1 with 14C: larger = later
-    rc = pd.read_excel(DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1")
+    rc = pd.read_csv(DATA / "raw" / "14CDatesFromMainfort2001.csv")
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     rc["cal_mid"] = rc["Calibrated Date A.D. (1 Sigma)"].map(parse_cal_midpoint)
     prov_date = rc.groupby("Provenience")["cal_mid"].agg(["mean", "count"])
@@ -584,7 +584,7 @@ def fig5_empirical_trajectory() -> None:
     ca1, _, _ = correspondence_axis(M)
 
     # Orient by 14C
-    rc = pd.read_excel(DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1")
+    rc = pd.read_csv(DATA / "raw" / "14CDatesFromMainfort2001.csv")
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     rc["cal_mid"] = rc["Calibrated Date A.D. (1 Sigma)"].map(parse_cal_midpoint)
     prov_date = rc.groupby("Provenience")["cal_mid"].agg(["mean", "count"])
@@ -746,10 +746,10 @@ def fig5_empirical_trajectory() -> None:
 # F7: Settlement mound-height ranking (basin set, like-for-like field) + bar inset
 # ---------------------------------------------------------------------------
 def fig7_ranksize() -> None:
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData.xlsx")
+    lmv = load_lmv(DATA / "LMVData_locations.csv")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bmatched = joined.dropna(subset=["Easting", "Northing"]).copy()
 
@@ -758,7 +758,7 @@ def fig7_ranksize() -> None:
     broad_members = _basin_members("broad")
     bmatched = bmatched[[str(i) in broad_members for i in bmatched.index]].copy()
 
-    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")

@@ -1,6 +1,6 @@
 """11_chronology_14c.py — Bayesian-style radiocarbon chronology for the basin.
 
-Uses the 109 Mainfort (2001) determinations in data/raw/14CDatesFromMainfort2001.xls
+Uses the 109 Mainfort (2001) determinations in data/raw/14CDatesFromMainfort2001.csv
 (parsed to BP +/- error) and the IntCal20 curve (data/raw/intcal20.14c) to:
 
 1. Calibrate every date (standard probabilistic calibration against IntCal20).
@@ -75,7 +75,7 @@ def calibrate(bp: float, err: float, grid: np.ndarray) -> np.ndarray:
 
 
 def parse_dates() -> pd.DataFrame:
-    df = pd.read_excel(DATA / "14CDatesFromMainfort2001.xls")
+    df = pd.read_csv(DATA / "14CDatesFromMainfort2001.csv")
     df = df[df["Uncorrected Years BP."].notna()].copy()
 
     def parse(s):

@@ -46,7 +46,7 @@ import make_figures as mf  # noqa: E402
 from mls_emergence.dataio.pfg import load_pfg_counts  # noqa: E402
 
 TSV = ROOT / "data" / "raw" / "williams1954_cmv_counts.tsv"
-PFG = ROOT / "data" / "raw" / "PFGData.xlsx"
+PFG = ROOT / "data" / "raw" / "PFGData_sherds.csv"
 OUT_MD = ROOT / "output" / "cmv_lmv_repertoire.md"
 OUT_FIG = ROOT / "figures" / "figX_cmv_lmv_repertoire.png"
 

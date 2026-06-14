@@ -62,10 +62,10 @@ def main():
     (PROC / "basin_members_curated.txt").write_text("\n".join(cur_members) + "\n")
 
     # broad settlement set (coords are UTM Easting/Northing)
-    broad = load_pfg_counts(ROOT / "data" / "raw" / "PFGData.xlsx")
+    broad = load_pfg_counts(ROOT / "data" / "raw" / "PFGData_sherds.csv")
     if not broad.index.is_unique:
         broad = broad.groupby(level=0).sum()
-    lmv = load_lmv(ROOT / "data" / "LMVData.xlsx")
+    lmv = load_lmv(ROOT / "data" / "LMVData_locations.csv")
     joined, _ = join_pfg_to_lmv(broad, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
     bp = gpd.GeoDataFrame(

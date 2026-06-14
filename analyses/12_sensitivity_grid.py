@@ -39,7 +39,7 @@ RISE = 0.30  # Spearman threshold for "rising"
 
 def load_curated_full():
     """Curated decorated set WITHOUT the basin latitude filter (whole-LMV, 55)."""
-    cur = pd.read_excel(DATA / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort").dropna(
+    cur = pd.read_csv(DATA / "mainfort-pfg-cpl.csv").dropna(
         subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")

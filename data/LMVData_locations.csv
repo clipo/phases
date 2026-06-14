@@ -1,0 +1,3031 @@
+Number,StateNum,Name,Area,Type,PFG Type,Period,Initial Period,Terminal Period,Northing,Easting,Zone,Num_Mounds,Max Mound Height (ft),Max Mound Area (sq ft),St Francis,Ditch,Platform
+22Pa528,22Pa528,Crenshaw,Sunflower,Large Village Site with Mound(s),,B-A,B,A,3821248.0,758056.0,15.0,3,0.0,0.0,0,0.0,1
+19-M-8,,Kirk,Yazoo,,,F-E,F,E,3681890.958,686730.03,15.0,2,6.561679790026247,0.0,0,0.0,0
+19-M-9,,King,Yazoo,,,F-D,F,D,3681231.958,687108.042,15.0,2,0.0,0.0,0,0.0,0
+19-N-10,,Jackson Bayou,Yazoo,,,E-D,E,D,3684848.944,731685.971,15.0,0,0.0,0.0,0,0.0,0
+19-N-11,,Sky Lake,Yazoo,,,H-G,H,G,3686241.035,732441.974,15.0,2,13.123359580052494,13526.328755613566,0,0.0,0
+19-N-12,,Mosely Mound,Yazoo,,,?,?,?,3678279.973,720792.004,15.0,1,0.0,0.0,0,0.0,0
+19-N-9,,Moorehead Bayou,Yazoo,,,H-G,H,G,3699119.982,732108.019,15.0,0,0.0,0.0,0,0.0,0
+19-O-10,,Hunt,Yazoo,,,E-D,E,D,3689778.961,739646.969,15.0,0,0.0,0.0,0,0.0,0
+19-O-11,,Nicholls,Yazoo,,,H-A,H,A,3691661.005,738660.008,15.0,1,4.921,3381.5821889033914,0,0.0,0
+19-O-12,,Simmons,Yazoo,,,E-D,E,D,3691661.005,738660.008,15.0,1,0.0,0.0,0,0.0,0
+19-O-13,,Paxton,Yazoo,,,H-A,F,E,3687699.994,734514.987,15.0,2,0.0,0.0,0,0.0,0
+19-O-14,,Montgomery,Yazoo,,,F-E,F,E,3688326.958,747965.012,15.0,1,12.0,0.0,0,0.0,0
+19-O-15,,Wall,Yazoo,,,?,?,?,3688326.958,747965.012,15.0,0,0.0,0.0,0,0.0,0
+19-O-7,,Pritchard,Yazoo,,,?,?,?,3695545.014,740610.957,15.0,2,8.202099737532809,13185.790260469408,0,0.0,0
+19-O-8,,Polk,Yazoo,,,F-D,F,D,3691792.038,738388.043,15.0,1,8.202099737532809,10956.326292046988,0,0.0,0
+19-O-9,,Campbell,Yazoo,,,B-A,B,A,3686617.958,732944.963,15.0,0,0.0,0.0,0,0.0,0
+19-P-1,,Palusah Creek,Yazoo,,,F-D,F,D,3706123.965,758373.965,15.0,0,0.0,0.0,0,0.0,0
+19-P-2,,Roebuck ,Yazoo,,,E-D,E,D,3702211.972,757132.017,15.0,2,19.68503937007874,5381.955208354861,0,0.0,1
+19-P-3,,Phillipi,Yazoo,,,F-E,F,E,3702211.972,757132.017,15.0,5,0.0,0.0,0,0.0,0
+20-L-1,,Law,Yazoo,,,B-A,B,A,3662760.028,684831.965,15.0,3,19.68503937007874,0.0,0,0.0,0
+20-L-2,,Silver Lake,Yazoo,,,F-C,F,C,3670587.044,684215.033,15.0,1,0.0,0.0,0,0.0,0
+20-L-3,,Griffin,Yazoo,,,E-A,E,A,3665245.997,685638.015,15.0,4,9.84251968503937,13454.88802088715,0,0.0,1
+20-M-10,,Matthews,Yazoo,,,?,?,?,3654836.041,691334.997,15.0,2,6.561679790026247,21134.888680646192,0,0.0,0
+20-M-7,,Percy Jones,Yazoo,,,?,?,?,3667738.047,689266.014,15.0,3,0.0,0.0,0,0.0,1
+20-M-8,,Woods,Yazoo,,,E-D,E,D,3666224.024,690919.995,15.0,1,0.0,0.0,0,0.0,1
+20-M-9,,Bear Garden,Yazoo,,,D-C,D,C,3661466.97,690524.999,15.0,1,3.2808398950131235,10763.910416709721,0,0.0,1
+20-N-5,,Cold Lake,Yazoo,,,H-C,H,C,3678241.955,721189.979,15.0,3,8.202099737532809,3381.5821889033914,0,0.0,0
+20-N-6,,Gooden Lake,Yazoo,,,?,?,?,3666888.053,722711.991,15.0,4,9.84251968503937,0.0,0,0.0,0
+20-O-10,,Brooks,Yazoo,,,F-D,F,D,3674479.044,750974.981,15.0,0,0.0,0.0,0,0.0,0
+20-O-12,,Quafalorma,Yazoo,,,E-D,E,D,3665595.994,749656.004,15.0,0,0.0,0.0,0,0.0,0
+20-O-13,,Horseshoe Brake,Yazoo,,,B-A,B,A,3665671.035,750433.984,15.0,2,0.0,0.0,0,0.0,0
+20-O-14,,Bee Lake,Yazoo,,,F-E,F,E,3658449.031,747870.009,15.0,0,0.0,0.0,0,0.0,0
+20-O-18,,Peaster,Yazoo,,,B-A,B,A,3658449.031,747870.009,15.0,4,0.0,0.0,0,0.0,0
+20-O-20,,Welsh Camp,Yazoo,,,H-G,H,G,3675310.966,741229.038,15.0,1,9.0,1734.9445429449634,0,0.0,0
+20-O-7,,Payne,Yazoo,,,E-D,E,D,3673080.989,737163.018,15.0,0,0.0,0.0,0,0.0,0
+20-O-8,,McClintock,Yazoo,,,?,?,?,3676519.013,740414.039,15.0,1,0.0,0.0,0,0.0,0
+20-O-9,,Tchula Lake,Yazoo,,,E-D,E,D,3675117.994,755620.046,15.0,0,0.0,0.0,0,0.0,0
+20-P-1,,Gamewood,Yazoo,,,F-D,F,D,3669060.049,761925.024,15.0,1,0.0,0.0,0,0.0,0
+20-P-2,,Sontheimer,Yazoo,,,?,?,?,3667852.96,766589.964,15.0,1,9.84251968503937,1902.1399812581576,0,0.0,0
+20-P-3,,Temple,Yazoo,,,?,?,?,3667702.986,763781.974,15.0,0,0.0,0.0,0,0.0,0
+21-L-1,,Mayersville,Yazoo,,,C-B,C,B,3640487.978,681976.002,15.0,11,32.808398950131235,0.0,0,0.0,0
+21-M-1,,Rolling Fork,Yazoo,,,B-A,B,A,3641747.986,698323.968,15.0,3,38.0,8075.0,0,0.0,0
+21-M-10,,Flannigan,Yazoo,,,?,?,?,3641747.986,698323.968,15.0,1,4.0,0.0,0,0.0,0
+21-M-11,,Chipman,Yazoo,,,?,?,?,3644747.961,697891.998,15.0,1,0.0,0.0,0,0.0,0
+21-M-2,,Mount Helena,Yazoo,,,?,?,?,3647088.053,699104.02,15.0,3,25.0,56700.0,0,0.0,1
+21-M-3,,Anguilla,Yazoo,,,?,?,?,3650240.003,701740.001,15.0,1,18.0,18334.649444186347,0,0.0,0
+21-M-4,,Lowery,Yazoo,,,F-E,F,E,3633951.987,709320.042,15.0,2,9.84251968503937,8072.932812532292,0,1.0,0
+21-M-5,,Cary,Yazoo,,,?,?,?,3631480.02,693687.987,15.0,4,22.0,5920.0,0,0.0,0
+21-M-6,,Moore,Yazoo,,,?,?,?,3631480.02,693687.987,15.0,1,2.0,0.0,0,0.0,0
+21-M-7,,Grace,Yazoo,,,C-A,C,A,3651876.981,689584.974,15.0,4,39.37007874015748,30434.23970013052,0,0.0,0
+21-M-8,,Lamidoux,Yazoo,,,?,?,?,3651876.981,689584.974,15.0,1,4.921259842519685,21134.888680646192,0,0.0,0
+21-M-9,,Alsworth,Yazoo,,,?,?,?,3645429.017,688499.038,15.0,1,9.84251968503937,19375.0387500775,1?,0.0,0
+21-N-1,,Lake George,Yazoo,,,H-A,H,A,3633043.951,716892.031,15.0,25,60.0,16500.0,0,1.0,0
+21-N-10,,Savory,Yazoo,,,H-A,H,A,3632890.955,714756.004,15.0,8,0.0,0.0,0,0.0,0
+21-N-13,,Erickson,Yazoo,,,F-D,F,D,3643779.958,731163.96,15.0,2,0.0,0.0,0,0.0,0
+21-N-15,,Tanglewood,Yazoo,,,E-A,E,A,3636003.022,715852.042,15.0,3,0.0,0.0,0,0.0,0
+21-N-16,,Robinson (Rialto),Yazoo,,,E-D,E,D,3636003.022,715852.042,15.0,0,0.0,0.0,0,0.0,0
+21-N-17,,Rugby,Yazoo,,,G-D,G,D,3633225.953,734930.034,15.0,0,0.0,0.0,0,0.0,0
+21-N-19,,Wilzone,Yazoo,,,E-C,E,C,3646204.045,733820.029,15.0,1,6.0,45000.0,0,0.0,0
+21-N-2,,Perry,Yazoo,,,F-E,F,E,3633526.972,718718.967,15.0,1,0.0,0.0,0,0.0,0
+21-N-20,,Jerusalem,Yazoo,,,B-A,B,A,3635839.957,715644.961,15.0,0,0.0,0.0,0,0.0,0
+21-N-3,,Spanish Fort,Yazoo,,,F-C,F,C,3626995.024,712446.03,15.0,2,0.0,0.0,0,1.0,0
+21-N-4,,Mabin,Yazoo,,,H-A,H,A,3628540.971,715832.005,15.0,2,0.0,0.0,0,0.0,0
+21-N-5,,Yucatan,Yazoo,,,E-D,E,D,3624999.974,723373.019,15.0,0,0.0,0.0,0,0.0,0
+21-N-6,,Screws,Yazoo,,,?,?,?,3625970.966,711899.0,15.0,1,0.0,0.0,0,0.0,0
+21-N-7,,Stalonia,Yazoo,,,D-C,D,C,3631256.001,713871.982,15.0,3,9.0,13184.0,0,0.0,1
+21-N-8,,Shannon,Yazoo,,,F-D,F,D,3632402.974,714442.046,15.0,1,0.0,0.0,0,0.0,0
+21-N-9,,Waller,Yazoo,,,H-G,H,G,3632897.007,715859.987,15.0,2,0.0,0.0,0,0.0,0
+21-O-1,,Boston Bayou,Yazoo,,,E-D,E,D,3642940.018,740300.034,15.0,1+,0.0,0.0,0,0.0,0
+21-O-10,,Champlin,Yazoo,,,?,?,?,3640564.035,743207.987,15.0,4,14.0,5250.0,0,0.0,0
+21-O-11,,York Hill ,Yazoo,,,E-D,E,D,3641088.046,745019.996,15.0,4,0.0,0.0,0,0.0,0
+21-O-12,,Pete Clark,Yazoo,,,E-D,E,D,3643361.971,740105.988,15.0,1,10.0,2827.4333882308138,0,0.0,0
+21-O-2,,Ingersoll,Yazoo,,,E-D,E,D,3653239.026,752423.039,15.0,0,0.0,0.0,0,0.0,0
+21-O-3,,Clark's Ferry,Yazoo,,,E-D,E,D,3653239.026,752423.039,15.0,1,12.0,768.0,0,0.0,0
+21-O-4,,McNeer,Yazoo,,,E-D,E,D,3653239.026,752423.039,15.0,1+,0.0,0.0,0,0.0,0
+21-O-5,,Crump,Yazoo,,,E-D,E,D,3652385.968,741132.98,15.0,1,0.0,0.0,0,0.0,0
+21-O-6,,Reaver Brown,Yazoo,,,F-E,F,E,3649507.953,733952.045,15.0,1,32.808398950131235,17119.25983132342,0,0.0,0
+21-O-7,,Love,Yazoo,,,G-E,G,E,3650176.979,734749.02,15.0,2,0.0,0.0,0,0.0,0
+21-O-9,,Shellwood,Yazoo,,,F-A,F,A,3644862.974,736380.019,15.0,2,0.0,0.0,0,0.0,0
+22-L-1,,Magna Vista,Yazoo,,,B-A,B,A,3614869.989,681002.036,15.0,1,9.84251968503937,0.0,0,0.0,0
+22-M-1,,Thorton,Yazoo,,,G-B,G,B,3615159.018,708355.038,15.0,1,0.0,0.0,0,0.0,0
+22-M-2,,Jeff Davis,Yazoo,,,D-B,D,B,3613931.98,704147.03,15.0,4,6.561679790026247,16953.15890631781,0,0.0,0
+22-M-3,,Aden,Yazoo,,,F-A,F,A,3613116.022,702939.956,15.0,3,9.84251968503937,4208.688972933502,0,0.0,0
+22-M-4,,Blanton,Yazoo,,,?,?,?,3624831.962,693546.022,15.0,1,0.0,0.0,0,0.0,0
+22-M-5,,Haynes Bluff,Yazoo,,,D-A,D,A,3600137.996,708113.954,15.0,4,29.52755905511811,5694.108610439443,0,0.0,0
+22-M-6,,Manny,Yazoo,,,F-B,F,B,3617767.967,689332.046,15.0,4,13.123359580052494,0.0,0,0.0,1
+22-M-7,,Johnson,Yazoo,,,C-B,C,B,3614868.986,690048.014,15.0,1+,0.0,0.0,0,0.0,0
+22-M-8,,Hardee,Yazoo,,,C-B,C,B,3608247.997,701392.01,15.0,3,13.123359580052494,40364.66406266146,0,0.0,0
+22-N-1,,Leist ,Yazoo,,,F-B,F,B,3616407.028,712927.977,15.0,3,16.404199475065617,23778.714795021144,0,0.0,1
+22-N-10,,Landrum,Yazoo,,,?,?,?,3626892.032,716572.039,15.0,1,13.123359580052494,5283.722170161548,0,0.0,0
+22-N-11,,Friedlander,Yazoo,,,?,?,?,3616291.985,723116.04,15.0,1,6.561679790026247,7608.55992503263,0,0.0,0
+22-N-12,,Harworth,Yazoo,,,E-D,E,D,3618248.011,716855.996,15.0,0,0.0,0.0,0,0.0,0
+22-N-13,,Trammel,Yazoo,,,G-E,G,E,3624143.975,719760.047,15.0,3,20.0,0.0,0,0.0,0
+22-N-14,,Little Spanish Fort,Yazoo,,,E-B,E,B,3619308.01,715940.018,15.0,1,0.0,0.0,0,0.0,1
+22-N-15,,Anthony's Fork,Yazoo,,,F-E,F,E,3624975.951,719448.037,15.0,0,0.0,0.0,0,0.0,0
+22-N-16,,Hollis,Yazoo,,,F-E,F,E,3621054.978,714158.043,15.0,1,0.0,0.0,0,0.0,0
+22-N-17,,Cowan,Yazoo,,,D-C,D,C,3612698.993,711550.999,15.0,0,0.0,0.0,0,0.0,0
+22-N-18,,Kitterman,Yazoo,,,E-D,E,D,3612574.997,712288.028,15.0,0,0.0,0.0,0,0.0,0
+22-N-19,,Russell,Yazoo,,,?,?,?,3612574.997,712288.028,15.0,1+,0.0,0.0,0,0.0,0
+22-N-20,,Mengel,Yazoo,,,?,?,?,3618191.013,719179.981,15.0,1,0.0,0.0,0,0.0,0
+22-N-21,,Gammel,Yazoo,,,D-B,D,B,3616822.035,718610.024,15.0,2,13.123359580052494,0.0,0,0.0,0
+22-N-22,,Evans,Yazoo,,,?,?,?,3609732.001,711670.038,15.0,0,0.0,0.0,0,0.0,0
+22-N-3,,No Mistake,Yazoo,,,?,?,?,3614167.986,729213.969,15.0,2,0.0,0.0,0,0.0,0
+22-N-4,,Barry,Yazoo,,,E-D,E,D,3621526.019,728867.999,15.0,1,6.561679790026247,2164.212600898171,0,0.0,0
+22-N-5,,Enola,Yazoo,,,?,?,?,3624605.012,726015.021,15.0,2,6.561679790026247,25833.385000103335,0,0.0,0
+22-N-6,,Dornbusch,Yazoo,,,?,?,?,3603906.03,712092.952,15.0,1,6.561679790026247,25833.385000103335,0,0.0,0
+22-N-8,,Potato Hill Bayou,Yazoo,,,?,?,?,3622914.002,725807.046,15.0,1,0.0,0.0,0,0.0,0
+22-N-9,,Fairview,Yazoo,,,H-F,H,F,3625678.018,715423.969,15.0,3,8.202099737532809,41424.38181406654,0,0.0,0
+23-M-1,,Kings Crossing,Yazoo,,,D-C,D,C,3588521.965,702784.988,15.0,4,25.0,0.0,0,0.0,1
+23-M-2,,Blakely,Yazoo,,,D-C,D,C,3588521.965,702784.988,15.0,1,6.561679790026247,12916.692500051668,0,0.0,1
+10-P-1,,Carson Lake,Memphis,St. Francis,St. Francis,C-B,C,B,3943300.0,767520.0,15.0,0,0.0,0.0,0,0.0,0
+10-P-2,,Bell Place,Memphis,St. Francis,St. Francis,B-A,B,A,3935704.0,761620.0,15.0,0,0.0,0.0,0,0.0,0
+10-P-3,,Nettle Ridge,Memphis,Large Village Site,Large Village Site,E-A,E,A,3933300.0,759953.0,15.0,0,0.0,0.0,0,0.0,0
+10-P-4,,Notgrass Place,Memphis,Large Village Site,Large Village Site,C-B,C,B,3936520.0,763764.0,15.0,0,0.0,0.0,0,0.0,0
+10-Q-1,,Upper Nodena,Memphis,Large Village Site with Mound(s),Irregular,B-A,B,A,3943700.0,773800.0,15.0,1+,5.0,0.0,0,0.0,0
+10-Q-2,,Sherman Mound,Memphis,Large Village Site with Mound(s),Irregular,?,?,?,3948420.0,773649.0,15.0,1,0.0,0.0,0,0.0,1
+10-Q-3,,Turnage ,Memphis,Small Village Site with Mound(s),Irregular,E-A,E,A,3940020.0,773403.0,15.0,1,0.0,0.0,0,0.0,0
+11-N-1,3CS29,Parkin,St. Francis,St. Francis,St. Francis,B-A,B,A,3906400.0,722250.0,15.0,4,23.0,0.0,1,0.0,1
+11-N-10,,Cross Country Club,St. Francis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3904500.0,710900.0,15.0,1,4.0,2827.4333882308138,0,0.0,0
+11-N-11,,Delta,St. Francis,Conical Mound(s),Conical Mound,D-C,D,C,3910400.0,719500.0,15.0,6,10.0,7853.981633974483,0,0.0,0
+11-N-12,,Turnbow Place,St. Francis,St. Francis,St. Francis,C-B,C,B,3924520.0,724518.0,15.0,14,10.0,0.0,0,0.0,1
+11-N-13,3CS26,Williamson,St. Francis,St. Francis,St. Francis,C-B,C,B,3909500.0,719950.0,15.0,9,8.0,0.0,1,0.0,1
+11-N-14,3CS78,Twist Plantation No. 1,St. Francis,Small Village Site with Mound(s),,?,?,?,3918540.0,723256.0,15.0,0,0.0,0.0,0,0.0,0
+11-N-15,3CS71,Fortune Mound,St. Francis,St. Francis,St. Francis,B-A,B,A,3921670.0,722850.0,15.0,1,0.0,0.0,1,0.0,0
+11-N-16,,Twist Group,St. Francis,Conical Mound(s),Conical Mound,C-B,C,B,3920400.0,724150.0,15.0,40+,10.0,2827.4333882308138,0,0.0,0
+11-N-2,,Rogers Place,St. Francis,Conical Mound(s),Conical Mound,D-C,D,C,3907350.0,724440.0,15.0,5,5.0,5026.548245743669,0,0.0,0
+11-N-3,,Roberts,St. Francis,Conical Mound(s),Conical Mound,D-C,D,C,3908400.0,725230.0,15.0,4,3.0,2827.4333882308138,0,0.0,0
+11-N-4,3CS24,Neeley's Ferry,St. Francis,St. Francis,St. Francis,B-A,B,A,3913500.0,723480.0,15.0,3,12.0,0.0,1,0.0,1
+11-N-6,,Block,St. Francis,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3906950.0,720220.0,15.0,5,15.0,0.0,1,0.0,1
+11-N-8,,Williams,St. Francis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3911040.0,719500.0,15.0,8,9.0,6361.725123519331,0,0.0,0
+11-N-9,3CS25,Vernon Paul,St. Francis,St. Francis,St. Francis,B-A,B,A,3913000.0,725000.0,15.0,5,9.0,0.0,1,0.0,1
+11-O-1,,Pittman,St. Francis,Conical Mound(s),Conical Mound,?,?,?,3927280.0,729657.0,15.0,1+,0.0,0.0,0,0.0,0
+11-O-10,3CT18,Barton Ranch,St. Francis,St. Francis,St. Francis,C-B,C,B,3918000.0,737150.0,15.0,1+,0.0,0.0,1,0.0,1
+11-O-11,,Prosperity,St. Francis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3914900.0,736700.0,15.0,1+,2.0,1963.4954084936207,0,0.0,0
+11-O-2,,Webster Cemetery,St. Francis,Conical Mound(s),Conical Mound,?,?,?,3900827.0,734435.0,15.0,1,0.0,0.0,0,0.0,0
+11-O-3,,Emrich Place,St. Francis,Conical Mound(s),Conical Mound,?,?,?,3900911.0,744054.0,15.0,2,0.0,0.0,0,0.0,0
+11-O-4,3PO5,Cummings,St. Francis,St. Francis,St. Francis,B-A,B,A,3944100.0,714360.0,15.0,3,5.0,0.0,0,0.0,0
+11-O-5,,Emory,St. Francis,Conical Mound(s),Conical Mound,D-C,D,C,3924190.0,734640.0,15.0,1,4.0,2827.4333882308138,0,0.0,0
+11-O-6,,Pinkston,St. Francis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3924830.0,734650.0,15.0,1,5.0,2827.4333882308138,0,0.0,0
+11-O-7,,Lewis Place,St. Francis,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3911480.0,730800.0,15.0,2,7.0,0.0,0,0.0,0
+11-O-8,3CT22,Richard's Bridge,St. Francis,St. Francis,St. Francis,C-B,C,B,3913622.0,732356.0,15.0,1,3.0,0.0,1,0.0,0
+11-O-9,,Gilliland,St. Francis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3916540.0,736740.0,15.0,2,4.0,1256.6370614359173,0,0.0,0
+11-P-1,,Shawnee Village,Memphis,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3931860.0,761300.0,15.0,2,8.0,0.0,0,0.0,0
+11-P-2,,Bradley,Memphis,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3910900.0,758280.0,15.0,1+,10.0,0.0,0,0.0,1
+11-P-3,,Golightly Place,Memphis,Small Village Site with Mound(s),,C-A,C,A,3915750.0,752551.0,15.0,1,0.0,0.0,0,0.0,1
+11-P-4,,Pacific,Memphis,Mounds - Unknown,,?,?,?,3919090.0,753177.0,15.0,1+,0.0,0.0,0,0.0,0
+11-P-5,,Lambethville Cemetery,Memphis,Mounds - Unknown,,?,?,?,3914790.0,757105.0,15.0,1+,0.0,0.0,0,0.0,0
+12-N-10,,DeRossetts Place,St. Francis,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3883280.0,711650.0,15.0,1,15.0,7853.981633974483,0,0.0,0
+12-N-11,,Johnson,St. Francis,Conical Mound(s),Conical Mound,D-B,D,B,3882311.0,711888.0,15.0,1,0.0,0.0,0,0.0,0
+12-N-12,,Widener Cemetery,St. Francis,Small Village Site with Mound(s),,D-B,D,B,3877380.0,711858.0,15.0,1,0.0,0.0,0,0.0,0
+12-N-13,,Parks,St. Francis,Small Village Site with Mound(s),,F-C,F,C,3887390.0,722345.0,15.0,1+,0.0,0.0,0,0.0,0
+12-N-14,,Crow Creek,St. Francis,Small Village Site with Mound(s),,E-D,E,D,3875990.0,706769.0,15.0,1+,0.0,0.0,0,0.0,0
+12-N-15,,Swan Place,St. Francis,Conical Mound(s),Conical Mound,F-E,F,E,3891230.0,712120.0,15.0,1,5.0,1256.6370614359173,0,0.0,0
+12-N-16,,Dent,St. Francis,Small Village Site with Mound(s),,C-B,C,B,3886430.0,726598.0,15.0,2+,0.0,0.0,0,0.0,0
+12-N-2,,Manly,St. Francis,St. Francis,St. Francis,B-A,B,A,3880450.0,708240.0,15.0,0,0.0,0.0,0,0.0,0
+12-N-3,3CS27,Rose Mound,St. Francis,St. Francis,St. Francis,B-A,B,A,3901650.0,717460.0,15.0,0,0.0,0.0,1,0.0,0
+12-N-4,3SF9,Big Eddy,St. Francis,St. Francis,St. Francis,B-A,B,A,3888750.0,710000.0,15.0,4,0.0,0.0,1,0.0,0
+12-N-5,,Welshans Place,St. Francis,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3900660.0,712820.0,15.0,3,5.0,0.0,0,0.0,1
+12-N-6,,Westmorland,St. Francis,Conical Mound(s),Conical Mound,D-C,D,C,3898930.0,714520.0,15.0,7,4.0,5026.548245743669,0,0.0,0
+12-N-7,,Lansing,St. Francis,Conical Mound(s),Conical Mound,D-C,D,C,3894330.0,720150.0,15.0,Many,4.0,706.8583470577034,0,0.0,0
+12-N-8,,Beckles,St. Francis,Mounds - Unknown,,?,?,?,3895560.0,721339.0,15.0,1,0.0,0.0,0,0.0,0
+12-N-9,,Burns,St. Francis,Conical Mound(s),Conical Mound,F-E,F,E,3851260.0,717650.0,15.0,1,0.0,0.0,0,0.0,0
+12-O-1,,Turner Place,Memphis,Mounds - Unknown,,C-B,C,B,3887020.0,745304.0,15.0,1+,0.0,0.0,0,0.0,0
+12-O-2,,Pouncey,Memphis,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3878800.0,741000.0,15.0,3,15.0,0.0,0,0.0,1
+12-O-3,,Thompson Lake,Memphis,Small Ceremonial Center,Small Ceremonial Center,E-D,E,D,3877520.0,735360.0,15.0,2,0.0,0.0,0,0.0,1
+12-O-4,,Davis Place,Memphis,Small Village Site with Mound(s),,E-D,E,D,3878950.0,733867.0,15.0,1+,0.0,0.0,0,0.0,0
+12-O-5,,Cramor Place,Memphis,St. Francis,St. Francis,C-B,C,B,3876440.0,729450.0,15.0,5,4.0,0.0,1,0.0,0
+12-O-6,,Brackenseed Place,Memphis,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3881800.0,749500.0,15.0,2,10.0,0.0,1,0.0,1
+12-P-1,,Mound Place,Memphis,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3885300.0,751720.0,15.0,2,10.0,0.0,0,0.0,1
+12-P-2,,Shelby/Chuckalissa,Memphis,Small Village Site with Mound(s),Irregular,B-A,B,A,3883840.0,761568.0,15.0,2,10.0,0.0,0,0.0,1
+12-P-3,,Mound City,Memphis,Small Village Site with Mound(s),,B-A,B,A,3898106.0,761665.0,15.0,1+,0.0,0.0,0,0.0,0
+13-M-1,,Hughes,Memphis,Large Village Site with Mound(s),Conical Mound,D-C,D,C,3861600.0,702850.0,15.0,2,10.0,18000.0,0,0.0,0
+13-N-10,,Taylor Mound,Memphis ,Small Village Site with Mound(s),,B-A,B,A,3854800.0,728018.0,15.0,1,0.0,0.0,0,0.0,0
+13-N-11,3LE15,Grant Place,Memphis ,Small Village Site,,D-B,D,B,3848280.0,718452.0,15.0,1,0.0,0.0,0,0.0,0
+13-N-12,3LE16,Murdock Place,Memphis ,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3854080.0,725340.0,15.0,2+,9.0,0.0,0,0.0,0
+13-N-13,,Rawlinson,Memphis ,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3867210.0,721550.0,15.0,2,6.0,2827.4333882308138,0,0.0,0
+13-N-14,3LE18,Conner Place,Memphis ,Small Village Site,,D-C,D,C,3859712.0,711584.0,15.0,0,0.0,0.0,0,0.0,0
+13-N-15,,Nickel,Memphis,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3871500.0,724350.0,15.0,2,12.0,0.0,0,0.0,0
+13-N-16,3LE17,Starkley,Memphis ,Small Village Site with Mound(s),Conical Mound,C-A,C,A,3848880.0,723216.0,15.0,1,12.0,0.0,1,0.0,0
+13-N-17,3LE24,Greer,Memphis ,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3848624.0,713036.0,15.0,1,14.0,0.0,0,0.0,1
+13-N-18,,Lakeside,Memphis ,Small Village Site with Mound(s),Conical Mound,C-B,C,B,3872280.0,718090.0,15.0,3,11.0,9503.317777109125,0,0.0,0
+13-N-19,,Riverside,Memphis ,Mounds - Unknown,,D-C,D,C,3870420.0,711815.0,15.0,1,0.0,0.0,0,0.0,0
+13-N-2,,Alligator Bayou,Memphis ,Small Village Site with Mound(s),,D-C,D,C,3854570.0,720657.0,15.0,1,0.0,0.0,0,0.0,0
+13-N-20,,Hargrave,Memphis ,Mounds - Unknown,,?,?,?,3872111.0,713834.0,15.0,1,0.0,0.0,0,0.0,0
+13-N-21,,Castile Landing,Memphis ,St. Francis,St. Francis,B-A,B,A,3872820.0,712000.0,15.0,1,9.0,0.0,1,0.0,0
+13-N-3,3LE7,Mound Cemetery,Memphis ,Small Village Site with Mound(s),,B-A,B,A,3859730.0,722513.0,15.0,2,23.0,0.0,0,0.0,1
+13-N-4,3LE8,Kent,Memphis ,Small Ceremonial Center,Small Ceremonial Center,E + B-A,B,A,3854800.0,725840.0,15.0,2,16.0,0.0,1,0.0,1
+13-N-5,3LE9,Davis,Memphis ,Small Village Site with Mound(s),,C-B,C,B,3858990.0,725132.0,15.0,1,0.0,0.0,0,0.0,0
+13-N-6,3LE10,Jerusalem Church,Memphis ,Small Village Site with Mound(s),,B-A,B,A,3855190.0,723393.0,15.0,1,3.0,0.0,0,0.0,0
+13-N-7,3LE11,Clay Hill,Memphis ,St. Francis,St. Francis,B-A,B,A,3861780.0,708000.0,15.0,2,0.0,0.0,1,0.0,0
+13-N-8,,Findley,Memphis ,Small Village Site,,D-C,D,C,3856560.0,726001.0,15.0,0,0.0,0.0,0,0.0,0
+13-N-9,3LE13,Red Oak,Memphis ,Small Village Site,,C-B,C,B,3850040.0,718056.0,15.0,0,0.0,0.0,0,0.0,0
+13-O-1,3LE3,Barrett,Memphis ,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3864600.0,732400.0,15.0,2,9.0,0.0,0,0.0,0
+13-O-10,,Hollywood,Memphis ,Large Ceremonial Center,Large Ceremonial Center,B-A,B,A,3851300.0,740620.0,15.0,15,20.0,0.0,0,0.0,1
+13-O-11,,Commerce,Memphis ,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3855772.0,739436.0,15.0,6,18.0,0.0,0,0.0,1
+13-O-12,,Indian Creek,Memphis ,Large Village Site,,C-B,C,B,3849650.0,741784.0,15.0,0,0.0,0.0,0,0.0,0
+13-O-13,,Crystal Spring Mound,Memphis ,Mounds - Unknown,,?,?,?,3852682.0,744014.0,15.0,1,0.0,0.0,0,0.0,0
+13-O-14,,Sledge (Royal),Memphis ,Small Village Site with Mound(s),,?,?,?,3849821.0,742436.0,15.0,1,0.0,0.0,0,0.0,0
+13-O-2,,Green River Plantation,Memphis ,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3872321.0,738817.0,15.0,2,12.0,0.0,0,0.0,0
+13-O-3,,Huber,Memphis ,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3870150.0,733280.0,15.0,1,0.0,0.0,0,0.0,0
+13-O-4,,Nickey Mound,Memphis ,Small Village Site with Mound(s),,C-B,C,B,3872690.0,737248.0,15.0,1,0.0,0.0,0,0.0,0
+13-O-5,,Belle Meade,Memphis,St. Francis,St. Francis,B-A,B,A,3870150.0,733280.0,15.0,6,10.0,0.0,1,0.0,1
+13-O-6,,New Bethel,Memphis,Small Village Site with Mound(s),,C-B,C,B,3872190.0,729228.0,15.0,1,0.0,0.0,0,0.0,1
+13-O-7,,Beck,Memphis,St. Francis,St. Francis,B-A,B,A,3866850.0,738580.0,15.0,8,10.0,0.0,0,0.0,0
+13-O-8,,Stoddard,Memphis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3864600.0,732400.0,15.0,2,6.0,2827.4333882308138,0,0.0,0
+13-O-9,,Collins,Memphis,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3875620.0,737480.0,15.0,3,4.0,1963.4954084936207,0,0.0,0
+13-P-1,,Walls,Memphis,Small Village Site with Mound(s),Irregular,B-A,B,A,3874859.0,754769.0,15.0,1+,0.0,0.0,0,0.0,0
+13-P-10,,Irby,Memphis,Large Village Site with Mound(s),Irregular,F-E + B-A,B,A,3867421.0,759796.0,15.0,1,0.0,0.0,0,0.0,0
+13-P-11,,Woodlyn,Memphis,Large Village Site with Mound(s),Irregular,B-A,B,A,3872116.0,753929.0,15.0,1,3.0,0.0,0,0.0,0
+13-P-2,,Edgefield Mounds,Memphis,Conical Mound(s),,?,?,?,3875797.0,754578.0,15.0,2,0.0,0.0,0,0.0,0
+13-P-3,,Turkey Ridge,Memphis,Large Village site,,G-F,G,F,3867500.0,757391.0,15.0,0,0.0,0.0,0,0.0,0
+13-P-4,,Dogwood Ridge,Memphis,Small Village Site,,D-B,D,B,3868400.0,759719.0,15.0,0,0.0,0.0,0,0.0,0
+13-P-5,,Shannon,Memphis,Small Village Site with Mound(s),,D-B,D,B,3863500.0,753463.0,15.0,1,0.0,0.0,0,0.0,0
+13-P-6,,Cheatham,Memphis,Small Village Site with Mound(s),Irregular,B-A,B,A,3872748.0,757787.0,15.0,5,6.0,0.0,0,0.0,1
+13-P-7,,Norfolk,Memphis,Small Village Site,,B-A,B,A,3869960.0,751930.0,15.0,0,0.0,0.0,0,0.0,0
+13-P-8,,Lake Cormorant,Memphis,Small Village Site with Mound(s),,F-A,F,A,3866890.0,753981.0,15.0,1,0.0,0.0,0,0.0,0
+13-P-9,,Withers,Memphis,Mounds - Unknown,,G-D,G,D,3865550.0,755964.0,15.0,2,0.0,0.0,0,0.0,0
+14-M-3,,Broom,Memphis ,Large Village Site with Mound(s),Conical Mound,D-C,D,C,3828650.0,686800.0,15.0,3,10.0,7853.981633974483,0,0.0,0
+14-N-1,3PH7,Moore,Memphis ,Large Village Site with Mound(s),,C-B,C,B,3833936.0,716829.0,15.0,1+,3.0,0.0,0,0.0,0
+14-N-2,,Steagall,Memphis ,Small Village Site,,?,?,?,3834450.0,717745.0,15.0,0,0.0,0.0,0,0.0,0
+14-N-3,,McCoullough Mound,Memphis ,Conical Mound(s),,?,?,?,3847076.0,706883.0,15.0,1,0.0,0.0,0,0.0,0
+14-N-4,,Bowie Village,Memphis ,Large Village Site,,F-E,F,E,3822960.0,715513.0,15.0,0,0.0,0.0,0,0.0,0
+14-N-5,,Coolidge Mound,Memphis ,Conical Mound(s),,?,?,?,3821916.0,715532.0,15.0,1,0.0,0.0,0,0.0,0
+14-N-6,,Helena Crossing,Memphis ,Large Village Site with Mound(s),,E,E,E,3820480.0,720022.0,15.0,1+,0.0,0.0,0,0.0,0
+14-O-1,,Evansville,Memphis ,Small Ceremonial Center,Small Ceremonial Center,E-D,E,D,3835900.0,738920.0,15.0,4,12.0,0.0,0,0.0,1
+14-O-10,22Tu520,West Mounds,Memphis ,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3825601.0,731878.0,15.0,2+,18.0,0.0,0,0.0,1
+14-O-11,,Kendall Mound,Memphis ,Small Village Site with Mound(s),,?,?,?,3845370.0,749901.0,15.0,1,0.0,0.0,0,0.0,0
+14-O-12,,Jepson,Memphis ,Small Village Site with Mound(s),,?,?,?,3844028.0,750923.0,15.0,1,0.0,0.0,0,0.0,0
+14-O-13,22Tu523,Canon,Memphis ,Large Village Site with Mound(s),Conical Mound,E-D,E,D,3827349.0,750391.0,15.0,1,12.0,3000.0,0,0.0,0
+14-O-2,,Owens,Memphis ,Small Ceremonial Center,Small Ceremonial Center,E-D,E,D,3834164.0,737160.0,15.0,2,12.0,0.0,0,0.0,0
+14-O-3,,Beaverdam,Memphis ,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3834660.0,738770.0,15.0,2+,11.0,0.0,0,0.0,0
+14-O-4,,Perry,Memphis ,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3846780.0,737110.0,15.0,4,10.0,0.0,0,0.0,1
+14-O-5,,McKinney Bayout,Memphis ,Small Village Site,,?,?,?,3844990.0,733381.0,15.0,0,0.0,0.0,0,0.0,0
+14-O-6,,Johnson Cemetery,Memphis ,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3847260.0,741160.0,15.0,1,12.0,0.0,0,0.0,0
+14-O-7,,Oakwood Cemetery,Memphis ,Small Village Site with Mound(s),,E-C,D,C,3841160.0,737112.0,15.0,1+,0.0,0.0,0,0.0,0
+14-O-8,22Tu501,Dundee,Memphis ,Small Ceremonial Center,Small Ceremonial Center,E-C,E,C,3822844.0,733102.0,15.0,4,15.0,0.0,0,0.0,0
+14-O-9,,Norflett,Memphis ,Conical Mound(s),,?,?,?,3827081.0,731131.0,15.0,1,0.0,0.0,0,0.0,0
+14-P-1,,McKane,Memphis ,Large Village Site with Mound(s),,E-D,E,D,3842090.0,754500.0,15.0,1,0.0,0.0,0,0.0,0
+14-P-2,,Prichard,Memphis ,Large Village Site,,D-C,D,C,3842770.0,752967.0,15.0,0,0.0,0.0,0,0.0,0
+15-L-1,3AR015,Butler Mound,Arkansas,Small Village Site with Mound(s),,D-C,D,C,3791982.0,671920.0,15.0,2,7.0,9503.317777109125,0,0.0,0
+15-L-2,,Baytown,Arkansas,Large Ceremonial Center,Large Ceremonial Center,D-C,D,C,3806090.0,678893.0,15.0,9,20.0,0.0,0,0.0,1
+15-M-1,,Tinsley Mound,Arkansas,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3800420.0,688201.0,15.0,2,4.0,0.0,0,0.0,0
+15-M-2,,Elaine,Arkansas,Conical Mound(s),,?,?,?,3797552.0,697684.0,15.0,1,0.0,0.0,0,0.0,0
+15-M-3,,Elaine Consolidated School Mound,Arkansas,Conical Mound(s),,?,?,?,3798307.0,697618.0,15.0,1,0.0,0.0,0,0.0,0
+15-M-4,,Crow,Arkansas,Conical Mound(s),,?,?,?,3796524.0,696687.0,15.0,1,0.0,0.0,0,0.0,0
+15-M-5,,Vogel Mounds,Arkansas,Mounds - Unknown,,?,?,?,3806844.0,686320.0,15.0,1+,0.0,0.0,0,0.0,0
+15-N-1,,Fitzhugh,Sunflower,Large Ceremonial Center,Large Ceremonial Center,B-A,B,A,3814590.0,720290.0,15.0,3,20.0,0.0,0,0.0,0
+15-N-10,22-Co-502,Dickerson,Sunflower,Large Village Site with Mound(s),Conical Mound,F-E,F,E,3804144.0,731312.0,15.0,2,9.0,6361.725123519331,0,0.0,0
+15-N-2,,Ellis,Arkansas,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3810440.0,718757.0,15.0,1,6.0,0.0,0,0.0,0
+15-N-3,,Old Town,Arkansas,St. Francis,St. Francis,B-A,B,A,3808000.0,708268.0,15.0,2,12.0,0.0,0,0.0,0
+15-N-4,,Buie,Arkansas,Small Village Site,,D-B,D,B,3806300.0,707130.0,15.0,0,0.0,0.0,0,0.0,0
+15-N-5,,Parchman Place,Arkansas,Large Village Site with Mound(s),,B-A,B,A,3803580.0,725377.0,15.0,1+,0.0,0.0,0,0.0,1
+15-N-6,,Montgomery,Sunflower,Small Village Site with Mound(s),,D-A,D,A,3797449.0,713147.0,15.0,2,0.0,0.0,0,0.0,1
+15-N-7,,Stovall,Sunflower,Conical Mound(s),,F-A,F,A,3797160.0,714046.0,15.0,1,0.0,0.0,0,0.0,0
+15-N-8,,Carson Group,Sunflower,Small Village Site with Mound(s),,B-A,B,A,3797169.0,714335.0,15.0,3,0.0,0.0,0,1.0,1
+15-N-9,,Vaught Mound,Sunflower,Mounds - Unknown,,?,?,?,3808956.0,726677.0,15.0,1,0.0,0.0,0,0.0,1
+15-O-1,22-Co-504,Salomon,Sunflower,Small Ceremonial Center,Small Ceremonial Center,E-B,E,B,3804150.0,731320.0,15.0,11,27.0,0.0,0,0.0,1
+15-O-10,,Wilsford,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3808537.0,730411.0,15.0,1,10.0,0.0,0,0.0,1
+15-O-12,,D'Orr,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3795120.0,747038.0,15.0,1,0.0,0.0,0,0.0,0
+15-O-13,22Qu514,Allison,Sunflower,Small Village Site with Mound(s),,E-A,E,A,3813392.0,749936.0,15.0,1+,0.0,0.0,0,0.0,1
+15-O-14,,Youngblood,Sunflower,Small Village Site with Mound(s),,?,?,?,3807000.0,741714.0,15.0,1+,0.0,0.0,0,0.0,0
+15-O-15,22Qu511,Whiting,Sunflower,Small Ceremonial Center,Small Ceremonial Center,E-C,E,C,3800530.0,742735.0,15.0,1+,0.0,0.0,0,0.0,0
+15-O-16,,Tidwell,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3798940.0,743878.0,15.0,1,5.0,2827.4333882308138,0,0.0,0
+15-O-17,,Miller Place,Sunflower,Mounds - Unknown,,?,?,?,3795821.0,743508.0,15.0,2,0.0,0.0,0,0.0,0
+15-O-18,,Ware,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3793760.0,745014.0,15.0,3,6.0,4417.864669110647,0,0.0,0
+15-O-2,22Co510,Barbee,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3812570.0,732861.0,15.0,1,8.0,7853.981633974483,0,0.0,0
+15-O-3,,Maddux,Sunflower,Small Village Site,,?,?,?,3813876.0,730470.0,15.0,0,0.0,0.0,0,0.0,0
+15-O-4,22Co517,Lula,Sunflower,Large Village Site with Mound(s),,F-D,F,D,3816984.0,729504.0,15.0,2,0.0,0.0,0,0.0,0
+15-O-5,,Moon,Sunflower,Large Village Site,,E-D,E,D,3810120.0,731401.0,15.0,0,0.0,0.0,0,0.0,0
+15-O-6,,Posey Mound,Sunflower,Small Ceremonial Center,Small Ceremonial Center,F-D,F,D,3802392.0,748156.0,15.0,1+,15.0,0.0,0,0.0,1
+15-O-7,22Co506,Prowell,Sunflower,Large Village Site with Mound(s),Conical Mound,F-E,F,E,3793390.0,738262.0,15.0,3,0.0,0.0,0,0.0,0
+15-O-8,22Co515,Hull Brake,Sunflower,Small Village Site,,F-B,F,B,3805939.0,728611.0,15.0,0,0.0,0.0,0,0.0,0
+15-P-1,,Thomas,Sunflower,Conical Mound(s),Conical Mound,F-E,F,E,3800320.0,770245.0,15.0,1,3.0,1590.4312808798327,0,0.0,0
+15-P-2,22Qu507,Taylor,Sunflower,Conical Mound(s),,?,?,?,3813380.0,753223.0,15.0,1,0.0,0.0,0,0.0,0
+15-P-3,22Pa513,Indian Creek,Sunflower,Small Ceremonial Center,Small Ceremonial Center,F-E,F,E,3814530.0,761736.0,15.0,1,12.0,0.0,0,0.0,1
+15-P-4,22Pa514,Corn Lake,Sunflower,Small Ceremonial Center,Small Ceremonial Center,D-B,D,B,3809960.0,758880.0,15.0,1+,0.0,0.0,0,0.0,0
+16-K-1,3AR14,Jones Place,Arkansas,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3765272.0,649648.0,15.0,2,5.0,1256.6370614359173,0,0.0,0
+16-K-2,3AR013,Mill Bayou Prairie Mound,Arkansas,Small Village Site with Mound(s),,?,?,?,3779544.0,643504.0,15.0,1,0.0,0.0,0,0.0,0
+16-K-3,3AR27,McGahhey,Arkansas,Conical Mound(s),,?,?,?,3765329.0,657598.0,15.0,1+,0.0,0.0,0,0.0,0
+16-L-1,3AR010,Bitely Place,Arkansas,Mounds - Unknown,,?,?,?,3772216.0,663560.0,15.0,1,20.0,0.0,0,0.0,1
+16-L-2,,Essex,Arkansas,Mounds - Unknown,,?,?,?,3790079.0,666539.0,15.0,1,0.0,0.0,0,0.0,1
+16-L-3,3AR009,Stovall Mounds,Arkansas,Small Village Site with Mound(s),,F-B,F,B,3791136.0,671632.0,15.0,1+,3.0,1963.4954084936207,0,0.0,0
+16-L-4,,Brandenburg Place A,Arkansas,Small Village Site with Mound(s),,C-B,C,B,3791063.0,672080.0,15.0,2,0.0,0.0,0,0.0,0
+16-L-5,,Brandenburg Place B,Arkansas,Small Village Site with Mound(s),Conical Mound,C-B,C,B,3791043.0,671222.0,15.0,2+,1.5,1963.4954084936207,0,0.0,0
+16-L-6,,Dupree,Arkansas,Large Village Site with Mound(s),Irregular,C-B,C,B,3783580.0,682776.0,15.0,1,10.0,0.0,0,0.0,1
+16-M-1,,Avenue,Arkansas,Small Village Site with Mound(s),,B-A,B,A,3784280.0,690527.0,15.0,1+,0.0,0.0,0,0.0,0
+16-M-2,,Tomanelli,Sunflower,Small Village Site with Mound(s),,C-B,C,B,3770770.0,699076.0,15.0,1+,0.0,0.0,0,0.0,0
+16-M-3,,Yates,Sunflower,Large Village Site with Mound(s),,F-C,F,C,3766240.0,704609.0,15.0,1+,0.0,0.0,0,0.0,0
+16-M-4,,Macedonia,Sunflower,Mounds - Unknown,,?,?,?,3792073.0,718913.0,15.0,1,0.0,0.0,0,0.0,0
+16-M-5,,Mount Olive,Sunflower,Small Village Site with Mound(s),,C-B,C,B,3765030.0,699196.0,15.0,1+,0.0,0.0,0,0.0,0
+16-M-6,,Stokes Bayou,Sunflower,Large Village Site with Mound(s),Irregular,C-B,C,B,3766410.0,697259.0,15.0,5,9.0,0.0,0,0.0,1
+16-M-7,,Brook Bayou,Sunflower,Mounds - Unknown,,?,?,?,3779737.0,713311.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-1,,Acree Place,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3775070.0,712291.0,15.0,2,6.0,7853.981633974483,0,0.0,0
+16-N-10,,Myer,Sunflower,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3775580.0,726680.0,15.0,1,15.0,0.0,0,0.0,1
+16-N-11,,Hopson Bayou,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3770230.0,728068.0,15.0,1,3.0,1256.6370614359173,0,0.0,0
+16-N-12,,Black Bayou,Sunflower,Small Village Site with Mound(s),,?,?,?,3782870.0,710870.0,15.0,1+,0.0,0.0,0,0.0,0
+16-N-13,,Sherard,Sunflower,Conical Mound(s),,?,?,?,3787501.0,711142.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-14,,Harris Bayou,Sunflower,Large Village Site with Mound(s),Conical Mound,F-E,F,E,3787130.0,713449.0,15.0,1,5.0,5026.548245743669,0,0.0,0
+16-N-15,,Dogwood Bayou,Sunflower,Small Village Site with Mound(s),,?,?,?,3785588.0,713965.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-16,,Baugh,Sunflower,Mounds - Unknown,,?,?,?,3786507.0,709960.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-17,,Howden Lake,Sunflower,Small Village Site with Mound(s),,?,?,?,3768080.0,709954.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-18,,Bobo,Sunflower,Mounds - Unknown,,?,?,?,3784940.0,721593.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-19,,Crawford Lake,Sunflower,Small Village Site with Mound(s),,C-B,C,B,3771110.0,723849.0,15.0,1+,0.0,0.0,0,0.0,0
+16-N-2,,Alligator Mounds,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3774300.0,708780.0,15.0,2,15.0,0.0,0,0.0,1
+16-N-20,,Aderholt,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3786690.0,718565.0,15.0,2,0.0,0.0,0,0.0,0
+16-N-21,,Morning Star,Sunflower,Mounds - Unknown,,?,?,?,3789172.0,722173.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-22,,Clark,Sunflower,Mounds - Unknown,,?,?,?,3784290.0,724631.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-23,,Hopkins,Sunflower,Mounds - Unknown,,?,?,?,3782020.0,724988.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-24,,Durham,Sunflower,Mounds - Unknown,,?,?,?,3782254.0,726813.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-25,,Doadey,Sunflower,Mounds - Unknown,,F,F,F,3772850.0,728389.0,15.0,1+,0.0,0.0,0,0.0,0
+16-N-3,,Ellis,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3791820.0,660360.0,15.0,3,12.0,7853.981633974483,0,0.0,0
+16-N-4,,Rufus Davis,Sunflower,Small Ceremonial Center,Small Ceremonial Center,E-D,E,D,3791340.0,717339.0,15.0,2,12.0,0.0,0,0.0,1
+16-N-5,,Little Sunflower,Sunflower,Mounds - Unknown,,D-C,D,C,3789150.0,717835.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-6,,Oliver,Sunflower,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3770950.0,721200.0,15.0,2,26.0,0.0,0,0.0,0
+16-N-7,,Bramlett,Sunflower,Small Village Site with Mound(s),,E-B,E,B,3778930.0,712966.0,15.0,1+,0.0,0.0,0,0.0,0
+16-N-8,,Peter's Rock,Sunflower,Conical Mound(s),,?,?,?,3782293.0,707831.0,15.0,1,0.0,0.0,0,0.0,0
+16-N-9,,Mattson,Sunflower,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3776890.0,728912.0,15.0,1,12.0,0.0,0,0.0,0
+16-O-1,,Dunn,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3788240.0,732175.0,15.0,2,15.0,0.0,0,0.0,1
+16-O-11,,Oxbow Bend,Sunflower,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3789290.0,735663.0,15.0,1,3.0,6361.725123519331,0,0.0,0
+16-O-12,,Oliverfried,Sunflower,Mounds - Unknown,,F-C,F,C,3783571.0,750265.0,15.0,1,0.0,0.0,0,0.0,0
+16-O-13,,Denton,Sunflower,Small Village Site with Mound(s),,?,?,?,3782580.0,744963.0,15.0,1,0.0,0.0,0,0.0,0
+16-O-14,,Stover,Sunflower,Small Village Site with Mound(s),Conical Mound,G-F,G,F,3768900.0,751284.0,15.0,1,3.0,1590.4312808798327,0,0.0,0
+16-O-15,,Garner,Sunflower,Small Village Site with Mound(s),Conical Mound,H-A,H,A,3773320.0,733696.0,15.0,1,5.0,4417.864669110647,0,0.0,0
+16-O-16,,Flower,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3771220.0,734081.0,15.0,1,0.0,0.0,0,0.0,0
+16-O-2,,Spendthirft,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3778260.0,732685.0,15.0,1,15.0,0.0,0,0.0,0
+16-O-3,,Everett,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3767380.0,740305.0,15.0,2,5.0,2827.4333882308138,0,0.0,0
+16-O-4,,Opossum Bayou,Sunflower,Conical Mound(s),,?,?,?,3784296.0,748158.0,15.0,1,0.0,0.0,0,0.0,0
+16-O-5,,Yager,Sunflower,Conical Mound(s),,?,?,?,3783248.0,748301.0,15.0,1,0.0,0.0,0,0.0,0
+16-O-6,,Garmon,Sunflower,Small Village Site with Mound(s),,G-F,G,F,3786320.0,744428.0,15.0,1,0.0,0.0,0,0.0,1
+16-O-7,,Henderson,Sunflower,Small Village Site with Mound(s),Conical Mound,G-F,G,F,3781730.0,737614.0,15.0,1,5.0,4417.864669110647,0,0.0,0
+16-O-8,,Norman,Sunflower,Mounds - Unknown,,H-F,H,F,3776050.0,736443.0,15.0,1+,0.0,0.0,0,0.0,0
+16-O-9,,Little Texas,Sunflower,Small Village Site with Mound(s),,?,?,?,3778000.0,735886.0,15.0,1+,0.0,0.0,0,0.0,0
+16-P-1,,Charleston,Sunflower,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3766640.0,771187.0,15.0,3,15.0,17671.458676442588,0,0.0,0
+16-P-2,,Shady Grove,Sunflower,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3789490.0,753408.0,15.0,2,18.0,0.0,0,0.0,1
+16-P-3,,Twin Lakes,Sunflower,Small Village Site with Mound(s),Conical Mound,H-A,H,A,3783870.0,757671.0,15.0,2,0.0,0.0,0,0.0,0
+16-P-4,,White,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3783170.0,755259.0,15.0,2,6.0,0.0,0,0.0,0
+16-P-5,,Crosslyn,Sunflower,Mounds - Unknown,,E-B,E,B,3787410.0,754652.0,15.0,1+,0.0,0.0,0,0.0,0
+16-P-6,,Cox,Sunflower,Small Village Site with Mound(s),,E-B,E,B,3785510.0,755436.0,15.0,1+,0.0,0.0,0,0.0,0
+16-P-7,,Mitchell,Sunflower,Small Village Site with Mound(s),,E-B,E,B,3781300.0,757214.0,15.0,1+,0.0,0.0,0,0.0,0
+16-P-8,,Blue Lake,Sunflower,Small Village Site with Mound(s),Conical Mound,H-A,H,A,3779450.0,757541.0,15.0,2,0.0,0.0,0,0.0,0
+16-P-9,,Carmichael,Sunflower,Mounds - Unknown,,G-F,G,F,3776617.0,757462.0,15.0,1,0.0,0.0,0,0.0,0
+17-K-1,3AR004,Menard Mound,Arkansas,Small Village Site with Mound(s),,D-A,D,A,3762400.0,659884.0,15.0,3,0.0,0.0,0,0.0,0
+17-K-2,,Thiele Hill,Arkansas,Small Village Site with Mound(s),,?,?,?,3760992.0,656376.0,15.0,1,0.0,0.0,0,0.0,0
+17-K-3,3AR025,Wallace,Arkansas,Village Site With Mound(s),,B-A,B,A,3762132.0,661476.0,15.0,1,0.0,0.0,0,0.0,0
+17-K-4,,Almond Farm,Arkansas,Small Village Site,,?,?,?,3762300.0,658468.0,15.0,0,0.0,0.0,0,0.0,0
+17-K-5,,Cooks Mound,Arkansas,Small Ceremonial Center,Small Ceremonial Center,D-B,D,B,3737720.0,660234.0,15.0,1,25.0,0.0,0,0.0,1
+17-K-6,,Bond,Arkansas,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3740130.0,659546.0,15.0,1,4.0,1963.4954084936207,0,0.0,0
+17-K-7,,Alma Brown,Arkansas,Large Village Site with Mound(s),,F-A,F,A,3735930.0,658649.0,15.0,1+,0.0,0.0,0,0.0,0
+17-L-1,,Massey Place,Arkansas,Large Village Site with Mound(s),,F-B,F,B,3762660.0,661971.0,15.0,1+,0.0,0.0,0,0.0,0
+17-L-2,,Ellerton Mound,Arkansas,Conical Mound(s),,?,?,?,3763111.0,662283.0,15.0,1+,0.0,0.0,0,0.0,0
+17-L-3,3AR003,Poor Place,Arkansas,Small Village Site with Mound(s),,E-C,E,C,3762288.0,661484.0,15.0,2,0.0,0.0,0,0.0,0
+17-L-4,,Wynn,Arkansas,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3753780.0,662679.0,15.0,2,11.0,0.0,0,0.0,1
+17-L-5,,Waxhaw,Sunflower,Mounds - Unknown,,?,?,?,3753260.0,683037.0,15.0,1+,0.0,0.0,0,0.0,1
+17-M-1,,Bear Ridge,Sunflower,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3755230.0,685270.0,15.0,6,10.0,0.0,0,0.0,1
+17-M-10,,Reynolds,Sunflower,Small Village Site,,E-C,E,C,3746440.0,695653.0,15.0,0,0.0,0.0,0,0.0,0
+17-M-11,,Bush,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3749490.0,692713.0,15.0,2,12.0,0.0,0,0.0,1
+17-M-12,,O'Donnell,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3746610.0,692098.0,15.0,1,8.0,0.0,0,0.0,1
+17-M-13,,Boles Lake,Sunflower,Small Village Site with Mound(s),Conical Mound,G-F,G,F,3745220.0,689311.0,15.0,1,9.0,2827.4333882308138,0,0.0,0
+17-M-14,,Bonkin Bayou,Sunflower,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3748200.0,687720.0,15.0,1,6.0,1963.4954084936207,0,0.0,0
+17-M-15,,Dattel,Sunflower,Conical Mound(s),,?,?,?,3748910.0,689484.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-16,,MacGowan,Sunflower,Small Village Site with Mound(s),,D-C,D,C,3745900.0,686378.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-17,,Nelson,Sunflower,Small Ceremonial Center,Small Ceremonial Center,F-E,F,E,3743370.0,686501.0,15.0,2,5.0,0.0,0,0.0,1
+17-M-18,,Roosevelt,Sunflower,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3749670.0,701217.0,15.0,2,5.0,0.0,0,0.0,0
+17-M-19,,Firtell,Sunflower,Mounds - Unknown,,?,?,?,3752287.0,698707.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-2,,Blanchard,Sunflower,St. Francis,St. Francis,B-A,B,A,3758170.0,693955.0,15.0,4,15.0,0.0,1,0.0,0
+17-M-20,,Shelby,Sunflower,Mounds - Unknown,,?,?,?,3756069.0,701541.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-21,,Laban Bayou,Sunflower,Mounds - Unknown,,?,?,?,3746582.0,686574.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-3,,Perthshire,Sunflower,Conical Mound(s),,?,?,?,3760722.0,691966.0,15.0,1+,0.0,0.0,0,0.0,0
+17-M-4,,Christmas,Sunflower,Conical Mound(s),,?,?,?,3738114.0,687171.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-5,,Walton,Sunflower,Mounds - Unknown,,?,?,?,3739123.0,689419.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-6,,Mound City,Sunflower,Large Village Site with Mound(s),,?,?,?,3738080.0,691968.0,15.0,1+,0.0,0.0,0,0.0,1
+17-M-7,,Moore,Sunflower,Small Village Site with Mound(s),,?,?,?,3739670.0,691582.0,15.0,1,0.0,0.0,0,0.0,1
+17-M-8,,Bob Williams,Sunflower,Mounds - Unknown,,?,?,?,3746646.0,702428.0,15.0,1,0.0,0.0,0,0.0,0
+17-M-9,,Spinks,Sunflower,Mounds - Unknown,,?,?,?,3741710.0,699280.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-1,,Merigold,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3746510.0,712155.0,15.0,7,18.0,0.0,0,0.0,0
+17-N-10,,Nora Smith,Sunflower,Small Village Site with Mound(s),,?,?,?,3747623.0,724081.0,15.0,1,0.0,0.0,0,0.0,0
+17-N-11,,Dockery,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3749500.0,722617.0,15.0,2,5.0,0.0,0,0.0,0
+17-N-12,,Long Lake,Sunflower,Small Village Site with Mound(s),,C-B,C,B,3750420.0,724949.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-13,,Burnet,Sunflower,Mounds - Unknown,,?,?,?,3748904.0,724670.0,15.0,1,0.0,0.0,0,0.0,0
+17-N-14,,Kimball,Sunflower,Small Village Site,,D-C,D,C,3751680.0,721317.0,15.0,0,0.0,0.0,0,0.0,0
+17-N-15,,Cook,Sunflower,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3746290.0,716142.0,15.0,2,3.0,1590.4312808798327,0,0.0,0
+17-N-16,,Wilnot,Sunflower,Small Village Site with Mound(s),Conical Mound,G-F,G,F,3744300.0,714802.0,15.0,1,3.0,2827.4333882308138,0,0.0,0
+17-N-17,,John Dickson,Sunflower,Mounds - Unknown,,G-F,G,F,3742286.0,715659.0,15.0,1,0.0,0.0,0,0.0,0
+17-N-18,,Joe Smith,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3742890.0,717750.0,15.0,1,6.0,4417.864669110647,0,0.0,0
+17-N-19,,Parker,Sunflower,Conical Mound(s),,?,?,?,3740632.0,716013.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-2,,Walford,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3739900.0,717172.0,15.0,2,10.0,0.0,0,0.0,0
+17-N-20,,Newton Bayou,Sunflower,Mounds - Unknown,,?,?,?,3746366.0,721230.0,15.0,1,0.0,0.0,0,0.0,0
+17-N-21,,Loosangle,Sunflower,Small Village Site with Mound(s),,?,?,?,3745261.0,721282.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-3,,Debow,Sunflower,Large Village Site with Mound(s),,G-C,G,C,3762040.0,724733.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-4,,Penitentiary,Sunflower,Small Village Site with Mound(s),,C-B,C,B,3753390.0,727586.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-5,,May,Sunflower,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3757850.0,718743.0,15.0,1,3.0,7853.981633974483,0,0.0,0
+17-N-6,,Sid Dodd,Sunflower,Small Village Site with Mound(s),,?,?,?,3757310.0,721501.0,15.0,1+,0.0,0.0,0,0.0,0
+17-N-7,,Baltzer,Sunflower,Small Village Site with Mound(s),,?,?,?,3763230.0,722422.0,15.0,1,0.0,0.0,0,0.0,0
+17-N-8,,Boyer,Sunflower,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3746770.0,720805.0,15.0,1,9.0,7853.981633974483,0,0.0,0
+17-N-9,,Vance,Sunflower,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3744880.0,723418.0,15.0,1,0.0,0.0,0,0.0,0
+17-O-1,,Buford,Sunflower,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3763070.0,744284.0,15.0,3,30.0,0.0,0,0.0,1
+17-O-10,,Sage,Sunflower,Mounds - Unknown,,?,?,?,3746533.0,739106.0,15.0,1,0.0,0.0,0,0.0,0
+17-O-11,,Cassidy Bayou,Sunflower,Large Village Site with Mound(s),Conical Mound,F-E,F,E,3760620.0,747168.0,15.0,1,9.0,6361.725123519331,0,0.0,0
+17-O-12,,Rome,Sunflower,Small Village Site with Mound(s),,E-B,E,B,3758840.0,732607.0,15.0,1+,0.0,0.0,0,0.0,0
+17-O-2,,James,Sunflower,Conical Mound(s),,?,?,?,3761261.0,743184.0,15.0,1,0.0,0.0,0,0.0,0
+17-O-3,,Petty,Sunflower,Small Village Site with Mound(s),,?,?,?,3759100.0,744166.0,15.0,1+,0.0,0.0,0,0.0,0
+17-O-4,,Flaut,Sunflower,Small Village Site with Mound(s),,?,?,?,3751410.0,749424.0,15.0,2,0.0,0.0,0,0.0,0
+17-O-5,,King Mound Group,Sunflower,Small Village Site with Mound(s),,F-E,F,E,3755410.0,750972.0,15.0,1+,0.0,0.0,0,0.0,1
+17-O-6,,Jernberg,Sunflower,Small Village Site with Mound(s),,D-C,D,C,3757750.0,740443.0,15.0,1+,0.0,0.0,0,0.0,0
+17-O-7,,Jacobs,Sunflower,Conical Mound(s),,?,?,?,3741029.0,748453.0,15.0,1,0.0,0.0,0,0.0,0
+17-O-8,,Falls,Sunflower,Small Village Site with Mound(s),,H-D,H,D,3742890.0,749833.0,15.0,1+,0.0,0.0,0,0.0,0
+17-O-9,,Powell Bayou,Sunflower,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3746000.0,732311.0,15.0,4,12.0,0.0,0,0.0,1
+17-P-1,,Tippo Bayou,Sunflower,Small Village Site with Mound(s),,C-B,C,B,3760720.0,761077.0,15.0,1,0.0,0.0,0,0.0,0
+17-P-2,,Cason,Sunflower,Large Ceremonial Center,Large Ceremonial Center,E-B,E,B,3738610.0,756494.0,15.0,4,18.0,0.0,0,0.0,1
+18-K-1,,Hogg Lake,Arkansas,Small Ceremonial Center,Small Ceremonial Center,F-C,F,C,3710200.0,657161.0,15.0,2,5.0,0.0,0,0.0,1
+18-K-2,,Westlake,Arkansas,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3712740.0,655034.0,15.0,2,3.0,706.8583470577034,0,0.0,0
+18-L-1,,Neblett Landing,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-B,D,B,3731260.0,683519.0,15.0,2,9.0,0.0,0,0.0,1
+18-M-1,,Porter Bayou,Yazoo,Small Village Site with Mound(s),Conical Mound,F-E,F,E,3716990.0,704900.0,15.0,3,12.0,2040.0,0,0.0,0
+18-M-2,,Noble,Yazoo,Mounds - Unknown,,?,?,?,3722200.0,686720.0,15.0,1,0.0,0.0,0,0.0,0
+18-M-3,,Stringtown,Yazoo,Mounds - Unknown,,?,?,?,3716110.0,686117.0,15.0,1,0.0,0.0,0,0.0,0
+18-M-4,,Lipe,Yazoo,Large Village Site with Mound(s),,D-B,D,B,3716240.0,701980.0,15.0,1+,0.0,0.0,0,0.0,0
+18-M-5,,Brooks,Yazoo,Conical Mound(s),Conical Mound,E-D,E,D,3734470.0,695292.0,15.0,1,10.0,9000.0,0,0.0,0
+18-M-6,,Choctaw,Yazoo,Small Ceremonial Center,Small Ceremonial Center; Poverty Point as well,H-D,H,D,3713830.0,704836.0,15.0,1+,12.0,0.0,0,0.0,0
+18-M-7,,Priscilla,Yazoo,Small Village Site with Mound(s),,C-B,C,B,3712260.0,686230.0,15.0,1+,0.0,0.0,0,0.0,0
+18-N-1,,Barlow,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3732700.0,723842.0,15.0,1,12.0,0.0,0,0.0,0
+18-N-10,,Gillfield,Yazoo,Conical Mound(s),,?,?,?,3726357.0,726643.0,15.0,1,0.0,0.0,0,0.0,0
+18-N-2,,Marlow Cemeter,Yazoo,Small Village Site with Mound(s),Conical Mound,D-C,D,C,3734730.0,725412.0,15.0,1,8.0,2827.4333882308138,0,0.0,0
+18-N-3,,Cooper,Yazoo,Small Village Site with Mound(s),,F-E,F,E,3733940.0,714695.0,15.0,1,0.0,0.0,0,0.0,0
+18-N-4,,Steiner,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3719990.0,721258.0,15.0,1,0.0,0.0,0,0.0,0
+18-N-5,,Moorhead Bayou,Yazoo,Mounds - Unknown,,?,?,?,3715609.0,716218.0,15.0,1,0.0,0.0,0,0.0,0
+18-N-6,,Anderson,Yazoo,Mounds - Unknown,,?,?,?,3713751.0,720290.0,15.0,1,0.0,0.0,0,0.0,0
+18-N-7,,Boyer,Yazoo,Small Village Site with Mound(s),,C-B,C,B,3711300.0,718394.0,15.0,1+,0.0,0.0,0,0.0,0
+18-N-8,,MacGregor,Yazoo,Shell Midden,Shell Midden,D-C,D,C,3719880.0,726232.0,15.0,0,0.0,0.0,0,0.0,0
+18-N-9,,Eastland,Yazoo,Shell Midden,Shell Midden,D-C,D,C,3727730.0,725886.0,15.0,0,0.0,0.0,0,0.0,0
+18-O-1,,Barry,Yazoo,Shell Midden,Shell Midden,E-D,E,D,3720200.0,752322.0,15.0,0,0.0,0.0,0,0.0,0
+18-O-2,,Garrard,Yazoo,Small Village Site with Mound(s),,?,?,?,3726165.0,745204.0,15.0,2,0.0,0.0,0,0.0,0
+18-P-1,,Lester Way,Yazoo,Small Village Site with Mound(s),,E-D,E,D,3714690.0,756552.0,15.0,1,0.0,0.0,0,0.0,0
+18-P-2,,Whaley,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3724190.0,767295.0,15.0,4,5.0,0.0,0,0.0,0
+19-L-1,,Winterville,Yazoo,Large Ceremonial Center,Large Ceremonial Center,C-B,C,B,3705750.0,679336.0,15.0,7,54.0,10000.0,0,0.0,1
+19-L-2,,Bachelor Bend,Yazoo,Small Village Site with Mound(s),,?,?,?,3705421.0,677073.0,15.0,1+,0.0,0.0,0,0.0,0
+19-L-3,,Ely,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3704530.0,681400.0,15.0,1,3.0,0.0,0,0.0,0
+19-L-4,,Deer City,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3703710.0,684664.0,15.0,2,12.0,2238.8933666756225,0,0.0,0
+19-L-5,,Ireland,Yazoo,Large Village Site,,E-D,E,D,3704760.0,684088.0,15.0,0,0.0,0.0,0,0.0,0
+19-L-6,,Refuge,Yazoo,Large Ceremonial Center,Large Ceremonial Center,B-A,B,A,3686170.0,676824.0,15.0,3,15.0,7104.180875028417,0,0.0,1
+19-L-7,,Ash Bayou,Yazoo,Mounds - Unknown,,?,?,?,3691360.0,681276.0,15.0,1,0.0,13526.328755613566,0,0.0,0
+19-M-1,,Leland,Yazoo,Large Ceremonial Center,Large Ceremonial Center,C-B,C,B,3699360.0,696616.0,15.0,5,31.0,0.0,0,0.0,0
+19-M-2,,Sheldon,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3704450.0,687779.0,15.0,2,0.0,0.0,0,0.0,0
+19-M-3,,Stoneville,Yazoo,Small Ceremonial Center,Small Ceremonial Center,B-A,B,A,3697740.0,693504.0,15.0,1+,6.0,30434.23970013052,0,0.0,0
+19-M-4,,Dunleith,Yazoo,Small Village Site with Mound(s),,?,?,?,3698070.0,700945.0,15.0,1+,0.0,0.0,0,0.0,1
+19-M-5,,Hollyknowe,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3695720.0,701359.0,15.0,1,5.0,7608.55992503263,0,0.0,0
+19-M-6,,Arcola High School,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3682620.0,696415.0,15.0,2,5.0,0.0,0,0.0,0
+19-M-7,,Polk,Yazoo,Small Ceremonial Center,Small Ceremonial Center,H-C,H,C,3700030.0,703309.0,15.0,1,5.0,0.0,0,0.0,0
+19-N-1,,Kinlock,Yazoo,Small Ceremonial Center,Small Ceremonial Center,H-G + B-A,H,A,3688530.0,712059.0,15.0,5,14.0,0.0,0,0.0,0
+19-N-2,,Shields,Yazoo,Shell Midden,Shell Midden,F-E,F,E,3695340.0,714533.0,15.0,1+,0.0,0.0,0,0.0,0
+19-N-3,,Bay Lake,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3694960.0,711987.0,15.0,3,6.0,3487.50697501395,0,0.0,0
+19-N-4,,Danzler,Yazoo,Conical Mound(s),,?,?,?,3698490.0,701100.0,15.0,2,0.0,0.0,0,0.0,0
+19-N-5,,Failing,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3703550.0,720713.0,15.0,2,0.0,0.0,0,0.0,0
+19-N-6,,Lake Dawson,Yazoo,Large Ceremonial Center,Large Ceremonial Center,C-B,C,B,3686180.0,720187.0,15.0,4,30.0,0.0,0,0.0,0
+19-N-7,,Mitchell,Yazoo,Small Village Site with Mound(s),,D-C,D,C,3705840.0,719493.0,15.0,1,0.0,6458.346250025834,0,0.0,1
+19-N-8,,Horve Hope,Yazoo,Mounds - Unknown,,?,?,?,3707676.0,718187.0,15.0,1,0.0,0.0,0,0.0,0
+19-O-1,,McLean,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3706733.0,749763.0,15.0,2,15.0,16145.865625064584,0,0.0,0
+19-O-2,,Shell Bluff,Yazoo,Shell Midden,Shell Midden,E-C,E,C,3698580.0,751416.0,15.0,0,0.0,34444.51333347111,0,0.0,0
+19-O-3,,Fleming,Yazoo,Shell Midden,Shell Midden,D-C,D,C,3683590.0,752467.0,15.0,0,0.0,0.0,0,0.0,0
+19-O-4,,Archer,Yazoo,Shell Midden,Shell Midden,E-D,E,D,3689580.0,753434.0,15.0,0,0.0,0.0,0,0.0,0
+19-O-5,,Old Dominion,Yazoo,Conical Mound(s),,?,?,?,3696290.0,742553.0,15.0,1,0.0,1902.1399812581576,0,0.0,0
+19-O-6,,Robinson Deadening,Yazoo,Mounds - Unknown,,?,?,?,3698319.0,738882.0,15.0,1,0.0,3229.173125012917,0,0.0,0
+20-M-1,,Arcola,Yazoo,Large Ceremonial Center,Large Ceremonial Center,B-A,B,A,3678140.0,696839.0,15.0,3,43.0,45208.42375018083,0,0.0,0
+20-M-2,,Deer Creek,Yazoo,Large Ceremonial Center,Large Ceremonial Center,B-A,B,A,3662880.0,701081.0,15.0,4,40.0,0.0,0,0.0,0
+20-M-3,,Panther Burn,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3660270.0,698020.0,15.0,1+,8.0,7608.55992503263,0,0.0,0
+20-M-4,,Lessiedell,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3662670.0,691027.0,15.0,2,12.0,15069.47458339361,0,0.0,0
+20-M-5,,Swan Lake,Yazoo,Small Ceremonial Center; Poverty Point,Small Ceremonial Center,H-A,H,A,3664480.0,688291.0,15.0,2,24.0,45208.42375018083,0,0.0,0
+20-M-6,,Clower,Yazoo,Mounds - Unknown,,?,?,?,3668300.0,702315.0,15.0,1,0.0,21134.888680646192,0,0.0,0
+20-N-1,,Midnight,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3657440.0,724827.0,15.0,2,10.0,8072.932812532292,0,0.0,0
+20-N-2,,Summerfield,Yazoo,Large Ceremonial Center,Large Ceremonial Center,D-C,D,C,3658120.0,718497.0,15.0,3,25.0,17222.256666735557,0,0.0,1
+20-N-3,,Straight Bayou,Yazoo,Mounds - Unknown,,?,?,?,3685237.0,723800.0,15.0,1,0.0,3381.5821889033914,0,0.0,0
+20-N-4,,Kongo,Yazoo,Mounds - Unknown,,?,?,?,3666880.0,711169.0,15.0,1+,0.0,5166.677000020667,0,0.0,0
+20-O-1,,Jaketown,Yazoo,Large Ceremonial Center,Large Ceremonial Center,H-G + C-B ,C,B,3679240.0,733349.0,15.0,5,15.0,0.0,0,0.0,0
+20-O-2,,Belzoni,Yazoo,Small Ceremonial Center,Small Ceremonial Center,D-C,D,C,3673870.0,734745.0,15.0,2,12.0,20625.0,0,0.0,0
+20-O-3,,Lamkin ,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3660940.0,738855.0,15.0,2,12.0,24487.896198014616,0,0.0,1
+20-O-4,,Atchafalaya Bayou,Yazoo,Mounds - Unknown,,?,?,?,3686110.0,733150.0,15.0,2,0.0,9687.51937503875,0,0.0,0
+20-O-5,,Silver City,Yazoo,Small Ceremonial Center,Small Ceremonial Center,C-B,C,B,3662890.0,733607.0,15.0,2,15.0,17954.66701755444,0,0.0,0
+20-O-6,,Golson,Yazoo,Shell Midden,Shell Midden,E-D,E,D,3665620.0,734014.0,15.0,0,0.0,0.0,0,0.0,0
+4-Q-1,,Peter Bess,SEMO,Small Village Site with Mound(s),,C-A,C,A,4105120.0,770455.0,15.0,6,10.0,17671.458676442588,0,0.0,1
+5-R-1,,Sikeston,SEMO,Small Village Site with Mound(s),,E-A,E,A,4080008.0,271712.0,16.0,7+,11.0,27600.0,0,1.0,1
+5-R-2,,East Lake,SEMO,Small Village Site with Mound(s),,E-A,E,A,4077576.0,272040.0,16.0,2,4.5,3318.307240354219,0,1.0,1
+5-R-3,,Matthews,SEMO,Small Village Site with Mound(s),,D-A,D,A,4072344.0,268723.0,16.0,7,11.0,7700.0,0,1.0,1
+5-R-8,,Morehouse,SEMO,Mounds - Unknown,,B-C,B,C,4079684.0,260043.0,16.0,1,0.0,0.0,0,0.0,0
+5-Q-3,23-So-16,Durnell,SEMO,Small Village Site with Mound(s),,E-A,E,A,4096613.0,249918.0,16.0,0,0.0,0.0,0,0.0,0
+5-S-5,,Lusk Chapel,SEMO,Conical Mound(s),,D-A,D,A,4099360.0,820690.0,15.0,1,18.0,0.0,0,0.0,0
+5-S-1 ,,Charleston,SEMO,Small Village Site with Mound(s),,D-A,D,A,4089040.0,833026.0,15.0,4,0.0,0.0,0,0.0,0
+5-S-1b,,Charleston-2,SEMO,Conical Mound(s),,E-D,E,D,4093225.0,829422.0,15.0,1,0.0,0.0,0,0.0,0
+5-S-4,,Sandy Woods,SEMO,Small Village Site with Mound(s),,D-A,D,A,4098150.0,816096.0,15.0,9,18.0,0.0,0,1.0,1
+5-S-6,,Meyer's Mound,SEMO,Small Village Site with Mound(s),,D-A,D,A,4090020.0,833225.0,15.0,2,15.0,0.0,0,0.0,1
+5-T-1,,Crosno,SEMO,Small Village Site with Mound(s),,D-A,D,A,4076910.0,841830.0,15.0,4,18.0,0.0,0,1.0,1
+5-T-6,,Wickliffe,SEMO,Small Village Site with Mound(s),,D-B,D,B,4098740.0,847845.0,15.0,10,0.0,0.0,0,0.0,1
+6-Q-1,,Rich Woods,SEMO,Large Ceremonial Center,,E-A,E,A,4065270.0,771193.0,15.0,35,0.0,0.0,0,0.0,1
+6-Q-2,,County Line,SEMO,Small Village Site with Mound(s),,E-A,E,A,4056300.0,771756.0,15.0,1,4.0,0.0,0,1.0,1
+6-Q-4,,Wulfing Plates,SEMO,Unknown,,?,?,?,4045150.0,771274.0,15.0,0,0.0,0.0,0,0.0,0
+6-R-1,,Lilbourn,SEMO,Small Village Site with Mound(s),,D-A,D,A,4052340.0,805749.0,15.0,8,21.0,58800.0,0,1.0,1
+6-S-1,,Barker,SEMO,Mounds - Unknown,,D-A,D,A,4066240.0,826023.0,15.0,3,0.0,0.0,0,0.0,1
+6-S-2,,Spanish Grant,SEMO,Mounds - Unknown,,D-A,D,A,4069440.0,821373.0,15.0,1,0.0,0.0,0,0.0,0
+6-S-3,,Survey Site,SEMO,Small Village Site,,D-A,D,A,4071830.0,822426.0,15.0,0,0.0,0.0,0,0.0,0
+6-S-4,,East Bayou,SEMO,Small Village Site,,D-A,D,A,4061175.0,821917.0,15.0,0,0.0,0.0,0,0.0,0
+6-T-1,,Beckwith's Fort,SEMO,Village Site With Mound(s),,D-A,D,A,4067516.0,836366.0,15.0,6,20.0,17600.0,0,1.0,1
+6-T-3,,O'Byam's Fort,SEMO,Village Site With Mound(s),,?,?,?,4064770.0,847784.0,,,0.0,0.0,,,
+7-P-1,23-DU-4,Holcomb,SEMO,Village Site With Mound(s),,E-A,E,A,4030210.0,764533.0,15.0,4,12.0,70685.83470577035,0,0.0,1
+7-Q-1,,Wardell,SEMO,Village Site With Mound(s),,D-A,D,A,4026910.0,784105.0,15.0,2,0.0,0.0,0,1.0,0
+7-R-3,,Estes,SEMO,Village Site With Mound(s),,E-A,E,A,4026130.0,801133.0,15.0,1,0.0,0.0,0,1.0,0
+8-O-1,,Cockrum Landing,SEMO,Mounds - Unknown,,E-A,E,A,3987390.0,739460.0,15.0,1,0.0,0.0,0,0.0,0
+8-O-2,,Wilkins Island,SEMO,Mounds - Unknown,,E-A,E,A,3995420.0,742596.0,15.0,1+,0.0,0.0,0,0.0,0
+8-P-1,,Old Varney River,SEMO,Mounds - Unknown,,E-A,E,A,4002970.0,749679.0,15.0,1,0.0,22500.0,0,0.0,0
+8-P-2,,Kennett,SEMO,Village Site With Mound(s),,E-A,E,A,4012710.0,760148.0,15.0,1,12.0,0.0,0,0.0,0
+8-P-3,23-DU-1,Landgon,SEMO,Village Site With Mound(s),,E-A,E,A,3996510.0,760676.0,15.0,3+,22.0,10000.0,0,1.0,1
+8-Q-3,,Canady,SEMO,Village Site With Mound(s),,E-A,E,A,4005340.0,791872.0,15.0,2+,0.0,0.0,0,0.0,0
+8-Q-4,,Persimmon Grove,SEMO,Village Site With Mound(s),,D-A,D,A,4000950.0,791867.0,15.0,1,6.0,1963.4954084936207,0,0.0,0
+8-Q-5,,Holland,SEMO,Village Site With Mound(s),,C-A,C,A,3994950.0,785475.0,15.0,5,0.0,0.0,0,0.0,0
+8-Q-7,,Cooter,SEMO,Village Site With Mound(s),,C-A,C,A,3992420.0,789617.0,15.0,1,6.0,7853.981633974483,0,0.0,0
+8-Q-8,,Frakes,SEMO,Unknown,,C-A,C,A,3999376.0,783686.0,15.0,1+,0.0,0.0,0,0.0,0
+8-R-1,,Caruthersville,SEMO,Village Site With Mound(s),,D-A,D,A,4005740.0,797559.0,15.0,2,30.0,30000.0,0,0.0,1
+8-R-2,,Kinfolk Ridge,SEMO,Mounds - Unknown,,C-A,C,A,4003880.0,801545.0,15.0,2,0.0,0.0,0,0.0,0
+8-R-3,,Chute,SEMO,Village Site With Mound(s),,C-A,C,A,4005300.0,803692.0,15.0,1,6.0,7853.981633974483,0,0.0,0
+Yz 1,,Chickachae,LA-MS,Village Site With Mound(s),,C-A,C,A,3558560.0,890054.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 2,,Coosa,LA-MS,Village Site With Mound(s),,C-A,C,A,3600310.0,911517.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 3,,Nanih Waiya,LA-MS,Village Site With Mound(s),,F-A,F,A,3647690.0,872743.0,15.0,2,25.0,30520.0,0,0.0,1
+Yz 4,,Nick place,LA-MS,Village Site With Mound(s),,C-A,C,A,3437690.0,592929.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 5,,Fatherland Place,LA-MS,Village Site With Mound(s),,C-A,C,A,3490800.0,654061.0,15.0,3,0.0,0.0,0,0.0,1
+Yz 6,,Foster Place,LA-MS,Village Site With Mound(s),,C-A,C,A,3494500.0,663189.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 7,,Natchez Fort,LA-MS,Village Site With Mound(s),,C-A,C,A,3528960.0,628927.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 8,,Smithport Landing,LA-MS,Village Site With Mound(s),,C-A,C,A,3555890.0,449895.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 9,,Jim Sinner Place,LA-MS,Village Site With Mound(s),,C-A,C,A,3588570.0,464030.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 10,,Ed Pease,LA-MS,Village Site With Mound(s),,C-A,C,A,3583080.0,464129.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 11,,Rock Bayou,LA-MS,Village Site With Mound(s),,C-A,C,A,3529860.0,478941.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 12,,Bod Hardy,LA-MS,Village Site With Mound(s),,C-A,C,A,3645560.0,497265.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 13,,Hy. Edwards,LA-MS,Village Site With Mound(s),,D-A,D,A,3594590.0,472567.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 14,,Maddox Place,LA-MS,Village Site With Mound(s),,D-A,D,A,3623130.0,454392.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 15,,Wilkinson Place,LA-MS,Village Site With Mound(s),,E-A,E,A,3532340.0,464435.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 16,,Arch Green,LA-MS,Village Site With Mound(s),,C-A,C,A,3604470.0,506103.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 17,,Mound Place,LA-MS,Village Site With Mound(s),,D-A,D,A,3622030.0,430760.0,15.0,4,0.0,0.0,0,0.0,1
+Yz 18,,Colbert Place,LA-MS,Village Site With Mound(s),,E-A,E,A,3608130.0,501944.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 19,,Harrison Bayou,LA-MS,Village Site With Mound(s),,E-A,E,A,3621940.0,414574.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 20,,Point Post Office,LA-MS,Village Site With Mound(s),,F-A,F,A,3615960.0,574238.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 24,,Pocahontas,LA-MS,Village Site With Mound(s),,D-A,D,A,3592510.0,757736.0,15.0,2,0.0,0.0,0,0.0,1
+Yz 25,,Anna,LA-MS,Village Site With Mound(s),,D-A,D,A,3503640.0,660882.0,15.0,4,0.0,0.0,0,0.0,1
+Yz 26,,Brans Camp,LA-MS,Village Site With Mound(s),,E-D,E,D,3721310.0,899007.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 27,,Lyons Bluff,LA-MS,Village Site With Mound(s),,E-D,E,D,3717310.0,895793.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 28,,Godfrey Smith,LA-MS,Village Site With Mound(s),,E-C,E,C,3653460.0,733164.0,15.0,1,0.0,0.0,0,0.0,1
+Yz 33,,Hancock Pl,LA-MS,Village Site With Mound(s),,E-C,E,C,3617160.0,737609.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 34,,Hoag Pl,LA-MS,Village Site With Mound(s),,E-C,E,C,3613140.0,803098.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 35,,Ingersole Pl,LA-MS,Village Site With Mound(s),,E-C,E,C,3651420.0,752652.0,15.0,4,0.0,0.0,0,0.0,1
+Yz 36,,Lightcap Pl,LA-MS,Village Site With Mound(s),,E-C,E,C,3634530.0,739215.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 37,,Lee Pl,LA-MS,Village Site With Mound(s),,E-D,E,D,3603570.0,733924.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 38,,Plymouth Bluff,LA-MS,Village Site With Mound(s),,E-D,E,D,3712950.0,924627.0,15.0,0,0.0,0.0,0,0.0,1
+Yz 43,,Taylor Pl.,LA-MS,Village Site With Mound(s),,E-D,E,D,3635350.0,782428.0,15.0,2,0.0,0.0,0,0.0,0
+Yz 44,,Walker Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3608000.0,743694.0,15.0,3,0.0,0.0,0,0.0,0
+Yz 48,,Reynolds Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3708970.0,887723.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 50,,Gross Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3612320.0,759508.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 51,,Deasonville v.s.,LA-MS,Village Site With Mound(s),,F-C,F,C,3629530.0,774209.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 52,,Christmas Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3671690.0,764066.0,15.0,3,0.0,0.0,0,0.0,0
+Yz 54,,L.M. Coody,LA-MS,Village Site With Mound(s),,F-C,F,C,3606440.0,739890.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 55,,Cowsert Pl.,LA-MS,Village Site With Mound(s),,F-D,F,D,3654110.0,792935.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 56,,Exum Pl.,LA-MS,Village Site With Mound(s),,F-D,F,D,3631600.0,779848.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 57,,Old Hoover,LA-MS,Village Site With Mound(s),,F-D,F,D,3644760.0,788123.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 58,,Lake View Pl.,LA-MS,Village Site With Mound(s),,F-A,F,A,3442538.0,576534.0,15.0,2,0.0,0.0,0,0.0,0
+Yz 59,,McRae Pl.,LA-MS,Village Site With Mound(s),,F-D,F,D,3559250.0,915444.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 61,,Coles Creek,LA-MS,Village Site With Mound(s),,E-A,E,A,3501940.0,676598.0,15.0,2,0.0,0.0,0,0.0,0
+Yz 62,,Billy Ldg.,LA-MS,Village Site With Mound(s),,E-A,E,A,3548450.0,591336.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 63,,James Smith,LA-MS,Village Site With Mound(s),,0,0,0,3544320.0,470487.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 64,,Hedgland Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3526790.0,637078.0,15.0,2,0.0,0.0,0,0.0,1
+Yz 65,,Ditto Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3531850.0,632060.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 67,,Mazique Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3479720.0,660429.0,15.0,2,0.0,0.0,0,0.0,1
+Yz 69,,C.H. Neely Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3624330.0,655484.0,15.0,3,0.0,0.0,0,0.0,0
+Yz 70,,Rhinehart Site,LA-MS,Village Site With Mound(s),,D-C,D,C,3499460.0,594819.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 71,,Smith Creek,LA-MS,Village Site With Mound(s),,E-C,E,C,3442520.0,640804.0,15.0,3,0.0,0.0,0,0.0,1
+Yz 72,,Stark Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3585550.0,644775.0,15.0,4,0.0,0.0,0,0.0,1
+Yz 73,,Truly Pl.,LA-MS,Village Site With Mound(s),,E-C,E,C,3512950.0,670669.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 74,,White Oak. Ladg.,LA-MS,Village Site With Mound(s),,E-C,E,C,3536520.0,615638.0,15.0,2,0.0,0.0,0,0.0,0
+Yz 75,,Chevalier Md.,LA-MS,Village Site With Mound(s),,E-C,E,C,3485450.0,595472.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 76,,Picketts I.,LA-MS,Village Site With Mound(s),,F-C,F,C,3497570.0,601715.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 77,,Chase Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3474230.0,651649.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 78,,Barfield Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3540850.0,610985.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 79,,Beldoin Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3437660.0,578697.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 80,,Wild Hog Md.,LA-MS,Village Site With Mound(s),,F-C,F,C,3473450.0,600817.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 81,,Marsden Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3597040.0,645215.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 83,,Alphenia Lldg.,LA-MS,Village Site With Mound(s),,F-C,F,C,3524320.0,640628.0,15.0,3,0.0,0.0,0,0.0,1
+Yz 84,,Sidney Biggs Pl.,LA-MS,Village Site With Mound(s),,F-A,F,A,3573880.0,649938.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 85,,Camp Bayou Md.,LA-MS,Village Site With Mound(s),,F-C,F,C,3478450.0,585911.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 86,,Dunbarton Pl.,LA-MS,Village Site With Mound(s),,F-A,F,A,3508270.0,630353.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 87,,Gorum Md.,LA-MS,Village Site With Mound(s),,F-C,F,C,3484960.0,589859.0,15.0,2,0.0,0.0,0,0.0,0
+26-I-1,,Jonesville/Troysville,LA-MS,Village Site With Mound(s),,F-A,F,A,3499940.0,611577.0,15.0,21,0.0,0.0,0,0.0,1
+Yz 90,,Hudson Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3467810.0,604756.0,15.0,4,0.0,0.0,0,0.0,1
+Yz 91,,Greenhouse Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3447536.0,590384.0,15.0,7,12.0,14400.0,0,0.0,1
+Yz 93,,Neal Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3615560.0,652948.0,15.0,6,0.0,0.0,0,0.0,1
+Yz 94,,Prichard Ldg.,LA-MS,Village Site With Mound(s),,F-C,F,C,3518940.0,615855.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 95,,Peck Site,LA-MS,Village Site With Mound(s),,F-C,F,C,3522230.0,628440.0,15.0,2,0.0,0.0,0,0.0,0
+Yz 96,,King Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3524360.0,616636.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 97,,Yokena Site,LA-MS,Village Site With Mound(s),,F-A,F,A,3559450.0,692964.0,15.0,3,0.0,0.0,0,0.0,1
+Yz 98,,Hill Pl.,LA-MS,Village Site With Mound(s),,F-E,F,E,3564050.0,639261.0,15.0,0,0.0,0.0,0,0.0,0
+Yz 99,,Fredericks Pl.,LA-MS,Village Site With Mound(s),,F-E,F,E,3531430.0,510327.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 100,,McIntosh Pl.,LA-MS,Village Site With Mound(s),,F-E,F,E,3642470.0,659747.0,15.0,4,0.0,0.0,0,0.0,0
+Yz 101,,Smithfield Pl.,LA-MS,Village Site With Mound(s),,F-E,F,E,3380800.0,651510.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 102,,Churupa Pl.,LA-MS,Village Site With Mound(s),,F-C,F,C,3500690.0,628655.0,15.0,1,0.0,0.0,0,0.0,0
+Yz 103,,Marksville Site,LA-MS,Village Site With Mound(s),,F-E,F,E,3442060.0,592371.0,15.0,4,0.0,0.0,0,1.0,1
+16-K-3,3AR12,Moore Place,Arkansas,Village Site With Mound(s),,B-A,B,A,3767832.0,646824.0,15.0,1,0.0,0.0,0,0.0,0
+15-J-2,3AR021,Sycamore Lane Mound,Arkansas,Village Site With Mound(s),,C-B,C,B,3802310.0,626000.0,15.0,1,12.0,1963.4954084936207,0,0.0,0
+15-L-5,3AR22,McKewen Site,Arkansas,Village Site With Mound(s),,?,?,?,3793268.0,662942.0,15.0,1+,0.0,0.0,0,0.0,0
+15-J-5,3AR023,Blue Farm,Arkansas,Village Site With Mound(s),,?,?,?,3812156.0,622370.0,15.0,1,0.0,0.0,0,0.0,0
+15-J-6,3AR024,Dabbs Site,Arkansas,Village Site With Mound(s),,?,?,?,3800000.0,625400.0,15.0,1,5.0,1963.4954084936207,0,0.0,0
+3AR030,3AR030,Roland Mound,Arkansas,Village Site With Mound(s),,E-D,E,D,3775857.0,668681.0,15.0,1,0.0,0.0,0,0.0,0
+3AR031,3AR031,Mouth of La Grue,Arkansas,Village Site With Mound(s),,E-D,E,D,3774412.0,668808.0,15.0,1+,0.0,0.0,0,0.0,0
+3AR032,3AR032,Indian Mound at Weber,Arkansas,Conical Mound(s),,?,?,?,3779725.0,667911.0,15.0,1,6.0,0.0,0,0.0,0
+3AR034,3AR034,Prosperous Bayou,Arkansas,Village Site With Mound(s),,?,?,?,3769850.0,666180.0,15.0,1+,0.0,0.0,0,0.0,0
+3AR034,3AR037,Hayes Mounds,Arkansas,Village Site With Mound(s),,D-C,D,C,3810459.0,628425.0,15.0,5,0.0,0.0,0,0.0,0
+3AR039,3AR039,Dillon,Arkansas,Mounds - Unknown,,?,?,?,3798521.0,658070.0,15.0,1,0.0,0.0,0,0.0,0
+3AR040,3AR040,Dumond Site,Arkansas,Village Site With Mound(s),,E-B,E,B,3793450.0,663000.0,15.0,53+,0.0,0.0,0,0.0,0
+3AR041,3AR041,Butler Hunting,Arkansas,Mounds - Unknown,,?,?,?,3784884.0,647544.0,15.0,20+,0.0,0.0,0,0.0,0
+3AR044,3AR044,Travis Site,Arkansas,Mounds - Unknown,,?,?,?,3796700.0,659200.0,15.0,2+,0.0,0.0,0,0.0,0
+3AR045,3AR045,Baker Brothers Site,Arkansas,Mounds - Unknown,,G-D,G,D,3822650.0,639460.0,15.0,1+,0.0,0.0,0,0.0,0
+3AR046,3AR046,McBroom,Arkansas,Mounds - Unknown,,B-A,B,A,3780700.0,667540.0,15.0,1,0.0,0.0,0,0.0,0
+3AR057,3AR057,Townsend Hunting Club,Arkansas,Mounds - Unknown,,?,?,?,3806100.0,628120.0,15.0,5,0.0,0.0,0,0.0,0
+,23-DU-2,Cummins,SEMO,,,C-B,C,B,4013144.0,760570.0,15.0,1,0.0,0.0,0,0.0,1
+23-DU-52,23-DU-52,Ray,SEMO,,,C-B,C,B,4002150.0,759332.0,15.0,1+,0.0,0.0,0,0.0,0
+23-DU-150,23-DU-150,David's Creek,SEMO,,,C-B,C,B,3996691.0,756175.0,15.0,1+,0.0,0.0,0,0.0,0
+8-P-8,23-DU-29,Pelts,SEMO,,,C-B,C,B,4004648.0,766245.0,15.0,1,0.0,0.0,0,0.0,0
+7-P-7,23-DU-30,Watson,SEMO,,,C-B,C,B,4016079.0,768021.0,15.0,0,0.0,0.0,0,0.0,0
+23-DU-37,23-DU-37,23-DU-37,SEMO,,,B-A,B,A,4004960.0,761864.0,15.0,0,0.0,0.0,0,0.0,0
+10-R-1,23-DU-49,Bishop,SEMO,,,B-A,B,A,3990004.0,742020.0,15.0,0,0.0,0.0,0,0.0,0
+23-DU-203,23-DU-203,23-DU-203,SEMO,,,B-A,B,A,4022036.248,769431.51,15.0,0,0.0,0.0,0,0.0,0
+23-DU-211,23-DU-211,23-DU-211,SEMO,,,B-A,B,A,4032744.0,767920.0,15.0,0,0.0,0.0,0,0.0,0
+23-DU-219,23-DU-219,23-DU-219,SEMO,,,B-A,B,A,4029493.284,769216.394,15.0,0,0.0,0.0,0,0.0,0
+,,WLA,SEMO,,,C-A,C,A,4007700.0,755173.0,15.0,0,0.0,0.0,0,1.0,0
+9-O-4,,Lawhorn,SEMO,,,C-A,C,A,3981909.0,736569.0,15.0,0,0.0,0.0,0,0.0,0
+,,Zeebree,SEMO,,Village ,D-C,D,C,3985840.0,758600.0,15.0,0,0.0,0.0,0,0.0,0
+,,Moon,NEAR,Village with no mounds,,C-B,C,B,3949046.0,721930.0,15.0,0,0.0,0.0,0,0.0,0
+,,Priestly,NEAR,,,D-B,D,B,3951216.0,721598.0,15.0,0,0.0,0.0,0,0.0,0
+,,Bowdre Mounds,SEMO,,,C-B,C,B,3851440.0,740616.0,15.0,4,22.0,32000.0,0,0.0,1
+,,Bishop Farm,SEMO,Rectangular village?,,B-A,B,A,3996777.0,743021.0,15.0,0,0.0,0.0,0,1.0,0
+,,Grey Horse Lake,SEMO,,,H-B,H,B,4026796.38,777835.536,15.0,0,0.0,0.0,0,0.0,0
+7-P-7,,Watson,SEMO,,,H-G,H,G,4016183.0,768042.0,15.0,0,0.0,0.0,0,0.0,0
+,,David's Creek,SEMO,,,C-B,C,B,3996688.0,756168.0,15.0,1,6.5,0.0,0,0.0,1
+,,Wilkin's,SEMO,,,C-B,C,B,3997910.0,756484.0,15.0,1,3.0,0.0,0,0.0,1
+,,Brandon Cemetery,SEMO,,,C-B,C,B,3996100.0,761558.0,15.0,1,0.0,0.0,0,0.0,1
+,,Hornersville,SEMO,,,B-A,B,A,3992452.0,759944.0,15.0,2+,0.0,0.0,0,0.0,1
+20-N-7,,McCoy,Yazoo,,,H-G,H,G,3667410.0,726365.0,15.0,0,0.0,0.0,0,0.0,0
+,,Isola,Yazoo,,,H-G,H,G,3682300.0,722804.0,15.0,0,0.0,0.0,0,0.0,0
+19-M-10,,Hebe,Yazoo,,,H-G,H,G,3691790.0,702848.0,15.0,0,0.0,0.0,0,0.0,0
+,,Tribbett,Yazoo,,,H-G,H,G,3692188.0,705612.0,15.0,0,0.0,0.0,0,0.0,0
+,,Williams,Yazoo,,,H-G,H,G,3704870.0,722932.0,15.0,0,0.0,0.0,0,0.0,0
+,,Hill,Yazoo,,,H-G,H,G,3710990.0,721297.0,15.0,0,0.0,0.0,0,0.0,0
+18-N-11,,Asack,Yazoo,,,H-G,H,G,3724110.0,722990.0,15.0,1+,0.0,0.0,0,0.0,0
+,,Murphy,Yazoo,,,H-G,H,G,3704780.0,745556.0,15.0,0,0.0,0.0,0,0.0,0
+,,Cole Crossroads,Yazoo,,,H-G,H,G,3726944.0,751224.0,15.0,1+,0.0,0.0,0,0.0,0
+,,McGary,Yazoo,,,H-G,H,G,3702450.0,758232.0,15.0,0,0.0,0.0,0,0.0,0
+34-G-2,,Morgan,Yazoo,,,H-G,H,G,3696656.0,747104.0,15.0,0,0.0,0.0,0,0.0,0
+18-P-7,,Neill,Yazoo,,,H-G,H,G,3722616.0,765983.0,15.0,0,0.0,0.0,0,0.0,0
+18-P-6,,Teoc Creek,Yazoo,,,H-G,H,G,3722099.0,768673.0,15.0,0,0.0,0.0,0,0.0,0
+18-P-8,,Jacks,Yazoo,,,H-G,H,G,3732912.0,761344.0,15.0,1+,0.0,0.0,0,0.0,0
+17-P-5,,Stainback,Yazoo,,,H-F,H,F,3740370.0,756486.0,15.0,0,0.0,0.0,0,0.0,0
+17-O-13,,W.E. Smith,Yazoo,,,H-G,H,G,3753801.0,747851.0,15.0,1,0.0,0.0,0,0.0,0
+,,Abby,Yazoo,,,H-G,H,G,3757110.0,742777.0,15.0,0,0.0,0.0,0,0.0,0
+,,Meredith,Yazoo,,,H-G,H,G,3780310.0,733786.0,15.0,0,0.0,0.0,0,0.0,0
+,,Tackett,Yazoo,,,H-G,H,G,3782182.0,731422.0,15.0,0,0.0,0.0,0,0.0,0
+,,Barner,Yazoo,,,H-G,H,G,3783820.0,733202.0,15.0,0,0.0,0.0,0,0.0,0
+,,Page,Yazoo,,,H-G,H,G,3788840.0,727130.0,15.0,0,0.0,0.0,0,0.0,0
+,,Hamson Brake,Yazoo,,,H-G,H,G,3802882.0,727761.0,15.0,0,0.0,0.0,0,0.0,0
+,,Goss,Yazoo,,,H-G,H,G,3776970.0,719079.0,15.0,0,0.0,0.0,0,0.0,0
+,,Cloverdale,Yazoo,,,H-G,H,G,3774350.0,717269.0,15.0,0,0.0,0.0,0,0.0,0
+,,Savage,Yazoo,,,H-G,H,G,3758610.0,695077.0,15.0,0,0.0,0.0,0,0.0,0
+,,Horseshoe Lake,LA,,,F-E,F,E,3535480.0,607314.0,15.0,1,0.0,0.0,0,0.0,0
+24-I-4,,Boothe Landing,LA,,,F-E,F,E,3513884.0,611816.0,15.0,1,13.123359580052494,16366.857794292415,0,0.0,0
+25-I-3,,King,LA,,,F-E,F,E,3507968.0,613024.0,15.0,2+,0.0,0.0,0,0.0,0
+22-K-1,16WC5,Poverty Point,LA,,,I-F,I,F,3611984.0,649120.0,15.0,2,23.0,72000.0,0,0.0,1
+26-H-3,,Crooks Mound,LA,,,G-A,G,A,3488420.0,594344.0,15.0,2,18.04461942257218,26511.60436100258,0,0.0,1
+27-H-11,,Russell Landing,LA,,,G-E,F,E,3481830.0,565816.0,15.0,1,0.0,0.0,0,0.0,0
+27-H-3,,Coles Island,LA,,,F-E,F,E,3458848.0,581824.0,15.0,1+,0.0,0.0,0,0.0,0
+16-O-8,,Norman,LA,,,F-E,F,E,3450320.0,581584.0,15.0,1+,0.0,0.0,0,0.0,0
+,,Claverie,LA,,,F-E,F,E,3455376.0,585984.0,15.0,1+,0.0,0.0,0,0.0,0
+28-H-2,,Moncla,LA,,,F-E,F,E,3452287.0,583612.0,15.0,1+,0.0,0.0,0,0.0,0
+28-H-32,,Mayer,LA,,,F-E,F,E,3454128.0,583920.0,15.0,1+,0.0,0.0,0,0.0,0
+28-H-1,28-H-1,Marksville,LA,,,G-E,G,E,3440850.0,587147.0,15.0,5,0.0,0.0,0,0.0,1
+,,Hicks,LA,,,G-F,G,F,3409990.0,592060.0,15.0,1,0.0,0.0,0,0.0,0
+20-O-4,,Holly,LA,,,G-F,G,F,3388570.0,591542.0,15.0,1+,0.0,0.0,0,0.0,0
+30-K-2,,Smithfield,LA,,,F-E,F,E,3381488.0,664544.0,15.0,1,0.0,0.0,0,0.0,0
+,16EBR17,Monte Sano,LA,,,I-E,I,E,3384570.0,675676.0,15.0,2,12.0,14400.0,0,0.0,1
+,,LSU,LA,,,H-G,H,G,3379140.0,677745.0,15.0,2,16.0,0.0,0,0.0,0
+23PM8,23PM8,8-Q-20,SEMO,,,C-B,C,B,4004323.095,773718.084,15.0,1+,0.0,0.0,0,0.0,0
+23PM11,23PM11,8-Q-16/ Dorrah/ Matthews,SEMO,,,C-B,C,B,4004223.039,791531.477,15.0,1+,0.0,0.0,0,0.0,0
+23PM31,23PM31,7-R-23,SEMO,,,C-B,C,B,4033216.047,800366.156,15.0,1+,0.0,0.0,0,0.0,0
+23PM56,23PM56,Brooks/ Campbell West,SEMO,,,C-B,C,B,3995653.211,786809.906,15.0,1+,0.0,0.0,0,0.0,0
+23PM60,23PM60,Roy Medlin,SEMO,,,C-B,C,B,4004377.627,801805.237,15.0,1+,0.0,0.0,0,0.0,0
+23PM66,23PM66,James Murphy,SEMO,,,C-B,C,B,4002963.441,799036.112,15.0,1+,0.0,0.0,0,0.0,0
+23PM68,23PM68,Klinkhart,SEMO,,,C-B,C,B,4001773.533,796974.837,15.0,1+,0.0,0.0,0,0.0,0
+20-K-2,3CH44,Bloomfield Church,Upper Tenas Basin,,,H-G,H,G,3661436.0,660836.0,15.0,0,0.0,0.0,0,0.0,0
+21-K-1,16WC1,Head,Upper Tenas Basin,,,"H-G,E",H,E,3637329.0,655049.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-10,16WC4,Neely,Upper Tenas Basin,,,H-G,H,G,3624612.0,654952.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-3,16WC6,Lower Jackson,Upper Tenas Basin,,,"H-G, F",H,F,3609109.0,650201.0,15.0,1+,0.0,0.0,0,0.0,0
+22-K-24,16EC39,Aaron,Upper Tenas Basin,,,H-G,H,G,3616644.0,658266.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-25,,Howington,Upper Tenas Basin,,,H-G,H,G,3610612.0,652286.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-27,,Ray Brake,Upper Tenas Basin,,,H-G,H,G,3600059.0,649873.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-26,16MA47,J.W. Copes,Upper Tenas Basin,,,H-G,H,G,3600787.0,651296.0,15.0,0,0.0,0.0,0,0.0,0
+23-K-4,16RI3,Marsden,Upper Tenas Basin,,,H-F,H,F,3596641.0,642334.0,15.0,0,0.0,0.0,0,0.0,0
+23-K-2,16FR12,Insley,Upper Tenas Basin,,,H-G,H,G,3575684.0,642856.0,15.0,12,0.0,0.0,0,0.0,1
+23-J-1,16FR11,Mott,Upper Tenas Basin,,,H-A,H,D,3575684.0,640516.0,15.0,1,0.0,0.0,0,0.0,0
+23-K-26,16MA16,Terral Lewis,Upper Tenas Basin,,,H-G,H,G,3595131.0,651250.0,15.0,0,0.0,0.0,0,0.0,0
+24-J-5,16FR34,Swampers,Upper Tenas Basin,,,H-G,H,G,3565632.0,633360.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-14,16EC18,Welch,Upper Tenas Basin,,,H-G,H,G,3604372.0,653108.0,15.0,0,0.0,0.0,0,0.0,0
+21-J-9,16MO43,Neimeyer-Dare,Boeuf Basin,,,H-G,H,G,3649552.0,625586.0,15.0,2,0.0,0.0,0,0.0,0
+22-J-50,16WC9,Pollard,Boeuf Basin,,,H-G,H,G,3624089.0,631948.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-20,16MO5,Parks,Boeuf Basin,,,H-G,H,G,3614561.0,623872.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-2,16RI14,Stevenson,Boeuf Basin,,,H-G,H,G,3606527.0,623869.0,15.0,0,0.0,0.0,0,0.0,0
+21-J-1,16MO2,Harp,Boeuf Basin,,,H-G,H,G,3629233.0,622185.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-21,16MO105,Robert Parker,Boeuf Basin,,,H-G,H,G,3623666.0,621137.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-47,16MO113,Victor Hill,Boeuf Basin,,,H-G,H,G,3623278.0,621644.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-43,16MO95,Black Hill,Boeuf Basin,,,H-G,H,G,3627154.0,623065.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-28,16MO108,Mambo,Boeuf Basin,,,H-G,H,G,3615132.0,623472.0,15.0,0,0.0,0.0,0,0.0,0
+21-J-8,16MO7/41,Little Crane Lake,Boeuf Basin,,,H-G,H,G,3643887.0,632413.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-52,16MO123,Horsehoe Church,Boeuf Basin,,,H-G,H,G,3619794.0,620961.0,15.0,0,0.0,0.0,0,0.0,0
+24-I-52,16FR173,Russell Place,Boeuf Basin,,,H-G,H,G,3558884.0,607772.0,15.0,0,0.0,0.0,0,0.0,0
+24-I-53,16FR174,DeBlieux ,Boeuf Basin,,,H-G,H,G,3559632.0,610384.0,15.0,0,0.0,0.0,0,0.0,0
+25-I-12,16FR221,Dailey Landing,Boeuf Basin,,,H-G,H,G,3534684.0,608700.0,15.0,0,0.0,0.0,0,0.0,0
+22-H-10,16OU160,McGuire,Quachita River,,,H-G,H,G,3601416.0,581240.0,15.0,0,0.0,0.0,0,0.0,0
+23-H-6,16OU175,Watson Brake,Quachita River,,,I-G,I,G,3581652.0,581284.0,15.0,11,21.0,0.0,0,0.0,0
+,16CT389,Baker's Field,Catahoula Swamp,,,H-G,H,G,3481416.0,595112.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT388,Baker's Overcup,Catahoula Swamp,,,H-G,H,G,3481944.0,594168.0,15.0,0,0.0,0.0,0,0.0,0
+,,Baker's Ridge,Catahoula Swamp,,,H-G,H,G,3481008.0,595560.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT374,Big Bayou Pumps,Catahoula Swamp,,,H-G,H,G,3480576.0,598160.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT11,Big Slough,Catahoula Swamp,,,H-G,H,G,3478456.0,601768.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT250,Big Slough Pipe NE,Catahoula Swamp,,,H-G,H,G,3479432.0,602616.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT251,Big Slough Pipe SE,Catahoula Swamp,,,H-G,H,G,3478744.0,602176.0,15.0,0,0.0,0.0,0,0.0,0
+27-H-4,16LA1,Cad,Catahoula Swamp,,,H-G,H,G,3480960.0,583728.0,15.0,0,0.0,0.0,0,0.0,0
+,16AV101,Cowpen Slough,Catahoula Swamp,,,H-G,H,G,3466412.0,601268.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT147,Counterfeit Ridge,Catahoula Swamp,,,H-G,H,G,3466334.0,591968.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT352/365,Cross Bayou,Catahoula Swamp,,,H-G,H,G,3477784.0,597672.0,15.0,0,0.0,0.0,0,0.0,0
+,,Dragline,Catahoula Swamp,,,H-G,H,G,3464980.0,600820.0,15.0,0,0.0,0.0,0,0.0,0
+,16RA414,Delson Chevalier,Catahoula Swamp,,,H-G,H,G,3477536.0,579376.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT391,Hogback Ridge,Catahoula Swamp,,,H-G,H,G,3486672.0,594736.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT366,Honey Brake,Catahoula Swamp,,,H-G,H,G,3482096.0,605080.0,15.0,0,0.0,0.0,0,0.0,0
+,,Honey Brake CT 17,Catahoula Swamp,,,H-G,H,G,3475936.0,604144.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT263,Island Bayou North,Catahoula Swamp,,,H-G,H,G,3477016.0,604576.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT361,Lick Bayou,Catahoula Swamp,,,H-G,H,G,3478448.0,599784.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT261,Long Branch Structure,Catahoula Swamp,,,H-G,H,G,3473856.0,602272.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT35,Mount Bayou,Catahoula Swamp,,,H-G,H,G,3478144.0,596992.0,15.0,0,0.0,0.0,0,0.0,0
+,,Old Saline,Catahoula Swamp,,,H-G,H,G,3467247.0,594185.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT12/35,Paul's Camp,Catahoula Swamp,,,H-G,H,G,3479280.0,595800.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT337,Red and White Pipe,Catahoula Swamp,,,H-G,H,G,3483104.0,595704.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT28,Reeves Woods,Catahoula Swamp,,,H-G,H,G,3477584.0,599312.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT348,Royd's Field,Catahoula Swamp,,,H-G,H,G,3477936.0,599884.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT342,Shoe Bayou,Catahoula Swamp,,,H-G,H,G,3465848.0,595120.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT27,Wild Hog Mound,Catahoula Swamp,,,H-G,H,G,3477338.0,596055.0,15.0,0,0.0,0.0,0,0.0,0
+,,Motley,Upper Tenas Basin,,,H-G,H,G,3614372.0,649568.0,15.0,0,0.0,0.0,0,0.0,0
+,,Heeley,Upper Tenas Basin,,,H-G,H,G,3624621.0,654949.0,15.0,0,0.0,0.0,0,0.0,0
+,,Kilbourne,Upper Tenas Basin,,,H-G,H,G,3652970.0,657421.0,15.0,0,0.0,0.0,0,0.0,0
+21-J-10,16MO81,Darrah Brake,Boeuf Basin,,,H-G,H,G,3651808.0,628032.0,15.0,0,0.0,0.0,0,0.0,0
+,,Dabb Bend,Boeuf Basin,,,H-G,H,G,3603301.0,620909.0,15.0,0,0.0,0.0,0,0.0,0
+22-I-4,16MO61,Brodenax Church,Boeuf Basin,,,H-G,H,G,3605503.0,616581.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-18,16MO103,Book Shepard,Boeuf Basin,,,H-G,H,G,3606040.0,617884.0,15.0,0,0.0,0.0,0,0.0,0
+22-I-7,16MO64,Cedar Grove/Miss Kat,Boeuf Basin,,,H-G,H,G,3607125.0,614524.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-40,16MO112,Flynn,Boeuf Basin,,,H-G,H,G,3611458.0,621346.0,15.0,0,0.0,0.0,0,0.0,0
+22-I-5,16MO62,J.C. Rolfe,Boeuf Basin,,,H-G,H,G,3615228.0,614327.0,15.0,0,0.0,0.0,0,0.0,0
+22-I-11,16MO68,Bethany Brake,Boeuf Basin,,,H-G,H,G,3611440.0,604832.0,15.0,0,0.0,0.0,0,0.0,0
+,,Whitney Island,Boeuf Basin,,,H-G,H,G,3609738.0,623106.0,15.0,0,0.0,0.0,0,0.0,0
+22-I-10,16MO67,Patten Slough,Boeuf Basin,,,H-G,H,G,3619474.0,605821.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-15,16MO101,Moss,Boeuf Basin,,,H-G,H,G,3613787.0,622927.0,15.0,0,0.0,0.0,0,0.0,0
+22-J-32,16MO110,Bapp Arnold,Boeuf Basin,,,H-G,H,G,3616725.0,623021.0,15.0,0,0.0,0.0,0,0.0,0
+21-J-47,16MO61,Dead Cotton,Boeuf Basin,,,H-G,H,G,3635358.0,620444.0,15.0,0,0.0,0.0,0,0.0,0
+21-J-44,16MO96,Hughes,Boeuf Basin,,,H-G,H,G,3638737.0,621666.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-14,16MO76,Cooper Ditch,Boeuf Basin,,,H-G,H,G,3635711.0,612844.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-15,16MO77,White Place,Boeuf Basin,,,H-G,H,G,3640760.0,616127.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-8,16MO70,Cooper Lake,Boeuf Basin,,,H-G,H,G,3636691.0,612744.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-13,16MO75,Walnut,Boeuf Basin,,,H-G,H,G,3639927.0,613101.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-12,16MO74,Twin Oaks,Boeuf Basin,,,H-G,H,G,3640383.0,613102.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-1,16MO32,Brodnax,Boeuf Basin,,,H-G,H,G,3639792.0,609540.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-11,16MO73,Rawlinson,Boeuf Basin,,,H-G,H,G,3642012.0,612180.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-7,16MO69,Caney Bayou,Boeuf Basin,,,H-G,H,G,3643164.0,615396.0,15.0,0,0.0,0.0,0,0.0,0
+21-I-9,16MO71,Bottleneck,Boeuf Basin,,,H-G,H,G,3644008.0,615296.0,15.0,0,0.0,0.0,0,0.0,0
+,,Montgomery II,Ouachita River,,,H-F,H,F,3640872.0,600048.0,15.0,0,0.0,0.0,0,0.0,0
+,,Alabama Landing,Ouachita River,,,H-G,H,G,3637452.0,585600.0,15.0,0,0.0,0.0,0,0.0,0
+,,Lea,Ouachita River,,,H-G,H,G,3603432.0,579216.0,15.0,0,0.0,0.0,0,0.0,0
+17-M-22,,Monroe,Ouachita River,,,H-G,H,G,3603144.0,582368.0,15.0,0,0.0,0.0,0,0.0,0
+,,Wilson,Ouachita River,,,H-G,H,G,3577864.0,583664.0,15.0,0,0.0,0.0,0,0.0,0
+,,Bennett,Ouachita River,,,H-G,H,G,3562976.0,611040.0,15.0,0,0.0,0.0,0,0.0,0
+,,Fife,Ouachita River,,,H-G,H,G,3563664.0,597356.0,15.0,0,0.0,0.0,0,0.0,0
+,,C.Bennett,Ouachita River,,,H-G,H,G,3559288.0,609248.0,15.0,0,0.0,0.0,0,0.0,0
+,,Brock,Ouachita River,,,H-G,H,G,3543346.0,605747.0,15.0,0,0.0,0.0,0,0.0,0
+,,Gunby Dam,Ouachita River,,,H-G,H,G,3560368.0,599368.0,15.0,0,0.0,0.0,0,0.0,0
+,,Gunby So.,Ouachita River,,,H-G,H,G,3558448.0,598608.0,15.0,0,0.0,0.0,0,0.0,0
+26-I-8,,Pickett's Island,Catahoula Swamp,,,H-F,H,F,3496426.0,591295.0,15.0,0,0.0,0.0,0,0.0,0
+,16CT5,Caney Mound,Catahoula Swamp,,,H-G,H,G,3483470.0,594893.0,15.0,6,0.0,0.0,0,0.0,0
+,,Cypress Bayou,Catahoula Swamp,,,H-G,H,G,3482720.0,595112.0,15.0,0,0.0,0.0,0,0.0,0
+,,Haigh's Landing,Catahoula Swamp,,,H-G,H,G,3480336.0,594993.0,15.0,0,0.0,0.0,0,0.0,0
+,,Honey Brake Lake,Catahoula Swamp,,,H-G,H,G,3478792.0,603358.0,15.0,0,0.0,0.0,0,0.0,0
+,,Bodcaw,Catahoula Swamp,,,H-G,H,G,3483624.0,608072.0,15.0,0,0.0,0.0,0,0.0,0
+,,Muddy Bayou,Catahoula Swamp,,,H-G,H,G,3472612.0,590136.0,15.0,0,0.0,0.0,0,0.0,0
+29-J-3,,Angola Gate,Delta,,,H-G,H,G,3423488.0,636368.0,15.0,0,0.0,0.0,0,0.0,0
+,,Russell's Landing,Catahoula Swamp,,,H-F,H,F,3483563.0,576033.0,15.0,0,0.0,0.0,0,0.0,0
+,,Sandy Run,Catahoula Swamp,,,H-G,H,G,3493712.0,586344.0,15.0,0,0.0,0.0,0,0.0,0
+,,Joseph's Island,Catahoula Swamp,,,H-G,H,G,3478640.0,576256.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0865,Meager 2,SEMO/NEAR,,,K-J,K,J,3956640.0,716780.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0030,"Brocket, Marshall Place",SEMO/NEAR,,,K-J,K,J,3920320.0,697240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0036,Brown,SEMO/NEAR,,,K-J,K,J,3897300.0,691450.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0045,"Bostick, Ralph Place",SEMO/NEAR,,,K-J,K,J,3908170.0,692650.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0130,Foltz,SEMO/NEAR,,,K-J,K,J,3902800.0,688380.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0027,Scott Place,SEMO/NEAR,,,K-J,K,J,3928700.0,695350.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0045,Languille Hunting Club,SEMO/NEAR,,,K-J,K,J,3930640.0,698450.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0009,"Pierce, Old Ben Place",SEMO/NEAR,,,K-J,K,J,3946800.0,705960.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0318,3PO0318,SEMO/NEAR,,,K-J,K,J,3935270.0,699280.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0014,"Clegg, Richard",SEMO/NEAR,,,K-J,K,J,3888820.0,694050.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0031,Taylor Place,SEMO/NEAR,,,K-J,K,J,3961600.0,726850.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0066,Davis #1,SEMO/NEAR,,,K-J,K,J,3964780.0,713600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0335,3CG0335,SEMO/NEAR,,,K-J,K,J,3962230.0,717350.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0859,Little Bay #1,SEMO/NEAR,,,K-J,K,J,3955080.0,717400.0,15.0,0,0.0,0.0,0,0.0,0
+,3CH0016,Earl,SEMO/NEAR,,,K-J,K,J,3668330.0,664500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CH0028,Verser Ridge,SEMO/NEAR,,,K-J,K,J,3666670.0,654170.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0047,"East, Charles",SEMO/NEAR,,,K-J,K,J,3921430.0,697680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0053,"Barnes, Walter 1",SEMO/NEAR,,,K-J,K,J,3907600.0,691160.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0130,"Tobe, Goldsmith Farm",SEMO/NEAR,,,K-J,K,J,3829220.0,715090.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0042,"Reddmann, J.B.",SEMO/NEAR,,,K-J,K,J,3935260.0,690600.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0097,"Smith, Ramond",SEMO/NEAR,,,K-J,K,J,3932400.0,699680.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0415,Claypool Reservoir,SEMO/NEAR,,,K-J,K,J,3944020.0,699820.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0469,3PO0469,SEMO/NEAR,,,K-J,K,J,3952600.0,679100.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0017,Lace Place,SEMO/NEAR,,,K-J,K,J,3924830.0,696670.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0157,3PO0157,SEMO/NEAR,,,K-J,K,J,3938320.0,699960.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0936,Craighead Lake,SEMO/NEAR,,,K-J,K,J,3961680.0,707100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0902,Milner,SEMO/NEAR,,,K-J,K,J,3982000.0,696850.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0016,Mitchell Farm,SEMO/NEAR,,,K-J,K,J,3794900.0,654030.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0017,Mccauley Farm,SEMO/NEAR,,,K-J,K,J,3798210.0,657110.0,15.0,0,0.0,0.0,0,0.0,0
+,3MO0023,Rigdon #2,SEMO/NEAR,,,K-J,K,J,3849620.0,665450.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0022,Rice Place,SEMO/NEAR,,,K-J,K,J,3828960.0,699570.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0023,Willie,SEMO/NEAR,,,K-J,K,J,3828620.0,699530.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0029,Jones Place,SEMO/NEAR,,,K-J,K,J,3832320.0,701550.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0114,Mimosa,SEMO/NEAR,,,K-J,K,J,3826160.0,715520.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0082,"Tractor,Evelyn S. Cooke",SEMO/NEAR,,,K-J,K,J,3828340.0,690620.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0137,Posted,SEMO/NEAR,,,K-J,K,J,3831960.0,712830.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0476,3PO0476,SEMO/NEAR,,,K-J,K,J,3941150.0,715150.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0003,3CG0003,SEMO/NEAR,,,K-J,K,J,3980920.0,718430.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0012,"Grimes, Conley",SEMO/NEAR,,,K-J,K,J,3973680.0,722410.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0014,"Crews, Bert Place",SEMO/NEAR,,,K-J,K,J,3978100.0,723260.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0017,Crabtree (1),SEMO/NEAR,,,K-J,K,J,3973340.0,725340.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0019,"Wallace, T.A. Place",SEMO/NEAR,,,K-J,K,J,3978830.0,724130.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0022,"States, Mrs. Joann Pl. 1",SEMO/NEAR,,,K-J,K,J,3973460.0,726300.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0026,Hood Place (B) 2,SEMO/NEAR,,,K-J,K,J,3973860.0,726820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0042,Cypress Tree,SEMO/NEAR,,,K-J,K,J,3980450.0,743990.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0051,3CG0051,SEMO/NEAR,,,K-J,K,J,3975490.0,694600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0076,Barnett's Dr. H.C. Farm,SEMO/NEAR,,,K-J,K,J,3977290.0,705670.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0085,"Hutchinson, Bowman",SEMO/NEAR,,,K-J,K,J,3981680.0,694600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0087,3CG0087,SEMO/NEAR,,,K-J,K,J,3982020.0,725060.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0098,3CG0098,SEMO/NEAR,,,K-J,K,J,3975420.0,727620.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0111,"Carney, H.A. Farm",SEMO/NEAR,,,K-J,K,J,3979160.0,696820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0115,"Craighead, Coy Hester #1",SEMO/NEAR,,,K-J,K,J,3980570.0,696940.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0152,3CG0152,SEMO/NEAR,,,K-J,K,J,3976020.0,720620.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0133,Stevens #3,SEMO/NEAR,,,K-J,K,J,3977600.0,693180.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0158,James #2,SEMO/NEAR,,,K-J,K,J,3973060.0,693230.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0137,Stevens #7,SEMO/NEAR,,,K-J,K,J,3972520.0,693010.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0145,Thomas #2,SEMO/NEAR,,,K-J,K,J,3975430.0,695450.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0165,"Fielder, H.B.",SEMO/NEAR,,,K-J,K,J,3980680.0,696440.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0148,3CG0148,SEMO/NEAR,,,K-J,K,J,3975860.0,719960.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0151,3CG0151,SEMO/NEAR,,,K-J,K,J,3976190.0,720760.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0185,3CG0185,SEMO/NEAR,,,K-J,K,J,3973430.0,717720.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0211,3CG0211,SEMO/NEAR,,,K-J,K,J,3972760.0,720270.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0192,5/8 Miles South Of 3cg57,SEMO/NEAR,,,K-J,K,J,3979330.0,693670.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0212,3CG0212,SEMO/NEAR,,,K-J,K,J,3980200.0,724320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0221,Burris #5,SEMO/NEAR,,,K-J,K,J,3973410.0,692200.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0230,3CG0230,SEMO/NEAR,,,K-J,K,J,3956850.0,680540.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0233,3CG0233,SEMO/NEAR,,,K-J,K,J,3961860.0,682010.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0295,Foreman #2,SEMO/NEAR,,,K-J,K,J,3971840.0,692680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0306,3CG0306,SEMO/NEAR,,,K-J,K,J,3973910.0,694400.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0307,3CG0307,SEMO/NEAR,,,K-J,K,J,3973820.0,694320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0328,3CG0328,SEMO/NEAR,,,K-J,K,J,3981860.0,724810.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0329,3CG0329,SEMO/NEAR,,,K-J,K,J,3965380.0,687860.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0337,3CG0337,SEMO/NEAR,,,K-J,K,J,3961430.0,718040.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0383,Wood Chippin,SEMO/NEAR,,,K-J,K,J,3976970.0,695680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0404,Trouter,SEMO/NEAR,,,K-J,K,J,3974610.0,694640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0482,3CG0482,SEMO/NEAR,,,K-J,K,J,3976650.0,694800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0485,3CG0485,SEMO/NEAR,,,K-J,K,J,3976750.0,695680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0500,Mcfarlin,SEMO/NEAR,,,K-J,K,J,3975040.0,733500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0503,3CG0503,SEMO/NEAR,,,K-J,K,J,3954140.0,716680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0519,3CG0519,SEMO/NEAR,,,K-J,K,J,3957060.0,715560.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0772,3CG0772,SEMO/NEAR,,,K-J,K,J,3955060.0,691750.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0740,3CG0740,SEMO/NEAR,,,K-J,K,J,3961130.0,720490.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0101,3LE0101,SEMO/NEAR,,,K-J,K,J,3859580.0,699440.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0102,3LE0102,SEMO/NEAR,,,K-J,K,J,3860000.0,696240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0015,Connley Place,SEMO/NEAR,,,K-J,K,J,3921520.0,690140.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0059,Noonen South 1,SEMO/NEAR,,,K-J,K,J,3918370.0,689460.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0083,Goff,SEMO/NEAR,,,K-J,K,J,3935800.0,712450.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0090,Brown,SEMO/NEAR,,,K-J,K,J,3942240.0,707720.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0011,3PO0011,SEMO/NEAR,,,K-J,K,J,3932470.0,683400.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0012,3PO0012,SEMO/NEAR,,,K-J,K,J,3930750.0,700560.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0018,Tilley Place,SEMO/NEAR,,,K-J,K,J,3924380.0,679720.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0028,Gunner 1,SEMO/NEAR,,,K-J,K,J,3925030.0,690800.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0030,Gunner 3,SEMO/NEAR,,,K-J,K,J,3926750.0,691210.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0031,"Gunner, V.C. 4",SEMO/NEAR,,,K-J,K,J,3926810.0,691640.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0136,County Line #1,SEMO/NEAR,,,K-J,K,J,3953500.0,716850.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0137,County Line #2,SEMO/NEAR,,,K-J,K,J,3953320.0,716840.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0138,County Line #3,SEMO/NEAR,,,K-J,K,J,3953050.0,716960.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0139,Brand,SEMO/NEAR,,,K-J,K,J,3930920.0,695220.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0140,3PO0140,SEMO/NEAR,,,K-J,K,J,3950450.0,713600.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0142,Landers #2,SEMO/NEAR,,,K-J,K,J,3935870.0,714600.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0147,Maddox - Brand,SEMO/NEAR,,,K-J,K,J,3930930.0,696770.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0161,3PO0161,SEMO/NEAR,,,K-J,K,J,3949900.0,684310.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0039,Lelan,SEMO/NEAR,,,K-J,K,J,3925140.0,681100.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0051,Landers,SEMO/NEAR,,,K-J,K,J,3936460.0,715550.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0053,Patterson,SEMO/NEAR,,,K-J,K,J,3950870.0,716070.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0176,3PO0176,SEMO/NEAR,,,K-J,K,J,3948600.0,715500.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0180,3PO0180,SEMO/NEAR,,,K-J,K,J,3944850.0,715350.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0215,"Harlan, Crawford #2",SEMO/NEAR,,,K-J,K,J,3951100.0,718010.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0244,Promised Land,SEMO/NEAR,,,K-J,K,J,3945800.0,717460.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0245,3PO0245,SEMO/NEAR,,,K-J,K,J,3946060.0,716770.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0246,3PO0246,SEMO/NEAR,,,K-J,K,J,3948640.0,714640.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0107,Condra #2,SEMO/NEAR,,,K-J,K,J,3929700.0,695250.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0050,Cart's Camp,SEMO/NEAR,,,K-J,K,J,3930520.0,720520.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0078,Stuckey #7,SEMO/NEAR,,,K-J,K,J,3929500.0,715890.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0229,Maddox,SEMO/NEAR,,,K-J,K,J,3930250.0,696470.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0437,3PO0437,SEMO/NEAR,,,K-J,K,J,3948280.0,710430.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0001,"Burns, Roscoe",SEMO/NEAR,,,K-J,K,J,3900665.0,686080.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0004,Crouch Place,SEMO/NEAR,,,K-J,K,J,3921400.0,679640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0005,Bollinger Place,SEMO/NEAR,,,K-J,K,J,3923340.0,679570.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0009,Clara,SEMO/NEAR,,,K-J,K,J,3891700.0,694620.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0016,"Hunt, Mrs. Jess Place",SEMO/NEAR,,,K-J,K,J,3904300.0,691820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0040,Cherry Valley Mound Group,SEMO/NEAR,,,K-J,K,J,3923250.0,705130.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0042,"Robinson, Harry Place",SEMO/NEAR,,,K-J,K,J,3915220.0,697320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0082,Flossie Davis Place,SEMO/NEAR,,,K-J,K,J,3895000.0,689820.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0002,3SF0002,SEMO/NEAR,,,K-J,K,J,3884450.0,691400.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0058,"Harper, J.L. 2",SEMO/NEAR,,,K-J,K,J,3911200.0,688250.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0091,3CS0091,SEMO/NEAR,,,K-J,K,J,3917550.0,715170.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0145,3CS0145,SEMO/NEAR,,,K-J,K,J,3895350.0,708150.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0148,"Hess, Albert Place 1",SEMO/NEAR,,,K-J,K,J,3900460.0,685500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0890,3CG0890,SEMO/NEAR,,,K-J,K,J,3962700.0,730020.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0921,3CG0921,SEMO/NEAR,,,K-J,K,J,3953930.0,689280.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0930,Bridger,SEMO/NEAR,,,K-J,K,J,3971250.0,695720.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0932,3CG0932,SEMO/NEAR,,,K-J,K,J,3961530.0,681780.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0933,3CG0933,SEMO/NEAR,,,K-J,K,J,3975070.0,727080.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0506,Weona #1,SEMO/NEAR,,,K-J,K,J,3931380.0,714050.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0507,Weona #2,SEMO/NEAR,,,K-J,K,J,3943730.0,714080.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0508,Stewart #2,SEMO/NEAR,,,K-J,K,J,3930650.0,719250.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0509,3PO0509,SEMO/NEAR,,,K-J,K,J,3938860.0,712280.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0939,Betty Brown,SEMO/NEAR,,,K-J,K,J,3977860.0,731300.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0488,Moon,SEMO/NEAR,,,K-J,K,J,3948800.0,722100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0949,"Schug #2, Sonny",SEMO/NEAR,,,K-J,K,J,3980700.0,728420.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0950,Mcnatt Site #1,SEMO/NEAR,,,K-J,K,J,3978900.0,729380.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0515,Newground,SEMO/NEAR,,,K-J,K,J,3933530.0,683600.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0142,3LE0142,SEMO/NEAR,,,K-J,K,J,3857000.0,701750.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0218,3LE0218,SEMO/NEAR,,,K-J,K,J,3863800.0,697500.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0194,3LE0194,SEMO/NEAR,,,K-J,K,J,3860040.0,700230.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0205,3LE0205,SEMO/NEAR,,,K-J,K,J,3856480.0,702770.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0528,3PO0528,SEMO/NEAR,,,K-J,K,J,3940380.0,701200.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0271,3SF0271,SEMO/NEAR,,,K-J,K,J,3870460.0,693730.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0205,3CS0205,SEMO/NEAR,,,K-J,K,J,3903660.0,691070.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0204,3CS0204,SEMO/NEAR,,,K-J,K,J,3922975.0,697980.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0193,3CS0193,SEMO/NEAR,,,K-J,K,J,3922280.0,698320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0202,3CS0202,SEMO/NEAR,,,K-J,K,J,3920800.0,697430.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE0001,Freeland,SEMO/NEAR,,,K-J,K,J,3863980.0,696720.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0534,3PO0534,SEMO/NEAR,,,K-J,K,J,3945530.0,703270.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0006,3CS0006,SEMO/NEAR,,,K-J,K,J,3922400.0,679730.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0013,Francis,SEMO/NEAR,,,K-J,K,J,3907240.0,687900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0017,"Holt, R.T. Place",SEMO/NEAR,,,K-J,K,J,3903760.0,691120.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0041,"Perkins, Vance Place",SEMO/NEAR,,,K-J,K,J,3912300.0,694900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0043,"Peeler, C.W. Place",SEMO/NEAR,,,K-J,K,J,3914520.0,696580.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0003,"Hunt, Sam",SEMO/NEAR,,,K-J,K,J,3904430.0,691070.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0018,Mosley Place,SEMO/NEAR,,,K-J,K,J,3921000.0,697500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0085,"Shaver, Whit.",SEMO/NEAR,,,K-J,K,J,3920550.0,688450.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0100,Tyer,SEMO/NEAR,,,K-J,K,J,3900450.0,691320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0131,3CS0131,SEMO/NEAR,,,K-J,K,J,3896410.0,707800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0147,"Hess, Albert Place 2",SEMO/NEAR,,,K-J,K,J,3900495.0,685385.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0105,3CS0105,SEMO/NEAR,,,K-J,K,J,3895170.0,708080.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0023,"Bostick, L.E. Place",SEMO/NEAR,,,K-J,K,J,3906520.0,691950.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0086,3CS0086,SEMO/NEAR,,,K-J,K,J,3891550.0,696100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0118,Wampler #3,SEMO/NEAR,,,K-J,K,J,3897330.0,679020.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0184,3CS0184,SEMO/NEAR,,,K-J,K,J,3910160.0,693800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0146,"Brown, Charlie",SEMO/NEAR,,,K-J,K,J,3896170.0,687240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0150,"Hess, Albert 3",SEMO/NEAR,,,K-J,K,J,3900350.0,685700.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0151,Ellis Chapel Cemetery (By,SEMO/NEAR,,,K-J,K,J,3896170.0,690900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0223,3CS0223,SEMO/NEAR,,,K-J,K,J,3902200.0,690360.0,15.0,0,0.0,0.0,0,0.0,0
+,3MS0351,Steele,SEMO/NEAR,,,K-J,K,J,3976400.0,748040.0,15.0,0,0.0,0.0,0,0.0,0
+,3MS0044,3MS0044,SEMO/NEAR,,,K-J,K,J,3958000.0,754820.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0095,3SF0095,SEMO/NEAR,,,K-J,K,J,3889900.0,707600.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0058,3PO0058,SEMO/NEAR,,,K-J,K,J,3948060.0,716620.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0055,Harlan #1,SEMO/NEAR,,,K-J,K,J,3950630.0,718120.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0060,Stuckey #1,SEMO/NEAR,,,K-J,K,J,3929490.0,715360.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0270,Ditch #9 #1,SEMO/NEAR,,,K-J,K,J,3951180.0,718120.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0164,Rabey #1,SEMO/NEAR,,,K-J,K,J,3949110.0,694930.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0172,3PO0172,SEMO/NEAR,,,K-J,K,J,3951720.0,716450.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0175,3PO0175,SEMO/NEAR,,,K-J,K,J,3950500.0,715200.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0241,Henderson #4,SEMO/NEAR,,,K-J,K,J,3947770.0,716830.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0234,3PO0234,SEMO/NEAR,,,K-J,K,J,3952840.0,697220.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0236,3PO0236,SEMO/NEAR,,,K-J,K,J,3948000.0,695000.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0204,3PO0204,SEMO/NEAR,,,K-J,K,J,3931020.0,699070.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0207,Hicklin,SEMO/NEAR,,,K-J,K,J,3931440.0,698380.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0104,Shephard #3,SEMO/NEAR,,,K-J,K,J,3927400.0,698380.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0079,Stuckey #8,SEMO/NEAR,,,K-J,K,J,3929530.0,715960.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0084,Buhrmeister #1,SEMO/NEAR,,,K-J,K,J,3952290.0,695350.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0081,Hyneman #4,SEMO/NEAR,,,K-J,K,J,3946850.0,715800.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0125,Stuckey #10,SEMO/NEAR,,,K-J,K,J,3928360.0,715460.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0210,Houston #1,SEMO/NEAR,,,K-J,K,J,3949950.0,718900.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0224,Pickle,SEMO/NEAR,,,K-J,K,J,3952460.0,688390.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0242,"Pipkin, Monis",SEMO/NEAR,,,K-J,K,J,3944000.0,711600.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0243,"Cummins, Gordon",SEMO/NEAR,,,K-J,K,J,3944100.0,714360.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0304,3PO0304,SEMO/NEAR,,,K-J,K,J,3946750.0,712800.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0394,3PO0394,SEMO/NEAR,,,K-J,K,J,3940960.0,732550.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0474,3PO0474,SEMO/NEAR,,,K-J,K,J,3952420.0,679000.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0006,"Mcgee, W.M. Place",SEMO/NEAR,,,K-J,K,J,3977000.0,721760.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0009,Mcfarland Place,SEMO/NEAR,,,K-J,K,J,3969100.0,716370.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0013,Roberson Place,SEMO/NEAR,,,K-J,K,J,3973180.0,721740.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0015,"Lawrence, Geneva",SEMO/NEAR,,,K-J,K,J,3979730.0,724320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0033,Fields Place,SEMO/NEAR,,,K-J,K,J,3966320.0,726620.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0380,3CG0380,SEMO/NEAR,,,K-J,K,J,3959520.0,684150.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0374,3CG0374,SEMO/NEAR,,,K-J,K,J,3971520.0,693250.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0382,Floatin Bridge (W/49&50),SEMO/NEAR,,,K-J,K,J,3976380.0,694440.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0037,Weist,SEMO/NEAR,,,K-J,K,J,3976980.0,700250.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0038,Hergett,SEMO/NEAR,,,K-J,K,J,3961080.0,717100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0040,Baker,SEMO/NEAR,,,K-J,K,J,3981480.0,699100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0044,3CG0044,SEMO/NEAR,,,K-J,K,J,3969580.0,704320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0045,3CG0045,SEMO/NEAR,,,K-J,K,J,3969740.0,704600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0046,3CG0046,SEMO/NEAR,,,K-J,K,J,3981170.0,693840.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0047,3CG0047,SEMO/NEAR,,,K-J,K,J,3980620.0,693830.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0049,Gibson #2,SEMO/NEAR,,,K-J,K,J,3976420.0,694570.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0050,Gibson #3,SEMO/NEAR,,,K-J,K,J,3976130.0,694470.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0035,Cowles,SEMO/NEAR,,,K-J,K,J,3965210.0,708870.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0041,Old Town Ridge,SEMO/NEAR,,,K-J,K,J,3981420.0,742340.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0355,3CG0355,SEMO/NEAR,,,K-J,K,J,3965440.0,722640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0362,3CG0362,SEMO/NEAR,,,K-J,K,J,3973180.0,721740.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0368,"Dalton, Jolly",SEMO/NEAR,,,K-J,K,J,3981990.0,694380.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0314,"Wright, Kelly",SEMO/NEAR,,,K-J,K,J,3981720.0,727610.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0319,Dryden #1,SEMO/NEAR,,,K-J,K,J,3967640.0,688500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0323,3CG0323,SEMO/NEAR,,,K-J,K,J,3972610.0,724040.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0325,3CG0325,SEMO/NEAR,,,K-J,K,J,3975540.0,705280.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0218,Burris #2,SEMO/NEAR,,,K-J,K,J,3970500.0,683900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0220,Burris #4,SEMO/NEAR,,,K-J,K,J,3972850.0,692000.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0222,3CG0222,SEMO/NEAR,,,K-J,K,J,3969520.0,700190.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0224,3CG0224,SEMO/NEAR,,,K-J,K,J,3968860.0,699270.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0225,3CG0225,SEMO/NEAR,,,K-J,K,J,3968840.0,699720.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0347,3CG0347,SEMO/NEAR,,,K-J,K,J,3956350.0,708500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0052,3CG0052,SEMO/NEAR,,,K-J,K,J,3980860.0,694070.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0054,Frierson #2,SEMO/NEAR,,,K-J,K,J,3954080.0,707860.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0079,Burns,SEMO/NEAR,,,K-J,K,J,3970610.0,691550.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0089,3CG0089,SEMO/NEAR,,,K-J,K,J,3976440.0,721160.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0105,Union Grove,SEMO/NEAR,,,K-J,K,J,3975330.0,704820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0106,South - West Of Big Creek,SEMO/NEAR,,,K-J,K,J,3976780.0,705600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0127,3CG0127,SEMO/NEAR,,,K-J,K,J,3972300.0,721530.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0297,West #1,SEMO/NEAR,,,K-J,K,J,3959240.0,712920.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0236,3CG0236,SEMO/NEAR,,,K-J,K,J,3960620.0,686190.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0244,3CG0244,SEMO/NEAR,,,K-J,K,J,3970360.0,686200.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0281,Ozbun,SEMO/NEAR,,,K-J,K,J,3975710.0,699820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0292,3CG0292,SEMO/NEAR,,,K-J,K,J,3969540.0,704950.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0168,"Scott, Richard Mac Farm",SEMO/NEAR,,,K-J,K,J,3980140.0,695010.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0056,Frierson #4,SEMO/NEAR,,,K-J,K,J,3954030.0,707700.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0057,3CG0057,SEMO/NEAR,,,K-J,K,J,3980330.0,693540.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0059,3CG0059,SEMO/NEAR,,,K-J,K,J,3980500.0,693730.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0061,3CG0061,SEMO/NEAR,,,K-J,K,J,3980250.0,693900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0071,3CG0071,SEMO/NEAR,,,K-J,K,J,3953820.0,679240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0072,3CG0072,SEMO/NEAR,,,K-J,K,J,3953580.0,679440.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0073,3CG0073,SEMO/NEAR,,,K-J,K,J,3954130.0,679560.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0074,Lane Farm,SEMO/NEAR,,,K-J,K,J,3981000.0,698520.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0078,Pierre Cache,SEMO/NEAR,,,K-J,K,J,3971200.0,692780.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0140,Tate #1,SEMO/NEAR,,,K-J,K,J,3973280.0,693730.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0141,Tate #3,SEMO/NEAR,,,K-J,K,J,3973450.0,694030.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0143,3CG0143,SEMO/NEAR,,,K-J,K,J,3980400.0,693880.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0526,3CG0526,SEMO/NEAR,,,K-J,K,J,3963570.0,719240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0639,3CG0639,SEMO/NEAR,,,K-J,K,J,3956490.0,716520.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0640,3CG0640,SEMO/NEAR,,,K-J,K,J,3955260.0,716580.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0660,3CG0660,SEMO/NEAR,,,K-J,K,J,3954800.0,717880.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0438,3CG0438,SEMO/NEAR,,,K-J,K,J,3979660.0,736980.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0016,Gamble,SEMO/NEAR,,,K-J,K,J,3975540.0,719620.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0456,3CG0456,SEMO/NEAR,,,K-J,K,J,3968670.0,685190.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0484,3CG0484,SEMO/NEAR,,,K-J,K,J,3976640.0,694940.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0487,3CG0487,SEMO/NEAR,,,K-J,K,J,3976700.0,695300.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0491,3CG0491,SEMO/NEAR,,,K-J,K,J,3976860.0,693980.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0080,Sand Hill,SEMO/NEAR,,,K-J,K,J,3970100.0,690140.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0039,Gibson,SEMO/NEAR,,,K-J,K,J,3965210.0,698560.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0060,3CG0060,SEMO/NEAR,,,K-J,K,J,3980330.0,693750.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0048,Gibson #1,SEMO/NEAR,,,K-J,K,J,3975920.0,694910.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0063,3CG0063,SEMO/NEAR,,,K-J,K,J,3980420.0,694090.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0081,West Fish Pond,SEMO/NEAR,,,K-J,K,J,3969330.0,690810.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0086,3CG0086,SEMO/NEAR,,,K-J,K,J,3976000.0,719060.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0088,3CG0088,SEMO/NEAR,,,K-J,K,J,3973660.0,717820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0090,3CG0090,SEMO/NEAR,,,K-J,K,J,3975320.0,719360.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0092,3CG0092,SEMO/NEAR,,,K-J,K,J,3978200.0,723640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0093,3CG0093,SEMO/NEAR,,,K-J,K,J,3977230.0,722170.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0094,3CG0094,SEMO/NEAR,,,K-J,K,J,3974730.0,718370.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0097,3CG0097,SEMO/NEAR,,,K-J,K,J,3972800.0,727200.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0108,3CG0108,SEMO/NEAR,,,K-J,K,J,3980320.0,724320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0118,3CG0118,SEMO/NEAR,,,K-J,K,J,3975640.0,717610.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0120,3CG0120,SEMO/NEAR,,,K-J,K,J,3975600.0,725700.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0124,Greer,SEMO/NEAR,,,K-J,K,J,3968660.0,690310.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0082,Old House Place,SEMO/NEAR,,,K-J,K,J,3970030.0,691170.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0131,Stevens #1,SEMO/NEAR,,,K-J,K,J,3977190.0,693330.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0138,Stevens #8,SEMO/NEAR,,,K-J,K,J,3977340.0,701000.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0139,Tate #2,SEMO/NEAR,,,K-J,K,J,3973300.0,693950.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0187,Stevens #9,SEMO/NEAR,,,K-J,K,J,3977690.0,693040.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0223,3CG0223,SEMO/NEAR,,,K-J,K,J,3969490.0,700480.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0228,"Mcdaniel, Old Farm",SEMO/NEAR,,,K-J,K,J,3961540.0,698800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0274,3CG0274,SEMO/NEAR,,,K-J,K,J,3981080.0,698600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0280,Cole,SEMO/NEAR,,,K-J,K,J,3972180.0,692850.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0286,Gravel #1,SEMO/NEAR,,,K-J,K,J,3975200.0,712100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0287,Between Gravel Catch #1&2,SEMO/NEAR,,,K-J,K,J,3974450.0,711670.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0300,3CG0300,SEMO/NEAR,,,K-J,K,J,3973440.0,719560.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0381,3CG0381,SEMO/NEAR,,,K-J,K,J,3959910.0,684100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0384,3CG0384,SEMO/NEAR,,,K-J,K,J,3975380.0,693690.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0407,Barnett #1,SEMO/NEAR,,,K-J,K,J,3978480.0,703800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0409,Barnett #2,SEMO/NEAR,,,K-J,K,J,3978590.0,703430.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0453,Krebs Place,SEMO/NEAR,,,K-J,K,J,3972060.0,687580.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0461,3CG0461,SEMO/NEAR,,,K-J,K,J,3967380.0,683700.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0525,3CG0525,SEMO/NEAR,,,K-J,K,J,3962960.0,719380.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0486,3CG0486,SEMO/NEAR,,,K-J,K,J,3976800.0,695520.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0490,3CG0490,SEMO/NEAR,,,K-J,K,J,3977660.0,694290.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0536,3CG0536,SEMO/NEAR,,,K-J,K,J,3964080.0,720450.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0584,3CG0584,SEMO/NEAR,,,K-J,K,J,3977380.0,741820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0841,3CG0841,SEMO/NEAR,,,K-J,K,J,3975940.0,741630.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0863,3CG0863,SEMO/NEAR,,,K-J,K,J,3964940.0,721060.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0229,3CS0229,SEMO/NEAR,,,K-J,K,J,3906500.0,690830.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0972,3CG0972,SEMO/NEAR,,,K-J,K,J,3965370.0,700250.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0967,3CG0967,SEMO/NEAR,,,K-J,K,J,3965100.0,729220.0,15.0,0,0.0,0.0,0,0.0,0
+,3MS0541,3MS0541,SEMO/NEAR,,,K-J,K,J,3969460.0,753950.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0242,3CG0242,SEMO/NEAR,,,K-J,K,J,3967790.0,688620.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0106,3SF0106,SEMO/NEAR,,,K-J,K,J,3887970.0,683920.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0988,3CG0988,SEMO/NEAR,,,K-J,K,J,3957720.0,678140.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0993,3CG0993,SEMO/NEAR,,,K-J,K,J,3959780.0,679400.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0994,3CG0994,SEMO/NEAR,,,K-J,K,J,3959520.0,678640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG0990,3CG0990,SEMO/NEAR,,,K-J,K,J,3957200.0,678100.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0580,3PO0580,SEMO/NEAR,,,K-J,K,J,3951030.0,717580.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0581,3PO0581,SEMO/NEAR,,,K-J,K,J,3950740.0,717140.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1016,"Johnson, George Farm",SEMO/NEAR,,,K-J,K,J,3960350.0,681500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1023,3CG1023,SEMO/NEAR,,,K-J,K,J,3981160.0,693310.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1024,3CG1024,SEMO/NEAR,,,K-J,K,J,3978270.0,693450.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1027,3CG1027,SEMO/NEAR,,,K-J,K,J,3972450.0,691900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1025,3CG1025,SEMO/NEAR,,,K-J,K,J,3972200.0,692050.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1049,3CG1049,SEMO/NEAR,,,K-J,K,J,3963560.0,682910.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1042,3CG1042,SEMO/NEAR,,,K-J,K,J,3962760.0,678900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1068,3CG1068,SEMO/NEAR,,,K-J,K,J,3971650.0,693480.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0595,3PO0595,SEMO/NEAR,,,K-J,K,J,3926260.0,700250.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0342,"Jim Johnson, Madonia 10",SEMO/NEAR,,,K-J,K,J,3824140.0,705220.0,15.0,0,0.0,0.0,0,0.0,0
+,3PH0343,"Ned Young, Madonia 65",SEMO/NEAR,,,K-J,K,J,3833520.0,699850.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0394,3SF0394,SEMO/NEAR,,,K-J,K,J,3877880.0,698760.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0279,3CS0279,SEMO/NEAR,,,K-J,K,J,3918900.0,712850.0,15.0,0,0.0,0.0,0,0.0,0
+,3CS0280,3CS0280,SEMO/NEAR,,,K-J,K,J,3918120.0,712620.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0601,3PO0601,SEMO/NEAR,,,K-J,K,J,3948510.0,695000.0,15.0,0,0.0,0.0,0,0.0,0
+,3SF0416,3SF0416,SEMO/NEAR,,,K-J,K,J,3867865.0,704800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1097,Ledbetter,SEMO/NEAR,,,K-J,K,J,3959640.0,681540.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1101,3CG1101,SEMO/NEAR,,,K-J,K,J,3961000.0,681250.0,15.0,0,0.0,0.0,0,0.0,0
+,3CG1102,3CG1102,SEMO/NEAR,,,K-J,K,J,3960900.0,681020.0,15.0,0,0.0,0.0,0,0.0,0
+,3SC1235,3SC1235,SEMO/NEAR,,,K-J,K,J,3845260.0,383070.0,15.0,0,0.0,0.0,0,0.0,0
+,3SC1236,3SC1236,SEMO/NEAR,,,K-J,K,J,3844950.0,382820.0,15.0,0,0.0,0.0,0,0.0,0
+,3CW0852,3CW0852,SEMO/NEAR,,,K-J,K,J,3944900.0,399000.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0317,3LA0317,SEMO/NEAR,,,K-J,K,J,3690480.0,435165.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0318,3LA0318,SEMO/NEAR,,,K-J,K,J,3687780.0,438535.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0319,3LA0319,SEMO/NEAR,,,K-J,K,J,3687790.0,438480.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0320,3LA0320,SEMO/NEAR,,,K-J,K,J,3677600.0,435435.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0321,3LA0321,SEMO/NEAR,,,K-J,K,J,3677740.0,435820.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0322,3LA0322,SEMO/NEAR,,,K-J,K,J,3677940.0,435845.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0323,3LA0323,SEMO/NEAR,,,K-J,K,J,3676930.0,435900.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0324,3LA0324,SEMO/NEAR,,,K-J,K,J,3702620.0,434960.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0325,3LA0325,SEMO/NEAR,,,K-J,K,J,3694680.0,436500.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0326,3LA0326,SEMO/NEAR,,,K-J,K,J,3702290.0,436320.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0327,3LA0327,SEMO/NEAR,,,K-J,K,J,3702500.0,436260.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0328,3LA0328,SEMO/NEAR,,,K-J,K,J,3698625.0,435500.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0329,3LA0329,SEMO/NEAR,,,K-J,K,J,3698700.0,435040.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0330,3LA0330,SEMO/NEAR,,,K-J,K,J,3699320.0,435040.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0331,3LA0331,SEMO/NEAR,,,K-J,K,J,3701630.0,435470.0,15.0,0,0.0,0.0,0,0.0,0
+,3LA0332,3LA0332,SEMO/NEAR,,,K-J,K,J,3702040.0,434845.0,15.0,0,0.0,0.0,0,0.0,0
+,3BA0260,3BA0260,SEMO/NEAR,,,K-J,K,J,3983300.0,557920.0,15.0,0,0.0,0.0,0,0.0,0
+,3BA0261,3BA0261,SEMO/NEAR,,,K-J,K,J,3983370.0,557870.0,15.0,0,0.0,0.0,0,0.0,0
+,3BA0262,3BA0262,SEMO/NEAR,,,K-J,K,J,3983180.0,558020.0,15.0,0,0.0,0.0,0,0.0,0
+,3BA0263,3BA0263,SEMO/NEAR,,,K-J,K,J,3982490.0,559190.0,15.0,0,0.0,0.0,0,0.0,0
+,3BA0264,3BA0264,SEMO/NEAR,,,K-J,K,J,3982700.0,558600.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0137,3AR0137,SEMO/NEAR,,,K-J,K,J,3790575.0,656690.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0138,3AR0138,SEMO/NEAR,,,K-J,K,J,3787875.0,650240.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0139,3AR0139,SEMO/NEAR,,,K-J,K,J,3787940.0,650240.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0140,3AR0140,SEMO/NEAR,,,K-J,K,J,3789700.0,659900.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0141,3AR0141,SEMO/NEAR,,,K-J,K,J,3790500.0,655140.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0142,C.P. Vittitow Barn,SEMO/NEAR,,,K-J,K,J,3789740.0,660700.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0143,3AR0143,SEMO/NEAR,,,K-J,K,J,3792380.0,661165.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0144,3AR0144,SEMO/NEAR,,,K-J,K,J,3789740.0,662340.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0145,Caney Hunting Club,SEMO/NEAR,,,K-J,K,J,3792940.0,660700.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0146,Elmo Rogers House,SEMO/NEAR,,,K-J,K,J,3792960.0,658420.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0147,"Scott Farm Barn, Granary",SEMO/NEAR,,,K-J,K,J,3791000.0,650300.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0148,John Alter Farm,SEMO/NEAR,,,K-J,K,J,3791400.0,656480.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1554,3MN1554,SEMO/NEAR,,,K-J,K,J,3805510.0,453510.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0142,3PR0142,SEMO/NEAR,,,K-J,K,J,3825840.0,630620.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0143,3PR0143,SEMO/NEAR,,,K-J,K,J,3825875.0,630140.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0144,3PR0144,SEMO/NEAR,,,K-J,K,J,3825870.0,628920.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0145,3PR0145,SEMO/NEAR,,,K-J,K,J,3825380.0,647610.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1473,3MN1473,SEMO/NEAR,,,K-J,K,J,3828560.0,445020.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0149,Clearpoint School Site,SEMO/NEAR,,,K-J,K,J,3824080.0,630850.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0150,3AR0150,SEMO/NEAR,,,K-J,K,J,3819410.0,630780.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0151,3AR0151,SEMO/NEAR,,,K-J,K,J,3820960.0,633970.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0152,3AR0152,SEMO/NEAR,,,K-J,K,J,3825710.0,634710.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0153,3AR0153,SEMO/NEAR,,,K-J,K,J,3820990.0,633310.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0154,3AR0154,SEMO/NEAR,,,K-J,K,J,3820970.0,633740.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0155,3AR0155,SEMO/NEAR,,,K-J,K,J,3824110.0,633250.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0161,South Of The Briar,SEMO/NEAR,,,K-J,K,J,3815510.0,649920.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0157,The Never Ending Site,SEMO/NEAR,,,K-J,K,J,3818040.0,635690.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0166,3AR0166,SEMO/NEAR,,,K-J,K,J,3822920.0,638920.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0146,3PR0146,SEMO/NEAR,,,K-J,K,J,3825760.0,638020.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0147,3PR0147,SEMO/NEAR,,,K-J,K,J,3825720.0,643840.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0164,3AR0164,SEMO/NEAR,,,K-J,K,J,3804460.0,650210.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0163,Road Dump,SEMO/NEAR,,,K-J,K,J,3802720.0,655920.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0733,3PL0733,SEMO/NEAR,,,K-J,K,J,3807980.0,393320.0,15.0,0,0.0,0.0,0,0.0,0
+,3HS0449,3HS0449,SEMO/NEAR,,,K-J,K,J,3800250.0,511300.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0162,Campbell Homestead,SEMO/NEAR,,,K-J,K,J,3802880.0,648850.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0173,3AR0173,SEMO/NEAR,,,K-J,K,J,3812620.0,648290.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0165,Hog Farm,SEMO/NEAR,,,K-J,K,J,3821360.0,650410.0,15.0,0,0.0,0.0,0,0.0,0
+,3SB1024,3SB1024,SEMO/NEAR,,,K-J,K,J,3906000.0,380000.0,15.0,0,0.0,0.0,0,0.0,0
+,3PP0448,3PP0448,SEMO/NEAR,,,K-J,K,J,3903870.0,484910.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0156,Rawls Store,SEMO/NEAR,,,K-J,K,J,3819990.0,635760.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0158,3AR0158,SEMO/NEAR,,,K-J,K,J,3821620.0,635760.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0159,Granny Green,SEMO/NEAR,,,K-J,K,J,3823250.0,635610.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0160,3AR0160,SEMO/NEAR,,,K-J,K,J,3825440.0,636380.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1573,3MN1573,SEMO/NEAR,,,K-J,K,J,3804350.0,454300.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1574,3MN1574,SEMO/NEAR,,,K-J,K,J,3804100.0,454250.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1575,3MN1575,SEMO/NEAR,,,K-J,K,J,3803720.0,454200.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1576,3MN1576,SEMO/NEAR,,,K-J,K,J,3804640.0,454250.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0161,3PR0161,SEMO/NEAR,,,K-J,K,J,3838820.0,620870.0,15.0,0,0.0,0.0,0,0.0,0
+,3WA1015,3WA1015,SEMO/NEAR,,,K-J,K,J,3999750.0,386460.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0160,3PR0160,SEMO/NEAR,,,K-J,K,J,3840340.0,621670.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0167,Earl George House,SEMO/NEAR,,,K-J,K,J,3830310.0,647200.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0168,John Leder House,SEMO/NEAR,,,K-J,K,J,3823720.0,643920.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0151,3PR0151,SEMO/NEAR,,,K-J,K,J,3827560.0,628130.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0153,3PR0153,SEMO/NEAR,,,K-J,K,J,3827500.0,627260.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0159,3PR0159,SEMO/NEAR,,,K-J,K,J,3827510.0,631260.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0158,3PR0158,SEMO/NEAR,,,K-J,K,J,3827500.0,630860.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0157,3PR0157,SEMO/NEAR,,,K-J,K,J,3829100.0,628180.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0152,3PR0152,SEMO/NEAR,,,K-J,K,J,3827530.0,625300.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0150,3PR0150,SEMO/NEAR,,,K-J,K,J,3830700.0,625800.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0154,3PR0154,SEMO/NEAR,,,K-J,K,J,3828320.0,624150.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0149,3PR0149,SEMO/NEAR,,,K-J,K,J,3835500.0,632900.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0155,3PR0155,SEMO/NEAR,,,K-J,K,J,3837180.0,631380.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0156,3PR0156,SEMO/NEAR,,,K-J,K,J,3834000.0,633280.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0162,3PR0162,SEMO/NEAR,,,K-J,K,J,3825910.0,643470.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0169,Otto Rubach House,SEMO/NEAR,,,K-J,K,J,3823880.0,640730.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0170,Ida Marlowe House,SEMO/NEAR,,,K-J,K,J,3806100.0,655990.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0171,Bennett House,SEMO/NEAR,,,K-J,K,J,3806140.0,653300.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0172,Relvea Barns,SEMO/NEAR,,,K-J,K,J,3802770.0,650780.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1601,3MN1601,SEMO/NEAR,,,K-J,K,J,3827970.0,438385.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0163,3PR0163,SEMO/NEAR,,,K-J,K,J,3831290.0,638980.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0170,3PR0170,SEMO/NEAR,,,K-J,K,J,3828920.0,638810.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0232,3ST0232,SEMO/NEAR,,,K-J,K,J,3982570.0,565880.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0171,3PR0171,SEMO/NEAR,,,K-J,K,J,3828860.0,450580.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0233,3ST0233,SEMO/NEAR,,,K-J,K,J,3982840.0,565770.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0234,3ST0234,SEMO/NEAR,,,K-J,K,J,3985430.0,563810.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0235,3ST0235,SEMO/NEAR,,,K-J,K,J,3985550.0,563730.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0236,3ST0236,SEMO/NEAR,,,K-J,K,J,3986010.0,562920.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0237,3ST0237,SEMO/NEAR,,,K-J,K,J,3985550.0,563750.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0238,3ST0238,SEMO/NEAR,,,K-J,K,J,3986180.0,563600.0,15.0,0,0.0,0.0,0,0.0,0
+,3ST0239,3ST0239,SEMO/NEAR,,,K-J,K,J,3981860.0,567500.0,15.0,0,0.0,0.0,0,0.0,0
+,3HS0450,3HS0450,SEMO/NEAR,,,K-J,K,J,3798140.0,510600.0,15.0,0,0.0,0.0,0,0.0,0
+,3BA0265,3BA0265,SEMO/NEAR,,,K-J,K,J,3999960.0,552040.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0164,3PR0164,SEMO/NEAR,,,K-J,K,J,3825850.0,631640.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0165,3PR0165,SEMO/NEAR,,,K-J,K,J,3829060.0,633340.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0166,3PR0166,SEMO/NEAR,,,K-J,K,J,3828910.0,633160.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0167,3PR0167,SEMO/NEAR,,,K-J,K,J,3829020.0,635220.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0168,3PR0168,SEMO/NEAR,,,K-J,K,J,3829040.0,635790.0,15.0,0,0.0,0.0,0,0.0,0
+,3HS0448,3HS0448,SEMO/NEAR,,,K-J,K,J,3817400.0,521500.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0169,3PR0169,SEMO/NEAR,,,K-J,K,J,3828990.0,637330.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0737,3PL0737,SEMO/NEAR,,,K-J,K,J,3837920.0,392960.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0738,3PL0738,SEMO/NEAR,,,K-J,K,J,3837370.0,396690.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0739,3PL0739,SEMO/NEAR,,,K-J,K,J,3837020.0,396640.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0740,3PL0740,SEMO/NEAR,,,K-J,K,J,3836980.0,396410.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0741,3PL0741,SEMO/NEAR,,,K-J,K,J,3837180.0,396250.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0742,3PL0742,SEMO/NEAR,,,K-J,K,J,3837350.0,396840.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0743,3PL0743,SEMO/NEAR,,,K-J,K,J,3837590.0,396820.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0744,3PL0744,SEMO/NEAR,,,K-J,K,J,3837570.0,396750.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0745,3PL0745,SEMO/NEAR,,,K-J,K,J,3837420.0,396370.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0746,3PL0746,SEMO/NEAR,,,K-J,K,J,3837250.0,396350.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0134,3AR0134,SEMO/NEAR,,,K-J,K,J,3762000.0,657750.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0135,3AR0135,SEMO/NEAR,,,K-J,K,J,3762180.0,658500.0,15.0,0,0.0,0.0,0,0.0,0
+,3AR0136,3AR0136,SEMO/NEAR,,,K-J,K,J,3763120.0,657450.0,15.0,0,0.0,0.0,0,0.0,0
+,3SV0290,3SV0290,SEMO/NEAR,,,K-J,K,J,3764880.0,376470.0,15.0,0,0.0,0.0,0,0.0,0
+,3PU0458,3PU0458,SEMO/NEAR,,,K-J,K,J,3827250.0,588800.0,15.0,0,0.0,0.0,0,0.0,0
+,3MO0064,3MO0064,SEMO/NEAR,,,K-J,K,J,3803400.0,683575.0,15.0,0,0.0,0.0,0,0.0,0
+,3PO0590,3PO0590,SEMO/NEAR,,,K-J,K,J,3926630.0,706530.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0759,3PL0759,SEMO/NEAR,,,K-J,K,J,3834550.0,394750.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0760,3PL0760,SEMO/NEAR,,,K-J,K,J,3834000.0,394980.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0761,3PL0761,SEMO/NEAR,,,K-J,K,J,3834490.0,395095.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0762,3PL0762,SEMO/NEAR,,,K-J,K,J,3834250.0,395080.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0763,3PL0763,SEMO/NEAR,,,K-J,K,J,3834580.0,394560.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0764,3PL0764,SEMO/NEAR,,,K-J,K,J,3834320.0,395580.0,15.0,0,0.0,0.0,0,0.0,0
+,3PP0449,3PP0449,SEMO/NEAR,,,K-J,K,J,3896320.0,488650.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0173,3PR0173,SEMO/NEAR,,,K-J,K,J,3843900.0,641180.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0243,3CN0243,SEMO/NEAR,,,K-J,K,J,3892940.0,524870.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0244,3CN0244,SEMO/NEAR,,,K-J,K,J,3891140.0,525140.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0245,3CN0245,SEMO/NEAR,,,K-J,K,J,3890820.0,525245.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0246,3CN0246,SEMO/NEAR,,,K-J,K,J,3886920.0,528850.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0247,3CN0247,SEMO/NEAR,,,K-J,K,J,3886960.0,529060.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0248,3CN0248,SEMO/NEAR,,,K-J,K,J,3888980.0,524700.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0249,3CN0249,SEMO/NEAR,,,K-J,K,J,3890140.0,525240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CN0250,3CN0250,SEMO/NEAR,,,K-J,K,J,3892510.0,524160.0,15.0,0,0.0,0.0,0,0.0,0
+,3MO0065,Shell Button Site,SEMO/NEAR,,,K-J,K,J,3834090.0,648100.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0174,3PR0174,SEMO/NEAR,,,K-J,K,J,3838700.0,645580.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0175,3PR0175,SEMO/NEAR,,,K-J,K,J,3843530.0,641550.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0176,3PR0176,SEMO/NEAR,,,K-J,K,J,3843990.0,641580.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0747,3PL0747,SEMO/NEAR,,,K-J,K,J,3836130.0,397320.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0748,3PL0748,SEMO/NEAR,,,K-J,K,J,3835960.0,397290.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0177,3PR0177,SEMO/NEAR,,,K-J,K,J,3840120.0,645650.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0749,3PL0749,SEMO/NEAR,,,K-J,K,J,3837550.0,396960.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0750,3PL0750,SEMO/NEAR,,,K-J,K,J,3836600.0,397500.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0751,3PL0751,SEMO/NEAR,,,K-J,K,J,3836210.0,397385.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0752,3PL0752,SEMO/NEAR,,,K-J,K,J,3836190.0,397890.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0753,3PL0753,SEMO/NEAR,,,K-J,K,J,3836320.0,397795.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0754,3PL0754,SEMO/NEAR,,,K-J,K,J,3836075.0,398035.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0755,3PL0755,SEMO/NEAR,,,K-J,K,J,3835980.0,397965.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0756,3PL0756,SEMO/NEAR,,,K-J,K,J,3836020.0,397320.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0757,3PL0757,SEMO/NEAR,,,K-J,K,J,3835685.0,397205.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0758,3PL0758,SEMO/NEAR,,,K-J,K,J,3835475.0,397300.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0178,3PR0178,SEMO/NEAR,,,K-J,K,J,3838710.0,642630.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1577,3MN1577,SEMO/NEAR,,,K-J,K,J,3803700.0,454090.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0179,3PR0179,SEMO/NEAR,,,K-J,K,J,3838590.0,641810.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0180,3PR0180,SEMO/NEAR,,,K-J,K,J,3844960.0,638820.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0181,3PR0181,SEMO/NEAR,,,K-J,K,J,3845840.0,638860.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0182,3PR0182,SEMO/NEAR,,,K-J,K,J,3838320.0,645590.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0734,3PL0734,SEMO/NEAR,,,K-J,K,J,3802634.0,405516.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0183,3PR0183,SEMO/NEAR,,,K-J,K,J,3839490.0,641520.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0184,3PR0184,SEMO/NEAR,,,K-J,K,J,3842040.0,639060.0,15.0,0,0.0,0.0,0,0.0,0
+,3MO0066,3MO0066,SEMO/NEAR,,,K-J,K,J,3833700.0,644020.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0185,3PR0185,SEMO/NEAR,,,K-J,K,J,3839140.0,645600.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1584,3MN1584,SEMO/NEAR,,,K-J,K,J,3802560.0,453250.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1585,3MN1585,SEMO/NEAR,,,K-J,K,J,3802660.0,453240.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1586,3MN1586,SEMO/NEAR,,,K-J,K,J,3802550.0,452960.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1587,3MN1587,SEMO/NEAR,,,K-J,K,J,3802450.0,453080.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1588,3MN1588,SEMO/NEAR,,,K-J,K,J,3802470.0,453150.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1589,3MN1589,SEMO/NEAR,,,K-J,K,J,3802580.0,452900.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1590,3MN1590,SEMO/NEAR,,,K-J,K,J,3802480.0,452780.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0186,3PR0186,SEMO/NEAR,,,K-J,K,J,3838610.0,645600.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1583,3MN1583,SEMO/NEAR,,,K-J,K,J,3802440.0,452880.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1581,3MN1581,SEMO/NEAR,,,K-J,K,J,3802820.0,453550.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1582,3MN1582,SEMO/NEAR,,,K-J,K,J,3803120.0,453750.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0735,3PL0735,SEMO/NEAR,,,K-J,K,J,3830550.0,405340.0,15.0,0,0.0,0.0,0,0.0,0
+,3SC1290,3SC1290,SEMO/NEAR,,,K-J,K,J,3850500.0,378700.0,15.0,0,0.0,0.0,0,0.0,0
+,3PL0736,3PL0736,SEMO/NEAR,,,K-J,K,J,3831240.0,406110.0,15.0,0,0.0,0.0,0,0.0,0
+,3MO0067,3MO0067,SEMO/NEAR,,,K-J,K,J,3831300.0,648140.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1578,3MN1578,SEMO/NEAR,,,K-J,K,J,3805640.0,451960.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1579,3MN1579,SEMO/NEAR,,,K-J,K,J,3805390.0,451940.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1580,3MN1580,SEMO/NEAR,,,K-J,K,J,3805400.0,451750.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0191,3PR0191,SEMO/NEAR,,,K-J,K,J,3842100.0,635400.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1592,3MN1592,SEMO/NEAR,,,K-J,K,J,3808980.0,456740.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0187,3PR0187,SEMO/NEAR,,,K-J,K,J,3846290.0,640890.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1593,3MN1593,SEMO/NEAR,,,K-J,K,J,3808960.0,457020.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1591,3MN1591,SEMO/NEAR,,,K-J,K,J,3813000.0,443320.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0192,3PR0192,SEMO/NEAR,,,K-J,K,J,3846600.0,640890.0,15.0,0,0.0,0.0,0,0.0,0
+,3YE0708,3YE0708,SEMO/NEAR,,,K-J,K,J,3872860.0,440370.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0188,3PR0188,SEMO/NEAR,,,K-J,K,J,3846340.0,640660.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0189,3PR0189,SEMO/NEAR,,,K-J,K,J,3849520.0,638320.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1594,3MN1594,SEMO/NEAR,,,K-J,K,J,3804000.0,434440.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0190,3PR0190,SEMO/NEAR,,,K-J,K,J,3849630.0,639180.0,15.0,0,0.0,0.0,0,0.0,0
+,3SC1237,3SC1237,SEMO/NEAR,,,K-J,K,J,3846920.0,391750.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0193,3PR0193,SEMO/NEAR,,,K-J,K,J,3850820.0,640890.0,15.0,0,0.0,0.0,0,0.0,0
+,3MN1595,3MN1595,SEMO/NEAR,,,K-J,K,J,3827450.0,435270.0,15.0,0,0.0,0.0,0,0.0,0
+,3PR0172,3PR0172,SEMO/NEAR,,,K-J,K,J,3833880.0,630180.0,15.0,0,0.0,0.0,0,0.0,0
+,3FR0363,3FR0363,SEMO/NEAR,,,K-J,K,J,3947380.0,419120.0,15.0,0,0.0,0.0,0,0.0,0
+,3AS0219,Reid,SEMO/NEAR,,,K-J,K,J,3657280.0,625630.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0008,Colette,SEMO/NEAR,,,K-J,K,J,4034700.0,735400.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0025,Jones Place,SEMO/NEAR,,,K-J,K,J,4033400.0,710940.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0073,3CY0073,SEMO/NEAR,,,K-J,K,J,4030650.0,734020.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0211,3CY0211,SEMO/NEAR,,,K-J,K,J,4028280.0,730070.0,15.0,0,0.0,0.0,0,0.0,0
+,3DR0146,3DR0146,SEMO/NEAR,,,K-J,K,J,3731710.0,602590.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0094,"Dalton Field, Sloan",SEMO/NEAR,,,K-J,K,J,3991180.0,701370.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0275,3GE0275,SEMO/NEAR,,,K-J,K,J,3987620.0,698620.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0315,3GE0315,SEMO/NEAR,,,K-J,K,J,3986120.0,697500.0,15.0,0,0.0,0.0,0,0.0,0
+,3LI0043,Turtle Creek,SEMO/NEAR,,,K-J,K,J,3764160.0,606770.0,15.0,0,0.0,0.0,0,0.0,0
+,3LI0044,White Cemetery,SEMO/NEAR,,,K-J,K,J,3763040.0,609050.0,15.0,0,0.0,0.0,0,0.0,0
+,3LI0071,Appleby,SEMO/NEAR,,,K-J,K,J,3759810.0,614250.0,15.0,0,0.0,0.0,0,0.0,0
+,3LI0085,Ables Creek Terrace,SEMO/NEAR,,,K-J,K,J,3740980.0,627910.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0026,Beech Grove,SEMO/NEAR,,,K-J,K,J,4009350.0,714650.0,15.0,0,0.0,0.0,0,0.0,0
+,3AS0040,Evans Place Field,SEMO/NEAR,,,K-J,K,J,3688900.0,596580.0,15.0,0,0.0,0.0,0,0.0,0
+,3DR0036,3DR0036,SEMO/NEAR,,,K-J,K,J,3722980.0,625320.0,15.0,0,0.0,0.0,0,0.0,0
+,3DR0009,Dripping Springs,SEMO/NEAR,,,K-J,K,J,3700710.0,593280.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0019,Howell,SEMO/NEAR,,,K-J,K,J,4025150.0,731200.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0020,Furtrell,SEMO/NEAR,,,K-J,K,J,4023000.0,729650.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0033,Teasley Place,SEMO/NEAR,,,K-J,K,J,4031760.0,710260.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0036,Woods Place,SEMO/NEAR,,,K-J,K,J,4030920.0,712840.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0038,Mathis Place,SEMO/NEAR,,,K-J,K,J,4030490.0,710610.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0044,Bradshaw Place,SEMO/NEAR,,,K-J,K,J,4022530.0,704330.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0084,Allen Cemetery,SEMO/NEAR,,,K-J,K,J,4020920.0,710940.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0109,Huggins,SEMO/NEAR,,,K-J,K,J,4026080.0,731640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0168,Clovis,SEMO/NEAR,,,K-J,K,J,4035240.0,703160.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0003,Forkum Place,SEMO/NEAR,,,K-J,K,J,3991460.0,702610.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0007,Delaney Place,SEMO/NEAR,,,K-J,K,J,3993650.0,699080.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0019,Nailing,SEMO/NEAR,,,K-J,K,J,4004590.0,740830.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0023,Griffin,SEMO/NEAR,,,K-J,K,J,3994890.0,733220.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0025,Hammon Place,SEMO/NEAR,,,K-J,K,J,3987520.0,729630.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0040,"Sloan, W.C. Farm",SEMO/NEAR,,,K-J,K,J,3985600.0,698150.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0044,"Nutt, Richard Behind Hous",SEMO/NEAR,,,K-J,K,J,3985700.0,700250.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0049,Kaylor Farm,SEMO/NEAR,,,K-J,K,J,3984120.0,698700.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0118,3GE0118,SEMO/NEAR,,,K-J,K,J,3983500.0,733760.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0131,Higgins #3,SEMO/NEAR,,,K-J,K,J,3985300.0,728000.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0153,3GE0153,SEMO/NEAR,,,K-J,K,J,3996750.0,707240.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0193,3GE0193,SEMO/NEAR,,,K-J,K,J,3994480.0,706660.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0194,3GE0194,SEMO/NEAR,,,K-J,K,J,3994230.0,706720.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0123,King,SEMO/NEAR,,,K-J,K,J,4012600.0,699270.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0250,3GE0250,SEMO/NEAR,,,K-J,K,J,3994890.0,720000.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0313,3GE0313,SEMO/NEAR,,,K-J,K,J,4013000.0,699200.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0013,Tower,SEMO/NEAR,,,K-J,K,J,4009080.0,705810.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0063,Lands,SEMO/NEAR,,,K-J,K,J,4002500.0,711050.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0080,3GE0080,SEMO/NEAR,,,K-J,K,J,4009700.0,709800.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0207,Bard,SEMO/NEAR,,,K-J,K,J,3997460.0,736660.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0010,Mccrory,SEMO/NEAR,,,K-J,K,J,4040210.0,744530.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0011,"Parrish, V.",SEMO/NEAR,,,K-J,K,J,4037140.0,736470.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0132,"Parrish, V.",SEMO/NEAR,,,K-J,K,J,4037140.0,736470.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0012,Marlie,SEMO/NEAR,,,K-J,K,J,4035220.0,737020.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0013,"Parrish, S.",SEMO/NEAR,,,K-J,K,J,4039710.0,733370.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0016,Cache River,SEMO/NEAR,,,K-J,K,J,4035470.0,745010.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0018,Allen,SEMO/NEAR,,,K-J,K,J,4030860.0,730260.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0261,Rattlesnake Hill,SEMO/NEAR,,,K-J,K,J,4034700.0,702050.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0271,3CY0271,SEMO/NEAR,,,K-J,K,J,4029780.0,716400.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0266,3CY0266,SEMO/NEAR,,,K-J,K,J,4026900.0,709250.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0274,3CY0274,SEMO/NEAR,,,K-J,K,J,4031620.0,717740.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0098,3CY0098,SEMO/NEAR,,,K-J,K,J,4025940.0,711980.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0285,3CY0285,SEMO/NEAR,,,K-J,K,J,4038860.0,706740.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0288,Laughlin Farm,SEMO/NEAR,,,K-J,K,J,4037200.0,700650.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0042,Brownfield,SEMO/NEAR,,,K-J,K,J,4035000.0,702600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0115,Briney,SEMO/NEAR,,,K-J,K,J,4041050.0,722900.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0303,Dalton Hill,SEMO/NEAR,,,K-J,K,J,4026050.0,707800.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0113,3CY0113,SEMO/NEAR,,,K-J,K,J,4035640.0,721000.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0277,3CY0277,SEMO/NEAR,,,K-J,K,J,4031740.0,714750.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0308,3CY0308,SEMO/NEAR,,,K-J,K,J,4026500.0,708600.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0312,3CY0312,SEMO/NEAR,,,K-J,K,J,4025650.0,708300.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0325,3CY0325,SEMO/NEAR,,,K-J,K,J,4023630.0,705850.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0330,3CY0330,SEMO/NEAR,,,K-J,K,J,4029250.0,716640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0332,3CY0332,SEMO/NEAR,,,K-J,K,J,4040550.0,723640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0339,"Moore, Paul",SEMO/NEAR,,,K-J,K,J,4029550.0,717350.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0346,"Watkins, Cleo",SEMO/NEAR,,,K-J,K,J,3982650.0,695360.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0348,Medford 5-88,SEMO/NEAR,,,K-J,K,J,4036130.0,755830.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0353,Halpole,SEMO/NEAR,,,K-J,K,J,4010750.0,708200.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0004,Rice,SEMO/NEAR,,,K-J,K,J,4035670.0,728140.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0004,Bard,SEMO/NEAR,,,K-J,K,J,3991540.0,701350.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0016,Taylor Place,SEMO/NEAR,,,K-J,K,J,4001210.0,734970.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0017,Swink,SEMO/NEAR,,,K-J,K,J,4002080.0,735030.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0030,3GE0030,SEMO/NEAR,,,K-J,K,J,3988900.0,698210.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0038,Frank Ridge Walnut Corner,SEMO/NEAR,,,K-J,K,J,3990360.0,700000.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0035,"Warner, A.F. Behind House",SEMO/NEAR,,,K-J,K,J,3990760.0,700870.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0039,"Nutt, Richard Front House",SEMO/NEAR,,,K-J,K,J,3986020.0,700370.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0046,"Sloan, W.C. Farm",SEMO/NEAR,,,K-J,K,J,3984910.0,697680.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0047,"Fielder, H.B.Cotton Field",SEMO/NEAR,,,K-J,K,J,3984680.0,697750.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0052,3GE0052,SEMO/NEAR,,,K-J,K,J,3990700.0,695300.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0053,3GE0053,SEMO/NEAR,,,K-J,K,J,3990850.0,695340.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0056,3GE0056,SEMO/NEAR,,,K-J,K,J,3990380.0,698320.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0079,Bolick #1,SEMO/NEAR,,,K-J,K,J,4012180.0,717300.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0058,"Fielder, G.E.Cotton Patch",SEMO/NEAR,,,K-J,K,J,3984610.0,696520.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0069,Big Island,SEMO/NEAR,,,K-J,K,J,3984290.0,695620.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0070,3GE0070,SEMO/NEAR,,,K-J,K,J,3983880.0,725730.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0179,3GE0179,SEMO/NEAR,,,K-J,K,J,3993080.0,706400.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0221,3GE0221,SEMO/NEAR,,,K-J,K,J,3998180.0,700990.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0233,3GE0233,SEMO/NEAR,,,K-J,K,J,3984480.0,696540.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0243,3GE0243,SEMO/NEAR,,,K-J,K,J,3991400.0,702550.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0245,3GE0245,SEMO/NEAR,,,K-J,K,J,3991930.0,702470.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0246,3GE0246,SEMO/NEAR,,,K-J,K,J,3991900.0,702640.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0249,3GE0249,SEMO/NEAR,,,K-J,K,J,3991660.0,702560.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0125,"Lee, Richard",SEMO/NEAR,,,K-J,K,J,3985740.0,696140.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0320,3GE0320,SEMO/NEAR,,,K-J,K,J,3992100.0,703050.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0311,3GE0311,SEMO/NEAR,,,K-J,K,J,4013700.0,699600.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0165,Fossett #2,SEMO/NEAR,,,K-J,K,J,4008940.0,704060.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0168,3GE0168,SEMO/NEAR,,,K-J,K,J,4006330.0,701430.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0078,3GE0078,SEMO/NEAR,,,K-J,K,J,3990060.0,699880.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0093,Blade,SEMO/NEAR,,,K-J,K,J,3991120.0,700940.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0115,3GE0115,SEMO/NEAR,,,K-J,K,J,3987020.0,701680.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0127,"Sloan, W.C. (Far Ridge)",SEMO/NEAR,,,K-J,K,J,3985200.0,698070.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0135,3GE0135,SEMO/NEAR,,,K-J,K,J,3986130.0,697240.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0149,Collins Hill,SEMO/NEAR,,,K-J,K,J,4009040.0,705720.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0150,3GE0150,SEMO/NEAR,,,K-J,K,J,4009100.0,705160.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0156,Williams,SEMO/NEAR,,,K-J,K,J,3997770.0,702500.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0164,Fossett #1,SEMO/NEAR,,,K-J,K,J,4008940.0,704240.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0170,Shewmaker #1,SEMO/NEAR,,,K-J,K,J,3996950.0,707530.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0186,3GE0186,SEMO/NEAR,,,K-J,K,J,3988250.0,730800.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0222,3GE0222,SEMO/NEAR,,,K-J,K,J,3998050.0,700740.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0224,3GE0224,SEMO/NEAR,,,K-J,K,J,3998290.0,700930.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0215,3GE0215,SEMO/NEAR,,,K-J,K,J,3998800.0,700900.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0218,3GE0218,SEMO/NEAR,,,K-J,K,J,3997410.0,700130.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0220,3GE0220,SEMO/NEAR,,,K-J,K,J,3997330.0,699500.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0236,3GE0236,SEMO/NEAR,,,K-J,K,J,3999200.0,700680.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0100,3GE0100,SEMO/NEAR,,,K-J,K,J,3987440.0,719160.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0088,Bryant,SEMO/NEAR,,,K-J,K,J,3998150.0,706450.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0139,3GE0139,SEMO/NEAR,,,K-J,K,J,4010180.0,700940.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0140,3GE0140,SEMO/NEAR,,,K-J,K,J,4010220.0,701070.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0028,Braham,SEMO/NEAR,,,K-J,K,J,3999800.0,738660.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0036,Jumper Farm,SEMO/NEAR,,,K-J,K,J,3984860.0,699120.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0060,"Farley, Stewart Place",SEMO/NEAR,,,K-J,K,J,3985320.0,700290.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0071,3GE0071,SEMO/NEAR,,,K-J,K,J,3985280.0,726430.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0005,Jenkins,SEMO/NEAR,,,K-J,K,J,4035940.0,735880.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0006,Elizabeth,SEMO/NEAR,,,K-J,K,J,4036590.0,736060.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0007,Nickerson,SEMO/NEAR,,,K-J,K,J,4034160.0,734190.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0009,Baker,SEMO/NEAR,,,K-J,K,J,4039840.0,744520.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0022,"Pyle, Harold Farm",SEMO/NEAR,,,K-J,K,J,4036380.0,703760.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0024,Murphy Lake,SEMO/NEAR,,,K-J,K,J,4025940.0,708700.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0027,3CY0027,SEMO/NEAR,,,K-J,K,J,4028530.0,708650.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0028,Vandover Farm,SEMO/NEAR,,,K-J,K,J,4028870.0,710680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0029,Gasoway Place,SEMO/NEAR,,,K-J,K,J,4030200.0,710290.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0031,High Point,SEMO/NEAR,,,K-J,K,J,4023640.0,706130.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0032,Arent Place,SEMO/NEAR,,,K-J,K,J,4030550.0,721860.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0034,Miller Place,SEMO/NEAR,,,K-J,K,J,4037400.0,704080.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0037,March,SEMO/NEAR,,,K-J,K,J,4028940.0,712690.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0050,Cox Place,SEMO/NEAR,,,K-J,K,J,4025040.0,702490.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0169,Cloud's Hardin,SEMO/NEAR,,,K-J,K,J,4034700.0,702640.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0180,3CY0180,SEMO/NEAR,,,K-J,K,J,4040760.0,741140.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0237,3CY0237,SEMO/NEAR,,,K-J,K,J,4031510.0,709000.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0003,Vandover Farm,SEMO/NEAR,,,K-J,K,J,4028870.0,710680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0076,3CY0076,SEMO/NEAR,,,K-J,K,J,4020660.0,726040.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0078,3CY0078,SEMO/NEAR,,,K-J,K,J,4027590.0,726370.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0079,3CY0079,SEMO/NEAR,,,K-J,K,J,4026440.0,726490.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0083,3CY0083,SEMO/NEAR,,,K-J,K,J,4025240.0,727260.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0087,James,SEMO/NEAR,,,K-J,K,J,4036250.0,721000.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0094,3CY0094,SEMO/NEAR,,,K-J,K,J,4028980.0,713680.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0096,3CY0096,SEMO/NEAR,,,K-J,K,J,4026780.0,712010.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0097,3CY0097,SEMO/NEAR,,,K-J,K,J,4026600.0,711960.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0106,3CY0106,SEMO/NEAR,,,K-J,K,J,4028090.0,722220.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0107,3CY0107,SEMO/NEAR,,,K-J,K,J,4028580.0,720920.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0110,3CY0110,SEMO/NEAR,,,K-J,K,J,4025810.0,731460.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0125,3CY0125,SEMO/NEAR,,,K-J,K,J,4040310.0,739910.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0128,3CY0128,SEMO/NEAR,,,K-J,K,J,4038800.0,737320.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0131,3CY0131,SEMO/NEAR,,,K-J,K,J,4036100.0,736230.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0135,3CY0135,SEMO/NEAR,,,K-J,K,J,4037680.0,736730.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0147,3CY0147,SEMO/NEAR,,,K-J,K,J,4037830.0,736500.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0152,3CY0152,SEMO/NEAR,,,K-J,K,J,4038700.0,737590.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0154,3CY0154,SEMO/NEAR,,,K-J,K,J,4039200.0,738100.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0157,3CY0157,SEMO/NEAR,,,K-J,K,J,4038470.0,737290.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0320,3CY0320,SEMO/NEAR,,,K-J,K,J,4019050.0,726200.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0341,3CY0341,SEMO/NEAR,,,K-J,K,J,4026650.0,706430.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0121,"Flanigan, G.C. Farm",SEMO/NEAR,,,K-J,K,J,4035020.0,721150.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0355,Dalton,SEMO/NEAR,,,K-J,K,J,4018920.0,706720.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0051,Thampson Place,SEMO/NEAR,,,K-J,K,J,4031020.0,713550.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0449,Starr,SEMO/NEAR,,,K-J,K,J,4028600.0,760240.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0433,Donner Site,SEMO/NEAR,,,K-J,K,J,4029040.0,758900.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0426,3GE0426,SEMO/NEAR,,,K-J,K,J,3992200.0,697400.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0425,3GE0425,SEMO/NEAR,,,K-J,K,J,3988420.0,696950.0,15.0,0,0.0,0.0,0,0.0,0
+,3LI0204,Harrison,SEMO/NEAR,,,K-J,K,J,3759300.0,613200.0,15.0,0,0.0,0.0,0,0.0,0
+,3LI0207,Johnny Jackson,SEMO/NEAR,,,K-J,K,J,3760200.0,613410.0,15.0,0,0.0,0.0,0,0.0,0
+,3GE0463,Lake Ponder,SEMO/NEAR,,,K-J,K,J,3991280.0,710360.0,15.0,0,0.0,0.0,0,0.0,0
+,3CY0468,3CY0468,SEMO/NEAR,,,K-J,K,J,4039720.0,753250.0,15.0,0,0.0,0.0,0,0.0,0
+,23DU55,Indian Camp Slough / Ralph Wayne 4 / Bald Knob Nutstone,SEMO/NEAR,,,K-J,K,J,4025808.065,767485.032,15.0,0,0.0,0.0,0,0.0,0
+,23DU77,Charles Provance Front Ridge,SEMO/NEAR,,,K-J,K,J,4043658.085,764935.027,15.0,0,0.0,0.0,0,0.0,0
+,23DU229,South Russom,SEMO/NEAR,,,K-J,K,J,4035808.078,766785.039,15.0,0,0.0,0.0,0,0.0,0
+,23DU230,North Russom,SEMO/NEAR,,,K-J,K,J,4036008.078,766785.039,15.0,0,0.0,0.0,0,0.0,0
+,23DU386,Blowhole,SEMO/NEAR,,,K-J,K,J,4029908.078,768435.045,15.0,0,0.0,0.0,0,0.0,0
+,23DU391,Costephens,SEMO/NEAR,,,K-J,K,J,4033208.081,768185.048,15.0,0,0.0,0.0,0,0.0,0
+,23DU392,Roadkill / Young,SEMO/NEAR,,,K-J,K,J,4034408.081,767885.047,15.0,0,0.0,0.0,0,0.0,0
+,23DU395,Tom True Slough Iii / True Slough,SEMO/NEAR,,,K-J,K,J,4034408.079,767435.043,15.0,0,0.0,0.0,0,0.0,0
+,23DU396,New Poterfield,SEMO/NEAR,,,K-J,K,J,4035108.08,767585.046,15.0,0,0.0,0.0,0,0.0,0
+,23DU398,Johnson / Porterfield,SEMO/NEAR,,,K-J,K,J,4033708.066,765185.022,15.0,0,0.0,0.0,0,0.0,0
+,23DU422,Garhole / Garhole Complex,SEMO/NEAR,,,K-J,K,J,4036708.082,767385.046,15.0,0,0.0,0.0,0,0.0,0
+,23DU424,Little Celt / Gunflint,SEMO/NEAR,,,K-J,K,J,4035708.085,768335.054,15.0,0,0.0,0.0,0,0.0,0
+,23DU437,Cude Cullum,SEMO/NEAR,,,K-J,K,J,4024401.677,770799.486,15.0,0,0.0,0.0,0,0.0,0
+,23DU440,Mcelwrath,SEMO/NEAR,,,K-J,K,J,4030446.341,770523.761,15.0,0,0.0,0.0,0,0.0,0
+,23DU441,Otto Bean,SEMO/NEAR,,,K-J,K,J,4029810.218,769962.167,15.0,0,0.0,0.0,0,0.0,0
+,23DU442,Melon Patch / North Ridge,SEMO/NEAR,,,K-J,K,J,4030140.911,769641.003,15.0,0,0.0,0.0,0,0.0,0
+,23DU443,Massey / Dempsey,SEMO/NEAR,,,K-J,K,J,4030215.871,769235.557,15.0,0,0.0,0.0,0,0.0,0
+,23DU445,Karston,SEMO/NEAR,,,K-J,K,J,4031269.862,770071.722,15.0,0,0.0,0.0,0,0.0,0
+,23DU447,Robinson / Lloyd Robertson,SEMO/NEAR,,,K-J,K,J,4031872.009,769282.773,15.0,0,0.0,0.0,0,0.0,0
+,23DU449,Don Davis,SEMO/NEAR,,,K-J,K,J,4021758.039,765435.016,15.0,0,0.0,0.0,0,0.0,0
+,23DU465,Nails Hill 19/ Little Ugly Clovis,SEMO/NEAR,,,K-J,K,J,4025608.069,768035.035,15.0,0,0.0,0.0,0,0.0,0
+,23DU468,Segraves 7 / East Of Wheeling,SEMO/NEAR,,,K-J,K,J,4029813.112,770813.657,15.0,0,0.0,0.0,0,0.0,0
+,23DU473,Sawmill Site 2,SEMO/NEAR,,,K-J,K,J,4024508.061,767285.029,15.0,0,0.0,0.0,0,0.0,0
+,23DU486,South Pete Cross,SEMO/NEAR,,,K-J,K,J,4028708.072,767885.039,15.0,0,0.0,0.0,0,0.0,0
+,23DU492,Green Briar Sw From Pete Cross,SEMO/NEAR,,,K-J,K,J,4028408.071,767685.037,15.0,0,0.0,0.0,0,0.0,0
+,23DU493,Tom True Leveled Mound,SEMO/NEAR,,,K-J,K,J,4028308.071,767835.038,15.0,0,0.0,0.0,0,0.0,0
+,23DU494,North Dead Mans Slough Complex Component C,SEMO/NEAR,,,K-J,K,J,4025008.071,768485.037,15.0,0,0.0,0.0,0,0.0,0
+,23DU496,True / Frisbee Complex Component B & B+,SEMO/NEAR,,,K-J,K,J,4028008.073,768185.04,15.0,0,0.0,0.0,0,0.0,0
+,23DU498,North Dead Mans Slough Complex Component A,SEMO/NEAR,,,K-J,K,J,4024208.066,767985.033,15.0,0,0.0,0.0,0,0.0,0
+,23DU514,West Ridge Pete Cross,SEMO/NEAR,,,K-J,K,J,4029308.07,767385.036,15.0,0,0.0,0.0,0,0.0,0
+,23DU523,Stanley Hays Complex Northeast Component,SEMO/NEAR,,,K-J,K,J,4043608.086,765335.032,15.0,0,0.0,0.0,0,0.0,0
+,23DU525,Kenny Collis South & East,SEMO/NEAR,,,K-J,K,J,4044908.09,765785.037,15.0,0,0.0,0.0,0,0.0,0
+,23DU527,Big Dicks Bend,SEMO/NEAR,,,K-J,K,J,4045708.07,749684.821,15.0,0,0.0,0.0,0,0.0,0
+,23DU538,Causeway,SEMO/NEAR,,,K-J,K,J,4042308.084,765585.034,15.0,0,0.0,0.0,0,0.0,0
+,23DU542,X-Sw Ralph Williams,SEMO/NEAR,,,K-J,K,J,4035458.074,766185.033,15.0,0,0.0,0.0,0,0.0,0
+,23DU546,Arliss,SEMO/NEAR,,,K-J,K,J,4038208.056,760184.973,15.0,0,0.0,0.0,0,0.0,0
+,23DU548,Markham,SEMO/NEAR,,,K-J,K,J,4032808.084,768785.053,15.0,0,0.0,0.0,0,0.0,0
+,23DU550,Angelfish,SEMO/NEAR,,,K-J,K,J,4042208.086,766135.04,15.0,0,0.0,0.0,0,0.0,0
+,23DU576,Scott - Davis Backside Snyder,SEMO/NEAR,,,K-J,K,J,4035358.03,756984.944,15.0,0,0.0,0.0,0,0.0,0
+,23DU586,Ben White J Highway,SEMO/NEAR,,,K-J,K,J,4051928.116,753784.842,15.0,0,0.0,0.0,0,0.0,0
+,23DU602,Broken Adz,SEMO/NEAR,,,K-J,K,J,4036832.478,772190.16,15.0,0,0.0,0.0,0,0.0,0
+,23DU605,South Mcguire Dropoff/ Also Given Site Number 23nm614,SEMO/NEAR,,,K-J,K,J,4042959.532,772429.344,15.0,0,0.0,0.0,0,0.0,0
+,23PM659,Pemiscot Dalton,SEMO/NEAR,,,K-J,K,J,4031131.18,775891.957,15.0,0,0.0,0.0,0,0.0,0
+,,Turnage,LA,,,G-F,F,E,3361196.0,590772.0,15.0,1,0.0,0.0,0,0.0,0
+,,Coulee Crow,LA,,,G-F,G,F,3342116.0,599776.0,15.0,5,0.0,0.0,0,0.0,0
+,,Fournet,LA,,,G-F,G,F,3342000.0,599696.0,15.0,2+,0.0,0.0,0,0.0,0
+,,Bayou Capucin,LA,,,G-F,G,F,3340680.0,604784.0,15.0,2+,0.0,0.0,0,0.0,0
+25-I-5,,McGuffee,LA,,,F-E,F,E,3521236.0,613968.0,15.0,2+,0.0,0.0,0,0.0,0
+25-J-6,,Lake Louis,LA,,,F-E,F,E,3521796.0,627544.0,15.0,1,12.139107611548555,0.0,0,0.0,0
+31-I-1,,Lafayette Mounds,LA,,,F+A,F,A,3347672.0,597456.0,15.0,2+,0.0,0.0,0,0.0,0
+,22-Pa-524,22-Pa-524,Yazoo,,,K-J,K,J,3811354.0,762075.0,15.0,12,0.0,0.0,0,0.0,0
+,22-Pa-615,22-Pa-615,Yazoo,,,K-J,K,J,3804860.0,764830.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-621,22-Pa-621,Yazoo,,,K-J,K,J,3804700.0,766120.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-660,22-Pa-660,Yazoo,,,K-J,K,J,3806800.0,769090.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-971,22-Pa-971,Yazoo,,,K-J,K,J,3785960.0,769220.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-991,22-Pa-991,Yazoo,,,K-J,K,J,3803380.0,767400.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-997,22-Pa-997,Yazoo,,,K-J,K,J,3802250.0,773740.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-1000,22-Pa-1000,Yazoo,,,K,K,K,3807725.98,786457.028,15.0,0,0.0,0.0,0,0.0,0
+,22-Bo-546,22-Bo-546,Yazoo,,,K-J,K,J,3719413.0,703331.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Bo-664,22-Bo-664,Yazoo,,,K-J,K,J,3723760.0,704100.0,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-517,22-Pa-517,Yazoo,,,K,K,K,3802140.039,777389.48,15.0,0,0.0,0.0,0,0.0,0
+,22-Pa-587,22-Pa-587,Yazoo,,,K,K,K,3807444.0,764187.0,15.0,0,0.0,0.0,0,0.0,0
+27-H-12,,Duck Slough,LA,,,G-H,G,H,3484536.0,576400.0,15.0,0,0.0,0.0,0,0.0,0
+26-H-2,,Gorum,LA,,,G-H,G,H,3486472.0,587128.0,15.0,0,0.0,0.0,0,0.0,0
+25-J-9,,Cut-off Landing,LA,,,G-H,G,H,3540604.0,630720.0,15.0,0,0.0,0.0,0,0.0,0
+25-I-2,,Pritchard Landing,LA,,,"G,E",G,E,3515900.0,614344.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-20,,Panther Lake,LA,,,G-E,G,E,3599920.0,655392.0,15.0,0,0.0,0.0,0,0.0,0
+27-H-10,,Sanson,LA,,,G-A,G,A,3479540.0,578744.0,15.0,0,0.0,0.0,0,0.0,0
+27-I-1,,Wiley,LA,,,H-E,H,E,3470944.0,600384.0,15.0,0,0.0,0.0,0,0.0,0
+28-G-5,,Rodriquez,LA,,,G-H,G,H,3449704.0,566128.0,15.0,0,0.0,0.0,0,0.0,0
+7-P-4,,Case School,SEMO,,,G-H,G,H,4033210.0,761064.0,15.0,0,0.0,0.0,0,0.0,0
+7-P-7,,Watson,SEMO,,,G-H,G,H,4016076.0,768020.0,15.0,0,0.0,0.0,0,0.0,0
+5-T-4,,O'Bryan Ridge,SEMO,,,G-H,G,H,4082232.0,303048.0,16.0,0,0.0,0.0,0,0.0,0
+5-T-7,,Weems,SEMO,,,G-E,G,E,4082376.0,301772.0,16.0,0,0.0,0.0,0,0.0,0
+7-R-5,,Double Bridges,SEMO,,,G-H,G,H,4035240.0,804688.0,15.0,0,0.0,0.0,0,0.0,0
+5-S-2,,Hoecake,SEMO,,,G-D,G,D,4074410.0,833560.0,15.0,0,0.0,0.0,0,0.0,0
+7-Q-2,,Pascola,SEMO,,,G-H,G,E,4018185.0,785151.0,15.0,0,0.0,0.0,0,0.0,0
+6-S-5,,LaPlant,SEMO,,,G-E,G,E,4063020.0,824249.0,15.0,0,0.0,0.0,0,0.0,0
+8-Q-12,,Blazer,SEMO,,,G-E,G,E,4012050.0,791290.0,15.0,0,0.0,0.0,0,0.0,0
+8-Q-10,,Hurley,SEMO,,,G-E,G,E,4001600.0,780205.0,15.0,0,0.0,0.0,0,0.0,0
+15-M-6,,Hugo,Arkansas,,,G-H,G,H,3807780.0,699888.0,15.0,0,0.0,0.0,0,0.0,0
+4-Q-2,23-SO-1,Baseline,SEMO,,,"F,D",F,D,4103392.0,252204.0,16.0,1,4.0,0.0,0,0.0,0
+6-R-3,,Kewanee,SEMO,,,F,F,F,4063610.0,806894.0,15.0,0,0.0,0.0,0,0.0,0
+8-Q-11,,Lipsey,SEMO,,,F,F,F,4004300.0,780158.0,15.0,0,0.0,0.0,0,0.0,0
+6-Q-3,,Risco,SEMO,,,F,F,F,4049120.0,784945.0,15.0,0,0.0,0.0,0,0.0,0
+6-Q-13,,Crumpecker,SEMO,,,F,F,F,4056700.0,782402.0,15.0,0,0.0,0.0,0,0.0,0
+4-R-16,23-St-32,Sand Ridge,SEMO,,,F,F,F,4099413.0,268694.0,16.0,0,0.0,0.0,0,0.0,0
+32-I-2,,Ruth Canal,LA,,,F,F,F,3346240.0,607584.0,15.0,0,0.0,0.0,0,0.0,0
+29-I-1,,Bayou Rouge,LA,,,F,F,F,3402912.0,611552.0,15.0,2+,0.0,0.0,0,0.0,0
+31-I-2,,Unnamed,LA,,,F,F,F,3359904.0,605120.0,15.0,0,0.0,0.0,0,0.0,0
+4-R-1,,Oberman,SEMO,,,E,E,E,4127120.0,798056.0,15.0,0,0.0,0.0,0,0.0,0
+18-K-1,,Medley,Arkansas,,,E,E,E,3710200.0,657161.0,15.0,0,0.0,0.0,0,0.0,0
+26-K-1,,Anna,Natchez,,,E-A,E,A,3508540.0,655983.0,15.0,5+,0.0,0.0,1,0.0,1
+25-K-9,,Sundown,LA,,,E-C,E,C,3534227.0,649215.0,15.0,3,0.0,0.0,0,0.0,0
+25-K-19,,Formosa,LA,,,E-D,E,D,3541996.0,646892.0,15.0,0,0.0,0.0,0,0.0,0
+25-J-15,,Kimbal,LA,,,E,E,E,3537139.0,636791.0,15.0,0,0.0,0.0,0,0.0,0
+24-J-9,,Canebrake,LA,,,E-A,E,A,3566936.0,638560.0,15.0,0,0.0,0.0,0,0.0,0
+24-J-32,,Egypt,LA,,,E-A,E,A,3550456.0,625400.0,15.0,0,0.0,0.0,0,0.0,0
+24-J-3,,Harris,LA,,,E-A,E,A,3563915.0,635518.0,15.0,0,0.0,0.0,0,0.0,0
+23-K-3,,Indian Bayou,LA,,,E-A,E,A,3577696.0,653088.0,15.0,0,0.0,0.0,0,0.0,0
+24-J-27,,New Hope,LA,,,E-C,E,C,3566124.0,640264.0,15.0,0,0.0,0.0,0,0.0,0
+23-K-20,,Shepherd,LA,,,E,E,E,3589600.0,645048.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-9,,Mackey,LA,,,E,E,E,3601596.0,646488.0,15.0,0,0.0,0.0,0,0.0,0
+22-L-3,,Transylvania,LA,,,E-C,E,C,3617676.0,668440.0,15.0,6+,0.0,0.0,0,0.0,0
+22-K-17,,Stickley,LA,,,E-C,E,C,3613044.0,659152.0,15.0,0,0.0,0.0,0,0.0,0
+22-K-6,,Johnson,LA,,,E-C,E,C,3609944.0,653248.0,15.0,0,0.0,0.0,0,0.0,0
+21-K-2,,McIntosh,LA,,,E,E,E,3643776.0,656832.0,15.0,0,0.0,0.0,0,0.0,0
+23-K-8,,Lake Place,LA,,,E-D,E,D,3591120.0,649472.0,15.0,0,0.0,0.0,0,0.0,0
+23-L-10,,Hopkins,LA,,,E-C,E,C,3579372.0,670152.0,15.0,1+,0.0,0.0,0,0.0,0
+23-L-9,,Compton L.,LA,,,E,E,E,3577476.0,680380.0,15.0,1+,0.0,0.0,0,0.0,0
+23-L-16,,Point Lake,LA,,,E,E,E,3573784.0,667704.0,15.0,0,0.0,0.0,0,0.0,0
+24-L-1,,Balmoral,LA,,,E-A,E,A,3556384.0,665856.0,15.0,3,0.0,0.0,0,0.0,1
+24-M-1,,Yokena,LA,,,E,E,A,3554376.0,692720.0,15.0,0,0.0,0.0,0,0.0,0
+27-H-6,,Camp Bayou,LA,,,E-A,E,A,3484444.0,586512.0,15.0,0,0.0,0.0,0,0.0,0
+28-H-8,,Saucier,LA,,,E-A,E,A,3450288.0,588752.0,15.0,0,0.0,0.0,0,0.0,0
+28-H-14,,Lamartiniere,LA,,,E-A,E,A,3444116.0,578912.0,15.0,0,0.0,0.0,0,0.0,0
+28-H-10,Av-25,Baptiste,LA,,,E-A,E,A,3440842.0,591708.0,15.0,0,0.0,0.0,0,0.0,0
+26-L-1,,Emerald Mound,MS,,,B-A,B,A,3501412.0,666220.0,15.0,8,0.0,0.0,1,0.0,1
+26-K-3,,Foster Mound,MS,,,B-A,B,A,3496984.0,658504.0,15.0,2,0.0,0.0,0,0.0,1
+25-L-15,,Windsor,MS,,,B-A,B,A,3535968.0,677024.0,15.0,4,0.0,0.0,0,0.0,1
+26-K-42,,Feltus,MS,,,B-A,B,A,3524608.0,670592.0,15.0,4,0.0,0.0,0,0.0,1
+24-M-2,,Glass,MS,,,B-A,B,A,3566484.0,694416.0,15.0,4,0.0,0.0,0,0.0,1
+,3LE29,Noel Carnes,Memphis,,,B-A,B,A,3842176.0,713616.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE92,Doughtie-Bethea,Memphis,,,B-A,B,A,3849268.0,718780.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE128,Troublesome Lake,Memphis,,,B-A,B,A,3857872.0,711696.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE130,Peters Church 1,Memphis,,,B-A,B,A,3856016.0,730426.0,15.0,0,0.0,0.0,0,0.0,0
+,3LE131,Peters Church 2,Memphis,,,B-A,B,A,3857096.0,730738.0,15.0,0,0.0,0.0,0,0.0,0
+13-N-1,3LE5,Soudan,Memphis,St. Francis,St. Francis,B-A,B,A,3856032.0,713408.0,15.0,2,0.0,0.0,1,0.0,0
+,3CS108,Smithdale,St. Francis,,,B-A,B,A,3905180.0,725571.0,15.0,1,8.0,0.0,0,0.0,0
+,3CT39,McKnight,St. Francis,,,B-A,B,A,3905888.0,727894.0,15.0,0,0.0,0.0,1,0.0,0
+,3CT37,Glover,St. Francis,,,B-A,B,A,3908069.0,729701.0,15.0,0,0.0,0.0,1,0.0,0
+,3CT47,Berry,St. Francis,,,B-A,B,A,3908948.0,730330.0,15.0,0,0.0,0.0,1,0.0,0
+,3CS28,Togo,St. Francis,,,B-A,B,A,3914513.0,721062.0,15.0,0,0.0,0.0,1,0.0,0
+,3PO24,Miller,St. Francis,,,B-A,B,A,3932768.0,731596.0,15.0,11,0.0,0.0,1,1.0,0
+,3PO59,Ritter,St. Francis,,,B-A,B,A,3934530.0,733435.0,15.0,0,0.0,0.0,1,0.0,0
+,3PO68,Taylor's Shanty,St. Francis,,,B-A,B,A,3935892.0,731381.0,15.0,17,6.0,16800.0,1,0.0,1
+,3PO68,Hazel,St. Francis,,,B-A,B,A,3936800.0,735609.0,15.0,1,0.0,0.0,0,0.0,0
+,3CT251,Holden Lake,Memphis,,,C-B,C,B,3902965.0,734391.0,15.0,1,0.0,0.0,0,0.0,0
+,3CT33,Edmondson,Memphs,,,D-B,D,B,3887423.0,745372.0,15.0,2,0.0,0.0,0,0.0,0
+,3CT42,3CT42,Memphis,,,C-B,C,B,3916855.0,736793.0,15.0,1,0.0,0.0,0,0.0,1
+,16Ou259,Frenchmans Bayou,LA,,,I-H,I,H,3611634.0,589898.0,15.0,5,15.0,10356.095453516635,0,0.0,0
+,16Ma201,Hillmans Mound,LA,,,I-H,I,H,3594276.0,657036.0,15.0,5,20.0,17119.25983132342,0,0.0,0
+,3AS379,Enterprise Lake Mound,Arkansas,,,H-G,H,G,3660360.0,630040.0,15.0,1,0.0,0.0,0,0.0,0
+,,Mound Field,Yazoo,,,E,E,E,3646620.0,733456.0,15.0,1+,0.0,0.0,0,1.0,0
+,,Onward,Yazoo,,,E,E,E,3622580.0,690572.0,15.0,0,0.0,0.0,0,1.0,0
+1-P-1,,Big Mound Field ,SEMO,Conical Mound(s),,?,?,?,4204756.0,762394.0,15.0,8,15.0,0.0,0,0.0,0
+1-Q-1,,MacCurdy,SEMO,Conical Mound(s),,?,?,?,4194773.0,246874.0,16.0,1,8.0,7853.981633974483,0,0.0,0
+1-Q-2,,Bushnell,SEMO,,,?,?,?,4198591.0,238084.0,16.0,0,0.0,0.0,0,0.0,0
+1-Q-3,,River Aux Vases,SEMO,,,?,?,?,4201176.0,236508.0,16.0,1+,0.0,0.0,0,0.0,0
+1-Q-4,,Laurent Creek,SEMO,,,?,?,?,4195720.0,241580.0,16.0,1+,0.0,0.0,0,0.0,0
+3-R-1,,Amelunke,SEMO,,,?,?,?,4126819.0,266159.0,16.0,0,0.0,0.0,0,0.0,0
+3-R-2,,Dutchtown,SEMO,,,?,?,?,4126217.0,264915.0,16.0,0,0.0,0.0,0,0.0,0
+3-R-3,,Hunze,SEMO,,,?,?,?,4129060.0,275208.0,16.0,0,0.0,0.0,0,0.0,0
+4-P-1,,Sturdivant,SEMO,,,?,?,?,4105155.0,765852.0,15.0,8+,30.0,0.0,0,0.0,0
+4-R-1,,Obeumann,SEMO,,,?,?,?,4125436.0,264744.0,16.0,1+,0.0,0.0,0,0.0,0
+4-R-2,23-St-2,4-R-2,SEMO,,,?,?,?,4117192.0,278048.0,16.0,1+,0.0,0.0,0,0.0,0
+4-S-1,23-St-31,Brushy Lake,SEMO,,,D-B,D,B,4103445.0,286391.0,16.0,0,0.0,0.0,0,0.0,0
+4-S-2,,Lake Michigan,SEMO,,,?,?,?,4104506.0,292424.0,16.0,1,0.0,0.0,0,0.0,0
+4-T-1,,Twin Mounds,SEMO,,,?,?,?,4104513.0,309372.0,16.0,2,24.5,23506.18163232223,0,0.0,1
+5-O-1,,Poplar Bluff,SEMO,,,?,?,?,4073728.0,735617.0,15.0,1+,4.0,0.0,0,0.0,0
+5-O-2,,Green Point,SEMO,,,?,?,?,4093240.0,738936.0,15.0,0,0.0,0.0,0,0.0,0
+5-O-3,,Piso Point,SEMO,,,?,?,?,4095084.0,737884.0,15.0,0,0.0,0.0,0,0.0,0
+5-O-4,,Rockwood Point,SEMO,,,?,?,?,4090665.0,741320.0,15.0,0,0.0,0.0,0,0.0,0
+5-O-5,,Mengo Mounds,SEMO,,,?,?,?,4076314.0,734257.0,15.0,1+,0.0,0.0,0,0.0,0
+5-P-1,,Hollis,SEMO,,,?,?,?,4078868.0,767528.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-2,,Moccassin Ridge,SEMO,,,?,?,?,4078232.0,766704.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-3,,Book,SEMO,,,?,?,?,4077552.0,766448.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-4,,Kinney,SEMO,,,?,?,?,4077260.0,765864.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-5,,Howell School,SEMO,,,?,?,?,4074516.0,764956.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-6,,Cypress Lateral,SEMO,,,?,?,?,4077032.0,758312.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-7,,Saddlers Church,SEMO,,,?,?,?,4080488.0,767272.0,15.0,0,0.0,0.0,0,0.0,0
+5-P-8,,Spring Creek,SEMO,,,?,?,?,4081016.0,764624.0,15.0,0,0.0,0.0,0,0.0,0
+5-Q-1,,Culbertson,SEMO,,,?,?,?,4080296.0,232536.0,16.0,0,0.0,0.0,0,0.0,0
+5-Q-2,,Panthor Swamp,SEMO,,,?,?,?,4076944.0,238984.0,16.0,0,0.0,0.0,0,0.0,0
+5-R-5,,Bowman,SEMO,,,?,?,?,4081268.0,274440.0,16.0,1+,0.0,0.0,0,0.0,0
+5-R-6,23-Nm-70,,SEMO,,,?,?,?,4070732.0,269272.0,16.0,0,0.0,0.0,0,0.0,0
+5-R-7,,Dump,SEMO,,,,,,4084272.0,271004.0,16.0,,,,,,
+5-R-9,,Vanduser Mound,SEMO,,,,,,4096386.0,259796.0,16.0,,,,,,
+5-R-10,,,SEMO,,,,,,4097072.0,264656.0,16.0,,,,,,
+5-R-11,,,SEMO,,,,,,4097472.0,264704.0,16.0,,,,,,
+5-R-12,,,SEMO,,,,,,4097376.0,264176.0,16.0,,,,,,
+5-R-13,,,SEMO,,,,,,4097136.0,264128.0,16.0,,,,,,
+5-R-14,,,SEMO,,,,,,4091056.0,265936.0,16.0,,,,,,
+5-R-15,,,SEMO,,,,,,4087776.0,266656.0,16.0,,,,,,
+5-R-16,,,SEMO,,,,,,4085968.0,273928.0,16.0,,,,,,
+5-R-17,,,SEMO,,,,,,4088320.0,270592.0,16.0,,,,,,
+5-R-18,,,SEMO,,,,,,4091632.0,270488.0,16.0,,,,,,
+5-R-19,,,SEMO,,,,,,4093416.0,269640.0,16.0,,,,,,
+5-R-20,,,SEMO,,,,,,4084520.0,276088.0,16.0,,,,,,
+5-R-21,,Beeson,SEMO,,,,,,4076424.0,261136.0,16.0,,,,,,
+5-R-22,,,SEMO,,,,,,4075240.0,262232.0,16.0,,,,,,
+5-R-23,,,SEMO,,,,,,4074664.0,263072.0,16.0,,,,,,
+5-R-24,,,SEMO,,,,,,4082200.0,259104.0,16.0,,,,,,
+5-R-25,,,SEMO,,,,,,4071432.0,260640.0,16.0,,,,,,
+5-S-3,,Hensen,SEMO,,,?,?,?,4086628.0,294924.0,16.0,18,0.0,0.0,0,0.0,0
+5-S-7,23-Mi-21,,SEMO,,,?,?,?,4086628.0,294920.0,16.0,1+,0.0,0.0,0,0.0,0
+5-S-8,22-MI-23,,SEMO,,,?,?,?,4078893.0,284270.0,16.0,1,0.0,0.0,0,0.0,0
+5-S-10,23-MI-32,Old John Short,,,,?,?,?,4070241.0,291089.0,16.0,1+,0.0,0.0,0,0.0,0
+5-S-31,,"""Rectangular Village",SEMO,,,?,?,?,4080128.0,284672.0,16.0,1,0.0,0.0,0,0.0,0
+5-T-2,,Brewer Lake,,,,,,,4090316.0,309156.0,16.0,,,,,,
+5-T-3,,Rush Ridge,,,,,,,4088412.0,304576.0,16.0,,,,,,
+,,Debrato Mounds,LA,,,,,,3499452.0,634108.0,15.0,5,,,,,
+,,Elkhorn,LA,,,,,,3498976.0,626424.0,15.0,1,,15000.0,0,0.0,1
+,,Churupa,LA,,,,,,3499430.0,626363.0,15.0,1,7.0,18750.0,,,
+,,Frogmore,LA,,,,,,3498184.0,625600.0,15.0,1,16.0,,0,0.0,1
+,,Troyville,LA,,,,,,3499304.0,612292.0,15.0,,,,,,
+,,Tew Lake Mounds,LA,,,,,,3508828.0,611852.0,15.0,3,4.0,,,,0
+,,King,LA,,,,,,3507920.0,613064.0,15.0,3,,,,,
+,,Delta Blues 1,MS,,,,,,3687404.0,682652.0,15.0,1,20.0,,,,
+,,Delta Blues 2,MS,,,,,,3687592.0,682416.0,15.0,1,3.0,,,,
+,,Rance Morgan,MS,,,,,,3696436.0,696075.0,15.0,1,12.0,,,0.0,
+,,Sandy Bumps,MS,,,,,,3694138.0,702656.0,15.0,0,,,,,
+,,Sherwood,MS,,,B-C,,,3699218.0,694588.0,15.0,2,6.0,5625.0,,,
+,,Cell Tower,MS,,,,,,3705060.0,698956.0,15.0,1,3.0,,,,0
+,,Garmin,MS,,,,,,3708580.0,676824.0,15.0,1,4.0,900.0,0,0.0,0
+18-L-7,,Black Bayou,MS,,,,,,3715324.0,671052.0,15.0,2,12.0,,,0.0,1
+18-L-5,,Arkansas City,AR,,,,,,3722960.0,666840.0,15.0,1,12.0,7776.0,0,0.0,1
+,,Christmas Lake,MS,,,,,,3729960.0,688296.0,15.0,,,,,,
+,,Pearson Neblett,MS,,,C-B,C,B,3732576.0,684704.0,15.0,3,,,,,1
+,,Christmas Lake,MS,,,,,,3738368.0,687072.0,15.0,1,20.0,3600.0,0,0.0,1
+,,Malvina,MS,,,,,,3740524.0,690996.0,15.0,2,,,,,
+,,Mound City 1,MS,,,,,,3739576.0,692656.0,15.0,1,5.0,900.0,,,
+,,Mound City 2,MS,,,,,,3739748.0,692695.0,15.0,1,3.0,8100.0,0,0.0,1
+,,Mound City 3,MS,,,,,,3739568.0,692660.0,15.0,1,9.0,,0,0.0,0
+,,Waldon Cemetery,MS,,,,,,3739440.0,689612.0,15.0,1,4.0,8100.0,0,0.0,1
+,,Flumes,MS,,,,,,3744564.0,685336.0,15.0,1,3.0,225.0,0,0.0,0
+,,Wright,MS,,,,,,3751472.0,686796.0,15.0,1,0.5,13500.0,0,0.0,1
+,,Niles 1,MS,,,,,,3748632.0,689456.0,15.0,1,6.0,13500.0,0,0.0,1
+,,Beeskep,MS,,,,,,3749444.0,692732.0,15.0,1,17.0,13500.0,0,0.0,1
+,,Henderson,MS,,,,,,3742464.0,691744.0,15.0,1,9.0,2500.0,0,0.0,0
+,,Bogue Phalia,MS,,,,,,3679980.0,703812.0,15.0,1,,,,,?
+,,Sandy Bumps 2,MS,,,,,,3662065.0,703777.0,15.0,,,,,,
+,,Caruthersville,SEMO,,,,,,4004500.0,257000.0,15.0,,,,,,
+,,Dell,NEAR,,,,,,3973500.0,767000.0,15.0,1,,,,,
+,,Bradbury,NEAR,,,,,,3965298.0,761038.0,15.0,,,,,,
+4-Q-3,23-So-4,Lakeville Settlement,SEMO,Small Village Site with Mound(s),,C-A,C,A,4107867.0,242036.0,16.0,2.0,0.0,0.0,0.0,0.0,1.0
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,
+,,Armorel,AR,,,,,,3978790.0,248371.0,16.0,,,,,,

@@ -24,7 +24,7 @@ Site coordinates:
   - Broad PFG set: drainage-basin sites only (within DRAINAGE_KM of the
     St. Francis / Tyronza / L'Anguille drainage), with UTM Zone 15N
     (Easting/Northing) from mls_emergence.dataio. Mound/ditch/fortification
-    flags from LMVData-22March2006.xls. Marker size scaled by
+    flags from LMVData-22March2006.csv. Marker size scaled by
     Max Mound Height (ft) where available (min size 6 for sites with no
     recorded mound height), making Parkin's 23 ft mound visually dominant.
   - Curated decorated set: drainage-basin sites from
@@ -33,7 +33,7 @@ Site coordinates:
   within-basin primate center.
 
 Parkin-phase delineation:
-  - Sites with PFG Type == "St. Francis" from LMVData-22March2006.xls,
+  - Sites with PFG Type == "St. Francis" from LMVData-22March2006.csv,
     restricted to the drainage basin (the same DRAINAGE_KM rule drops the
     southern outliers and the Mississippi-proximal centers). The retained
     cluster is delineated by a buffer-union: each point buffered by 9 km then
@@ -133,15 +133,15 @@ def _load_broad_sites() -> pd.DataFrame:
 
     Northing/Easting are already UTM Zone 15N (EPSG:26915).
     """
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData.xlsx")
+    lmv = load_lmv(DATA / "LMVData_locations.csv")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
 
-    # Attach binary features from LMVData-22March2006.xls
-    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    # Attach binary features from LMVData-22March2006.csv
+    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")
@@ -246,7 +246,7 @@ def _within_drainage(df: pd.DataFrame, ekey: str, nkey: str, sf) -> np.ndarray:
 
 
 # ---------------------------------------------------------------------------
-# Parkin-phase sites: PFG Type == "St. Francis" from LMVData-22March2006.xls
+# Parkin-phase sites: PFG Type == "St. Francis" from LMVData-22March2006.csv
 # ---------------------------------------------------------------------------
 def _load_parkin_phase_sites() -> tuple[pd.DataFrame, int]:
     """Return all St-Francis-type sites; the caller applies drainage membership.
@@ -262,7 +262,7 @@ def _load_parkin_phase_sites() -> tuple[pd.DataFrame, int]:
     stfr_core : pd.DataFrame  (retained sites, with a 'lat' column added)
     n_all     : int           (total St-Francis-type count before the cut)
     """
-    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     stfr = lmv2[
         lmv2["PFG Type"].astype(str).str.contains(r"St\.\s*Francis", case=False, na=False)
@@ -505,7 +505,7 @@ def make_map() -> None:
     parkin_region = _hull.buffer(BUFFER_M)
 
     # Verify exclusion: Winterville (~lat 33.48, id 19-L-1) must NOT be inside.
-    lmv2_all = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    lmv2_all = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2_all = lmv2_all.dropna(subset=["Number"]).copy()
     winterville_rows = lmv2_all[
         lmv2_all["Name"].astype(str).str.contains("Winterville", case=False, na=False)

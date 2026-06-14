@@ -144,15 +144,15 @@ def main():
           f"- 14C anchors matching curated assemblages: {n_anch}.", ""]
 
     # settlement: mound-height ranking on the broad basin
-    broad = load_pfg_counts(ROOT / "data" / "raw" / "PFGData.xlsx")
+    broad = load_pfg_counts(ROOT / "data" / "raw" / "PFGData_sherds.csv")
     if not broad.index.is_unique:
         broad = broad.groupby(level=0).sum()
-    lmv = load_lmv(ROOT / "data" / "LMVData.xlsx")
+    lmv = load_lmv(ROOT / "data" / "LMVData_locations.csv")
     joined, _ = join_pfg_to_lmv(broad, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
     members = mf._basin_members("broad")
     bm = bm[[str(i) in members for i in bm.index]].copy()
-    lmv2 = pd.read_excel(ROOT / "data" / "LMVData-22March2006.xls", sheet_name="Sheet1").dropna(subset=["Number"])
+    lmv2 = pd.read_csv(ROOT / "data" / "LMVData-22March2006.csv").dropna(subset=["Number"])
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates("_k").set_index("_k")
     ext = lmv2.reindex(pd.Index([normalize_grid(str(i)) for i in bm.index]))

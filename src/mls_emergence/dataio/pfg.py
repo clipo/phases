@@ -6,7 +6,7 @@ NON_TYPE_COLS = ["Site Name", "Site Number", "Sherd Total"]
 
 def load_pfg_counts(path: str | Path) -> pd.DataFrame:
     """Assemblage x type count matrix, indexed by PFG Site Number."""
-    raw = pd.read_excel(path, sheet_name="SherdData")
+    raw = pd.read_csv(path)
     # Strip whitespace from column names (e.g., 'Old Town Red ' has trailing space)
     raw.columns = raw.columns.str.strip()
     raw = raw.dropna(subset=["Site Number"])
@@ -18,4 +18,4 @@ def load_pfg_counts(path: str | Path) -> pd.DataFrame:
 
 def load_pfg_attributes(path: str | Path) -> pd.DataFrame:
     """Type attribute table (temper, surface treatment, decoration)."""
-    return pd.read_excel(path, sheet_name="Sheet2")
+    return pd.read_csv(path)

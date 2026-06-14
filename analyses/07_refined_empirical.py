@@ -325,8 +325,8 @@ def main() -> None:
     # =======================================================================
     # Load curated decorated set
     # =======================================================================
-    cur = pd.read_excel(
-        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
+    cur = pd.read_csv(
+        DATA / "raw" / "mainfort-pfg-cpl.csv"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
@@ -371,8 +371,8 @@ def main() -> None:
     # =======================================================================
     # 2. Maximized 14C matching (do this before CA orientation)
     # =======================================================================
-    rc = pd.read_excel(
-        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
+    rc = pd.read_csv(
+        DATA / "raw" / "14CDatesFromMainfort2001.csv"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     cal_col = "Calibrated Date A.D. (1 Sigma)"
@@ -383,7 +383,7 @@ def main() -> None:
     # Broad PFG site names (for the secondary path: a 14C provenience that maps
     # to a broad site that does NOT exist in the curated decorated set cannot be
     # placed on the CA axis; report it honestly).
-    broad_raw = pd.read_excel(DATA / "raw" / "PFGData.xlsx")
+    broad_raw = pd.read_csv(DATA / "raw" / "PFGData_sherds.csv")
     broad_names = (
         broad_raw["Site Name"].dropna().astype(str).str.strip().unique()
         if "Site Name" in broad_raw.columns else []
@@ -886,14 +886,14 @@ def main() -> None:
     # =======================================================================
     emit("## 6. Corrected Parkin record (settlement-level cross-check)")
     emit()
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData.xlsx")
+    lmv = load_lmv(DATA / "LMVData_locations.csv")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bmatched = joined.dropna(subset=["Easting", "Northing"]).copy()
 
-    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")

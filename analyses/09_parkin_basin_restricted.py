@@ -265,8 +265,8 @@ def rank_size(area: pd.Series):
 # ---------------------------------------------------------------------------
 def load_curated():
     """Curated decorated counts + lat/long (already in the XY file)."""
-    cur = pd.read_excel(
-        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
+    cur = pd.read_csv(
+        DATA / "raw" / "mainfort-pfg-cpl.csv"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
@@ -290,10 +290,10 @@ def load_curated():
 def load_broad():
     """Broad PFG/LMV settlement set + lat/long (UTM->geographic via pyproj) +
     LMV-22 binary/quantitative features."""
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData.xlsx")
+    lmv = load_lmv(DATA / "LMVData_locations.csv")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
 
@@ -315,7 +315,7 @@ def load_broad():
     bm["lon"] = lon
 
     # LMV-22 features joined by Number.
-    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")
@@ -477,8 +477,8 @@ def main() -> None:
     ca = pd.Series(ordinate, index=counts.index, name="ca")
 
     # 14C anchor (basin assemblages only)
-    rc = pd.read_excel(
-        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
+    rc = pd.read_csv(
+        DATA / "raw" / "14CDatesFromMainfort2001.csv"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     rc["cal_mid"] = rc["Calibrated Date A.D. (1 Sigma)"].map(parse_cal_midpoint)

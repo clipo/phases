@@ -212,8 +212,8 @@ def main() -> None:
     emit()
 
     # -- Load curated counts ------------------------------------------------
-    cur = pd.read_excel(
-        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
+    cur = pd.read_csv(
+        DATA / "raw" / "mainfort-pfg-cpl.csv"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
@@ -258,8 +258,8 @@ def main() -> None:
     )
 
     # -- 14C dates ----------------------------------------------------------
-    rc = pd.read_excel(
-        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
+    rc = pd.read_csv(
+        DATA / "raw" / "14CDatesFromMainfort2001.csv"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     cal_col = "Calibrated Date A.D. (1 Sigma)"
@@ -570,16 +570,16 @@ def main() -> None:
     emit("## Settlement level (broad PFG/LMV set)")
     emit()
 
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     n_broad_before = len(broad_counts)
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData.xlsx")
+    lmv = load_lmv(DATA / "LMVData_locations.csv")
     joined, unmatched = join_pfg_to_lmv(broad_counts, lmv)
     bmatched = joined.dropna(subset=["Easting", "Northing"]).copy()
 
-    # Clean binary features from LMVData-22March2006.xls, joined by Number.
-    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
+    # Clean binary features from LMVData-22March2006.csv, joined by Number.
+    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")

@@ -3,8 +3,6 @@ import re
 from pathlib import Path
 import pandas as pd
 
-ZONE_SHEETS = ["Locations-Zone-15", "Locations-Zone-16"]
-
 # Matches the canonical grid format: <digits>-<token>-<digits>
 # with an optional compound suffix starting with '/'
 _GRID_RE = re.compile(
@@ -39,9 +37,8 @@ def normalize_grid(site_id: str) -> str:
 
 
 def load_lmv(path: str | Path) -> pd.DataFrame:
-    """Load and concatenate both UTM zone sheets from LMVData.xlsx."""
-    frames = [pd.read_excel(path, sheet_name=s) for s in ZONE_SHEETS]
-    return pd.concat(frames, ignore_index=True)
+    """Load the combined LMV site-location table (both UTM zones)."""
+    return pd.read_csv(path)
 
 
 def join_pfg_to_lmv(counts: pd.DataFrame, lmv: pd.DataFrame):
