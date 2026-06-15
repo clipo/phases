@@ -43,8 +43,9 @@ sys.path.insert(0, str(ROOT / "src"))
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.colors import Normalize  # noqa: E402
+from matplotlib.colors import Normalize, LinearSegmentedColormap  # noqa: E402
 from matplotlib.cm import ScalarMappable  # noqa: E402
+from matplotlib.patches import Rectangle  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
 import pandas as pd  # noqa: E402
 import geopandas as gpd  # noqa: E402
@@ -254,12 +255,19 @@ def main():
 
     margin = 12_000.0
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
-    mm.basin_basemap(axA, ext)
+    # Grayscale base to match Figure 1: uniform land tone plus the no-geology,
+    # gray-hydrology basemap (American Antiquity prints without color).
+    axA.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
+                            facecolor="0.93", edgecolor="none", zorder=-5))
+    mm.basin_basemap(axA, ext, geology=False, grayscale=True)
 
     norm = Normalize(0.0, 1.0)
-    cmap = plt.get_cmap("viridis")
+    # Truncated Greys so the lowest probabilities are still a visible mid-gray on
+    # the light land rather than white; markers keep black edges for definition.
+    cmap = LinearSegmentedColormap.from_list(
+        "greys_t", plt.get_cmap("Greys")(np.linspace(0.20, 1.0, 256)))
     axA.scatter(E[nonpk], Nm[nonpk], c=P[nonpk], cmap=cmap, norm=norm, s=54,
-                edgecolor="black", linewidth=0.4, zorder=10)
+                edgecolor="black", linewidth=0.5, zorder=10)
     axA.scatter([E[pk]], [Nm[pk]], marker="*", s=320, c="white",
                 edgecolor="black", linewidth=0.8, zorder=11)
     axA.annotate("Parkin", (E[pk], Nm[pk]), fontsize=7, zorder=12,
@@ -272,18 +280,27 @@ def main():
     axA.set_title("A. Probability of sharing Parkin's \"phase\" under spatial drift\n"
                   f"({N_CONS} river-network runs, contemporaneous snapshot)", fontsize=8.5)
 
-    # Panel B: between-group F_ST, observed vs drift (drift sits at observed level)
-    axB.axhline(obs_fst, ls="--", c="0.55", lw=1)
+    # Panel B: between-group F_ST, observed vs the drift 95% interval (2.5-97.5
+    # percentiles). The observed sits inside the contemporaneous-drift interval,
+    # so drift reproduces the observed level; the exceedance fraction is annotated.
+    axB.axhline(obs_fst, ls="--", c="0.4", lw=1)
     axB.scatter([0], [obs_fst], s=55, c="black", zorder=3)
-    for x, arr, col in [(1, fst_co, "#56B4E9"), (2, fst_tt, "#0072B2")]:
+    axB.annotate(f"{obs_fst:.3f}", (0, obs_fst), xytext=(8, 0),
+                 textcoords="offset points", fontsize=6.5, va="center")
+    for x, arr in [(1, fst_co), (2, fst_tt)]:
         a = arr[np.isfinite(arr)]
-        axB.errorbar([x], [a.mean()], yerr=[a.std()], fmt="o", ms=7, c=col,
-                     capsize=3, zorder=3)
+        lo, md, hi = np.percentile(a, [2.5, 50, 97.5])
+        axB.errorbar([x], [md], yerr=[[md - lo], [hi - md]], fmt="o", ms=7,
+                     c="0.3", capsize=3, zorder=3)
+        axB.annotate(f"{np.mean(a >= obs_fst) * 100:.1f}%\n≥ obs", (x, hi),
+                     xytext=(0, 4), textcoords="offset points", fontsize=5.8,
+                     ha="center", va="bottom", color="0.3")
     axB.set_xticks([0, 1, 2])
     axB.set_xticklabels(["observed", "contemp.\ndrift", "time-tr.\ndrift"],
                         fontsize=7)
     axB.set_xlim(-0.5, 2.5)
-    axB.set_ylim(0, max(obs_fst, np.nanmax(fst_co), np.nanmax(fst_tt)) * 1.25)
+    axB.set_ylim(0, max(obs_fst, np.nanpercentile(fst_co, 97.5),
+                        np.nanpercentile(fst_tt, 97.5)) * 1.35)
     axB.set_ylabel("between-group $F_{ST}$", fontsize=8)
     axB.set_title("B. Drift reproduces the\nobserved level", fontsize=8.5)
     axB.tick_params(labelsize=7)

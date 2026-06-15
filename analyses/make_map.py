@@ -381,12 +381,19 @@ def _label_river(ax: plt.Axes, gdf: gpd.GeoDataFrame, text: str,
 # ---------------------------------------------------------------------------
 # Reusable basin basemap (rivers + geology), for figures beyond the study map
 # ---------------------------------------------------------------------------
-def basin_basemap(ax: plt.Axes, extent: tuple) -> None:
+def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
+                  grayscale: bool = False) -> None:
     """Draw the St. Francis basin river and geology basemap (UTM15N) onto ax,
     clipped to extent=(e_min, e_max, n_min, n_max). Sets equal aspect, the axis
     limits, and a thin frame; labels the Mississippi, St. Francis, and Tyronza.
-    Reused by the emergence figure so it shares fig1's geographic base."""
-    geo = _clip_gdf(_load_geology(), extent)
+    Reused by the emergence figure so it shares fig1's geographic base.
+
+    geology=False skips the surficial-geology fill (which covers only the
+    Arkansas/Missouri side) so the whole map reads as uniform land, leaving the
+    county and state lines, which span all five states, to carry the base.
+    grayscale=True renders the water and rivers in gray tones for figures that
+    must print without color (American Antiquity does not publish color)."""
+    geo = _clip_gdf(_load_geology(), extent) if geology else None
     hydro = _clip_gdf(_load_hydrology(), extent)
     major_rivers = _clip_gdf(_load_major_rivers(), extent)
     states = _clip_gdf(_load_states(), extent)
@@ -396,27 +403,36 @@ def basin_basemap(ax: plt.Axes, extent: tuple) -> None:
     ms_poly = major_rivers[major_rivers["RIVER_NAME"] == "Mississippi River"]
     stfr_poly = major_rivers[major_rivers["RIVER_NAME"] == "St. Francis River"]
 
-    for cls, color in _GEO_COLORS.items():
-        subset = geo[geo["geo_class"] == cls]
-        if not subset.empty:
-            subset.plot(ax=ax, facecolor=color, edgecolor="none", linewidth=0, zorder=0)
-    if not geo.empty:
-        geo.plot(ax=ax, facecolor="none", edgecolor="#C8C0B0", linewidth=0.15, zorder=1)
+    if geology:
+        for cls, color in _GEO_COLORS.items():
+            subset = geo[geo["geo_class"] == cls]
+            if not subset.empty:
+                subset.plot(ax=ax, facecolor=color, edgecolor="none", linewidth=0,
+                            zorder=0)
+        if not geo.empty:
+            geo.plot(ax=ax, facecolor="none", edgecolor="#C8C0B0", linewidth=0.15,
+                     zorder=1)
     if not counties.empty:
         counties.plot(ax=ax, facecolor="none", edgecolor="#AAAAAA", linewidth=0.4, zorder=2)
     if not states.empty:
         states.plot(ax=ax, facecolor="none", edgecolor="#888888", linewidth=1.0, zorder=3)
 
-    water_blue, water_blue_dark, line_blue = "#A8D0E8", "#4A8AB0", "#5BA3C9"
+    if grayscale:
+        water_blue, water_blue_dark, line_blue = "0.66", "0.25", "0.4"
+        stream_col = "0.55"
+    else:
+        water_blue, water_blue_dark, line_blue = "#A8D0E8", "#4A8AB0", "#5BA3C9"
+        stream_col = "#90C0D8"
+    edge_col = "0.5" if grayscale else "#6EB5D8"
     if not ms_poly.empty:
-        ms_poly.plot(ax=ax, facecolor=water_blue, edgecolor="#6EB5D8", linewidth=0.4, zorder=4)
+        ms_poly.plot(ax=ax, facecolor=water_blue, edgecolor=edge_col, linewidth=0.4, zorder=4)
     if not stfr_poly.empty:
-        stfr_poly.plot(ax=ax, facecolor=water_blue, edgecolor="#6EB5D8", linewidth=0.3, zorder=4)
+        stfr_poly.plot(ax=ax, facecolor=water_blue, edgecolor=edge_col, linewidth=0.3, zorder=4)
     if not hydro.empty:
         other = hydro[~hydro["NAME"].isin(["Saint Francis River", "Tyronza River"])
                       & (hydro["FEATURE"] == "Stream")]
         if not other.empty:
-            other.plot(ax=ax, color="#90C0D8", linewidth=0.5, zorder=5)
+            other.plot(ax=ax, color=stream_col, linewidth=0.5, zorder=5)
     if not stfr_lines.empty:
         stfr_lines.plot(ax=ax, color=line_blue, linewidth=1.3, zorder=6)
     if not tyronza_lines.empty:
@@ -525,22 +541,34 @@ def river_distance_matrix(coords_latlon, tol: float = 250.0,
 # ---------------------------------------------------------------------------
 # North America locator inset
 # ---------------------------------------------------------------------------
-def _add_na_inset(fig: plt.Figure, extent_utm: tuple) -> None:
-    """Add a small North America locator inset (lower-left corner).
+def _add_na_inset(fig: plt.Figure, extent_utm: tuple, rect=None,
+                  grayscale: bool = False) -> None:
+    """Add a small North America locator inset.
 
     extent_utm: (e_min, e_max, n_min, n_max) in UTM15N meters.
+    rect: figure-fraction [left, bottom, width, height] for the inset axes;
+        defaults to the lower-left corner.
+    grayscale: render land, water, and the study-area box in gray tones for
+        figures that print without color.
     """
     e_min, e_max, n_min, n_max = extent_utm
+    if rect is None:
+        rect = [0.02, 0.02, 0.19, 0.26]
 
-    # Convert UTM extent corners to geographic (lon/lat) for the red box
+    if grayscale:
+        land_c, ocean_c, river_c = "#DDDDDD", "#F0F0F0", "0.45"
+        box_face, box_edge = "0.55", "0.15"
+    else:
+        land_c, ocean_c, river_c = "#E8E4DC", "#C8DCE8", "#2E6DA4"
+        box_face, box_edge = "#CC000033", "red"
+
+    # Convert UTM extent corners to geographic (lon/lat) for the study-area box
     t_to_ll = Transformer.from_crs(UTM15N, "EPSG:4326", always_xy=True)
     lon0, lat0 = t_to_ll.transform(e_min, n_min)
     lon1, lat1 = t_to_ll.transform(e_max, n_max)
 
-    # Inset axes: lower-left corner of the figure, in figure-fraction coords.
-    # Sized to be compact but readable (~18% width, proportional height).
     inset_ax = fig.add_axes(
-        [0.02, 0.02, 0.19, 0.26],
+        rect,
         projection=ccrs.AlbersEqualArea(central_longitude=-96, central_latitude=37.5),
     )
 
@@ -550,12 +578,12 @@ def _add_na_inset(fig: plt.Figure, extent_utm: tuple) -> None:
     # Natural Earth features
     inset_ax.add_feature(
         cfeature.NaturalEarthFeature("physical", "land", "110m",
-                                     facecolor="#E8E4DC", edgecolor="none"),
+                                     facecolor=land_c, edgecolor="none"),
         zorder=0,
     )
     inset_ax.add_feature(
         cfeature.NaturalEarthFeature("physical", "ocean", "110m",
-                                     facecolor="#C8DCE8", edgecolor="none"),
+                                     facecolor=ocean_c, edgecolor="none"),
         zorder=0,
     )
     inset_ax.add_feature(
@@ -574,19 +602,19 @@ def _add_na_inset(fig: plt.Figure, extent_utm: tuple) -> None:
     # location on the river rather than an isolated point.
     inset_ax.add_feature(
         cfeature.NaturalEarthFeature("physical", "rivers_lake_centerlines", "50m",
-                                     facecolor="none", edgecolor="#2E6DA4", linewidth=0.7),
+                                     facecolor="none", edgecolor=river_c, linewidth=0.7),
         zorder=2,
     )
     inset_ax.text(-90.0, 41.5, "Mississippi R.", transform=ccrs.PlateCarree(),
-                  fontsize=4.5, color="#2E6DA4", style="italic", rotation=62,
+                  fontsize=4.5, color=river_c, style="italic", rotation=62,
                   ha="center", va="center", zorder=4,
                   path_effects=[pe.withStroke(linewidth=1.2, foreground="white")])
 
-    # Red rectangle for study-area extent
+    # Rectangle for study-area extent
     study_box = box(lon0, lat0, lon1, lat1)
     xs, ys = study_box.exterior.xy
     inset_ax.fill(xs, ys, transform=ccrs.PlateCarree(),
-                  facecolor="#CC000033", edgecolor="red", linewidth=1.2, zorder=3)
+                  facecolor=box_face, edgecolor=box_edge, linewidth=1.2, zorder=3)
 
     # Thin border around inset
     for spine in inset_ax.spines.values():
