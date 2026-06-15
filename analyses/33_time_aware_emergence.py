@@ -311,7 +311,7 @@ def main():
         f"falls with distance (Spearman rho = {rho_tt:+.2f}) because assemblages at "
         "different seriation positions carry different repertoires, so membership reflects "
         "space and time jointly.",
-        f"- Either way, no assemblage is a certain member (P = 1) or non-member (P = 0) of "
+        "- Either way, no assemblage is a certain member (P = 1) or non-member (P = 0) of "
         "Parkin's group: membership is graded and probabilistic, so the 'phase' has no "
         "stable membership.",
         "",

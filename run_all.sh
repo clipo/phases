@@ -41,7 +41,9 @@ for s in analyses/[0-9][0-9]_*.py; do
   run "$s"
 done
 
-# House-style figure pipeline (most main-text and supplemental figures).
+# Shared map pipeline (Figure 1 study-area map) and the house-style figure
+# pipeline (most main-text and supplemental figures).
+run "analyses/make_map.py"
 run "analyses/make_figures.py"
 
 echo "=================================================================="

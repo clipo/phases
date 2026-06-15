@@ -2,7 +2,7 @@
 
 Code and data for **"Are the phases real? Distinguishing bounded interaction
 groups from spatially structured drift in central Mississippi Valley decorated
-ceramics"** by Carl P. Lipo and Robert J. DiNapoli.
+ceramics"** by Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
 
 ## The question
 
@@ -37,9 +37,14 @@ draft in progress. Rebuild it with pandoc:
 ```bash
 pandoc docs/manuscript/MAIN_TEXT.md -o docs/manuscript/MAIN_TEXT.pdf \
   --citeproc --bibliography=docs/manuscript/references.bib \
+  --csl docs/manuscript/american-antiquity.csl \
   --pdf-engine=xelatex -H docs/manuscript/_pdf_header.tex \
   --resource-path=docs/manuscript:.
 ```
+
+Build the Supplemental Text the same way, substituting `SUPPLEMENTAL_TEXT` for
+`MAIN_TEXT`. The American Antiquity citation style (`american-antiquity.csl`) is
+vendored in `docs/manuscript/` so the build is self-contained.
 
 ## Repository layout
 
@@ -47,7 +52,7 @@ pandoc docs/manuscript/MAIN_TEXT.md -o docs/manuscript/MAIN_TEXT.pdf \
 analyses/         numbered analysis and figure scripts (each has a header docstring)
 src/              the mls_emergence package (transmission models, signatures, I/O)
 data/             source ceramic tables, radiocarbon, and geospatial reference layers
-docs/manuscript/  the manuscript (MAIN_TEXT.md, references.bib, built docx/PDF)
+docs/manuscript/  the manuscript (MAIN_TEXT.md, references.bib, american-antiquity.csl, built docx/PDF)
 figures/          manuscript figures (committed); run_all.sh regenerates them
 output/           generated text/markdown results       (created by run_all.sh)
 ```
@@ -89,9 +94,11 @@ python3 analyses/23_phases_vs_spatial_drift.py # drift-vs-groups comparison
 python3 analyses/29_concept_figure.py          # the conceptual figure
 ```
 
-The full run takes a while: several scripts run Monte Carlo simulations with
-many seeds. The run continues past any single failure and reports the count at
-the end.
+The full run takes roughly an hour: several scripts run Monte Carlo simulations
+with many seeds. The heaviest are `33_time_aware_emergence.py` (500 drift
+realizations) and `34_emergence_robustness.py` (a 432-run factor grid); each
+caches its per-run results to `output/`, so re-runs are fast. The run continues
+past any single failure and reports the count at the end.
 
 ## Script index
 
@@ -115,8 +122,10 @@ The ones that produce the paper's results and figures:
 | `29_concept_figure.py` | Conceptual figure (what the test distinguishes) |
 | `30_regional_map.py` | Regional two-scale map |
 | `31_within_region_structure.py` | Within-region structure, central valley vs lower valley |
+| `33_time_aware_emergence.py` | Phase-like structure emerging from neutral drift on the river network, sampled time-transgressively; probability of sharing Parkin's emergent community (Figure 8) |
+| `34_emergence_robustness.py` | Robustness of the emergence result across interaction length, mixing, and innovation (Figure S7) |
 | `make_figures.py` | House-style pipeline for most main-text and supplemental figures |
-| `make_map.py` | Shared map helpers |
+| `make_map.py` | Shared map helpers, the river basemap, and river-network distance |
 
 Scripts `04`–`08` and `10` are earlier-stage analyses retained for provenance.
 Scripts `08` and `10` are coupled to the parent monument-signaling model and
@@ -147,10 +156,10 @@ normally.
 If you use this code or data, please cite the paper (in preparation) and this
 repository:
 
-> Lipo, Carl P., and Robert J. DiNapoli. Are the phases real? Distinguishing
-> bounded interaction groups from spatially structured drift in central
-> Mississippi Valley decorated ceramics.
+> Lipo, Carl P., Robert J. DiNapoli, and Mark E. Madsen. Are the phases real?
+> Distinguishing bounded interaction groups from spatially structured drift in
+> central Mississippi Valley decorated ceramics.
 
 ## Authors
 
-Carl P. Lipo and Robert J. DiNapoli.
+Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
