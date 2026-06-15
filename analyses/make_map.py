@@ -65,6 +65,8 @@ import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
 import geopandas as gpd
+import networkx as nx
+from scipy.spatial import cKDTree
 from pyproj import Transformer
 from shapely.geometry import box, MultiPoint, Point
 import cartopy.crs as ccrs
@@ -374,6 +376,150 @@ def _label_river(ax: plt.Axes, gdf: gpd.GeoDataFrame, text: str,
         path_effects=[pe.withStroke(linewidth=2.0, foreground="white")],
         zorder=12,
     )
+
+
+# ---------------------------------------------------------------------------
+# Reusable basin basemap (rivers + geology), for figures beyond the study map
+# ---------------------------------------------------------------------------
+def basin_basemap(ax: plt.Axes, extent: tuple) -> None:
+    """Draw the St. Francis basin river and geology basemap (UTM15N) onto ax,
+    clipped to extent=(e_min, e_max, n_min, n_max). Sets equal aspect, the axis
+    limits, and a thin frame; labels the Mississippi, St. Francis, and Tyronza.
+    Reused by the emergence figure so it shares fig1's geographic base."""
+    geo = _clip_gdf(_load_geology(), extent)
+    hydro = _clip_gdf(_load_hydrology(), extent)
+    major_rivers = _clip_gdf(_load_major_rivers(), extent)
+    states = _clip_gdf(_load_states(), extent)
+    counties = _clip_gdf(_load_counties(), extent)
+    stfr_lines = hydro[hydro["NAME"] == "Saint Francis River"]
+    tyronza_lines = hydro[hydro["NAME"] == "Tyronza River"]
+    ms_poly = major_rivers[major_rivers["RIVER_NAME"] == "Mississippi River"]
+    stfr_poly = major_rivers[major_rivers["RIVER_NAME"] == "St. Francis River"]
+
+    for cls, color in _GEO_COLORS.items():
+        subset = geo[geo["geo_class"] == cls]
+        if not subset.empty:
+            subset.plot(ax=ax, facecolor=color, edgecolor="none", linewidth=0, zorder=0)
+    if not geo.empty:
+        geo.plot(ax=ax, facecolor="none", edgecolor="#C8C0B0", linewidth=0.15, zorder=1)
+    if not counties.empty:
+        counties.plot(ax=ax, facecolor="none", edgecolor="#AAAAAA", linewidth=0.4, zorder=2)
+    if not states.empty:
+        states.plot(ax=ax, facecolor="none", edgecolor="#888888", linewidth=1.0, zorder=3)
+
+    water_blue, water_blue_dark, line_blue = "#A8D0E8", "#4A8AB0", "#5BA3C9"
+    if not ms_poly.empty:
+        ms_poly.plot(ax=ax, facecolor=water_blue, edgecolor="#6EB5D8", linewidth=0.4, zorder=4)
+    if not stfr_poly.empty:
+        stfr_poly.plot(ax=ax, facecolor=water_blue, edgecolor="#6EB5D8", linewidth=0.3, zorder=4)
+    if not hydro.empty:
+        other = hydro[~hydro["NAME"].isin(["Saint Francis River", "Tyronza River"])
+                      & (hydro["FEATURE"] == "Stream")]
+        if not other.empty:
+            other.plot(ax=ax, color="#90C0D8", linewidth=0.5, zorder=5)
+    if not stfr_lines.empty:
+        stfr_lines.plot(ax=ax, color=line_blue, linewidth=1.3, zorder=6)
+    if not tyronza_lines.empty:
+        tyronza_lines.plot(ax=ax, color=line_blue, linewidth=1.0, zorder=6)
+
+    _label_river(ax, ms_poly, "Mississippi R.", water_blue_dark, rotation=90)
+    _label_river(ax, stfr_poly, "St. Francis R.", water_blue_dark, rotation=70)
+    _label_river(ax, tyronza_lines, "Tyronza R.", water_blue_dark, rotation=0)
+
+    e_min, e_max, n_min, n_max = extent
+    ax.set_xlim(e_min, e_max)
+    ax.set_ylim(n_min, n_max)
+    ax.set_aspect("equal")
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for sp in ax.spines.values():
+        sp.set_visible(True)
+        sp.set_linewidth(0.5)
+        sp.set_edgecolor("0.6")
+
+
+# ---------------------------------------------------------------------------
+# River-network (along-waterway) distance between sites
+# ---------------------------------------------------------------------------
+def river_distance_matrix(coords_latlon, tol: float = 250.0,
+                          margin: float = 25_000.0):
+    """Along-waterway shortest-path distance (km) between sites.
+
+    coords_latlon: N x 2 array of (latitude, longitude). Builds a graph from the
+    LMVHydrology centerlines clipped to the site bounding box + margin, repairs
+    topology by bridging vertices within ``tol`` meters of each other, keeps the
+    largest connected component, snaps each site to the nearest network node
+    (adding the snap distance as an access cost at both ends), and returns
+    (D_km[N,N], site_xy_utm[N,2], access_km[N], info_dict)."""
+    arr = np.asarray(coords_latlon, float)
+    s = gpd.GeoSeries(gpd.points_from_xy(arr[:, 1], arr[:, 0]),
+                      crs="EPSG:4326").to_crs(UTM15N)
+    SX, SY = s.x.to_numpy(), s.y.to_numpy()
+    ext = (SX.min() - margin, SX.max() + margin,
+           SY.min() - margin, SY.max() + margin)
+    h = _clip_gdf(_load_hydrology(), ext)
+
+    G = nx.Graph()
+
+    def add_line(coords):
+        for (ax, ay), (bx, by) in zip(coords[:-1], coords[1:]):
+            a = (round(ax, 1), round(ay, 1))
+            b = (round(bx, 1), round(by, 1))
+            if a == b:
+                continue
+            w = float(np.hypot(a[0] - b[0], a[1] - b[1]))
+            if G.has_edge(a, b):
+                if w < G[a][b]["weight"]:
+                    G[a][b]["weight"] = w
+            else:
+                G.add_edge(a, b, weight=w)
+
+    for geom in h.geometry:
+        if geom is None:
+            continue
+        if geom.geom_type == "LineString":
+            add_line(list(geom.coords))
+        elif geom.geom_type == "MultiLineString":
+            for ln in geom.geoms:
+                add_line(list(ln.coords))
+
+    # repair topology: bridge vertices within tol meters across separate lines
+    nodes = list(G.nodes)
+    if len(nodes) > 1:
+        xy = np.array(nodes, float)
+        for i, j in cKDTree(xy).query_pairs(tol):
+            a, b = nodes[i], nodes[j]
+            if not G.has_edge(a, b):
+                G.add_edge(a, b, weight=float(np.hypot(a[0] - b[0], a[1] - b[1])))
+
+    comp = max(nx.connected_components(G), key=len)
+    H = G.subgraph(comp).copy()
+    hnodes = list(H.nodes)
+    htree = cKDTree(np.array(hnodes, float))
+
+    access = np.empty(len(SX))
+    snap = []
+    for k in range(len(SX)):
+        d, idx = htree.query([SX[k], SY[k]])
+        access[k] = d
+        snap.append(hnodes[idx])
+
+    N = len(SX)
+    D = np.zeros((N, N))
+    for i in range(N):
+        L = nx.single_source_dijkstra_path_length(H, snap[i], weight="weight")
+        for j in range(N):
+            D[i, j] = L.get(snap[j], np.inf) + access[i] + access[j]
+    np.fill_diagonal(D, 0.0)
+
+    info = {
+        "n_nodes": G.number_of_nodes(),
+        "n_components": nx.number_connected_components(G),
+        "largest_component": H.number_of_nodes(),
+        "max_access_km": float(access.max() / 1000.0),
+        "n_unreachable": int(np.isinf(D).sum()),
+    }
+    return D / 1000.0, np.column_stack([SX, SY]), access / 1000.0, info
 
 
 # ---------------------------------------------------------------------------
