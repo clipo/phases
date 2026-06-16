@@ -159,7 +159,14 @@ def mds2(counts):
     w, V = np.linalg.eigh(B)
     idx = np.argsort(-w)[:2]
     L = np.maximum(w[idx], 0)
-    return V[:, idx] * np.sqrt(L)
+    coords = V[:, idx] * np.sqrt(L)
+    # Deterministic sign convention: eigh returns eigenvectors with an arbitrary
+    # sign that can differ across linear-algebra libraries and mirror the layout,
+    # so orient each axis to make its largest-magnitude coordinate positive.
+    for j in range(coords.shape[1]):
+        if coords[np.argmax(np.abs(coords[:, j])), j] < 0:
+            coords[:, j] = -coords[:, j]
+    return coords
 
 
 def main():
