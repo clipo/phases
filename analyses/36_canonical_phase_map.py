@@ -10,8 +10,8 @@ Kent, Walls, Parchman); assemblages Mainfort does not place on that map are left
 partition of the assigned deposits, dissolved by phase and clipped to a loose
 envelope around the sites, giving the bounded phase-territory picture the phase
 concept assumes, the foil for the drift-generated graded membership of Figure 8
-and Figure S8. The St. Francis basin set is ringed to show it crosses several of
-these phases.
+and Figure S8. Each territory is shrunk inward by a fixed margin so adjacent
+phases are separated by a visible gap rather than sharing a Voronoi edge.
 
 Writes figures/fig1_phases.png (manuscript Figure 1).
 
@@ -43,6 +43,10 @@ import make_map as mm  # noqa: E402
 m35 = importlib.import_module("35_basin_pullout")
 
 OUT_FIG = ROOT / "figures" / "fig1_phases.png"
+
+# Each phase territory is shrunk inward by this many meters before plotting, so
+# adjacent phases show a clear gap instead of sharing a Voronoi boundary line.
+PHASE_GAP_M = 2500.0
 
 PHASES = ["Parkin", "Nodena", "Jones Bayou", "Tipton", "Kent", "Walls",
           "Parchman"]
@@ -150,6 +154,10 @@ def main():
         if not member:
             continue
         poly = unary_union(member).intersection(envelope)
+        # Shrink the territory inward so neighboring phases are visibly separated.
+        poly = poly.buffer(-PHASE_GAP_M)
+        if poly.is_empty:
+            continue
         geoms = poly.geoms if poly.geom_type == "MultiPolygon" else [poly]
         for g in geoms:
             if g.is_empty or g.geom_type != "Polygon":
@@ -167,9 +175,6 @@ def main():
             continue
         ax.scatter(E[m], Nm[m], s=26, c="black", marker=PHASE_MARKER[ph],
                    edgecolor="white", linewidth=0.4, zorder=10)
-    # St. Francis basin members ringed, to show the basin crosses several phases.
-    ax.scatter(E[is_basin], Nm[is_basin], s=58, facecolors="none",
-               edgecolor="black", linewidth=0.8, zorder=11)
     for k, ph in enumerate(PHASES):
         m = lab_idx == k
         if m.sum() == 0:
@@ -188,9 +193,6 @@ def main():
                       markerfacecolor="black", markeredgecolor="white",
                       markeredgewidth=0.4, markersize=6, label=ph) for ph in PHASES]
     handles += [
-        Line2D([0], [0], marker="o", color="none", markerfacecolor="none",
-               markeredgecolor="black", markersize=9,
-               label="St. Francis basin set (n=29)"),
         Line2D([0], [0], marker="*", color="none", markerfacecolor="white",
                markeredgecolor="black", markersize=12, label="Parkin (type-site)"),
     ]
