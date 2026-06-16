@@ -34,7 +34,6 @@ import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
-from matplotlib.patches import Rectangle  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 import geopandas as gpd  # noqa: E402
 from shapely.geometry import Point, MultiPoint, box  # noqa: E402
@@ -109,10 +108,8 @@ def main():
     is_basin = np.array([nm in basin for nm in names])
 
     fig, ax = plt.subplots(figsize=(5.8, 6.8))
-    # Uniform land tone behind everything so the Tennessee/Mississippi side reads
-    # as land like the mapped Arkansas/Missouri geology rather than blank.
-    ax.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
-                           facecolor="0.93", edgecolor="none", zorder=-5))
+    # No land tone behind the map: a white background makes the light-gray phase
+    # territories stand out clearly.
     mm.basin_basemap(ax, ext, geology=False, grayscale=True)
 
     # State boundaries, drawn heavier and darker than the county lines so the
