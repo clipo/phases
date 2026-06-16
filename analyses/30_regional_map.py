@@ -45,9 +45,9 @@ mm = importlib.import_module("make_map")
 
 UTM = "EPSG:26915"
 OUT = ROOT / "figures" / "fig1_regional.png"
-C_LMV = "#D55E00"
-C_CMV = "#0072B2"
-RIVER = "#2E6DA4"
+C_LMV = "0.20"
+C_CMV = "0.55"
+RIVER = "0.5"
 LL2U = Transformer.from_crs("EPSG:4326", UTM, always_xy=True)
 LON0, LON1, LAT0, LAT1 = -91.3, -88.8, 34.8, 37.4
 

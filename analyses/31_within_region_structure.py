@@ -39,8 +39,8 @@ demo = importlib.import_module("25_drift_vs_groups_demo")
 g26 = importlib.import_module("26_cmv_phase_groupness")
 
 OUT = ROOT / "figures" / "fig9_within_region.png"
-C_DRIFT = "#0072B2"
-C_GROUP = "#D55E00"
+C_DRIFT = "0.62"
+C_GROUP = "0.28"
 LEN, MB = 24.0, 0.02
 
 
@@ -106,7 +106,8 @@ def main():
                          "font.sans-serif": ["Arial", "DejaVu Sans"], "font.size": 8})
     fig = plt.figure(figsize=(7.0, 5.4))
     gs = fig.add_gridspec(2, 2, height_ratios=[1.15, 0.85], hspace=0.42, wspace=0.28)
-    pal = ["#0072B2", "#D55E00", "#009E73", "#CC79A7"]
+    pal = ["0.15", "0.50", "0.72", "0.0"]      # grayscale cluster shades
+    mark = ["o", "s", "^", "D"]                  # distinct markers per cluster
 
     for j, R in enumerate(regions):
         ax = fig.add_subplot(gs[0, j])
@@ -114,12 +115,12 @@ def main():
         for c in np.unique(R["lab"]):
             m = R["lab"] == c
             ax.scatter(xy[m, 0], xy[m, 1], s=24, c=pal[c % len(pal)],
-                       edgecolor="white", linewidth=0.4)
+                       marker=mark[c % len(mark)], edgecolor="white", linewidth=0.4)
         ax.set_xticks([]); ax.set_yticks([])
         ax.set_title(f"{R['name']}\n(n={R['n']}, {R['k']} spatial clusters, "
                      f"F_ST={R['obs']:+.03f})", fontsize=7.5)
         for sp in ax.spines.values():
-            sp.set_edgecolor("#bbbbbb")
+            sp.set_edgecolor("0.73")
 
     # bottom: observed F_ST vs drift / bounded-groups nulls, both regions
     axb = fig.add_subplot(gs[1, :])

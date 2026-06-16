@@ -53,19 +53,21 @@ mpl.rcParams.update(
 )
 
 # ---------------------------------------------------------------------------
-# Okabe-Ito colorblind-safe palette
-# Order: orange, sky-blue, bluish-green, yellow, blue, vermillion, reddish-purple,
-#        black. Reference: Okabe & Ito (2008).
+# Grayscale palette (American Antiquity prints without color). The names keep
+# the former Okabe-Ito aliases so figure scripts need no change; each maps to a
+# distinct gray chosen for contrast in the common pairings (primary series dark,
+# highlight/observed black). Where more than three series share a panel, the
+# scripts also vary marker and line style so the figures read in grayscale.
 # ---------------------------------------------------------------------------
 OKABE_ITO: list[str] = [
-    "#E69F00",  # orange
-    "#56B4E9",  # sky blue
-    "#009E73",  # bluish green
-    "#F0E442",  # yellow
-    "#0072B2",  # blue
-    "#D55E00",  # vermillion
-    "#CC79A7",  # reddish purple
-    "#000000",  # black
+    "0.50",   # was orange  -> medium gray (secondary series)
+    "0.72",   # was sky     -> light gray (tertiary series)
+    "0.38",   # was green   -> dark-medium gray
+    "0.82",   # was yellow  -> very light gray
+    "0.20",   # was blue    -> dark gray (primary series)
+    "0.00",   # was vermillion -> black (highlight / observed)
+    "0.62",   # was purple  -> medium-light gray
+    "0.00",   # black
 ]
 
 # Named aliases for convenience

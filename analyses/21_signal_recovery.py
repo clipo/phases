@@ -292,9 +292,13 @@ def main():
 
     # ---- figure ----
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))
-    cmap = {"neutral": OI_PURPLE, "seriability": OI_GREEN, "fst": OI_ORANGE, "spatial": OI_BLUE}
+    # Grayscale: distinct gray + marker + line style per signature.
+    cmap = {"neutral": "0.0", "seriability": "0.45", "fst": "0.0", "spatial": "0.45"}
+    mkr = {"neutral": "o", "seriability": "s", "fst": "^", "spatial": "D"}
+    lst = {"neutral": "-", "seriability": "--", "fst": ":", "spatial": "-."}
     for sg in SIG:
-        axA.plot(S_GRID, persig[sg], "-o", ms=3, color=cmap[sg], lw=1.4, label=SIG_LABEL[sg])
+        axA.plot(S_GRID, persig[sg], marker=mkr[sg], ms=3, color=cmap[sg],
+                 ls=lst[sg], lw=1.4, label=SIG_LABEL[sg])
     axA.axhline(0, color="0.7", lw=0.6)
     axA.set_xlabel("injected emergence strength s")
     axA.set_ylabel("signature trend (Spearman rho)")

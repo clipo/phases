@@ -275,7 +275,7 @@ def main():
                  path_effects=[pe.withStroke(linewidth=2, foreground="white")])
     cb = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=axA,
                       orientation="horizontal", fraction=0.05, pad=0.03)
-    cb.set_label("P(shares Parkin's emergent community)", fontsize=8)
+    cb.set_label("P(shares Parkin's drift-detected group)", fontsize=8)
     cb.ax.tick_params(labelsize=7)
     axA.set_title("A. Probability of sharing Parkin's \"phase\" under spatial drift\n"
                   f"({N_CONS} river-network runs, contemporaneous snapshot)", fontsize=8.5)

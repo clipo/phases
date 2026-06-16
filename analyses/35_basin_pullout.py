@@ -221,7 +221,7 @@ def main():
                  path_effects=[pe.withStroke(linewidth=2, foreground="white")])
     cb = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=axA,
                       orientation="horizontal", fraction=0.05, pad=0.03)
-    cb.set_label("P(shares Parkin's emergent community)", fontsize=8)
+    cb.set_label("P(shares Parkin's drift-detected group)", fontsize=8)
     cb.ax.tick_params(labelsize=7)
     axA.legend(fontsize=6.5, loc="upper right", framealpha=0.9)
     axA.set_title("A. Does the Parkin phase pull out of the wider LMV set?\n"

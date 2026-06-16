@@ -230,7 +230,11 @@ def fig4_validation() -> None:
         "drift_space": "Isolation by\ndistance",
     }
     SIG_LABELS = ["Neutral departure", "Seriability", "Cultural F_ST", "Spatial boundary"]
-    SIG_COLORS = [OI_BLUE, OI_ORANGE, OI_GREEN, OI_SKY]
+    # Grayscale: distinct marker and line style per signature so the four series
+    # read apart without color.
+    SIG_COLORS = ["0.0", "0.45", "0.0", "0.45"]
+    SIG_MARKERS = ["o", "s", "^", "D"]
+    SIG_LS = ["-", "--", ":", "-."]
     MECH_ORDER = ["group_emergence", "aggregated_signaling", "patchiness", "drift_space"]
 
     fig = plt.figure(figsize=(7, 6.5))
@@ -241,9 +245,10 @@ def fig4_validation() -> None:
     for ax, mech in zip(axes_main, MECH_ORDER):
         panel = panels[mech]
         x = panel.index.to_numpy(float)
-        for col, label, color in zip(SIGNATURE_COLUMNS, SIG_LABELS, SIG_COLORS):
-            ax.plot(x, panel[col], marker="o", markersize=3, color=color,
-                    label=label, linewidth=1.4)
+        for col, label, color, mk, ls in zip(SIGNATURE_COLUMNS, SIG_LABELS,
+                                              SIG_COLORS, SIG_MARKERS, SIG_LS):
+            ax.plot(x, panel[col], marker=mk, markersize=3, color=color,
+                    label=label, linewidth=1.4, linestyle=ls)
         conv = verdict[mech]["convergent"]
         ax.set_title(
             LABELS[mech] + ("\n* CONVERGENT" if conv else ""),
@@ -314,19 +319,22 @@ def fig3_ca_ordination() -> None:
 
     fig, ax = plt.subplots(figsize=(7, 5))
 
-    # Color points by CA1 rank (continuous gradient from early to late)
+    # Shade points by CA1 rank (continuous gradient from early to late). Grayscale
+    # (truncated so the earliest points are a visible mid-gray, not white).
+    from matplotlib.colors import LinearSegmentedColormap
     ca1_rank = ca1_s.rank(pct=True).values
-    cmap = plt.cm.viridis_r
+    cmap = LinearSegmentedColormap.from_list(
+        "greys_t", plt.cm.Greys(np.linspace(0.25, 1.0, 256)))
     sc = ax.scatter(
         ca1_s.values, ca2_s.values,
         c=ca1_rank, cmap=cmap,
-        s=28, alpha=0.8, edgecolors="white", linewidths=0.4, zorder=3,
+        s=28, alpha=0.9, edgecolors="black", linewidths=0.3, zorder=3,
     )
     # Parkin highlighted
     pk_x = float(ca1_s[PARKIN_CUR])
     pk_y = float(ca2_s[PARKIN_CUR])
-    ax.scatter([pk_x], [pk_y], s=160, marker="*",
-               color=OI_VERMIL, edgecolors="white", linewidths=0.8,
+    ax.scatter([pk_x], [pk_y], s=170, marker="*",
+               facecolor="white", edgecolors="black", linewidths=0.9,
                label="Parkin", zorder=6)
     ax.annotate("Parkin", (pk_x, pk_y), fontsize=7,
                 xytext=(5, 5), textcoords="offset points", color=OI_VERMIL)

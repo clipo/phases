@@ -39,8 +39,8 @@ r21 = importlib.import_module("21_signal_recovery")
 res17 = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "figures" / "fig2_concept.png"
-C0 = "#0072B2"   # spatial cluster 0
-C1 = "#D55E00"   # spatial cluster 1
+C0 = "0.20"   # spatial cluster 0 (dark gray)
+C1 = "0.60"   # spatial cluster 1 (light gray)
 LEN = 24.0       # calibrated interaction range (km)
 MB = 0.02        # low between-node mixing
 
@@ -127,9 +127,10 @@ def main():
     for j, (title, M, sub) in enumerate(panels):
         ax = fig.add_subplot(gs[0, j])
         xy = demo.mds2(M)
-        for gi, col in zip((0, 1), (C0, C1)):
+        for gi, col, mk in zip((0, 1), (C0, C1), ("o", "s")):
             m = glab == gi
-            ax.scatter(xy[m, 0], xy[m, 1], s=22, c=col, edgecolor="white", linewidth=0.4)
+            ax.scatter(xy[m, 0], xy[m, 1], s=22, c=col, marker=mk,
+                       edgecolor="white", linewidth=0.4)
         ax.set_xticks([]); ax.set_yticks([])
         ax.set_title(title, fontsize=8)
         ax.set_xlabel(sub, fontsize=7, color="#555555")

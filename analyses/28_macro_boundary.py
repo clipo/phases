@@ -48,8 +48,8 @@ from mls_emergence.signatures.assortativity import similarity_matrix, mantel  # 
 OUT_MD = ROOT / "output" / "macro_boundary.md"
 OUT_FIG = ROOT / "figures" / "figS6_macro_transect.png"
 MIN_DEC = 10
-C_CMV = "#0072B2"
-C_LMV = "#D55E00"
+C_CMV = "0.62"
+C_LMV = "0.28"
 
 
 def _norm_grid(s):

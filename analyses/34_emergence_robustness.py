@@ -91,8 +91,8 @@ def box_by_factor(ax, levels, factor_col, val_col, obs, xlabel, title, fmt="%g")
             for lv in levels]
     pos = np.arange(len(levels))
     ax.boxplot(data, positions=pos, widths=0.6,
-               medianprops=dict(color="#0072B2"))
-    ax.axhline(obs, ls="--", c="#D55E00", lw=1.2, label=f"observed ({obs:.2f})")
+               medianprops=dict(color="0.5"))
+    ax.axhline(obs, ls="--", c="0.0", lw=1.2, label=f"observed ({obs:.2f})")
     ax.set_xticks(pos)
     ax.set_xticklabels([fmt % lv for lv in levels])
     ax.set_xlabel(xlabel, fontsize=8)
@@ -147,18 +147,18 @@ def main():
                   "innovation rate", "B. F_ST vs innovation", fmt="%g")
 
     vals, cnts = np.unique(nc_c.astype(int), return_counts=True)
-    axC.bar(vals, cnts / cnts.sum(), width=0.7, color="#0072B2",
+    axC.bar(vals, cnts / cnts.sum(), width=0.7, color="0.5",
             edgecolor="black", linewidth=0.3)
-    axC.set_xlabel("emergent communities (per run)", fontsize=8)
+    axC.set_xlabel("drift-detected groups (per run)", fontsize=8)
     axC.set_ylabel("fraction of runs", fontsize=8)
-    axC.set_title(f"C. Phase-like groups emerge ({frac_phase*100:.0f}% have $\\geq$2)",
+    axC.set_title(f"C. Phase-like groups under drift ({frac_phase*100:.0f}% have $\\geq$2)",
                   fontsize=9)
     axC.set_xticks(vals)
     axC.tick_params(labelsize=7)
 
-    axD.hist(rho_c[np.isfinite(rho_c)], bins=16, color="#0072B2",
+    axD.hist(rho_c[np.isfinite(rho_c)], bins=16, color="0.5",
              edgecolor="black", linewidth=0.3)
-    axD.axvline(np.nanmean(rho_c), ls="--", c="#D55E00", lw=1.2,
+    axD.axvline(np.nanmean(rho_c), ls="--", c="0.0", lw=1.2,
                 label=f"mean {np.nanmean(rho_c):.2f}")
     axD.set_xlabel("seriation recovery |Spearman rho|", fontsize=8)
     axD.set_ylabel("runs", fontsize=8)
