@@ -18,7 +18,7 @@ Figure B (analyses/35) then asks whether one named phase, Parkin, exceeds drift.
 Per-run results cache to output/lmv_drift_groups_runs.csv and the example
 realization to output/lmv_drift_groups_example.csv; delete those to force a rerun.
 
-Writes output/lmv_drift_groups.md and figures/fig_lmv_drift_groups.png.
+Writes output/lmv_drift_groups.md and figures/fig8_lmv_drift_groups.png.
 
 Usage: PYTHONPATH=src python3 analyses/37_lmv_drift_groups.py
 """
@@ -49,7 +49,7 @@ m36 = importlib.import_module("36_canonical_phase_map")
 OUT_MD = ROOT / "output" / "lmv_drift_groups.md"
 OUT_RUNS = ROOT / "output" / "lmv_drift_groups_runs.csv"
 OUT_EX = ROOT / "output" / "lmv_drift_groups_example.csv"
-OUT_FIG = ROOT / "figures" / "fig_lmv_drift_groups.png"
+OUT_FIG = ROOT / "figures" / "fig8_lmv_drift_groups.png"
 N_CONS = 500
 N_NAMED = len(m36.PHASES)   # seven named culture-historical phases
 

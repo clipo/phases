@@ -18,7 +18,7 @@ drift-and-hydrology effect rather than a social boundary.
 Per-run results cache to output/basin_pullout_runs.csv and the per-assemblage
 probabilities to output/basin_pullout_prob.csv; delete those to force a rerun.
 
-Writes output/basin_pullout.md and figures/figS8_basin_pullout.png.
+Writes output/basin_pullout.md and figures/fig9_parkin_pullout.png.
 
 Usage: PYTHONPATH=src python3 analyses/35_basin_pullout.py
 """
@@ -55,7 +55,7 @@ DATA = ROOT / "data"
 OUT_MD = ROOT / "output" / "basin_pullout.md"
 OUT_RUNS = ROOT / "output" / "basin_pullout_runs.csv"
 OUT_PROB = ROOT / "output" / "basin_pullout_prob.csv"
-OUT_FIG = ROOT / "figures" / "figS8_basin_pullout.png"
+OUT_FIG = ROOT / "figures" / "fig9_parkin_pullout.png"
 N_CONS = 500
 
 

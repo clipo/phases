@@ -15,7 +15,7 @@ A North America locator inset is reused from make_map.
 Powers-phase is shown only as Powers Fort (a point); no Powers-phase polygon is
 held by the project, so no area is drawn.
 
-Read-only on the manuscript. Writes figures/fig1_regional.png.
+Read-only on the manuscript. Writes figures/fig10_regional.png.
 
 Usage: .venv/bin/python analyses/30_regional_map.py
 """
@@ -44,7 +44,7 @@ import make_figures as mf  # noqa: E402
 mm = importlib.import_module("make_map")
 
 UTM = "EPSG:26915"
-OUT = ROOT / "figures" / "fig1_regional.png"
+OUT = ROOT / "figures" / "fig10_regional.png"
 C_LMV = "0.20"
 C_CMV = "0.55"
 RIVER = "0.5"
