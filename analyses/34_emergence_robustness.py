@@ -167,7 +167,7 @@ def main():
     axD.tick_params(labelsize=7)
 
     fig.tight_layout()
-    fig.savefig(OUT_FIG, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT_FIG)
     plt.close(fig)
 
     # ---- summary ----

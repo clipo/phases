@@ -216,7 +216,7 @@ def main():
                   0.38 * pos.width, 0.30 * pos.height]
     mm._add_na_inset(fig, ext, rect=inset_rect, grayscale=True)
 
-    fig.savefig(OUT_FIG, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT_FIG)
     plt.close(fig)
     counts = {p: int((labels == p).sum()) for p in PHASES}
     basin_phases = {p: int(((labels == p) & is_basin).sum()) for p in PHASES}

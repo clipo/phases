@@ -1,7 +1,9 @@
 # Generated analysis artifacts (reproduced by run_all.sh)
 output/
 # figures/ holds the manuscript's figures (committed); run_all.sh regenerates
-# them in place.
+# them in place. TIFFs are large (~175 MB total) and excluded from git; they are
+# regenerated in all formats (png, pdf, svg, tif) by the figure scripts.
+figures/*.tif
 
 # Python
 __pycache__/

@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from figstyle import save, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK
+from figstyle import save, save_all, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK  # noqa: F401  (save_all re-exported as mf.save_all)
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)

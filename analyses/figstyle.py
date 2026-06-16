@@ -87,16 +87,34 @@ OI_BLACK    = OKABE_ITO[7]
 _FIGURES_DIR = Path(__file__).resolve().parent.parent / "figures"
 
 
-def save(fig: "plt.Figure", name: str) -> Path:
-    """Write figures/{name}.png at 300 dpi, tight bounding box.
+_FORMATS = (".png", ".pdf", ".svg", ".tif")
 
-    The figures/ directory is created if absent. Returns the Path written.
-    """
-    _FIGURES_DIR.mkdir(exist_ok=True)
-    out = _FIGURES_DIR / f"{name}.png"
-    fig.savefig(out, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-    return out
+
+def save_all(fig: "plt.Figure", name_or_path, dpi: int = 300,
+             close: bool = False) -> Path:
+    """Write a figure in every distribution format: PNG and TIFF (raster at
+    ``dpi``) and PDF and SVG (vector). ``name_or_path`` may be a bare figure
+    name (written under figures/) or a path; any extension is replaced, so the
+    four siblings share one stem. Returns the .png Path. Set close=True to close
+    the figure afterwards."""
+    p = Path(name_or_path)
+    if p.suffix == "":
+        _FIGURES_DIR.mkdir(exist_ok=True)
+        stem = _FIGURES_DIR / p.name
+    else:
+        p.parent.mkdir(parents=True, exist_ok=True)
+        stem = p.with_suffix("")
+    for ext in _FORMATS:
+        fig.savefig(f"{stem}{ext}", dpi=dpi, bbox_inches="tight")
+    if close:
+        plt.close(fig)
+    return Path(f"{stem}.png")
+
+
+def save(fig: "plt.Figure", name: str) -> Path:
+    """Write figures/{name} in all formats (PNG, PDF, SVG, TIFF) at 300 dpi,
+    tight bounding box, and close the figure. Returns the .png Path."""
+    return save_all(fig, name, dpi=300, close=True)
 
 
 def despine(ax: "mpl.axes.Axes") -> None:

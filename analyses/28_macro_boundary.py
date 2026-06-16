@@ -44,6 +44,7 @@ rep = importlib.import_module("27_cmv_lmv_repertoire")
 demo = importlib.import_module("25_drift_vs_groups_demo")
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 from mls_emergence.signatures.assortativity import similarity_matrix, mantel  # noqa: E402
+from figstyle import save_all  # noqa: E402
 
 OUT_MD = ROOT / "output" / "macro_boundary.md"
 OUT_FIG = ROOT / "figures" / "figS6_macro_transect.png"
@@ -198,7 +199,7 @@ def main():
     for sp in ("top", "right"):
         axd.spines[sp].set_visible(False)
     fig.tight_layout()
-    fig.savefig(OUT_FIG, dpi=200, bbox_inches="tight")
+    save_all(fig, OUT_FIG, dpi=200)
 
     print("\n".join(L))
     print(f"\nwrote {OUT_MD}\nwrote {OUT_FIG}")

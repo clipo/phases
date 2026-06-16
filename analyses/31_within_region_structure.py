@@ -147,7 +147,7 @@ def main():
     for sp in ("top", "right", "left"):
         axb.spines[sp].set_visible(False)
 
-    fig.savefig(OUT, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT)
     for R in regions:
         print(f"{R['name']}: obs F_ST={R['obs']:+.3f} drift95=[{np.percentile(R['drift'],2.5):+.3f},"
               f"{np.percentile(R['drift'],97.5):+.3f}] groups95=[{np.percentile(R['grp'],2.5):+.3f},"

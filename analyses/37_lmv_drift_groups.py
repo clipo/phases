@@ -149,7 +149,7 @@ def main():
     axB.legend(fontsize=6.0, loc="upper right", framealpha=0.9)
     axB.tick_params(labelsize=7)
 
-    fig.savefig(OUT_FIG, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT_FIG)
     plt.close(fig)
 
     # ---- summary ----

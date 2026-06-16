@@ -166,7 +166,7 @@ def main():
     for spi in ("top", "right"):
         axr.spines[spi].set_visible(False)
 
-    fig.savefig(OUT, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT)
     print(f"s* = {s_star:.2f}; observed F_ST trend = {obs_fst:+.3f}; "
           f"recovered at s=0.5 = {means[np.argmin(abs(s_grid - 0.5))]:+.3f}")
     print(f"wrote {OUT}")

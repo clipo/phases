@@ -305,7 +305,7 @@ def main():
     axB.set_title("B. Drift reproduces the\nobserved level", fontsize=8.5)
     axB.tick_params(labelsize=7)
 
-    fig.savefig(OUT_FIG, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT_FIG)
     plt.close(fig)
 
     # ---- summary ----

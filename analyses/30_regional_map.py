@@ -156,7 +156,7 @@ def main():
     except Exception as exc:
         print("inset skipped:", exc)
 
-    fig.savefig(OUT, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT)
     print(f"CMV n={len(cc)} lat {cc['lat'].min():.2f}-{cc['lat'].max():.2f}; LMV n={len(codf)}")
     print(f"local hydro={len(loc_hydro)} NE rivers={len(ne_rivers)} states={len(ne_states)}")
     print(f"wrote {OUT}")

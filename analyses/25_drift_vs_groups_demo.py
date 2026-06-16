@@ -271,7 +271,7 @@ def main():
              "bounded groups produce\nsharper separation than\nobserved.",
              fontsize=6, va="top")
 
-    fig.savefig(OUT_FIG, dpi=300, bbox_inches="tight")
+    mf.save_all(fig, OUT_FIG)
     print("\n".join(L))
     print(f"\nwrote {OUT_MD}\nwrote {OUT_FIG}")
 
