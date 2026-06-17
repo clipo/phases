@@ -44,6 +44,8 @@ from matplotlib.patches import Rectangle  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
 import pandas as pd  # noqa: E402
 import geopandas as gpd  # noqa: E402
+import cartopy.io.shapereader as shpreader  # noqa: E402
+from shapely.geometry import box  # noqa: E402
 import make_figures as mf  # noqa: E402  (house style + DECORATED_TYPES, basin members)
 import make_map as mm  # noqa: E402  (river basemap + river-network distance)
 m33 = importlib.import_module("33_time_aware_emergence")
@@ -204,7 +206,20 @@ def main():
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
     axA.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
                             facecolor="0.93", edgecolor="none", zorder=-5))
-    mm.basin_basemap(axA, ext, geology=False, grayscale=True)
+    mm.basin_basemap(axA, ext, geology=False, grayscale=True,
+                     show_counties=False, show_states=False)
+    # Eastern-side hydrology from Natural Earth, matching Figure 1: the local LMV
+    # layer covers the western (St. Francis) side only, so the wider region's
+    # major rivers are added to populate the Tennessee and Mississippi side.
+    _river_clip = box(ext[0], ext[2], ext[1], ext[3])
+    for _ne_name in ("rivers_north_america", "rivers_lake_centerlines"):
+        try:
+            _ne_fn = shpreader.natural_earth(resolution="10m", category="physical", name=_ne_name)
+            _ne_riv = gpd.read_file(_ne_fn).to_crs("EPSG:26915").clip(_river_clip)
+            if not _ne_riv.empty:
+                _ne_riv.plot(ax=axA, color="0.6", linewidth=0.5, zorder=4.5)
+        except Exception as _exc:
+            print(f"Natural Earth {_ne_name} skipped: {_exc}")
     norm = Normalize(0.0, 1.0)
     cmap = LinearSegmentedColormap.from_list(
         "greys_t", plt.get_cmap("Greys")(np.linspace(0.20, 1.0, 256)))

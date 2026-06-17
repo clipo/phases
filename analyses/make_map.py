@@ -382,7 +382,8 @@ def _label_river(ax: plt.Axes, gdf: gpd.GeoDataFrame, text: str,
 # Reusable basin basemap (rivers + geology), for figures beyond the study map
 # ---------------------------------------------------------------------------
 def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
-                  grayscale: bool = False) -> None:
+                  grayscale: bool = False, show_counties: bool = True,
+                  show_states: bool = True) -> None:
     """Draw the St. Francis basin river and geology basemap (UTM15N) onto ax,
     clipped to extent=(e_min, e_max, n_min, n_max). Sets equal aspect, the axis
     limits, and a thin frame; labels the Mississippi, St. Francis, and Tyronza.
@@ -412,9 +413,9 @@ def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
         if not geo.empty:
             geo.plot(ax=ax, facecolor="none", edgecolor="#C8C0B0", linewidth=0.15,
                      zorder=1)
-    if not counties.empty:
+    if show_counties and not counties.empty:
         counties.plot(ax=ax, facecolor="none", edgecolor="#AAAAAA", linewidth=0.4, zorder=2)
-    if not states.empty:
+    if show_states and not states.empty:
         states.plot(ax=ax, facecolor="none", edgecolor="#888888", linewidth=1.0, zorder=3)
 
     if grayscale:

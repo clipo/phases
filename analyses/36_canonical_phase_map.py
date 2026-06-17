@@ -38,6 +38,7 @@ from matplotlib.lines import Line2D  # noqa: E402
 import geopandas as gpd  # noqa: E402
 from shapely.geometry import Point, MultiPoint, box  # noqa: E402
 from shapely.ops import unary_union, voronoi_diagram  # noqa: E402
+import cartopy.io.shapereader as shpreader  # noqa: E402
 import make_figures as mf  # noqa: E402
 import make_map as mm  # noqa: E402
 m35 = importlib.import_module("35_basin_pullout")
@@ -114,14 +115,29 @@ def main():
     fig, ax = plt.subplots(figsize=(5.8, 6.8))
     # No land tone behind the map: a white background makes the light-gray phase
     # territories stand out clearly.
-    mm.basin_basemap(ax, ext, geology=False, grayscale=True)
+    mm.basin_basemap(ax, ext, geology=False, grayscale=True,
+                     show_counties=False, show_states=False)
 
-    # State boundaries, drawn heavier and darker than the county lines so the
-    # states read clearly. Labels are placed by hand in clear areas (the
+    # Eastern-side hydrology: the local LMV layer covers the St. Francis (western)
+    # side only, so the Tennessee and Mississippi side is otherwise bare. We add
+    # the wider region's major rivers from Natural Earth (the same source the
+    # regional map uses), drawn faintly in gray beneath the deposits and labels.
+    river_clip = box(ext[0], ext[2], ext[1], ext[3])
+    for _ne_name in ("rivers_north_america", "rivers_lake_centerlines"):
+        try:
+            _ne_fn = shpreader.natural_earth(resolution="10m", category="physical", name=_ne_name)
+            _ne_riv = gpd.read_file(_ne_fn).to_crs("EPSG:26915").clip(river_clip)
+            if not _ne_riv.empty:
+                _ne_riv.plot(ax=ax, color="0.6", linewidth=0.5, zorder=4.5)
+        except Exception as _exc:
+            print(f"Natural Earth {_ne_name} skipped: {_exc}")
+
+    # State labels only, with no political boundary lines: the Mississippi River
+    # carries the eastern edge as water rather than as a border, and county
+    # lines are omitted. Labels are placed by hand in clear areas (the
     # assemblages fall in Arkansas, Tennessee, and Mississippi; Missouri lies
     # just north of the mapped area).
     st = mm._clip_gdf(mm._load_states(), ext).dissolve(by="STATE")
-    st.boundary.plot(ax=ax, color="0.1", linewidth=1.5, zorder=3.6)
     STATE_LBL = {"AR": (0.20, 0.46), "TN": (0.92, 0.74), "MS": (0.40, 0.16)}
     for abbr, (fx, fy) in STATE_LBL.items():
         if abbr not in st.index:
