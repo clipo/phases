@@ -204,8 +204,6 @@ def main():
 
     margin = 12_000.0
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
-    axA.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
-                            facecolor="0.93", edgecolor="none", zorder=-5))
     mm.basin_basemap(axA, ext, geology=False, grayscale=True,
                      show_counties=False, show_states=False)
     # Eastern-side hydrology from Natural Earth, matching Figure 1: the local LMV
