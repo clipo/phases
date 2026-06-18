@@ -1,3 +1,9 @@
+"""Load the Phillips-Ford-Griffin (1951) decorated-ceramic tables.
+
+Reads the assemblage-by-type sherd-count matrix and the type-attribute table
+(compiled by Lipo 2001) into pandas frames keyed by Lower Mississippi Survey
+site number. See data/README.md for provenance.
+"""
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd

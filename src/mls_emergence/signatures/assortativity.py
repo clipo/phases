@@ -1,3 +1,12 @@
+"""Spatial-assortativity signature: does decorated similarity follow social
+rather than geographic distance?
+
+Provides Brainerd-Robinson similarity, a Mantel test against geographic
+distance, and the distance-controlled boundary-excess statistic that separates a
+sharp social boundary from smooth isolation by distance (a plain Mantel r cannot
+tell the two apart). Spatial clusters for the boundary excess are found by
+k-means with multiple restarts.
+"""
 from __future__ import annotations
 import numpy as np
 
@@ -9,6 +18,7 @@ def brainerd_robinson(a: np.ndarray, b: np.ndarray) -> float:
     return float(200.0 - np.sum(np.abs(pa - pb)))
 
 def similarity_matrix(counts: np.ndarray) -> np.ndarray:
+    """Pairwise Brainerd-Robinson similarity matrix (n x n) over assemblages."""
     n = counts.shape[0]
     S = np.zeros((n, n))
     for i in range(n):
@@ -17,6 +27,7 @@ def similarity_matrix(counts: np.ndarray) -> np.ndarray:
     return S
 
 def geo_distance(coords: np.ndarray) -> np.ndarray:
+    """Pairwise Euclidean distance matrix for the given coordinates."""
     d = coords[:, None, :] - coords[None, :, :]
     return np.sqrt((d ** 2).sum(-1))
 
@@ -41,6 +52,7 @@ def spatial_assortativity(counts: np.ndarray, coords: np.ndarray, n_perm: int = 
 
 
 def _kmeans_once(coords: np.ndarray, k: int, rng: np.random.Generator):
+    """One Lloyd k-means run from a random seeding; returns (labels, inertia)."""
     n = coords.shape[0]
     centers = coords[rng.choice(n, size=k, replace=False)].copy()
     labels = np.full(n, -1)

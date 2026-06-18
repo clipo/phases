@@ -1,3 +1,10 @@
+"""Convergence scoring across the four transmission signatures.
+
+Standardizes each signature across the ordinal sequence and averages them, so
+convergence measures the co-movement of all four rather than any single one, and
+returns the time-ordered slope used to test whether the signatures rise
+together.
+"""
 from __future__ import annotations
 import numpy as np
 import pandas as pd

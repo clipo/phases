@@ -1,3 +1,12 @@
+"""Departure-from-neutral-transmission signature (Neiman 1995).
+
+Estimates the transmission parameter theta from an assemblage's decorated-class
+counts two ways: from the unbiased homozygosity (theta_F) and from the class
+richness via the Ewens sampling formula (theta_E). Under neutral, unbiased
+copying the two agree. Conformity lowers theta_F relative to theta_E and a
+novelty bias does the reverse, so their ratio both detects a departure from
+neutrality and signs its direction.
+"""
 from __future__ import annotations
 import numpy as np
 from scipy.optimize import brentq
@@ -21,6 +30,8 @@ def theta_f(counts: np.ndarray) -> float:
 
 
 def _ewens_expected_k(theta: float, n: int) -> float:
+    """Ewens sampling-formula expectation of the number of classes k in a sample
+    of size n at parameter theta: sum_{i=0}^{n-1} theta/(theta+i)."""
     i = np.arange(n)
     return float(np.sum(theta / (theta + i)))
 

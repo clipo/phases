@@ -1,3 +1,10 @@
+"""Load and join the Lower Mississippi Valley settlement tables.
+
+Reads the LMV site-location and attribute tables (the Lipo & Dunnell regional
+database) and joins them to the PFG ceramic assemblages by grid designation,
+normalizing grid ids to absorb digit-0/letter-O transcription errors and
+compound-site suffixes. See data/README.md for provenance.
+"""
 from __future__ import annotations
 import re
 from pathlib import Path

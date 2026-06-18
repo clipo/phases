@@ -1,3 +1,8 @@
+"""Load period and chronology attributes from the LMV location table.
+
+Provides the assemblage period assignments used alongside the seriation-derived
+ordinal chronology. See data/README.md for provenance.
+"""
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
