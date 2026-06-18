@@ -175,7 +175,7 @@ def main():
     axB.set_ylabel("mean within-bin distance")
     axB.text(0.05, 0.95, rf"$\rho$ = {rho_traj:+.2f} (n.s.)", transform=axB.transAxes,
              ha="left", va="top", fontsize=9)
-    save(fig, "figS1_neiman")
+    save(fig, "figS2_neiman")
 
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")

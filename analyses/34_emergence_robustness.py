@@ -19,7 +19,7 @@ emergent F_ST brackets the observed value rather than depending on a tuned corne
 Raw per-run results are cached to output/emergence_robustness.csv so the figure
 can be regenerated without re-simulating; delete that file to force a fresh run.
 
-Writes output/emergence_robustness.{csv,md} and figures/figS7_emergence_robustness.png.
+Writes output/emergence_robustness.{csv,md} and figures/figS5_emergence_robustness.png.
 
 Usage: PYTHONPATH=src python3 analyses/34_emergence_robustness.py
 """
@@ -46,7 +46,7 @@ from scipy.stats import spearmanr  # noqa: E402
 
 OUT_MD = ROOT / "output" / "emergence_robustness.md"
 OUT_CSV = ROOT / "output" / "emergence_robustness.csv"
-OUT_FIG = ROOT / "figures" / "figS7_emergence_robustness.png"
+OUT_FIG = ROOT / "figures" / "figS5_emergence_robustness.png"
 
 # Factor grid, centered on the positive-control corner (24 km, 0.02, 0.012).
 LEN_GRID = [12.0, 18.0, 24.0, 36.0]   # interaction length (km)
@@ -91,8 +91,8 @@ def box_by_factor(ax, levels, factor_col, val_col, obs, xlabel, title, fmt="%g")
             for lv in levels]
     pos = np.arange(len(levels))
     ax.boxplot(data, positions=pos, widths=0.6,
-               medianprops=dict(color="0.5"))
-    ax.axhline(obs, ls="--", c="0.0", lw=1.2, label=f"observed ({obs:.2f})")
+               medianprops=dict(color="#0072B2"))
+    ax.axhline(obs, ls="--", c="#D55E00", lw=1.2, label=f"observed ({obs:.2f})")
     ax.set_xticks(pos)
     ax.set_xticklabels([fmt % lv for lv in levels])
     ax.set_xlabel(xlabel, fontsize=8)
@@ -147,7 +147,7 @@ def main():
                   "innovation rate", "B. F_ST vs innovation", fmt="%g")
 
     vals, cnts = np.unique(nc_c.astype(int), return_counts=True)
-    axC.bar(vals, cnts / cnts.sum(), width=0.7, color="0.5",
+    axC.bar(vals, cnts / cnts.sum(), width=0.7, color="#0072B2",
             edgecolor="black", linewidth=0.3)
     axC.set_xlabel("drift-detected groups (per run)", fontsize=8)
     axC.set_ylabel("fraction of runs", fontsize=8)
@@ -156,9 +156,9 @@ def main():
     axC.set_xticks(vals)
     axC.tick_params(labelsize=7)
 
-    axD.hist(rho_c[np.isfinite(rho_c)], bins=16, color="0.5",
+    axD.hist(rho_c[np.isfinite(rho_c)], bins=16, color="#0072B2",
              edgecolor="black", linewidth=0.3)
-    axD.axvline(np.nanmean(rho_c), ls="--", c="0.0", lw=1.2,
+    axD.axvline(np.nanmean(rho_c), ls="--", c="#D55E00", lw=1.2,
                 label=f"mean {np.nanmean(rho_c):.2f}")
     axD.set_xlabel("seriation recovery |Spearman rho|", fontsize=8)
     axD.set_ylabel("runs", fontsize=8)

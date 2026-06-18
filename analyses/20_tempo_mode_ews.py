@@ -30,7 +30,7 @@ rising trend in both indicators toward the contact end would be the dynamic
 signature of an approaching transition (the "brink"); its absence is concordant
 with the static negative.
 
-Writes output/tempo_mode_ews.md + figures/figS2_dynamic.png, the merged
+Writes output/tempo_mode_ews.md + figures/figS7_dynamic.png, the merged
 dynamic-sufficiency figure (panel A = ABC posterior from output/abc_posterior.npz,
 written by 19_abc_transmission.py; panel B = tempo-and-mode Akaike weights). The
 early-warning result is in the .md but is not figured. Run 19 before 20.
@@ -340,7 +340,7 @@ def main():
     axB.set_ylabel("Akaike weight")
     axB.set_ylim(0, 1)
     axB.legend(frameon=False, fontsize=7)
-    save(fig, "figS2_dynamic")
+    save(fig, "figS7_dynamic")
 
     print(f"wrote {OUT}")
     print("\n".join(L))

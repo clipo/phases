@@ -23,7 +23,7 @@ Reports whether the synthetic assemblages (a) seriate, (b) form spatially
 coherent, elevated-F_ST communities (phase-like structure), and (c) match the
 observed level of structure better than the contemporaneous case.
 
-Writes output/time_aware_emergence.md and figures/figS8_emergent_phases.png.
+Writes output/time_aware_emergence.md and figures/figS4_emergent_phases.png.
 
 Usage: PYTHONPATH=src python3 analyses/33_time_aware_emergence.py
 """
@@ -58,7 +58,7 @@ from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
 from scipy.stats import spearmanr  # noqa: E402
 
 OUT_MD = ROOT / "output" / "time_aware_emergence.md"
-OUT_FIG = ROOT / "figures" / "figS8_emergent_phases.png"
+OUT_FIG = ROOT / "figures" / "figS4_emergent_phases.png"
 OUT_RUNS = ROOT / "output" / "time_aware_runs.csv"
 OUT_PARKIN = ROOT / "output" / "time_aware_parkin_prob.csv"
 N_CONS = 500       # consensus realizations for the Parkin co-membership map
