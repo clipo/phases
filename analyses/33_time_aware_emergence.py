@@ -49,6 +49,8 @@ from matplotlib.patches import Rectangle  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
 import pandas as pd  # noqa: E402
 import geopandas as gpd  # noqa: E402
+import cartopy.io.shapereader as shpreader  # noqa: E402
+from shapely.geometry import box  # noqa: E402
 import make_figures as mf  # noqa: E402  (applies house style on import)
 import make_map as mm  # noqa: E402  (reuse the fig1 river basemap)
 sd = importlib.import_module("23_phases_vs_spatial_drift")
@@ -255,17 +257,23 @@ def main():
 
     margin = 12_000.0
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
-    # Grayscale base to match Figure 1: uniform land tone plus the no-geology,
-    # gray-hydrology basemap (American Antiquity prints without color).
-    axA.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
-                            facecolor="0.93", edgecolor="none", zorder=-5))
-    mm.basin_basemap(axA, ext, geology=False, grayscale=True)
+    # Background matches main-text Figure 9 (and Figure 1): unshaded land with the
+    # river basemap, the eastern side populated from Natural Earth hydrology.
+    mm.basin_basemap(axA, ext, geology=False, grayscale=True,
+                     show_counties=False, show_states=False)
+    _river_clip = box(ext[0], ext[2], ext[1], ext[3])
+    for _ne_name in ("rivers_north_america", "rivers_lake_centerlines"):
+        try:
+            _ne_fn = shpreader.natural_earth(resolution="10m", category="physical", name=_ne_name)
+            _ne_riv = gpd.read_file(_ne_fn).to_crs("EPSG:26915").clip(_river_clip)
+            if not _ne_riv.empty:
+                _ne_riv.plot(ax=axA, color="0.6", linewidth=0.5, zorder=4.5)
+        except Exception as _exc:
+            print(f"Natural Earth {_ne_name} skipped: {_exc}")
 
     norm = Normalize(0.0, 1.0)
-    # Truncated Greys so the lowest probabilities are still a visible mid-gray on
-    # the light land rather than white; markers keep black edges for definition.
-    cmap = LinearSegmentedColormap.from_list(
-        "greys_t", plt.get_cmap("Greys")(np.linspace(0.20, 1.0, 256)))
+    # Online-only supplement: viridis probability scale (colorblind-safe).
+    cmap = plt.get_cmap("viridis")
     axA.scatter(E[nonpk], Nm[nonpk], c=P[nonpk], cmap=cmap, norm=norm, s=54,
                 edgecolor="black", linewidth=0.5, zorder=10)
     axA.scatter([E[pk]], [Nm[pk]], marker="*", s=320, c="white",

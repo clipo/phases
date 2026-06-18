@@ -49,8 +49,8 @@ from figstyle import save_all  # noqa: E402
 OUT_MD = ROOT / "output" / "macro_boundary.md"
 OUT_FIG = ROOT / "figures" / "figS6_macro_transect.png"
 MIN_DEC = 10
-C_CMV = "0.62"
-C_LMV = "0.28"
+C_CMV = "#0072B2"
+C_LMV = "#E69F00"
 
 
 def _norm_grid(s):

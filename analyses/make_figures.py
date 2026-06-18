@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from figstyle import save, save_all, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK  # noqa: F401  (save_all re-exported as mf.save_all)
+from figstyle import save, save_all, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK, OIC_BLUE, OIC_VERMIL  # noqa: F401  (save_all re-exported as mf.save_all)
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -230,9 +230,8 @@ def fig4_validation() -> None:
         "drift_space": "Isolation by\ndistance",
     }
     SIG_LABELS = ["Neutral departure", "Seriability", "Cultural F_ST", "Spatial boundary"]
-    # Grayscale: distinct marker and line style per signature so the four series
-    # read apart without color.
-    SIG_COLORS = ["0.0", "0.45", "0.0", "0.45"]
+    # Color (online-only supplement); marker and line style also vary per signature.
+    SIG_COLORS = ["#0072B2", "#E69F00", "#009E73", "#D55E00"]
     SIG_MARKERS = ["o", "s", "^", "D"]
     SIG_LS = ["-", "--", ":", "-."]
     MECH_ORDER = ["group_emergence", "aggregated_signaling", "patchiness", "drift_space"]
@@ -252,7 +251,7 @@ def fig4_validation() -> None:
         conv = verdict[mech]["convergent"]
         ax.set_title(
             LABELS[mech] + ("\n* CONVERGENT" if conv else ""),
-            fontsize=8, pad=3, color=OI_VERMIL if conv else "black",
+            fontsize=8, pad=3, color=OIC_VERMIL if conv else "black",
         )
         ax.set_xlabel("Ordinal step", fontsize=7)
         ax.set_ylabel("Signature value", fontsize=7)
@@ -266,7 +265,7 @@ def fig4_validation() -> None:
 
     ax_ins = fig.add_subplot(gs_inset[0, 0])
     bar_vals = [genuine_meanabs] + list(mimic_meanabs.values())
-    bar_colors = [OI_VERMIL] + [OI_BLUE] * 3
+    bar_colors = [OIC_VERMIL] + [OIC_BLUE] * 3
     bpos = np.arange(len(bar_vals))
     ax_ins.bar(bpos, bar_vals, color=bar_colors, width=0.6, edgecolor="none")
     ax_ins.set_xticks(bpos)

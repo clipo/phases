@@ -15,6 +15,7 @@ save(fig, "fig2_validation")
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import matplotlib as mpl
@@ -53,24 +54,42 @@ mpl.rcParams.update(
 )
 
 # ---------------------------------------------------------------------------
-# Grayscale palette (American Antiquity prints without color). The names keep
-# the former Okabe-Ito aliases so figure scripts need no change; each maps to a
-# distinct gray chosen for contrast in the common pairings (primary series dark,
-# highlight/observed black). Where more than three series share a panel, the
-# scripts also vary marker and line style so the figures read in grayscale.
+# Palette. Main-text figures print in grayscale (American Antiquity prints
+# without color), so the default OKABE_ITO is a set of distinct grays and the
+# scripts also vary marker and line style where more than three series share a
+# panel. The supplement is online-only and may use color: set the environment
+# variable MLS_FIG_COLOR=1 to make OKABE_ITO and the OI_* aliases resolve to the
+# true Okabe-Ito colors instead. The always-color palette is also exposed as
+# OKABE_ITO_COLOR / OIC_* for figures that opt into color directly (used to
+# color a single figure in a script that also makes grayscale print figures).
 # ---------------------------------------------------------------------------
-OKABE_ITO: list[str] = [
-    "0.50",   # was orange  -> medium gray (secondary series)
-    "0.72",   # was sky     -> light gray (tertiary series)
-    "0.38",   # was green   -> dark-medium gray
-    "0.82",   # was yellow  -> very light gray
-    "0.20",   # was blue    -> dark gray (primary series)
-    "0.00",   # was vermillion -> black (highlight / observed)
-    "0.62",   # was purple  -> medium-light gray
+_GRAY: list[str] = [
+    "0.50",   # orange      -> medium gray (secondary series)
+    "0.72",   # sky         -> light gray (tertiary series)
+    "0.38",   # green       -> dark-medium gray
+    "0.82",   # yellow      -> very light gray
+    "0.20",   # blue        -> dark gray (primary series)
+    "0.00",   # vermillion  -> black (highlight / observed)
+    "0.62",   # purple      -> medium-light gray
     "0.00",   # black
 ]
 
-# Named aliases for convenience
+# True Okabe-Ito colorblind-safe palette.
+OKABE_ITO_COLOR: list[str] = [
+    "#E69F00",  # orange
+    "#56B4E9",  # sky blue
+    "#009E73",  # bluish green
+    "#F0E442",  # yellow
+    "#0072B2",  # blue
+    "#D55E00",  # vermillion
+    "#CC79A7",  # reddish purple
+    "#000000",  # black
+]
+
+_USE_COLOR = os.environ.get("MLS_FIG_COLOR", "").strip().lower() not in ("", "0", "false", "no")
+OKABE_ITO: list[str] = OKABE_ITO_COLOR if _USE_COLOR else _GRAY
+
+# Named aliases (resolve to gray or color per MLS_FIG_COLOR)
 OI_ORANGE   = OKABE_ITO[0]
 OI_SKY      = OKABE_ITO[1]
 OI_GREEN    = OKABE_ITO[2]
@@ -79,6 +98,16 @@ OI_BLUE     = OKABE_ITO[4]
 OI_VERMIL   = OKABE_ITO[5]
 OI_PURPLE   = OKABE_ITO[6]
 OI_BLACK    = OKABE_ITO[7]
+
+# Always-color aliases (independent of MLS_FIG_COLOR)
+OIC_ORANGE  = OKABE_ITO_COLOR[0]
+OIC_SKY     = OKABE_ITO_COLOR[1]
+OIC_GREEN   = OKABE_ITO_COLOR[2]
+OIC_YELLOW  = OKABE_ITO_COLOR[3]
+OIC_BLUE    = OKABE_ITO_COLOR[4]
+OIC_VERMIL  = OKABE_ITO_COLOR[5]
+OIC_PURPLE  = OKABE_ITO_COLOR[6]
+OIC_BLACK   = OKABE_ITO_COLOR[7]
 
 
 # ---------------------------------------------------------------------------

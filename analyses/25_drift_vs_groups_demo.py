@@ -52,10 +52,10 @@ from mls_emergence.signatures.assortativity import similarity_matrix  # noqa: E4
 OUT_MD = ROOT / "output" / "drift_vs_groups_demo.md"
 OUT_FIG = ROOT / "figures" / "figS5_drift_vs_groups.png"
 
-# Grayscale (drift medium, group dark, observed black)
-C_DRIFT = "0.62"
-C_GROUP = "0.28"
-C_OBS = "0.00"
+# Color (online-only supplement): drift blue, groups orange, observed black
+C_DRIFT = "#0072B2"
+C_GROUP = "#E69F00"
+C_OBS = "#000000"
 
 
 def drift_weights(coords, length_km=12.0):
