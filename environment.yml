@@ -1,0 +1,32 @@
+# Conda environment for the "Are the phases real?" analysis pipeline.
+#
+# Create and activate:
+#   conda env create -f environment.yml      # or: mamba env create -f environment.yml
+#   conda activate phases
+#   pip install -e .                          # installs the mls_emergence package
+#
+# Conda-forge ships the compiled GEOS / PROJ / GDAL libraries the geospatial
+# stack needs, so no system geos/proj packages are required (unlike the pip
+# path in README.md). Version floors match requirements.txt; the analyses were
+# last run with the versions noted there. For an exactly pinned, per-platform
+# install, use the lockfile instead:
+#   conda-lock install --name phases conda-lock.yml
+name: phases
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.12
+  - numpy>=1.26
+  - scipy>=1.12
+  - pandas>=2.0
+  - matplotlib-base>=3.8
+  - networkx>=3.2
+  - geopandas>=0.13
+  - pyproj>=3.4
+  - shapely>=2.0
+  - cartopy>=0.22
+  - openpyxl>=3.1
+  - xlrd>=2.0
+  - pandoc>=3.0          # builds the manuscript in docs/manuscript
+  - pip

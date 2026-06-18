@@ -1,0 +1,5 @@
+#!/bin/bash
+# Binder/repo2docker post-build step: install the local package into the
+# environment created from environment.yml so `import mls_emergence` works.
+set -e
+pip install -e .

@@ -4,6 +4,11 @@ Code and data for **"Are the phases real? Distinguishing bounded interaction
 groups from spatially structured drift in central Mississippi Valley decorated
 ceramics"** by Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/clipo/phases/main)
+
+Launch a zero-install environment in the browser with Binder (badge above), or
+build locally with conda, the conda-lock lockfile, or Docker (see Installation).
+
 ## The question
 
 The *phase* is the foundational unit of Mississippian culture history. It rests
@@ -59,21 +64,51 @@ output/           generated text/markdown results       (created by run_all.sh)
 
 ## Installation
 
-Python 3.11 or newer. The geospatial stack needs system GEOS and PROJ:
+Three ways to get a working environment, in order of reproducibility. All use
+Python 3.11 or newer.
+
+### Conda / mamba (recommended)
+
+Conda-forge ships the compiled GEOS/PROJ/GDAL libraries, so no system packages
+are needed:
 
 ```bash
-# macOS
-brew install geos proj
-# Debian/Ubuntu
-sudo apt-get install libgeos-dev libproj-dev proj-data proj-bin
+conda env create -f environment.yml     # or: mamba env create -f environment.yml
+conda activate phases
+pip install -e .                         # makes the mls_emergence package importable
 ```
 
-Then, from the repository root:
+For an exactly pinned, per-platform build (linux-64, osx-64, osx-arm64, win-64),
+install from the lockfile instead of `environment.yml`:
 
 ```bash
+pip install conda-lock                              # once
+conda-lock install --name phases conda-lock.yml
+conda activate phases
+pip install -e .
+```
+
+### pip + venv
+
+This path needs the system GEOS and PROJ libraries first:
+
+```bash
+# macOS:         brew install geos proj
+# Debian/Ubuntu: sudo apt-get install libgeos-dev libproj-dev proj-data proj-bin
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-pip install -e .          # makes the `mls_emergence` package importable
+pip install -e .          # makes the mls_emergence package importable
+```
+
+### Docker
+
+A self-contained container (conda environment baked in):
+
+```bash
+docker build -t phases .
+docker run --rm -it \
+  -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" \
+  phases ./run_all.sh
 ```
 
 ## Reproducing the analysis

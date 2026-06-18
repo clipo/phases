@@ -1,0 +1,11 @@
+# Keep the build context (and image) small.
+.git
+.gitignore
+**/__pycache__/
+*.pyc
+figures/*.tif
+figures/_archive/
+output/*
+docs/references/pdfs/
+.venv/
+.ipynb_checkpoints/
