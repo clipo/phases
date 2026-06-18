@@ -1,13 +1,15 @@
 """make_figures.py — house-style figure pipeline for mls-emergence.
 
-Generates nine figures (F2-F7, S2, S3, S5) to figures/ using
-analyses/figstyle.py house style (Okabe-Ito, DejaVu Sans, 300 dpi, 7 in).
-Reuses data-loading and computation logic from prior analysis scripts
-(analyses/04-08); does not recompute from scratch where avoidable.
+Generates the house-style main-text figures this module owns (CA ordination,
+empirical four-signature trajectory, IDSS structure, settlement rank-size) and
+the supplemental criterion-validation figure (Figure S1), to figures/ using
+analyses/figstyle.py house style (Okabe-Ito palette, sans-serif, 300 dpi).
+Reuses data-loading and computation logic from prior analysis scripts; does not
+recompute from scratch where avoidable.
 
-Data policy: data/ is gitignored and location-sensitive. This script NEVER
-prints raw coordinates to stdout. Figures use centered/relative frames with
-no axis-scale tick labels where required by the data policy.
+Data policy: site coordinates are sensitive. This script never prints raw
+coordinates to stdout, and figures use centered or relative frames with no
+axis-scale tick labels where required.
 
 Usage:
     .venv/bin/python analyses/make_figures.py

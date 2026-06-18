@@ -51,7 +51,7 @@ vendored in `docs/manuscript/` so the build is self-contained.
 ```
 analyses/         numbered analysis and figure scripts (each has a header docstring)
 src/              the mls_emergence package (transmission models, signatures, I/O)
-data/             source ceramic tables, radiocarbon, and geospatial reference layers
+data/             source ceramic tables, radiocarbon, and geospatial reference layers (provenance in data/README.md)
 docs/manuscript/  the manuscript (MAIN_TEXT.md, references.bib, american-antiquity.csl, built docx/PDF)
 figures/          manuscript figures (committed); run_all.sh regenerates them
 output/           generated text/markdown results       (created by run_all.sh)
@@ -122,8 +122,10 @@ The ones that produce the paper's results and figures:
 | `29_concept_figure.py` | Conceptual figure (what the test distinguishes) |
 | `30_regional_map.py` | Regional two-scale map |
 | `31_within_region_structure.py` | Within-region structure, central valley vs lower valley |
-| `33_time_aware_emergence.py` | Phase-like structure emerging from neutral drift on the river network, sampled time-transgressively; probability of sharing Parkin's emergent community (Figure 8) |
-| `34_emergence_robustness.py` | Robustness of the emergence result across interaction length, mixing, and innovation (Figure S7) |
+| `33_time_aware_emergence.py` | Basin positive control: phase-like structure from neutral drift on the river network, sampled time-transgressively, and the probability of sharing Parkin's drift group (Figure S4) |
+| `34_emergence_robustness.py` | Robustness of the drift result across interaction length, mixing, and innovation (Figure S5) |
+| `35_basin_pullout.py` | Parkin pull-out: does the Parkin phase separate from the other named phases by more than drift (Figure 9) |
+| `37_lmv_drift_groups.py` | Phase-like group counts from neutral drift across the wider lower Mississippi Valley (Figure 8) |
 | `make_figures.py` | House-style pipeline for most main-text and supplemental figures |
 | `make_map.py` | Shared map helpers, the river basemap, and river-network distance |
 

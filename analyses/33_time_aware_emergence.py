@@ -43,9 +43,8 @@ sys.path.insert(0, str(ROOT / "src"))
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.colors import Normalize, LinearSegmentedColormap  # noqa: E402
+from matplotlib.colors import Normalize  # noqa: E402
 from matplotlib.cm import ScalarMappable  # noqa: E402
-from matplotlib.patches import Rectangle  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
 import pandas as pd  # noqa: E402
 import geopandas as gpd  # noqa: E402

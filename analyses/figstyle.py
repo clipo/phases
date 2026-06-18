@@ -1,8 +1,15 @@
 """House figure style for mls-emergence manuscript figures.
 
 Import this module in any figure script to apply the global rcParams and
-access the Okabe-Ito palette. Call ``save(fig, name)`` to write
-figures/{name}.png at 300 dpi with tight bounding box.
+access the palette. Call ``save(fig, name)`` to write figures/{name} in all
+formats (PNG, PDF, SVG, TIFF) at 300 dpi with a tight bounding box.
+
+Color policy: the palette (``OKABE_ITO`` / the ``OI_*`` aliases) is grayscale
+by default, so the print (main-text) figures render without color. Set the
+environment variable ``MLS_FIG_COLOR=1`` before importing this module to switch
+the palette to the true Okabe-Ito colors (used by the online-only supplement
+figures). The always-color ``OKABE_ITO_COLOR`` / ``OIC_*`` aliases are available
+for coloring a single figure in a script that otherwise makes grayscale figures.
 
 Example
 -------
