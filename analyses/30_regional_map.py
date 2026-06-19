@@ -1,4 +1,4 @@
-"""30_regional_map.py — regional two-scale overview map (Figure 1A).
+"""30_regional_map.py — regional two-scale overview map (Figure 10).
 
 Sets the geographic frame for the two-scale study: the LMV St. Francis basin
 (Parkin phase, Phillips-Ford-Griffin curated assemblages) and the CMV southeast-
@@ -143,6 +143,13 @@ def main():
     ax.set_aspect("equal")
     ax.legend(loc="upper right", fontsize=6.5, frameon=True, framealpha=0.92)
 
+    # neatline: a clear frame enclosing the map
+    for sp in ax.spines.values():
+        sp.set_visible(True)
+        sp.set_linewidth(1.2)
+        sp.set_edgecolor("black")
+        sp.set_zorder(8)
+
     # scale bar (top-left, clear of the lower-left inset)
     bar_m = 50_000
     x0 = e_min + 0.06 * (e_max - e_min); y0 = n_max - 0.06 * (n_max - n_min)
@@ -150,9 +157,16 @@ def main():
     ax.text(x0 + bar_m / 2, y0 + 0.012 * (n_max - n_min), "50 km",
             ha="center", va="bottom", fontsize=7, zorder=10)
 
-    # North America locator inset (reused from make_map)
+    # North America locator inset (reused from make_map), placed inside the
+    # neatline in the blank lower-right area east of the Mississippi. The rect
+    # is computed from the realized equal-aspect axes box so the inset sits
+    # within the map frame rather than overhanging its right/bottom edge.
     try:
-        mm._add_na_inset(fig, ext)
+        fig.canvas.draw()
+        pos = ax.get_position()
+        iw, ih, pad = 0.20, 0.16, 0.012
+        rect = [pos.x1 - iw - pad, pos.y0 + pad, iw, ih]
+        mm._add_na_inset(fig, ext, rect=rect)
     except Exception as exc:
         print("inset skipped:", exc)
 
