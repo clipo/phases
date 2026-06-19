@@ -19,7 +19,11 @@ here cannot separate a synchronic spatial boundary from early-CMV/late-LMV
 succession. Reported as spatial PATTERN, not as a demonstrated synchronic boundary.
 
 Read-only on the manuscript. Writes output/macro_boundary.md and
-figures/figS6_macro_transect.png.
+output/diag_macro_transect.png. This between-region (CMV/LMV) boundary diagnostic
+is retained for provenance but is NOT a manuscript figure. The paper reports the
+within-region drift result for each phase scheme (Figure 11), not a between-region
+boundary, because the CMV/LMV step is confounded with time and analytical history
+(see the caveat above).
 
 Usage: .venv/bin/python analyses/28_macro_boundary.py
 """
@@ -47,7 +51,7 @@ from mls_emergence.signatures.assortativity import similarity_matrix, mantel  # 
 from figstyle import save_all  # noqa: E402
 
 OUT_MD = ROOT / "output" / "macro_boundary.md"
-OUT_FIG = ROOT / "figures" / "figS6_macro_transect.png"
+OUT_FIG = ROOT / "output" / "diag_macro_transect.png"
 MIN_DEC = 10
 C_CMV = "#0072B2"
 C_LMV = "#E69F00"

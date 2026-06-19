@@ -1,7 +1,7 @@
 # Are the phases real?
 
 Code and data for **"Are the phases real? Distinguishing bounded interaction
-groups from spatially structured drift in central Mississippi Valley decorated
+groups from spatially structured drift in lower Mississippi Valley decorated
 ceramics"** by Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/clipo/phases/main)
@@ -22,7 +22,7 @@ drift concentrates similar styles nearby. The result is the same
 within-greater-than-between similarity, produced by geography rather than by a
 social boundary.
 
-This repository tests, for the late pre-contact central Mississippi Valley,
+This repository tests, for the late pre-contact lower Mississippi Valley,
 whether decorated-ceramic similarity records bounded interaction groups or
 spatially structured drift. It compares two generative processes (neutral
 spatial drift versus bounded groups) on the real geography of the assemblages
@@ -153,7 +153,7 @@ The ones that produce the paper's results and figures:
 | `21_signal_recovery.py` | Record-matched, size-controlled signal-recovery calibration |
 | `22_generator_diagnostic.py` | Which signatures are recoverable at the record's resolution |
 | `23`–`25` | Drift-versus-bounded-groups generative comparison on real coordinates |
-| `26`–`28` | Central-valley (Williams 1954) vs lower-valley repertoire and macro transect |
+| `26`–`28` | Southeast-Missouri (Williams 1954) decorated repertoire and the between-region transect diagnostic (retained for provenance, not a manuscript figure) |
 | `29_concept_figure.py` | Conceptual figure (what the test distinguishes) |
 | `30_regional_map.py` | Regional two-scale map |
 | `31_within_region_structure.py` | Within-region structure, central valley vs lower valley |
@@ -195,7 +195,7 @@ repository:
 
 > Lipo, Carl P., Robert J. DiNapoli, and Mark E. Madsen. Are the phases real?
 > Distinguishing bounded interaction groups from spatially structured drift in
-> central Mississippi Valley decorated ceramics.
+> lower Mississippi Valley decorated ceramics.
 
 ## Authors
 
