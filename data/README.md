@@ -54,10 +54,19 @@ ESRI shapefile set (`.shp/.shx/.dbf/.prj` plus spatial-index siblings).
 | `LMVcounties4.*` | County boundaries. |
 | `LMVgeology3.*` | Surface geology polygons. |
 | `LMVstates.*` | State boundaries. |
+| `hydrorivers_lmv_cmv.gpkg` | Detailed river network across the full two-region extent, for the regional map (Figure 10). |
 
-The local layers cover the western (St. Francis) side and stop near 36.6 degrees
-N; the figure scripts extend the eastern and northern hydrography and the state
+The `LMV*` local layers cover the western (St. Francis) side and stop near 36.6
+degrees N; the basin-scale figure scripts extend the eastern and northern state
 boundaries with Natural Earth data, which the scripts download on demand.
+
+`hydrorivers_lmv_cmv.gpkg` is a clip of HydroRIVERS v1.0 (Lehner and Grill 2013,
+North America layer) to the Figure 10 extent (longitude -92.4 to -87.8, latitude
+33.7 to 37.9), reprojected on the fly to UTM 15N. It gives uniform river detail
+across Arkansas, Missouri, Tennessee, and Mississippi for the regional map, with
+the `ORD_FLOW` field driving the line width. HydroRIVERS is distributed under the
+HydroSHEDS license (free for non-commercial and commercial use with attribution);
+source: https://www.hydrosheds.org/products/hydrorivers.
 
 ## `CMV/` — central Mississippi Valley point layers
 

@@ -45,9 +45,18 @@ mm = importlib.import_module("make_map")
 
 UTM = "EPSG:26915"
 OUT = ROOT / "figures" / "fig10_regional.png"
+HYDRO = ROOT / "data" / "Shapefiles" / "hydrorivers_lmv_cmv.gpkg"
 C_LMV = "0.20"
 C_CMV = "0.55"
 RIVER = "0.5"
+# Line width and shade by HydroRIVERS flow order (ORD_FLOW: smaller = larger
+# river). The Mississippi main stem reads as the heaviest line; small tributaries
+# are thin and light. Applied uniformly across the whole extent.
+RIVER_STYLE = {
+    2: (2.2, "#7ba3c4"), 3: (1.3, "#7ba3c4"),
+    4: (0.85, "0.45"), 5: (0.55, "0.52"),
+    6: (0.40, "0.60"), 7: (0.28, "0.68"), 8: (0.22, "0.72"),
+}
 LL2U = Transformer.from_crs("EPSG:4326", UTM, always_xy=True)
 LON0, LON1, LAT0, LAT1 = -91.3, -88.8, 34.8, 37.4
 
@@ -85,18 +94,10 @@ def main():
 
     # --- layers ---
     ne_states = ne("10m", "cultural", "admin_1_states_provinces_lines").clip(clip)
-    parts = []
-    for nm in ("rivers_north_america", "rivers_lake_centerlines"):
-        try:
-            parts.append(ne("10m", "physical", nm).clip(clip))
-        except Exception as exc:
-            print(f"NE {nm} skipped:", exc)
-    ne_rivers = (gpd.GeoDataFrame(pd.concat(parts, ignore_index=True), crs=UTM)
-                 if parts else gpd.GeoDataFrame())
-    # detailed local hydrology (LMV + most of the CMV up to ~36.6 N)
-    loc_hydro = mm._load_hydrology().clip(clip)
-    loc_rivers = mm._load_major_rivers().clip(clip)
-    ms_poly = loc_rivers[loc_rivers["RIVER_NAME"] == "Mississippi River"]
+    # Detailed hydrography across the whole extent (HydroRIVERS v1.0, clipped to
+    # the map), so the river network is rendered at the same resolution in every
+    # state rather than detailed only where the local survey layer reaches.
+    hyd = gpd.read_file(HYDRO).to_crs(UTM).clip(clip)
 
     # --- figure ---
     plt.rcParams.update({"font.family": "sans-serif",
@@ -104,12 +105,12 @@ def main():
     fig, ax = plt.subplots(figsize=(6.2, 7.2))
     ax.set_facecolor("#fbfaf7")
 
-    if not loc_hydro.empty:
-        loc_hydro.plot(ax=ax, color=RIVER, linewidth=0.4, alpha=0.85, zorder=2)
-    if not ne_rivers.empty:
-        ne_rivers.plot(ax=ax, color=RIVER, linewidth=0.7, zorder=2)
-    if not ms_poly.empty:
-        ms_poly.plot(ax=ax, facecolor="#bcd6ea", edgecolor=RIVER, linewidth=0.3, zorder=2)
+    # draw smallest streams first so the main stems sit on top
+    if not hyd.empty and "ORD_FLOW" in hyd.columns:
+        for ordf in sorted(hyd["ORD_FLOW"].unique(), reverse=True):
+            sub = hyd[hyd["ORD_FLOW"] == ordf]
+            lw, col = RIVER_STYLE.get(int(ordf), (0.3, "0.6"))
+            sub.plot(ax=ax, color=col, linewidth=lw, zorder=2 + (8 - int(ordf)) * 0.05)
     if not ne_states.empty:
         ne_states.plot(ax=ax, color="#8a8a8a", linewidth=1.0, zorder=3)
 
@@ -172,7 +173,7 @@ def main():
 
     mf.save_all(fig, OUT)
     print(f"CMV n={len(cc)} lat {cc['lat'].min():.2f}-{cc['lat'].max():.2f}; LMV n={len(codf)}")
-    print(f"local hydro={len(loc_hydro)} NE rivers={len(ne_rivers)} states={len(ne_states)}")
+    print(f"hydrorivers segments={len(hyd)} states={len(ne_states)}")
     print(f"wrote {OUT}")
 
 
