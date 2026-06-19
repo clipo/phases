@@ -38,7 +38,7 @@ GENERATORS = {
 GENUINE = "group_emergence"
 MIMICS = [m for m in GENERATORS if m != GENUINE]
 REPORT_SEED = 42
-AUDIT_SEEDS = list(range(20))
+AUDIT_SEEDS = list(range(500))
 DERIV_THRESHOLD = 0.10
 
 
