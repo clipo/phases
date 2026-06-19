@@ -103,14 +103,16 @@ def main():
         vals = np.array(vals)
         means.append(vals.mean()); los.append(np.percentile(vals, 2.5)); his.append(np.percentile(vals, 97.5))
     means, los, his = map(np.array, (means, los, his))
-    obs_vals = []
-    for b in range(200):
-        rg = np.random.default_rng(5000 + b)
-        Mr = r21.rarefy(real_have, r21.NRARE, rg)
-        rho = r21.sig_rhos(Mr, clh, binsh, cch_c, which=["fst"])["fst"]
-        if np.isfinite(rho):
-            obs_vals.append(rho)
-    obs_fst = float(np.mean(obs_vals))
+    # observed F_ST trend, computed identically to the size-controlled empirical
+    # value reported in the recovery experiment (script 21, Figure 4), so the two
+    # figures agree rather than each showing a separate noisy near-zero estimate.
+    rng_obs = np.random.default_rng(9)
+    obs_vals = [
+        r21.sig_rhos(r21.rarefy(real_have, r21.NRARE, rng_obs), clh, binsh, cch_c,
+                     which=["fst"])["fst"]
+        for _ in range(r21.B_EMP)
+    ]
+    obs_fst = float(np.nanmean(obs_vals))
     s_star = 0.5     # detection threshold from the calibrated recovery (Figure 4)
 
     # ---- figure ----------------------------------------------------------- #

@@ -151,7 +151,7 @@ def main():
             edgecolor="black", linewidth=0.3)
     axC.set_xlabel("drift-detected groups (per run)", fontsize=8)
     axC.set_ylabel("fraction of runs", fontsize=8)
-    axC.set_title(f"C. Phase-like groups under drift ({frac_phase*100:.0f}% have $\\geq$2)",
+    axC.set_title(f"C. Phase-like groups under drift ({frac_phase*100:.1f}% have $\\geq$2)",
                   fontsize=9)
     axC.set_xticks(vals)
     axC.tick_params(labelsize=7)
@@ -183,7 +183,7 @@ def main():
         f"Observed data: {obs_ncom} communities, between-group F_ST = {obs_fst:.3f}.",
         "",
         "## Headline robustness",
-        f"- Phase-like structure (>= 2 emergent communities): {frac_phase*100:.0f}% of runs.",
+        f"- Phase-like structure (>= 2 emergent communities): {frac_phase*100:.1f}% of runs.",
         f"- Emergent F_ST at or below the observed value: {frac_le_obs*100:.0f}% of runs.",
         f"- Emergent F_ST within a factor of two of observed "
         f"({0.5*obs_fst:.3f}-{2*obs_fst:.3f}): {frac_bracket*100:.0f}% of runs.",
