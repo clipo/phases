@@ -38,10 +38,11 @@ from matplotlib.lines import Line2D  # noqa: E402
 import geopandas as gpd  # noqa: E402
 from shapely.geometry import Point, MultiPoint, box  # noqa: E402
 from shapely.ops import unary_union, voronoi_diagram  # noqa: E402
-import cartopy.io.shapereader as shpreader  # noqa: E402
+from pyproj import Transformer  # noqa: E402
 import make_figures as mf  # noqa: E402
 import make_map as mm  # noqa: E402
 m35 = importlib.import_module("35_basin_pullout")
+m30 = importlib.import_module("30_regional_map")  # shared HydroRIVERS layer + style
 
 OUT_FIG = ROOT / "figures" / "fig1_phases.png"
 
@@ -116,21 +117,29 @@ def main():
     # No land tone behind the map: a white background makes the light-gray phase
     # territories stand out clearly.
     mm.basin_basemap(ax, ext, geology=False, grayscale=True,
-                     show_counties=False, show_states=False)
+                     show_counties=False, show_states=False, show_hydrology=False)
 
-    # Eastern-side hydrology: the local LMV layer covers the St. Francis (western)
-    # side only, so the Tennessee and Mississippi side is otherwise bare. We add
-    # the wider region's major rivers from Natural Earth (the same source the
-    # regional map uses), drawn faintly in gray beneath the deposits and labels.
+    # Uniform detailed hydrography from HydroRIVERS (the same layer and flow-order
+    # styling as the regional map, Figure 10), so the river network is rendered at
+    # the same resolution on both the St. Francis (western) and Mississippi
+    # (eastern) sides rather than detailed only where the local survey reaches.
     river_clip = box(ext[0], ext[2], ext[1], ext[3])
-    for _ne_name in ("rivers_north_america", "rivers_lake_centerlines"):
-        try:
-            _ne_fn = shpreader.natural_earth(resolution="10m", category="physical", name=_ne_name)
-            _ne_riv = gpd.read_file(_ne_fn).to_crs("EPSG:26915").clip(river_clip)
-            if not _ne_riv.empty:
-                _ne_riv.plot(ax=ax, color="0.6", linewidth=0.5, zorder=4.5)
-        except Exception as _exc:
-            print(f"Natural Earth {_ne_name} skipped: {_exc}")
+    hyd = gpd.read_file(m30.HYDRO).to_crs("EPSG:26915").clip(river_clip)
+    if not hyd.empty and "ORD_FLOW" in hyd.columns:
+        for ordf in sorted(hyd["ORD_FLOW"].unique(), reverse=True):
+            sub = hyd[hyd["ORD_FLOW"] == ordf]
+            lw, col = m30.RIVER_STYLE.get(int(ordf), (0.3, "0.6"))
+            sub.plot(ax=ax, color=col, linewidth=lw, zorder=4 + (8 - int(ordf)) * 0.05)
+    # River labels placed by hand in clear water, matching the regional map.
+    ll2u = Transformer.from_crs("EPSG:4326", "EPSG:26915", always_xy=True)
+    for _lon, _lat, _txt, _rot in [
+        (-89.62, 35.55, "Mississippi R.", 80.0),
+        (-90.64, 34.92, "St. Francis R.", 72.0),
+    ]:
+        _e, _n = ll2u.transform(_lon, _lat)
+        ax.text(_e, _n, _txt, fontsize=6.0, color="0.30", style="italic",
+                rotation=_rot, ha="center", va="center", zorder=9,
+                path_effects=[pe.withStroke(linewidth=2.0, foreground="white")])
 
     # State labels only, with no political boundary lines: the Mississippi River
     # carries the eastern edge as water rather than as a border, and county
