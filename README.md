@@ -265,7 +265,7 @@ The numbered scripts run in order under `run_all.sh`.
 | `make_map.py` | Shared map helpers, the river basemap, and river-network distance |
 | `figstyle.py` | Figure house style (fonts, palette, multi-format export) |
 
-Scripts `04`–`08` and `10` are earlier-stage analyses retained for provenance.
+Scripts `05`–`08` and `10` are earlier-stage analyses retained for provenance.
 Scripts `08` and `10` are coupled to the parent monument-signaling model and
 require the optional `monument-mls` package (below); no main-text figure depends
 on them.
