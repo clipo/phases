@@ -2,7 +2,7 @@
 #
 # run_all.sh — reproduce every analysis and figure for
 #   "Are the phases real? Distinguishing bounded interaction groups from
-#    spatially structured drift in central Mississippi Valley decorated ceramics"
+#    spatially structured drift in lower Mississippi Valley decorated ceramics"
 #
 # Usage:
 #   ./run_all.sh                 # uses `python3`
@@ -41,8 +41,8 @@ for s in analyses/[0-9][0-9]_*.py; do
   run "$s"
 done
 
-# Shared map pipeline (Figure 1 study-area map) and the house-style figure
-# pipeline (most main-text and supplemental figures).
+# Shared map helpers (make_map) and the house-style figure pipeline
+# (make_figures: Figures 3, 6, 7, and S1).
 run "analyses/make_map.py"
 run "analyses/make_figures.py"
 
