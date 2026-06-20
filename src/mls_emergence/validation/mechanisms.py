@@ -324,8 +324,8 @@ def gen_group_emergence(seed: int):
     return slices, coords
 
 
-def gen_aggregated_signaling(seed: int):
-    """Aggregated signaling mimic.
+def gen_aggregated_conformity(seed: int):
+    """Aggregated conformity mimic.
 
     One shared pool (no between-group divergence) but rising conformity. Produces
     a within-group neutrality departure with NO spatial structure and NO F_ST

@@ -23,7 +23,7 @@ from mls_emergence.validation.harness import (
     signatures_over_axis,
 )
 from mls_emergence.validation.mechanisms import (
-    gen_aggregated_signaling,
+    gen_aggregated_conformity,
     gen_drift_space,
     gen_group_emergence,
     gen_patchiness,
@@ -31,7 +31,7 @@ from mls_emergence.validation.mechanisms import (
 
 GENERATORS = {
     "group_emergence": gen_group_emergence,
-    "aggregated_signaling": gen_aggregated_signaling,
+    "aggregated_conformity": gen_aggregated_conformity,
     "patchiness": gen_patchiness,
     "drift_space": gen_drift_space,
 }
@@ -72,7 +72,7 @@ def main() -> None:
     emergence_corr = _pooled_correlation(gen_group_emergence, AUDIT_SEEDS[:8])
     emergence_meanabs = _mean_offdiag_abs(emergence_corr)
     mimic_corrs = {
-        "aggregated_signaling": _pooled_correlation(gen_aggregated_signaling, AUDIT_SEEDS[:8]),
+        "aggregated_conformity": _pooled_correlation(gen_aggregated_conformity, AUDIT_SEEDS[:8]),
         "patchiness": _pooled_correlation(gen_patchiness, AUDIT_SEEDS[:8]),
         "drift_space": _pooled_correlation(gen_drift_space, AUDIT_SEEDS[:8]),
     }

@@ -17,8 +17,3 @@ shapely>=2.0         # (tested 2.1.2)
 cartopy>=0.22        # (tested 0.25.0)
 openpyxl>=3.1        # (tested 3.1.5) reads the .xlsx source tables
 xlrd>=2.0            # (tested 2.0.2) reads the legacy .xls source tables
-
-# Optional, only for the parent-model-coupled supplemental analyses
-# (analyses/08_coupling_robustness.py and analyses/10_neiman_power_diagnostics.py):
-#     pip install -e ../monument-mls
-# It provides the `signaling` package. None of the main-text figures need it.

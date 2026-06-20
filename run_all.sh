@@ -14,9 +14,7 @@
 #
 # The numbered scripts run in ascending order; outputs land in output/ and
 # figures/. The run continues past any single failure and reports the count at
-# the end. Two scripts (08, 10) also need the optional monument-mls package and
-# will exit with a clear message if it is absent; this is expected and does not
-# affect any main-text result.
+# the end.
 
 set -u
 cd "$(dirname "$0")"
@@ -48,5 +46,3 @@ run "analyses/make_figures.py"
 
 echo "=================================================================="
 echo "Done. ${fail} script(s) reported a non-zero exit."
-echo "(Scripts 08 and 10 exit non-zero without the optional monument-mls"
-echo " package; that is expected and does not affect any main-text result.)"

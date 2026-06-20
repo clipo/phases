@@ -23,13 +23,6 @@ dependencies = [
     "xlrd>=2.0",
 ]
 
-# The parent model (monument-mls) is an optional path dependency installed
-# editable, not pinned here to avoid a brittle relative file URL:
-#     pip install -e ../monument-mls
-# It exposes the `signaling` package and is needed only by the two
-# parent-model-coupled supplemental analyses (analyses 08 and 10). No
-# main-text figure depends on it.
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

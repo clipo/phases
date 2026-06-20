@@ -1,4 +1,4 @@
-"""make_figures.py — house-style figure pipeline for mls-emergence.
+"""make_figures.py — house-style figure pipeline for the manuscript.
 
 Generates the house-style main-text figures this module owns (CA ordination,
 empirical four-signature trajectory, IDSS structure, settlement rank-size) and
@@ -49,7 +49,7 @@ from mls_emergence.validation.harness import (
     run_blind, discriminates, signatures_over_axis, SIGNATURE_COLUMNS,
 )
 from mls_emergence.validation.mechanisms import (
-    gen_group_emergence, gen_aggregated_signaling, gen_patchiness, gen_drift_space,
+    gen_group_emergence, gen_aggregated_conformity, gen_patchiness, gen_drift_space,
 )
 
 DATA = ROOT / "data"
@@ -197,7 +197,7 @@ def _basin_members(which: str) -> set:
 def fig4_validation() -> None:
     GENERATORS = {
         "group_emergence": gen_group_emergence,
-        "aggregated_signaling": gen_aggregated_signaling,
+        "aggregated_conformity": gen_aggregated_conformity,
         "patchiness": gen_patchiness,
         "drift_space": gen_drift_space,
     }
@@ -218,7 +218,7 @@ def fig4_validation() -> None:
 
     genuine_corr = pooled_corr(gen_group_emergence, AUDIT_SEEDS[:8])
     mimic_corrs = {
-        "aggregated_signaling": pooled_corr(gen_aggregated_signaling, AUDIT_SEEDS[:8]),
+        "aggregated_conformity": pooled_corr(gen_aggregated_conformity, AUDIT_SEEDS[:8]),
         "patchiness": pooled_corr(gen_patchiness, AUDIT_SEEDS[:8]),
         "drift_space": pooled_corr(gen_drift_space, AUDIT_SEEDS[:8]),
     }
@@ -227,7 +227,7 @@ def fig4_validation() -> None:
 
     LABELS = {
         "group_emergence": "Group emergence\n(genuine)",
-        "aggregated_signaling": "Aggregated\nsignaling",
+        "aggregated_conformity": "Aggregated\nconformity",
         "patchiness": "Spatial\npatchiness",
         "drift_space": "Isolation by\ndistance",
     }
@@ -236,7 +236,7 @@ def fig4_validation() -> None:
     SIG_COLORS = ["#0072B2", "#E69F00", "#009E73", "#D55E00"]
     SIG_MARKERS = ["o", "s", "^", "D"]
     SIG_LS = ["-", "--", ":", "-."]
-    MECH_ORDER = ["group_emergence", "aggregated_signaling", "patchiness", "drift_space"]
+    MECH_ORDER = ["group_emergence", "aggregated_conformity", "patchiness", "drift_space"]
 
     fig = plt.figure(figsize=(7, 6.5))
     gs_main = fig.add_gridspec(2, 2, left=0.07, right=0.65, hspace=0.50, wspace=0.45)
@@ -271,7 +271,7 @@ def fig4_validation() -> None:
     bpos = np.arange(len(bar_vals))
     ax_ins.bar(bpos, bar_vals, color=bar_colors, width=0.6, edgecolor="none")
     ax_ins.set_xticks(bpos)
-    short_labels = ["Genuine\nemergence", "Agg.\nsignaling", "Patchiness", "Drift\n(IBD)"]
+    short_labels = ["Genuine\nemergence", "Agg.\nconformity", "Patchiness", "Drift\n(IBD)"]
     ax_ins.set_xticklabels(short_labels, fontsize=6)
     ax_ins.set_ylabel("Mean |r| among\nfour signatures", fontsize=7)
     ax_ins.tick_params(labelsize=6)

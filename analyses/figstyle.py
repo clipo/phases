@@ -1,4 +1,4 @@
-"""House figure style for mls-emergence manuscript figures.
+"""House figure style for the manuscript figures.
 
 Import this module in any figure script to apply the global rcParams and
 access the palette. Call ``save(fig, name)`` to write figures/{name} in all

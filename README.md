@@ -105,9 +105,8 @@ docker run --rm -it \
 python3 -c "import mls_emergence, geopandas, cartopy; print('environment OK')"
 ```
 
-If that prints `environment OK`, every analysis script will run. Two optional
-scripts additionally need the `monument-mls` package (see [Optional parent
-model](#optional-parent-model-monument-mls)); everything else runs without it.
+If that prints `environment OK`, every analysis script will run. The repository
+is self-contained and has no dependency on any sibling repository.
 
 ## Reproducing the analysis
 
@@ -220,6 +219,7 @@ The numbered scripts run in order under `run_all.sh`.
 
 | Script | Purpose |
 |---|---|
+| `10_neiman_size_diagnostic.py` | Neiman (1995:17) sample-size / time-averaging diagnostic of the neutrality estimators |
 | `13_neiman_distance_and_fit.py` | Neiman diversity-distance diagnostic (Fig S2) |
 | `15_continuum_test.py` | Clustering-tendency tests on the CA ordination |
 | `17_basin_results.py` | Consolidated basin Results numbers |
@@ -265,10 +265,7 @@ The numbered scripts run in order under `run_all.sh`.
 | `make_map.py` | Shared map helpers, the river basemap, and river-network distance |
 | `figstyle.py` | Figure house style (fonts, palette, multi-format export) |
 
-Scripts `05`–`08` and `10` are earlier-stage analyses retained for provenance.
-Scripts `08` and `10` are coupled to the parent monument-signaling model and
-require the optional `monument-mls` package (below); no main-text figure depends
-on them.
+Scripts `05`–`07` are earlier-stage analyses retained for provenance.
 
 ## Data
 
@@ -299,20 +296,6 @@ Build the Supplemental Text the same way, substituting `SUPPLEMENTAL_TEXT` for
 `MAIN_TEXT`, and produce the `.docx` by changing the output extension. The
 American Antiquity citation style (`american-antiquity.csl`) is vendored in
 `docs/manuscript/`, so the build is self-contained.
-
-## Optional parent model (monument-mls)
-
-Two supplemental analyses (`08_coupling_robustness.py`,
-`10_neiman_power_diagnostics.py`) couple the ceramic simulator to a parent
-costly-signaling model of monumental construction. They need the `signaling`
-package from the separate `monument-mls` repository:
-
-```bash
-pip install -e ../monument-mls
-```
-
-Without it, those two scripts exit with a clear message and everything else runs
-normally. No main-text figure depends on them.
 
 ## Licensing
 
