@@ -113,7 +113,7 @@ def main():
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
     is_basin = np.array([nm in basin for nm in names])
 
-    fig, ax = plt.subplots(figsize=(5.8, 6.8))
+    fig, ax = plt.subplots(figsize=(5.3, 6.0))
     # No land tone behind the map: a white background makes the light-gray phase
     # territories stand out clearly.
     mm.basin_basemap(ax, ext, geology=False, grayscale=True,
@@ -127,6 +127,8 @@ def main():
     hyd = gpd.read_file(m30.HYDRO).to_crs("EPSG:26915").clip(river_clip)
     if not hyd.empty and "ORD_FLOW" in hyd.columns:
         for ordf in sorted(hyd["ORD_FLOW"].unique(), reverse=True):
+            if int(ordf) > 6:  # drop the tiniest streams for a cleaner map at this scale
+                continue
             sub = hyd[hyd["ORD_FLOW"] == ordf]
             lw, col = m30.RIVER_STYLE.get(int(ordf), (0.3, "0.6"))
             sub.plot(ax=ax, color=col, linewidth=lw, zorder=4 + (8 - int(ordf)) * 0.05)
