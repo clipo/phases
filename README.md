@@ -182,9 +182,15 @@ and can be deleted and rebuilt at any time.
     `basin_results.md` (consolidated basin numbers), `signal_recovery.md`
     (size-controlled recovery), `chronology_14c.md` (radiocarbon),
     `lmv_drift_groups.md` and `emergence_robustness.md` (drift simulations).
+    These reports are version-controlled as the canonical reproducibility
+    baseline. Every Monte Carlo analysis is seeded, so rerunning the pipeline
+    reproduces them exactly and `git diff output/*.md` stays empty.
   - **Monte Carlo caches** (`*.csv`, `*.npz`) so repeat runs are fast:
     `emergence_robustness.csv`, `basin_pullout_runs.csv`, `basin_pullout_prob.csv`,
-    `lmv_drift_groups_runs.csv`, `time_aware_runs.csv`, `abc_posterior.npz`.
+    `lmv_drift_groups_runs.csv`, `time_aware_runs.csv`, `abc_posterior.npz`. These
+    are regenerable and are not tracked. Delete them to force a full from-scratch
+    recompute (e.g. `rm output/*.csv output/*.npz`, then `./run_all.sh`); the
+    result reports above must come back identical.
   - `diag_macro_transect.png` — the between-region (central-vs-lower valley)
     transect diagnostic, retained for provenance; it is not a manuscript figure
     (the paper reports the within-region drift result for each phase scheme).

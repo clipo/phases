@@ -1,5 +1,9 @@
-# Generated analysis artifacts (reproduced by run_all.sh)
-output/
+# Generated analysis artifacts (reproduced by run_all.sh). The small Markdown
+# result reports are tracked as the canonical reproducibility baseline: rerunning
+# the pipeline must leave `git diff output/*.md` empty. The large Monte Carlo
+# caches (.csv, .npz) and diagnostic images are regenerable and stay ignored.
+output/*
+!output/*.md
 # figures/ holds the manuscript's figures (committed); run_all.sh regenerates
 # them in place. TIFFs are large (~175 MB total) and excluded from git; they are
 # regenerated in all formats (png, pdf, svg, tif) by the figure scripts.
