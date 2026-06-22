@@ -318,6 +318,8 @@ repository:
 > Distinguishing bounded interaction groups from spatially structured drift in
 > lower Mississippi Valley decorated ceramics.
 
+The archived version of the code and data is deposited at Zenodo: https://doi.org/10.5281/zenodo.20796240 (private until the paper is published, so it will not resolve before then).
+
 ## Authors
 
 Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
