@@ -21,9 +21,14 @@ license: MIT
 repository-code: "https://github.com/clipo/phases"
 keywords:
   - cultural transmission
-  - neutral model
-  - frequency seriation
+  - neutral models
+  - spatially structured drift
   - isolation by distance
+  - frequency seriation
+  - cultural FST
+  - bounded interaction groups
+  - archaeological systematics
+  - archaeological phase concept
   - Mississippian archaeology
   - Parkin phase
   - lower Mississippi Valley
