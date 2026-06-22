@@ -196,7 +196,7 @@ The phase is the unit on which lower Mississippi Valley culture history is built
 
 ## Data and Code Availability
 
-All data and code needed to reproduce the analyses and figures reported here are openly available at https://github.com/clipo/phases and archived at https://doi.org/10.5281/zenodo.20796240. The repository includes the decorated-ceramic class counts, the georeferencing and radiocarbon data, the complete analysis procedure, and instructions for reproducing all results and figures. The code is released under the MIT License, and the data under a Creative Commons Attribution 4.0 International license.
+All data and code needed to reproduce the analyses and figures reported here are openly available at https://github.com/clipo/phases. On publication, a versioned snapshot of the repository will be released at https://doi.org/10.5281/zenodo.20796240. The repository includes the decorated-ceramic class counts, the georeferencing and radiocarbon data, the complete analysis procedure, and instructions for reproducing all results and figures. The code is released under the MIT License, and the data under a Creative Commons Attribution 4.0 International license.
 
 ## References
 <!-- managed in references.bib -->
