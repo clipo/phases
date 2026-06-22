@@ -1,0 +1,23 @@
+{
+  "title": "phases: analysis code and data for \"Are the phases real? Distinguishing bounded interaction groups from spatially structured drift in lower Mississippi Valley decorated ceramics\"",
+  "upload_type": "software",
+  "description": "Analysis code and data for the study distinguishing bounded interaction groups from spatially structured drift in late pre-contact lower Mississippi Valley decorated-ceramic assemblages. Includes the transmission-signature pipeline, the drift-versus-groups generative comparison, the manuscript figures, and the per-analysis result reports.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "access_right": "restricted",
+  "access_conditions": "Held private during peer review; will be opened on publication.",
+  "creators": [
+    { "name": "Lipo, Carl P.", "affiliation": "Binghamton University" },
+    { "name": "DiNapoli, Robert J.", "affiliation": "Binghamton University" },
+    { "name": "Madsen, Mark E." }
+  ],
+  "keywords": [
+    "cultural transmission",
+    "neutral model",
+    "frequency seriation",
+    "isolation by distance",
+    "Mississippian archaeology",
+    "Parkin phase",
+    "lower Mississippi Valley"
+  ]
+}

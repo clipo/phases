@@ -81,6 +81,8 @@ locations on the Lower Mississippi Survey grid.
   manuscript Methods bound both constraints.
 - The chronology is **seriation-derived**; the radiocarbon files exist to break
   that circularity with an independent (if coarse) calendar anchor.
-- Coordinates are real site locations. They are included because the analysis is
-  geographic; please treat site locations with the care archaeological site
+- Coordinates are approximate site locations georeferenced from published maps
+  and survey tables (USGS topographic sheets and the Lower Mississippi Survey
+  grid), not precise survey-grade fixes. They are included because the analysis
+  is geographic; please treat site locations with the care archaeological site
   data warrants.

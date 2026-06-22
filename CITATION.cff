@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite both the paper and this archived repository."
+title: "phases: analysis code and data for \"Are the phases real?\""
+abstract: >-
+  Analysis code and data for the study distinguishing bounded interaction
+  groups from spatially structured drift in late pre-contact lower Mississippi
+  Valley decorated-ceramic assemblages.
+type: software
+authors:
+  - family-names: Lipo
+    given-names: Carl P.
+    affiliation: Binghamton University
+  - family-names: DiNapoli
+    given-names: Robert J.
+    affiliation: Binghamton University
+  - family-names: Madsen
+    given-names: Mark E.
+version: 1.0.0
+date-released: "2026-06-22"
+license: MIT
+repository-code: "https://github.com/clipo/phases"
+keywords:
+  - cultural transmission
+  - neutral model
+  - frequency seriation
+  - isolation by distance
+  - Mississippian archaeology
+  - Parkin phase
+  - lower Mississippi Valley
+preferred-citation:
+  type: article
+  title: >-
+    Are the phases real? Distinguishing bounded interaction groups from
+    spatially structured drift in lower Mississippi Valley decorated ceramics
+  authors:
+    - family-names: Lipo
+      given-names: Carl P.
+      affiliation: Binghamton University
+    - family-names: DiNapoli
+      given-names: Robert J.
+      affiliation: Binghamton University
+    - family-names: Madsen
+      given-names: Mark E.
+  year: 2026
+  notes: In preparation.
