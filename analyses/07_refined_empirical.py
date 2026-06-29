@@ -671,7 +671,7 @@ def main() -> None:
     SIGS = ["neutral_departure", "fst", "spatial_boundary"]
     SIG_LABELS = {
         "neutral_departure": "Neutral departure",
-        "fst": "Cultural F_ST",
+        "fst": "Cultural $F_{ST}$",
         "spatial_boundary": "Spatial boundary excess",
     }
 
@@ -850,7 +850,7 @@ def main() -> None:
     contrast = {}
     for metric, label in [
         ("neutral_departure", "Neutral departure"),
-        ("fst", "Cultural F_ST"),
+        ("fst", "Cultural $F_{ST}$"),
         ("spatial_boundary", "Spatial boundary excess"),
         ("n_idss_groups", "IDSS n_groups (fragmentation)"),
     ]:
@@ -1015,7 +1015,7 @@ def main() -> None:
     # (b) early-vs-late structural contrast bar
     fig, ax = plt.subplots(figsize=(7, 4.2))
     mets = ["neutral_departure", "fst", "spatial_boundary", "n_idss_groups"]
-    labs = ["Neutral\ndeparture", "Cultural\nF_ST", "Boundary\nexcess",
+    labs = ["Neutral\ndeparture", "Cultural\n$F_{ST}$", "Boundary\nexcess",
             "IDSS\nn_groups"]
     # scale each metric by its early/late magnitude so all four share an axis
     earlyv, latev = [], []
@@ -1105,7 +1105,7 @@ def main() -> None:
     )
     emit("- Early- vs late-CA-third structural contrast (late - early):")
     for m, label in [("neutral_departure", "Neutral departure"),
-                     ("fst", "Cultural F_ST"),
+                     ("fst", "Cultural $F_{ST}$"),
                      ("spatial_boundary", "Spatial boundary excess"),
                      ("n_idss_groups", "IDSS n_groups")]:
         c = contrast[m]
@@ -1220,7 +1220,7 @@ def main() -> None:
     )
     emit()
 
-    OUTPUT.joinpath("empirical_refined.md").write_text("\n".join(lines))
+    OUTPUT.joinpath("empirical_refined.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
 
     # console: neutral, no coordinates
     print("Phase 5 refined empirical re-test complete.")

@@ -568,7 +568,7 @@ def main() -> None:
     SIGS = ["neutral_departure", "fst", "spatial_boundary"]
     SIG_LABELS = {
         "neutral_departure": "Neutral departure",
-        "fst": "Cultural F_ST",
+        "fst": "Cultural $F_{ST}$",
         "spatial_boundary": "Spatial boundary excess",
     }
 
@@ -1015,7 +1015,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "parkin_basin_restricted.md").write_text("\n".join(lines))
+    (OUTPUT / "parkin_basin_restricted.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
 
     # console: NEUTRAL, no raw coordinates
     print("Parkin-phase / St. Francis basin-restricted re-run complete.")

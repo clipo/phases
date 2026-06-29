@@ -756,7 +756,7 @@ def main() -> None:
     x = panel.index.to_numpy(float)
     specs = [
         ("neutral_departure", OKABE["blue"], "Neutral departure"),
-        ("fst", OKABE["orange"], "Cultural F_ST"),
+        ("fst", OKABE["orange"], "Cultural $F_{ST}$"),
         ("spatial_boundary", OKABE["green"], "Spatial boundary excess"),
     ]
     for col, color, label in specs:
@@ -1022,7 +1022,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "empirical_findings_v2.md").write_text("\n".join(lines))
+    (OUTPUT / "empirical_findings_v2.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
 
     # Console: NEUTRAL, no coordinates.
     print("Phase 5 v2 two-level empirical application complete.")

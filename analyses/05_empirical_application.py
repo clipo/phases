@@ -604,7 +604,7 @@ def main() -> None:
 
     series_specs = [
         ("neutral_departure", OKABE["blue"], "Neutral departure"),
-        ("fst", OKABE["orange"], "Cultural F_ST"),
+        ("fst", OKABE["orange"], "Cultural $F_{ST}$"),
         ("spatial_boundary", OKABE["green"], "Spatial boundary excess"),
     ]
     for col, color, label in series_specs:
@@ -871,7 +871,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "empirical_findings.md").write_text("\n".join(lines))
+    (OUTPUT / "empirical_findings.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
 
     # Console: NEUTRAL, no coordinates.
     print("Phase 5 empirical application complete.")
