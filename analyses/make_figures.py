@@ -231,7 +231,7 @@ def fig4_validation() -> None:
         "patchiness": "Spatial\npatchiness",
         "drift_space": "Isolation by\ndistance",
     }
-    SIG_LABELS = ["Neutral departure", "Seriability", "Cultural F_ST", "Spatial boundary"]
+    SIG_LABELS = ["Neutral departure", "Seriability", "Cultural $F_{ST}$", "Spatial boundary"]
     # Color (online-only supplement); marker and line style also vary per signature.
     SIG_COLORS = ["#0072B2", "#E69F00", "#009E73", "#D55E00"]
     SIG_MARKERS = ["o", "s", "^", "D"]
@@ -674,7 +674,7 @@ def fig5_empirical_trajectory() -> None:
     SIGS = ["neutral_departure", "seriation", "fst", "spatial_boundary"]
     SIG_LABELS = {"neutral_departure": "Neutral departure (θF/θE)",
                   "seriation": "Seriation fragmentation",
-                  "fst": "Cultural F_ST",
+                  "fst": "Cultural $F_{ST}$",
                   "spatial_boundary": "Spatial boundary excess"}
     SIG_COLORS = {"neutral_departure": OI_BLUE, "seriation": OI_PURPLE,
                   "fst": OI_ORANGE, "spatial_boundary": OI_GREEN}

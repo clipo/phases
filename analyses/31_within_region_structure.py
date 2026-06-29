@@ -118,7 +118,7 @@ def main():
                        marker=mark[c % len(mark)], edgecolor="white", linewidth=0.4)
         ax.set_xticks([]); ax.set_yticks([])
         ax.set_title(f"{R['name']}\n(n={R['n']}, {R['k']} spatial clusters, "
-                     f"F_ST={R['obs']:+.03f})", fontsize=7.5)
+                     f"$F_{{ST}}$={R['obs']:+.03f})", fontsize=7.5)
         for sp in ax.spines.values():
             sp.set_edgecolor("0.73")
 
@@ -138,7 +138,7 @@ def main():
     axb.set_yticks(ypos)
     axb.set_yticklabels(["LMV basin", "CMV (Miss.)"], fontsize=8)
     axb.set_ylim(-0.6, 1.6)
-    axb.set_xlabel("between-cluster cultural F_ST")
+    axb.set_xlabel("between-cluster cultural $F_{ST}$")
     from matplotlib.patches import Patch
     axb.legend(handles=[Patch(color=C_DRIFT, alpha=0.5, label="neutral spatial-drift null (95%)"),
                         Patch(color=C_GROUP, alpha=0.5, label="bounded-groups null (95%)"),

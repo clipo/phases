@@ -240,7 +240,7 @@ def main():
         ax.hist(d, bins=bins, color=C_DRIFT, alpha=0.55, density=True, label="spatial drift")
         ax.hist(g, bins=bins, color=C_GROUP, alpha=0.55, density=True, label="bounded groups")
         ax.axvline(obs[key], color=C_OBS, lw=1.4)
-        ax.set_xlabel(lab)
+        ax.set_xlabel(lab.replace("F_ST", "$F_{ST}$"))
         ax.set_yticks([])
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)

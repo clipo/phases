@@ -298,14 +298,14 @@ def main():
     lst = {"neutral": "-", "seriability": "--", "fst": ":", "spatial": "-."}
     for sg in SIG:
         axA.plot(S_GRID, persig[sg], marker=mkr[sg], ms=3, color=cmap[sg],
-                 ls=lst[sg], lw=1.4, label=SIG_LABEL[sg])
+                 ls=lst[sg], lw=1.4, label=SIG_LABEL[sg].replace("F_ST", "$F_{ST}$"))
     axA.axhline(0, color="0.7", lw=0.6)
     axA.set_xlabel("injected emergence strength s")
     axA.set_ylabel("signature trend (Spearman rho)")
     axA.legend(frameon=False, fontsize=6.5, loc="upper left")
 
-    axB.plot(S_GRID, power[1]["power"], "-o", ms=3, color=OI_BLUE, label="F_ST (no averaging)")
-    axB.plot(S_GRID, power[3]["power"], "-s", ms=3, color=OI_VERMIL, label="F_ST (time-averaged)")
+    axB.plot(S_GRID, power[1]["power"], "-o", ms=3, color=OI_BLUE, label="$F_{ST}$ (no averaging)")
+    axB.plot(S_GRID, power[3]["power"], "-s", ms=3, color=OI_VERMIL, label="$F_{ST}$ (time-averaged)")
     axB.axhline(POWER_TARGET, color="0.5", ls="--", lw=0.8)
     for w, c in ((1, OI_BLUE), (3, OI_VERMIL)):
         if np.isfinite(power[w]["s_star"]):
@@ -314,7 +314,7 @@ def main():
     axB.set_ylabel("detection power")
     axB.set_ylim(0, 1.02)
     axB.legend(frameon=False, fontsize=6.5, loc="lower right")
-    axB.text(0.04, 0.95, f"empirical F_ST = {emp_fst_mean:+.2f}\n(uninformative)",
+    axB.text(0.04, 0.95, f"empirical $F_{{ST}}$ = {emp_fst_mean:+.2f}\n(uninformative)",
              transform=axB.transAxes, va="top", fontsize=6.5, color=OI_GREEN)
     save(fig, "fig4_recovery")
 
@@ -330,7 +330,7 @@ def main():
     for ax, j in zip(axes.ravel(), range(len(SIG))):
         sg = SIG[j]
         ax.plot(range(N_BINS), panel_mean[:, j], "-o", ms=4, color=cmap5[sg], lw=1.5)
-        ax.set_ylabel(SIG_LABEL[sg], fontsize=8)
+        ax.set_ylabel(SIG_LABEL[sg].replace("F_ST", "$F_{ST}$"), fontsize=8)
         ax.set_xticks(range(N_BINS))
         ax.text(0.95, 0.95, rf"$\rho$ = {rar_emp_mean[sg]:+.2f}", transform=ax.transAxes,
                 ha="right", va="top", fontsize=9)

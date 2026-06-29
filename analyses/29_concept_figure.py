@@ -148,9 +148,9 @@ def main():
     axr.axvspan(0, s_star, color="#cccccc", alpha=0.40, zorder=0)
     axr.fill_between(s_grid, los, his, color=C1, alpha=0.20, zorder=1)
     axr.plot(s_grid, means, color=C1, lw=1.8, zorder=2,
-             label="F_ST signal recovered from synthetic groups")
+             label="$F_{ST}$ signal recovered from synthetic groups")
     axr.axhline(obs_fst, color="black", lw=1.4, ls="--", zorder=3,
-                label=f"observed F_ST signal ({obs_fst:+.02f})")
+                label=f"observed $F_{{ST}}$ signal ({obs_fst:+.02f})")
     axr.axvline(s_star, color="#444444", lw=1.0, ls=":", zorder=3)
     # annotation high in the shaded (below-resolution) region, clear of the curve
     axr.text(s_star / 2, ymax - 0.02,
@@ -161,7 +161,7 @@ def main():
              ha="left", va="bottom", fontsize=6.5, color="#333333")
     axr.set_xlabel("strength of group closure injected into synthetic assemblages "
                    "(0 = drift, 1 = strong bounded groups)")
-    axr.set_ylabel("recovered F_ST trend (Spearman rho)")
+    axr.set_ylabel("recovered $F_{ST}$ trend (Spearman rho)")
     # legend below the panel so it cannot overlap the curve or the annotations
     axr.legend(fontsize=6.5, frameon=False, loc="upper center",
                bbox_to_anchor=(0.5, -0.28), ncol=2)

@@ -141,10 +141,10 @@ def main():
     axA, axB, axC, axD = axes.ravel()
 
     box_by_factor(axA, MIX_GRID, mx_c, fst_c, obs_fst,
-                  "between-node mixing", "A. F_ST vs mixing", fmt="%g")
+                  "between-node mixing", "A. $F_{ST}$ vs mixing", fmt="%g")
     axA.legend(fontsize=6.5, loc="upper right")
     box_by_factor(axB, MU_GRID, mu_c, fst_c, obs_fst,
-                  "innovation rate", "B. F_ST vs innovation", fmt="%g")
+                  "innovation rate", "B. $F_{ST}$ vs innovation", fmt="%g")
 
     vals, cnts = np.unique(nc_c.astype(int), return_counts=True)
     axC.bar(vals, cnts / cnts.sum(), width=0.7, color="#0072B2",
