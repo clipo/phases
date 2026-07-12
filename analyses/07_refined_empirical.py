@@ -44,6 +44,7 @@ from __future__ import annotations
 
 import re
 import warnings
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -301,27 +302,63 @@ def ols_slope(x: np.ndarray, y: np.ndarray) -> float:
     return float((x @ (y[m] - y[m].mean())) / (x @ x))
 
 
-def main() -> None:
-    lines: list[str] = []
+@dataclass
+class PanelInputs:
+    """Pure (emit-free) data-prep products shared by analysis 07 and downstream
+    analyses. Every field is computed by ``prepare_inputs`` with no ``emit()``
+    side effects and no consumption of the section-4/5 bootstrap RNG."""
 
-    def emit(s: str = "") -> None:
-        lines.append(s)
+    counts: pd.DataFrame
+    type_cols: list
+    dropped_zero: list
+    have_coords_ids: list
+    cc_c: np.ndarray
+    M: np.ndarray
+    ordinate: np.ndarray
+    inertia_frac: float
+    ca: pd.Series
+    idx: list
+    coord_set: set
+    cluster_of: dict
+    geo_full: np.ndarray
+    geo_pos: dict
+    # 14C matching
+    rc: pd.DataFrame
+    n_prov: int
+    prov_date: pd.DataFrame
+    prov_to_assem: dict
+    prov_in_broad_only: list
+    prov_nowhere: list
+    n_matched_14c: int
+    dated_assems: list
+    rho_ca_date: float
+    p_ca_date: float
+    flipped: bool
+    # IDSS group structure
+    idss_by_cont: dict
+    prim: dict
+    groups: list
+    coherence_ratio: float
+    pk: int
+    pk_in: list
+    pk_is_bridge: bool
+    memb_prim: dict
+    ca_vals: np.ndarray
+    nmemb: np.ndarray
+    rho_frag: float
+    p_frag: float
+    slope_frag: float
 
-    emit("# Refined empirical re-test of transmission-level convergence (Phase 5 refinement)")
-    emit()
-    emit(
-        "This pass re-tests the prior result (no convergence at the "
-        "transmission level; leans H2 or underpowered) with five legitimate "
-        "refinements: a theory-faithful Signature 2 from the real IDSS group "
-        "structure, maximized 14C matching, a corrected Parkin record, "
-        "bootstrap CIs plus bin-count sensitivity, and a chronology-light "
-        "early-vs-late structural contrast. The result is reported honestly "
-        "whether or not it shows convergence. No verdict between H1 (nascent "
-        "emergence / consolidation toward contact) and H2 (stable "
-        "non-consolidation; Rees 2001) is declared."
-    )
-    emit()
 
+def prepare_inputs() -> PanelInputs:
+    """Compute analysis 07's data-prep products with NO emit() side effects.
+
+    Loads the curated decorated set, computes the CA seriation axis, matches the
+    14C proveniences and orients the CA axis by calendar time, selects the
+    silhouette-best k-means spatial clustering, and derives the IDSS group
+    structure (including per-assemblage co-seriable membership counts). Returns a
+    PanelInputs; main() emits the reported values from its fields, and downstream
+    analyses reuse the same inputs and panel builders."""
     # =======================================================================
     # Load curated decorated set
     # =======================================================================
@@ -354,19 +391,6 @@ def main() -> None:
     M = counts.to_numpy(float)
     ordinate, inertia_frac = correspondence_axis(M)
     ca = pd.Series(ordinate, index=counts.index, name="ca")
-
-    emit("## 0. Data")
-    emit()
-    emit(
-        f"- Curated decorated assemblages used: {len(counts)} "
-        f"({len(type_cols)} types: {', '.join(type_cols)})."
-    )
-    if dropped_zero:
-        emit(f"- Dropped {len(dropped_zero)} zero-decorated assemblage(s): "
-             f"{', '.join(dropped_zero)}.")
-    emit(f"- Assemblages with coordinates: {len(have_coords_ids)}.")
-    emit(f"- CA first non-trivial axis inertia fraction: {inertia_frac:.3f}.")
-    emit()
 
     # =======================================================================
     # 2. Maximized 14C matching (do this before CA orientation)
@@ -411,44 +435,6 @@ def main() -> None:
     assem_date = {a: float(np.mean(v)) for a, v in assem_date.items()}
     n_matched_14c = len(assem_date)
 
-    emit("## 1/2. Maximized 14C matching")
-    emit()
-    emit(
-        f"- 14C samples with a provenience: {len(rc)}; aggregated to "
-        f"{n_prov} unique proveniences."
-    )
-    emit(
-        f"- Proveniences matched to a curated decorated assemblage (improved "
-        f"normalization: generic suffixes stripped, longest-overlap "
-        f"containment): **{n_matched_14c}**."
-    )
-    emit("  Matched provenience -> assemblage (mean 1-sigma calendar AD, n samples):")
-    for prov in sorted(prov_to_assem):
-        a = prov_to_assem[prov]
-        emit(f"  - {prov} -> {a}: AD {float(prov_date.loc[prov,'mean']):.0f} "
-             f"(n={int(prov_date.loc[prov,'count'])})")
-    emit(
-        f"- Proveniences that exist as BROAD PFG sites but are NOT in the "
-        f"curated decorated set (cannot be placed on the CA axis): "
-        f"{len(prov_in_broad_only)} "
-        f"({', '.join(sorted(prov_in_broad_only)) if prov_in_broad_only else 'none'})."
-    )
-    emit(
-        f"- Proveniences absent from both curated and broad sets "
-        f"(different drainages / phases): {len(prov_nowhere)} "
-        f"({', '.join(sorted(prov_nowhere)) if prov_nowhere else 'none'})."
-    )
-    emit(
-        f"- HONEST CEILING: the dated-provenience pool is {n_prov}, but only "
-        f"{n_matched_14c} of those proveniences correspond to assemblages in "
-        f"the curated decorated set. The 14C anchor for the CA axis is bounded "
-        f"by these {n_matched_14c} points, not by the full {n_prov}. The "
-        f"remaining dated sites (Powers-phase and other-drainage sites such as "
-        f"Powers Fort, Snodgrass, Turner, Lilbourn, Hazel, Hess, Moon, Denton "
-        f"Mounds, Callahan-Thompson) are outside the curated decorated set."
-    )
-    emit()
-
     # -- Orient CA by 14C ---------------------------------------------------
     dated_assems = [a for a in ca.index if a in assem_date]
     ca_d = ca.reindex(dated_assems).to_numpy(float)
@@ -465,28 +451,9 @@ def main() -> None:
         rho_ca_date = -rho_ca_date
         flipped = True
 
-    emit(
-        f"- CA<->14C Spearman on the {len(dated_assems)} anchors = "
-        f"{rho_ca_date:+.3f} (p = {p_ca_date:.3f}); axis "
-        + ("flipped so increasing = later." if flipped
-           else "kept (already increasing with time).")
-    )
-    if n_matched_14c < 10:
-        emit(
-            f"- PLAIN STATEMENT: with only {n_matched_14c} anchors (< 10), the "
-            "absolute time anchor remains weak. The CA axis is essentially a "
-            "RELATIVE seriation ordinate; the calendar orientation is "
-            "directional, not a calibrated chronology. This is the principal "
-            "reason the cross-sectional structural test (section 5) is run as a "
-            "chronology-light complement."
-        )
-    emit()
-
     # =======================================================================
     # 1. Theory-faithful Signature 2: IDSS group structure on the curated set
     # =======================================================================
-    emit("## 3. Signature 2 via the real IDSS group structure (curated set)")
-    emit()
     idx = list(counts.index)
     coord_set = set(have_coords_ids)
 
@@ -526,30 +493,6 @@ def main() -> None:
 
     prim = idss_by_cont[CONT_PRIMARY]
     groups = prim["groups"]
-    emit(
-        f"Primary run uses the IDSS continuity threshold cont={CONT_PRIMARY} "
-        f"(see note: cont=0.30 of Lipo et al. 2015 over-saturates this broadly "
-        f"overlapping decorated matrix and exceeds the solver caps). Group "
-        f"counts and Parkin's bridge rank are reported across cont in "
-        f"{CONT_SWEEP} for sensitivity."
-    )
-    emit()
-    emit(
-        f"- Number of maximal co-seriable groups (cont={CONT_PRIMARY}): "
-        f"**{prim['n_groups']}**. Largest group sizes: {prim['sizes'][:8]} "
-        f"(max group size = {prim['sizes'][0]})."
-    )
-    sd = pd.Series([len(g) for g in groups]).value_counts().sort_index().to_dict()
-    emit(
-        f"- Group-size distribution {{size: n_groups}}: {sd}. The structure is "
-        "highly FRAGMENTED: many small overlapping windows, no single large "
-        "ordering covering the set. This matches Lipo et al. 2015, where the "
-        "largest LMV solution held only four assemblages."
-    )
-    emit(
-        f"- Multi-membership (bridge) assemblages: {prim['n_multi']} of "
-        f"{len(idx)} belong to more than one maximal group."
-    )
 
     # spatial coherence of groups: within- vs between-group geographic distance
     within_d, between_d = [], []
@@ -578,6 +521,288 @@ def main() -> None:
     mean_between = float(np.mean(between_d)) if between_d else np.nan
     coherence_ratio = (mean_within / mean_between
                        if mean_between and np.isfinite(mean_between) else np.nan)
+
+    # Parkin bridge
+    pk = idx.index(PARKIN_CUR)
+    pk_in = [gi for gi, g in enumerate(groups) if pk in g]
+    pk_is_bridge = len(pk_in) > 1
+
+    # -- IDSS fragmentation vs CA position: do later-CA assemblages bridge more?
+    # per-assemblage number of distinct groups it participates in, regressed on
+    # its CA position. Rising = fragmentation/assortment increasing toward later.
+    memb_prim = prim["memb"]
+    ca_vals = ca.reindex(idx).to_numpy(float)
+    nmemb = np.array([memb_prim[r] for r in range(len(idx))], float)
+    rho_frag, p_frag = spearmanr(ca_vals, nmemb)
+    slope_frag = ols_slope(ca_vals, nmemb)
+
+    return PanelInputs(
+        counts=counts,
+        type_cols=type_cols,
+        dropped_zero=dropped_zero,
+        have_coords_ids=have_coords_ids,
+        cc_c=cc_c,
+        M=M,
+        ordinate=ordinate,
+        inertia_frac=inertia_frac,
+        ca=ca,
+        idx=idx,
+        coord_set=coord_set,
+        cluster_of=cluster_of,
+        geo_full=geo_full,
+        geo_pos=geo_pos,
+        rc=rc,
+        n_prov=n_prov,
+        prov_date=prov_date,
+        prov_to_assem=prov_to_assem,
+        prov_in_broad_only=prov_in_broad_only,
+        prov_nowhere=prov_nowhere,
+        n_matched_14c=n_matched_14c,
+        dated_assems=dated_assems,
+        rho_ca_date=rho_ca_date,
+        p_ca_date=p_ca_date,
+        flipped=flipped,
+        idss_by_cont=idss_by_cont,
+        prim=prim,
+        groups=groups,
+        coherence_ratio=coherence_ratio,
+        pk=pk,
+        pk_in=pk_in,
+        pk_is_bridge=pk_is_bridge,
+        memb_prim=memb_prim,
+        ca_vals=ca_vals,
+        nmemb=nmemb,
+        rho_frag=rho_frag,
+        p_frag=p_frag,
+        slope_frag=slope_frag,
+    )
+
+
+def panel_for_bins(inp: PanelInputs, n_bins: int) -> pd.DataFrame:
+    """The 3-signature (neutral_departure, fst, spatial_boundary) x n_slices
+    panel along the CA axis, over the coordinate-bearing assemblages. Same logic
+    as analysis 07's original in-main closure."""
+    have_coords_ids = inp.have_coords_ids
+    ca_have = inp.ca.reindex(have_coords_ids)
+    counts_have = inp.counts.reindex(have_coords_ids)
+    cc_have = inp.cc_c  # aligned to have_coords_ids
+    cluster_of = inp.cluster_of
+
+    bins = pd.qcut(ca_have, q=n_bins, labels=False, duplicates="drop")
+    bin_ids = sorted(pd.Series(bins).dropna().unique())
+    rows = {}
+    for b in bin_ids:
+        ids = [i for i in have_coords_ids
+               if not pd.isna(bins[i]) and bins[i] == b]
+        sub_counts = counts_have.loc[ids].to_numpy(float)
+        sub_coords = cc_have[[have_coords_ids.index(i) for i in ids]]
+        sub_clusters = np.array([cluster_of[i] for i in ids])
+        nd = neutral_departure_pooled(sub_counts, sub_clusters)
+        fst = fst_across(sub_counts, sub_clusters)
+        sb = (boundary_excess(sub_counts, sub_coords, seed=7)
+              if len(ids) >= 4 else np.nan)
+        rows[b] = {"neutral_departure": nd, "fst": fst,
+                   "spatial_boundary": sb}
+    return pd.DataFrame(rows).T.sort_index()
+
+
+def bootstrap_panel_once(inp: PanelInputs, n_bins: int,
+                         rng: np.random.Generator) -> pd.DataFrame | None:
+    """One assemblage-bootstrap rebuild of the 3-signature panel: resample the
+    coordinate-bearing assemblages with replacement, re-bin via qcut, and
+    recompute the three continuous signatures per bin. Returns None if the
+    resample fails to bin (matching analysis 07's original ``continue``).
+
+    Consumes exactly ONE draw from ``rng`` (the resample); the signatures are
+    deterministic (boundary_excess uses its own fixed seed), so this reproduces
+    07's original per-signature bootstrap draw sequence byte-for-byte."""
+    have_coords_ids = inp.have_coords_ids
+    ca = inp.ca
+    counts = inp.counts
+    cluster_of = inp.cluster_of
+    cc_have = inp.cc_c
+    ids_all = list(have_coords_ids)
+    samp = list(rng.choice(ids_all, size=len(ids_all), replace=True))
+    ca_s = ca.reindex(samp).reset_index(drop=True)
+    cnt_s = counts.reindex(samp).reset_index(drop=True)
+    cl_s = np.array([cluster_of[i] for i in samp])
+    cco_s = cc_have[[have_coords_ids.index(i) for i in samp]]
+    try:
+        bb = pd.qcut(ca_s, q=n_bins, labels=False, duplicates="drop")
+    except Exception:
+        return None
+    rows = {}
+    for bb_id in sorted(pd.Series(bb).dropna().unique()):
+        mask = (bb == bb_id).to_numpy()
+        sc = cnt_s.to_numpy(float)[mask]
+        nd = neutral_departure_pooled(sc, cl_s[mask])
+        fst = fst_across(sc, cl_s[mask])
+        sb = (boundary_excess(sc, cco_s[mask], seed=7)
+              if mask.sum() >= 4 else np.nan)
+        rows[bb_id] = {"neutral_departure": nd, "fst": fst,
+                       "spatial_boundary": sb}
+    return pd.DataFrame(rows).T.sort_index()
+
+
+def main() -> None:
+    lines: list[str] = []
+
+    def emit(s: str = "") -> None:
+        lines.append(s)
+
+    emit("# Refined empirical re-test of transmission-level convergence (Phase 5 refinement)")
+    emit()
+    emit(
+        "This pass re-tests the prior result (no convergence at the "
+        "transmission level; leans H2 or underpowered) with five legitimate "
+        "refinements: a theory-faithful Signature 2 from the real IDSS group "
+        "structure, maximized 14C matching, a corrected Parkin record, "
+        "bootstrap CIs plus bin-count sensitivity, and a chronology-light "
+        "early-vs-late structural contrast. The result is reported honestly "
+        "whether or not it shows convergence. No verdict between H1 (nascent "
+        "emergence / consolidation toward contact) and H2 (stable "
+        "non-consolidation; Rees 2001) is declared."
+    )
+    emit()
+
+    inp = prepare_inputs()
+    counts = inp.counts
+    type_cols = inp.type_cols
+    dropped_zero = inp.dropped_zero
+    have_coords_ids = inp.have_coords_ids
+    cc_c = inp.cc_c
+    M = inp.M
+    ordinate = inp.ordinate
+    inertia_frac = inp.inertia_frac
+    ca = inp.ca
+    idx = inp.idx
+    coord_set = inp.coord_set
+    cluster_of = inp.cluster_of
+    geo_full = inp.geo_full
+    geo_pos = inp.geo_pos
+    rc = inp.rc
+    n_prov = inp.n_prov
+    prov_date = inp.prov_date
+    prov_to_assem = inp.prov_to_assem
+    prov_in_broad_only = inp.prov_in_broad_only
+    prov_nowhere = inp.prov_nowhere
+    n_matched_14c = inp.n_matched_14c
+    dated_assems = inp.dated_assems
+    rho_ca_date = inp.rho_ca_date
+    p_ca_date = inp.p_ca_date
+    flipped = inp.flipped
+    idss_by_cont = inp.idss_by_cont
+    prim = inp.prim
+    groups = inp.groups
+    coherence_ratio = inp.coherence_ratio
+    pk = inp.pk
+    pk_in = inp.pk_in
+    pk_is_bridge = inp.pk_is_bridge
+    memb_prim = inp.memb_prim
+    ca_vals = inp.ca_vals
+    nmemb = inp.nmemb
+    rho_frag = inp.rho_frag
+    p_frag = inp.p_frag
+    slope_frag = inp.slope_frag
+
+    emit("## 0. Data")
+    emit()
+    emit(
+        f"- Curated decorated assemblages used: {len(counts)} "
+        f"({len(type_cols)} types: {', '.join(type_cols)})."
+    )
+    if dropped_zero:
+        emit(f"- Dropped {len(dropped_zero)} zero-decorated assemblage(s): "
+             f"{', '.join(dropped_zero)}.")
+    emit(f"- Assemblages with coordinates: {len(have_coords_ids)}.")
+    emit(f"- CA first non-trivial axis inertia fraction: {inertia_frac:.3f}.")
+    emit()
+
+    emit("## 1/2. Maximized 14C matching")
+    emit()
+    emit(
+        f"- 14C samples with a provenience: {len(rc)}; aggregated to "
+        f"{n_prov} unique proveniences."
+    )
+    emit(
+        f"- Proveniences matched to a curated decorated assemblage (improved "
+        f"normalization: generic suffixes stripped, longest-overlap "
+        f"containment): **{n_matched_14c}**."
+    )
+    emit("  Matched provenience -> assemblage (mean 1-sigma calendar AD, n samples):")
+    for prov in sorted(prov_to_assem):
+        a = prov_to_assem[prov]
+        emit(f"  - {prov} -> {a}: AD {float(prov_date.loc[prov,'mean']):.0f} "
+             f"(n={int(prov_date.loc[prov,'count'])})")
+    emit(
+        f"- Proveniences that exist as BROAD PFG sites but are NOT in the "
+        f"curated decorated set (cannot be placed on the CA axis): "
+        f"{len(prov_in_broad_only)} "
+        f"({', '.join(sorted(prov_in_broad_only)) if prov_in_broad_only else 'none'})."
+    )
+    emit(
+        f"- Proveniences absent from both curated and broad sets "
+        f"(different drainages / phases): {len(prov_nowhere)} "
+        f"({', '.join(sorted(prov_nowhere)) if prov_nowhere else 'none'})."
+    )
+    emit(
+        f"- HONEST CEILING: the dated-provenience pool is {n_prov}, but only "
+        f"{n_matched_14c} of those proveniences correspond to assemblages in "
+        f"the curated decorated set. The 14C anchor for the CA axis is bounded "
+        f"by these {n_matched_14c} points, not by the full {n_prov}. The "
+        f"remaining dated sites (Powers-phase and other-drainage sites such as "
+        f"Powers Fort, Snodgrass, Turner, Lilbourn, Hazel, Hess, Moon, Denton "
+        f"Mounds, Callahan-Thompson) are outside the curated decorated set."
+    )
+    emit()
+
+    emit(
+        f"- CA<->14C Spearman on the {len(dated_assems)} anchors = "
+        f"{rho_ca_date:+.3f} (p = {p_ca_date:.3f}); axis "
+        + ("flipped so increasing = later." if flipped
+           else "kept (already increasing with time).")
+    )
+    if n_matched_14c < 10:
+        emit(
+            f"- PLAIN STATEMENT: with only {n_matched_14c} anchors (< 10), the "
+            "absolute time anchor remains weak. The CA axis is essentially a "
+            "RELATIVE seriation ordinate; the calendar orientation is "
+            "directional, not a calibrated chronology. This is the principal "
+            "reason the cross-sectional structural test (section 5) is run as a "
+            "chronology-light complement."
+        )
+    emit()
+
+    # =======================================================================
+    # 1. Theory-faithful Signature 2: IDSS group structure on the curated set
+    # =======================================================================
+    emit("## 3. Signature 2 via the real IDSS group structure (curated set)")
+    emit()
+    emit(
+        f"Primary run uses the IDSS continuity threshold cont={CONT_PRIMARY} "
+        f"(see note: cont=0.30 of Lipo et al. 2015 over-saturates this broadly "
+        f"overlapping decorated matrix and exceeds the solver caps). Group "
+        f"counts and Parkin's bridge rank are reported across cont in "
+        f"{CONT_SWEEP} for sensitivity."
+    )
+    emit()
+    emit(
+        f"- Number of maximal co-seriable groups (cont={CONT_PRIMARY}): "
+        f"**{prim['n_groups']}**. Largest group sizes: {prim['sizes'][:8]} "
+        f"(max group size = {prim['sizes'][0]})."
+    )
+    sd = pd.Series([len(g) for g in groups]).value_counts().sort_index().to_dict()
+    emit(
+        f"- Group-size distribution {{size: n_groups}}: {sd}. The structure is "
+        "highly FRAGMENTED: many small overlapping windows, no single large "
+        "ordering covering the set. This matches Lipo et al. 2015, where the "
+        "largest LMV solution held only four assemblages."
+    )
+    emit(
+        f"- Multi-membership (bridge) assemblages: {prim['n_multi']} of "
+        f"{len(idx)} belong to more than one maximal group."
+    )
+
     emit(
         f"- Spatial coherence of IDSS groups: mean within-group geographic "
         f"distance / mean between-group distance = {coherence_ratio:.3f} "
@@ -585,10 +810,6 @@ def main() -> None:
         f"non-co-seriable pairs, i.e. groups are spatially clustered)."
     )
 
-    # Parkin bridge
-    pk = idx.index(PARKIN_CUR)
-    pk_in = [gi for gi, g in enumerate(groups) if pk in g]
-    pk_is_bridge = len(pk_in) > 1
     emit(
         f"- **Parkin** belongs to {len(pk_in)} maximal groups "
         f"(bridge = {pk_is_bridge}); bridge rank {prim['pk_rank']} of "
@@ -610,14 +831,6 @@ def main() -> None:
              f"{d['pk_memb']} | {d['pk_rank']}/{len(idx)} |")
     emit()
 
-    # -- IDSS fragmentation vs CA position: do later-CA assemblages bridge more?
-    # per-assemblage number of distinct groups it participates in, regressed on
-    # its CA position. Rising = fragmentation/assortment increasing toward later.
-    memb_prim = prim["memb"]
-    ca_vals = ca.reindex(idx).to_numpy(float)
-    nmemb = np.array([memb_prim[r] for r in range(len(idx))], float)
-    rho_frag, p_frag = spearmanr(ca_vals, nmemb)
-    slope_frag = ols_slope(ca_vals, nmemb)
     emit(
         f"- Signature-2 TREND (proper): per-assemblage count of distinct "
         f"co-seriable groups vs CA position: Spearman rho = {rho_frag:+.3f} "
@@ -650,24 +863,6 @@ def main() -> None:
     counts_have = counts.reindex(have_coords_ids)
     cc_have = cc_c  # aligned to have_coords_ids
 
-    def panel_for_bins(n_bins: int):
-        bins = pd.qcut(ca_have, q=n_bins, labels=False, duplicates="drop")
-        bin_ids = sorted(pd.Series(bins).dropna().unique())
-        rows = {}
-        for b in bin_ids:
-            ids = [i for i in have_coords_ids
-                   if not pd.isna(bins[i]) and bins[i] == b]
-            sub_counts = counts_have.loc[ids].to_numpy(float)
-            sub_coords = cc_have[[have_coords_ids.index(i) for i in ids]]
-            sub_clusters = np.array([cluster_of[i] for i in ids])
-            nd = neutral_departure_pooled(sub_counts, sub_clusters)
-            fst = fst_across(sub_counts, sub_clusters)
-            sb = (boundary_excess(sub_counts, sub_coords, seed=7)
-                  if len(ids) >= 4 else np.nan)
-            rows[b] = {"neutral_departure": nd, "fst": fst,
-                       "spatial_boundary": sb}
-        return pd.DataFrame(rows).T.sort_index()
-
     SIGS = ["neutral_departure", "fst", "spatial_boundary"]
     SIG_LABELS = {
         "neutral_departure": "Neutral departure",
@@ -684,7 +879,7 @@ def main() -> None:
     sens = {s: {} for s in SIGS}
     panels = {}
     for nb in (4, 6, 8):
-        p = panel_for_bins(nb)
+        p = panel_for_bins(inp, nb)
         panels[nb] = p
         for s in SIGS:
             v = p[s].dropna()
@@ -727,30 +922,11 @@ def main() -> None:
             rho, _pval = np.nan, np.nan
         # bootstrap: resample assemblages, rebuild 6-bin panel, refit slope
         bslopes = []
-        ids_all = list(have_coords_ids)
         for _ in range(800):
-            samp = list(rng.choice(ids_all, size=len(ids_all), replace=True))
-            ca_s = ca.reindex(samp).reset_index(drop=True)
-            cnt_s = counts.reindex(samp).reset_index(drop=True)
-            cl_s = np.array([cluster_of[i] for i in samp])
-            cco_s = cc_have[[have_coords_ids.index(i) for i in samp]]
-            try:
-                bb = pd.qcut(ca_s, q=6, labels=False, duplicates="drop")
-            except Exception:
+            bp = bootstrap_panel_once(inp, 6, rng)
+            if bp is None:
                 continue
-            bvals = []
-            for bb_id in sorted(pd.Series(bb).dropna().unique()):
-                mask = (bb == bb_id).to_numpy()
-                sc = cnt_s.to_numpy(float)[mask]
-                if s == "neutral_departure":
-                    val = neutral_departure_pooled(sc, cl_s[mask])
-                elif s == "fst":
-                    val = fst_across(sc, cl_s[mask])
-                else:
-                    val = (boundary_excess(sc, cco_s[mask], seed=7)
-                           if mask.sum() >= 4 else np.nan)
-                bvals.append((bb_id, val))
-            bvdf = pd.Series({k: v2 for k, v2 in bvals}).dropna()
+            bvdf = bp[s].dropna()
             if len(bvdf) >= 2:
                 bslopes.append(ols_slope(bvdf.index.to_numpy(float), bvdf.values))
         bslopes = np.array([b for b in bslopes if np.isfinite(b)])
