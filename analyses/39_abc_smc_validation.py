@@ -165,6 +165,9 @@ def main(fast=False, n_workers=None):
     # 1. SBC
     ranks = sbc_ranks(cfg["n_sbc"], K, cfg["sbc_particles"], cfg["sbc_rounds"],
                       seed=11, n_workers=n_workers)
+    # persist the ranks so the manuscript figure (Figure S6) can show the b-rank
+    # calibration histogram without recomputing the (expensive) SBC.
+    np.savez(ROOT / "output" / "abc_smc_sbc_ranks.npz", ranks=ranks)
     names = ["mu", "b", "N", "w"]
     # chi-square uniformity test on the b ranks
     from scipy.stats import kstest

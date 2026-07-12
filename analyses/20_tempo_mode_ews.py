@@ -30,7 +30,9 @@ rising trend in both indicators toward the contact end would be the dynamic
 signature of an approaching transition (the "brink"); its absence is concordant
 with the static negative.
 
-Writes output/tempo_mode_ews.md + figures/figS6_dynamic.png, the merged
+Writes output/tempo_mode_ews.md + figures/figS2_dynamic.png (legacy two-panel
+diagnostic; the manuscript's three-panel Figure S6 is built by 42_figS6_dynamic.py),
+the merged
 dynamic-sufficiency figure (panel A = ABC posterior from output/abc_posterior.npz,
 written by 19_abc_transmission.py; panel B = tempo-and-mode Akaike weights). The
 early-warning result is in the .md but is not figured. Run 19 before 20.
@@ -333,6 +335,12 @@ def main():
     xpos = np.arange(len(MODELS))
     type_means = [np.mean(type_weight[m]) if type_weight[m] else 0 for m in MODELS]
     div_w = [w_div[m] for m in MODELS]
+    # persist the tempo-mode Akaike weights so the merged manuscript figure
+    # (Figure S6, assembled by 42_figS6_dynamic.py after the ABC-SMC/SBC scripts
+    # run) can reuse them without recomputing.
+    np.savez(ROOT / "output" / "tempo_akaike.npz",
+             models=np.array(MODELS), type_means=np.array(type_means, float),
+             div_w=np.array(div_w, float))
     axB.bar(xpos - 0.2, type_means, width=0.4, color=OI_BLUE, label="type trajectories (mean)")
     axB.bar(xpos + 0.2, div_w, width=0.4, color=OI_ORANGE, label="diversity trajectory")
     axB.set_xticks(xpos)
@@ -340,7 +348,11 @@ def main():
     axB.set_ylabel("Akaike weight")
     axB.set_ylim(0, 1)
     axB.legend(frameon=False, fontsize=7)
-    save(fig, "figS6_dynamic")
+    # Figure S6 is now the three-panel merged figure assembled by
+    # 42_figS6_dynamic.py (ABC-SMC posterior + SBC calibration + tempo-mode);
+    # this two-panel version is retained as a legacy diagnostic under a
+    # different name so it does not overwrite the manuscript figure.
+    save(fig, "figS2_dynamic")
 
     print(f"wrote {OUT}")
     print("\n".join(L))
