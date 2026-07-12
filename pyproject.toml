@@ -21,6 +21,9 @@ dependencies = [
     "cartopy>=0.22",
     "openpyxl>=3.1",
     "xlrd>=2.0",
+    "pymc>=6.1",
+    "arviz>=1.2",
+    "h5netcdf>=1.3",
 ]
 
 [build-system]
@@ -29,6 +32,10 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mls_emergence"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["data: touches local research data files"]
 
 [tool.ruff]
 line-length = 100

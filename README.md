@@ -128,6 +128,13 @@ realizations each), `34_emergence_robustness.py` (a 432-run factor grid),
 `19_abc_transmission.py` (40,000 ABC simulations). Each caches its per-run
 results to `output/`, so re-runs are fast.
 
+The Bayesian analyses (`38`–`41`) need PyMC and arviz, installed by
+`requirements.txt`. `39_abc_smc_validation.py` is among the heaviest (a few
+hundred short MCMC fits, parallelized across cores). PyMC/PyTensor numerical
+output can shift across library versions, so the pinned versions in
+`requirements.txt` reproduce the deposited MCMC result tables exactly; a
+different PyMC version may change the trailing digits.
+
 To regenerate a single figure or result, run its script directly. For example:
 
 ```bash
@@ -233,6 +240,17 @@ The numbered scripts run in order under `run_all.sh`.
 | `19_abc_transmission.py` | Time-averaging-aware ABC inference of the copying bias |
 | `20_tempo_mode_ews.py` | Tempo-and-mode model comparison and early-warning probe (Fig S6) |
 | `12_sensitivity_grid.py` | Forking-paths sensitivity of the basin result |
+
+**Bayesian robustness analyses**
+
+| Script | Purpose |
+|---|---|
+| `38_abc_smc_transmission.py` | ABC-SMC (sequential Monte Carlo) posterior of the copying bias, the calibrated upgrade to `19` |
+| `39_abc_smc_validation.py` | Simulation-based calibration, coverage, and cross-check of the ABC-SMC posterior against `19` |
+| `40_hierarchical_convergence.py` | Hierarchical Bayesian posterior of the four-signature convergence: `P(all four slopes rise together)` |
+| `41_hierarchical_convergence_validation.py` | Calibration, prior sensitivity, and posterior-predictive checks for the convergence model |
+
+These four use PyMC and arviz (in `requirements.txt`). They restate the transmission-bias inference and the convergence criterion as calibrated Bayesian posteriors, and reach the same conclusions as the primary analyses: a copying bias tightly constrained near neutral, and no convergence of the four signatures (`P = 0`).
 
 **Criterion validation and signal recovery**
 
