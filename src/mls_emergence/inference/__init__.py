@@ -14,9 +14,12 @@ from .convergence_model import (
 from .bayesian_fst import (
     fst_from_frequencies,
     build_fst_model,
+    build_panmixia_model,
     sample_fst,
-    fst_posterior,
     fst_summary,
+    gini_simpson_posterior,
+    gini_simpson_summary,
+    bayes_factor_structure,
 )
 
 __all__ = [
@@ -31,7 +34,10 @@ __all__ = [
     "convergence_summary",
     "fst_from_frequencies",
     "build_fst_model",
+    "build_panmixia_model",
     "sample_fst",
-    "fst_posterior",
     "fst_summary",
+    "gini_simpson_posterior",
+    "gini_simpson_summary",
+    "bayes_factor_structure",
 ]
