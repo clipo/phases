@@ -249,8 +249,10 @@ The numbered scripts run in order under `run_all.sh`.
 | `39_abc_smc_validation.py` | Simulation-based calibration, coverage, and cross-check of the ABC-SMC posterior against `19` |
 | `40_hierarchical_convergence.py` | Hierarchical Bayesian posterior of the four-signature convergence: `P(all four slopes rise together)` |
 | `41_hierarchical_convergence_validation.py` | Calibration, prior sensitivity, and posterior-predictive checks for the convergence model |
+| `43_bayesian_fst.py` | Bayesian credible interval on the between-cluster cultural F_ST (hierarchical Dirichlet-multinomial), with small-sample bias correction |
+| `44_bayesian_fst_validation.py` | Coverage, small-sample-bias, and MCMC-health checks for the Bayesian F_ST |
 
-These four use PyMC and arviz (in `requirements.txt`). They restate the transmission-bias inference and the convergence criterion as calibrated Bayesian posteriors, and reach the same conclusions as the primary analyses: a copying bias tightly constrained near neutral, and no convergence of the four signatures (`P = 0`).
+These use PyMC and arviz (in `requirements.txt`). They restate the transmission-bias inference and the convergence criterion as calibrated Bayesian posteriors, and reach the same conclusions as the primary analyses: a copying bias tightly constrained near neutral, and no convergence of the four signatures (`P = 0`). `43`/`44` add a calibrated credible interval on the between-cluster cultural F_ST estimate; this is estimation uncertainty conditional on the clustering and is distinct from the size-controlled per-bin F_ST that carries the main-text argument.
 
 **Criterion validation and signal recovery**
 
