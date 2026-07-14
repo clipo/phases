@@ -383,7 +383,7 @@ def _label_river(ax: plt.Axes, gdf: gpd.GeoDataFrame, text: str,
 # ---------------------------------------------------------------------------
 def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
                   grayscale: bool = False, show_counties: bool = True,
-                  show_states: bool = True, show_hydrology: bool = True) -> None:
+                  show_states: bool = True, draw_rivers: bool = True) -> None:
     """Draw the St. Francis basin river and geology basemap (UTM15N) onto ax,
     clipped to extent=(e_min, e_max, n_min, n_max). Sets equal aspect, the axis
     limits, and a thin frame; labels the Mississippi, St. Francis, and Tyronza.
@@ -418,14 +418,17 @@ def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
     if show_states and not states.empty:
         states.plot(ax=ax, facecolor="none", edgecolor="#888888", linewidth=1.0, zorder=3)
 
-    if show_hydrology:
-        if grayscale:
-            water_blue, water_blue_dark, line_blue = "0.66", "0.25", "0.4"
-            stream_col = "0.55"
-        else:
-            water_blue, water_blue_dark, line_blue = "#A8D0E8", "#4A8AB0", "#5BA3C9"
-            stream_col = "#90C0D8"
-        edge_col = "0.5" if grayscale else "#6EB5D8"
+    if grayscale:
+        water_blue, water_blue_dark, line_blue = "0.66", "0.25", "0.4"
+        stream_col = "0.55"
+    else:
+        water_blue, water_blue_dark, line_blue = "#A8D0E8", "#4A8AB0", "#5BA3C9"
+        stream_col = "#90C0D8"
+    edge_col = "0.5" if grayscale else "#6EB5D8"
+    # draw_rivers=False suppresses the local LMVHydrology lines so a caller can
+    # supply a consistent hydrography layer (draw_hydrorivers) instead; the river
+    # labels below are kept either way.
+    if draw_rivers:
         if not ms_poly.empty:
             ms_poly.plot(ax=ax, facecolor=water_blue, edgecolor=edge_col, linewidth=0.4, zorder=4)
         if not stfr_poly.empty:
@@ -440,9 +443,9 @@ def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
         if not tyronza_lines.empty:
             tyronza_lines.plot(ax=ax, color=line_blue, linewidth=1.0, zorder=6)
 
-        _label_river(ax, ms_poly, "Mississippi R.", water_blue_dark, rotation=90)
-        _label_river(ax, stfr_poly, "St. Francis R.", water_blue_dark, rotation=70)
-        _label_river(ax, tyronza_lines, "Tyronza R.", water_blue_dark, rotation=0)
+    _label_river(ax, ms_poly, "Mississippi R.", water_blue_dark, rotation=90)
+    _label_river(ax, stfr_poly, "St. Francis R.", water_blue_dark, rotation=70)
+    _label_river(ax, tyronza_lines, "Tyronza R.", water_blue_dark, rotation=0)
 
     e_min, e_max, n_min, n_max = extent
     ax.set_xlim(e_min, e_max)
@@ -454,6 +457,59 @@ def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
         sp.set_visible(True)
         sp.set_linewidth(0.5)
         sp.set_edgecolor("0.6")
+
+
+# ---------------------------------------------------------------------------
+# Consistent HydroRIVERS hydrography (shared by Figures 1, 9, 10)
+# ---------------------------------------------------------------------------
+HYDRORIVERS = DATA / "HydroRIVERS_v10_na.gdb.zip"
+
+# Line width (points) per HydroRIVERS flow order. Lower ORD_FLOW = larger river,
+# so the Mississippi (order ~2) reads as the heaviest line and small tributaries
+# taper. Used identically across the three regional maps for a uniform look.
+_ORD_LW = {1: 2.4, 2: 2.0, 3: 1.3, 4: 0.9, 5: 0.6, 6: 0.42, 7: 0.30,
+           8: 0.22, 9: 0.16, 10: 0.13}
+
+
+def draw_hydrorivers(ax, extent, *, max_ord: int = 6, main_ord: int = 3,
+                     grayscale: bool = False, lw_scale: float = 1.0,
+                     zorder: float = 4.4) -> None:
+    """Draw HydroRIVERS [Lehner & Grill 2013] hydrography onto ax, UTM15N.
+
+    A single consistent hydrography layer for the regional maps: rivers down to
+    flow order ``max_ord`` are drawn with line width scaled by flow order, so the
+    Mississippi main stem is the heaviest line and small tributaries taper. Rivers
+    of order <= ``main_ord`` (the Mississippi and the largest trunks) are drawn in
+    blue; smaller tributaries in gray. ``extent`` is (e_min, e_max, n_min, n_max)
+    in UTM15N; it is reprojected to a lat/lon bbox for a fast spatial read.
+    """
+    from shapely.geometry import box as _box
+    t = Transformer.from_crs(UTM15N, "EPSG:4326", always_xy=True)
+    xs = (extent[0], extent[1], extent[0], extent[1])
+    ys = (extent[2], extent[2], extent[3], extent[3])
+    lons, lats = t.transform(xs, ys)
+    pad = 0.15  # degrees, so lines crossing the edge are not clipped early
+    bbox = (min(lons) - pad, min(lats) - pad, max(lons) + pad, max(lats) + pad)
+
+    riv = gpd.read_file(HYDRORIVERS, bbox=bbox)
+    riv = riv[riv["ORD_FLOW"] <= max_ord]
+    if riv.empty:
+        return
+    riv = riv.to_crs(UTM15N)
+    riv = riv.clip(_box(extent[0], extent[2], extent[1], extent[3]))
+    if riv.empty:
+        return
+
+    trib_col = "0.62"
+    main_col = "0.32" if grayscale else "#5B9BC9"
+    # draw smallest first so larger trunks sit on top
+    for ordv in sorted(riv["ORD_FLOW"].unique(), reverse=True):
+        sub = riv[riv["ORD_FLOW"] == ordv]
+        lw = _ORD_LW.get(int(ordv), 0.15) * lw_scale
+        is_main = ordv <= main_ord
+        sub.plot(ax=ax, color=(main_col if is_main else trib_col),
+                 linewidth=lw, zorder=zorder + (0.3 if is_main else 0.0),
+                 capstyle="round")
 
 
 # ---------------------------------------------------------------------------

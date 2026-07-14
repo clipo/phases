@@ -38,11 +38,10 @@ from matplotlib.lines import Line2D  # noqa: E402
 import geopandas as gpd  # noqa: E402
 from shapely.geometry import Point, MultiPoint, box  # noqa: E402
 from shapely.ops import unary_union, voronoi_diagram  # noqa: E402
-from pyproj import Transformer  # noqa: E402
+import cartopy.io.shapereader as shpreader  # noqa: E402
 import make_figures as mf  # noqa: E402
 import make_map as mm  # noqa: E402
 m35 = importlib.import_module("35_basin_pullout")
-m30 = importlib.import_module("30_regional_map")  # shared HydroRIVERS layer + style
 
 OUT_FIG = ROOT / "figures" / "fig1_phases.png"
 
@@ -113,35 +112,15 @@ def main():
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
     is_basin = np.array([nm in basin for nm in names])
 
-    fig, ax = plt.subplots(figsize=(5.3, 6.0))
+    fig, ax = plt.subplots(figsize=(5.8, 6.8))
     # No land tone behind the map: a white background makes the light-gray phase
     # territories stand out clearly.
     mm.basin_basemap(ax, ext, geology=False, grayscale=True,
-                     show_counties=False, show_states=False, show_hydrology=False)
+                     show_counties=False, show_states=False, draw_rivers=False)
 
-    # Uniform detailed hydrography from HydroRIVERS (the same layer and flow-order
-    # styling as the regional map, Figure 10), so the river network is rendered at
-    # the same resolution on both the St. Francis (western) and Mississippi
-    # (eastern) sides rather than detailed only where the local survey reaches.
-    river_clip = box(ext[0], ext[2], ext[1], ext[3])
-    hyd = gpd.read_file(m30.HYDRO).to_crs("EPSG:26915").clip(river_clip)
-    if not hyd.empty and "ORD_FLOW" in hyd.columns:
-        for ordf in sorted(hyd["ORD_FLOW"].unique(), reverse=True):
-            if int(ordf) > 6:  # drop the tiniest streams for a cleaner map at this scale
-                continue
-            sub = hyd[hyd["ORD_FLOW"] == ordf]
-            lw, col = m30.RIVER_STYLE.get(int(ordf), (0.3, "0.6"))
-            sub.plot(ax=ax, color=col, linewidth=lw, zorder=4 + (8 - int(ordf)) * 0.05)
-    # River labels placed by hand in clear water, matching the regional map.
-    ll2u = Transformer.from_crs("EPSG:4326", "EPSG:26915", always_xy=True)
-    for _lon, _lat, _txt, _rot in [
-        (-89.62, 35.55, "Mississippi R.", 80.0),
-        (-90.64, 34.92, "St. Francis R.", 72.0),
-    ]:
-        _e, _n = ll2u.transform(_lon, _lat)
-        ax.text(_e, _n, _txt, fontsize=6.0, color="0.30", style="italic",
-                rotation=_rot, ha="center", va="center", zorder=9,
-                path_effects=[pe.withStroke(linewidth=2.0, foreground="white")])
+    # Consistent HydroRIVERS hydrography (shared with Figures 9 and 10): rivers
+    # to flow order 6, width scaled by order, Mississippi main stem in blue.
+    mm.draw_hydrorivers(ax, ext, max_ord=6, main_ord=3, grayscale=False, zorder=4.4)
 
     # State labels only, with no political boundary lines: the Mississippi River
     # carries the eastern edge as water rather than as a border, and county
