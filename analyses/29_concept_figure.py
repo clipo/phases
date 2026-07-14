@@ -31,6 +31,7 @@ sys.path.insert(0, str(ROOT / "analyses"))
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib.patches import Patch  # noqa: E402
 import pandas as pd  # noqa: E402
 import make_figures as mf  # noqa: E402
 demo = importlib.import_module("25_drift_vs_groups_demo")
@@ -39,8 +40,8 @@ r21 = importlib.import_module("21_signal_recovery")
 res17 = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "figures" / "fig2_concept.png"
-C0 = "0.20"   # spatial cluster 0 (dark gray)
-C1 = "0.60"   # spatial cluster 1 (light gray)
+C0 = "#0072B2"   # spatial cluster 0
+C1 = "#D55E00"   # spatial cluster 1
 LEN = 24.0       # calibrated interaction range (km)
 MB = 0.02        # low between-node mixing
 
@@ -103,16 +104,14 @@ def main():
         vals = np.array(vals)
         means.append(vals.mean()); los.append(np.percentile(vals, 2.5)); his.append(np.percentile(vals, 97.5))
     means, los, his = map(np.array, (means, los, his))
-    # observed F_ST trend, computed identically to the size-controlled empirical
-    # value reported in the recovery experiment (script 21, Figure 4), so the two
-    # figures agree rather than each showing a separate noisy near-zero estimate.
-    rng_obs = np.random.default_rng(9)
-    obs_vals = [
-        r21.sig_rhos(r21.rarefy(real_have, r21.NRARE, rng_obs), clh, binsh, cch_c,
-                     which=["fst"])["fst"]
-        for _ in range(r21.B_EMP)
-    ]
-    obs_fst = float(np.nanmean(obs_vals))
+    obs_vals = []
+    for b in range(200):
+        rg = np.random.default_rng(5000 + b)
+        Mr = r21.rarefy(real_have, r21.NRARE, rg)
+        rho = r21.sig_rhos(Mr, clh, binsh, cch_c, which=["fst"])["fst"]
+        if np.isfinite(rho):
+            obs_vals.append(rho)
+    obs_fst = float(np.mean(obs_vals))
     s_star = 0.5     # detection threshold from the calibrated recovery (Figure 4)
 
     # ---- figure ----------------------------------------------------------- #
@@ -129,13 +128,16 @@ def main():
     for j, (title, M, sub) in enumerate(panels):
         ax = fig.add_subplot(gs[0, j])
         xy = demo.mds2(M)
-        for gi, col, mk in zip((0, 1), (C0, C1), ("o", "s")):
+        for gi, col in zip((0, 1), (C0, C1)):
             m = glab == gi
-            ax.scatter(xy[m, 0], xy[m, 1], s=22, c=col, marker=mk,
-                       edgecolor="white", linewidth=0.4)
+            ax.scatter(xy[m, 0], xy[m, 1], s=22, c=col, edgecolor="white", linewidth=0.4)
         ax.set_xticks([]); ax.set_yticks([])
-        ax.set_title(title, fontsize=8)
-        ax.set_xlabel(sub, fontsize=7, color="#555555")
+        # MDS coordinates are dimensionless (arbitrary scale/sign/rotation), so
+        # the axes carry no ticks; label them as the ordination dimensions. The
+        # scenario subtitle moves into the title so nothing is lost.
+        ax.set_title(f"{title}\n({sub})", fontsize=8)
+        ax.set_xlabel("MDS 1", fontsize=7, labelpad=2)
+        ax.set_ylabel("MDS 2", fontsize=7, labelpad=2)
         for spi in ax.spines.values():
             spi.set_edgecolor("#bbbbbb")
 
@@ -148,9 +150,9 @@ def main():
     axr.axvspan(0, s_star, color="#cccccc", alpha=0.40, zorder=0)
     axr.fill_between(s_grid, los, his, color=C1, alpha=0.20, zorder=1)
     axr.plot(s_grid, means, color=C1, lw=1.8, zorder=2,
-             label="$F_{ST}$ signal recovered from synthetic groups")
+             label="F_ST signal recovered from synthetic groups")
     axr.axhline(obs_fst, color="black", lw=1.4, ls="--", zorder=3,
-                label=f"observed $F_{{ST}}$ signal ({obs_fst:+.02f})")
+                label=f"observed F_ST signal ({obs_fst:+.02f})")
     axr.axvline(s_star, color="#444444", lw=1.0, ls=":", zorder=3)
     # annotation high in the shaded (below-resolution) region, clear of the curve
     axr.text(s_star / 2, ymax - 0.02,
@@ -161,14 +163,15 @@ def main():
              ha="left", va="bottom", fontsize=6.5, color="#333333")
     axr.set_xlabel("strength of group closure injected into synthetic assemblages "
                    "(0 = drift, 1 = strong bounded groups)")
-    axr.set_ylabel("recovered $F_{ST}$ trend (Spearman rho)")
+    axr.set_ylabel("recovered F_ST trend (Spearman rho)")
     # legend below the panel so it cannot overlap the curve or the annotations
     axr.legend(fontsize=6.5, frameon=False, loc="upper center",
                bbox_to_anchor=(0.5, -0.28), ncol=2)
     for spi in ("top", "right"):
         axr.spines[spi].set_visible(False)
 
-    mf.save_all(fig, OUT)
+    from figstyle import save_all
+    save_all(fig, OUT)
     print(f"s* = {s_star:.2f}; observed F_ST trend = {obs_fst:+.3f}; "
           f"recovered at s=0.5 = {means[np.argmin(abs(s_grid - 0.5))]:+.3f}")
     print(f"wrote {OUT}")
