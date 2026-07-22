@@ -80,6 +80,10 @@ def calibrate(bp: float, err: float, grid: np.ndarray) -> np.ndarray:
 def parse_dates() -> pd.DataFrame:
     df = pd.read_csv(DATA / "14CDatesFromMainfort2001.csv")
     df = df[df["Uncorrected Years BP."].notna()].copy()
+    # Drop exact-duplicate determinations (the Mainfort file lists Hazel TX-848
+    # twice). Same lab number with a DIFFERENT age is kept (e.g. Snodgrass
+    # M-2181), since that is a distinct row, not a duplicate.
+    df = df.drop_duplicates(subset=["Sample ID", "Provenience", "Uncorrected Years BP."])
 
     def parse(s):
         m = re.match(r"\s*(\d+)\s*[±+]/?-?\s*(\d+)", str(s))
