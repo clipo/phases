@@ -52,13 +52,68 @@ script directly (see the [Figures](#figures) table). The manuscript itself is in
 
 ## Installation
 
-Three ways to get a working environment, in order of reproducibility. All use
-Python 3.11 or newer.
+The pipeline runs on Windows, macOS (Intel and Apple Silicon), and Linux, all
+with Python 3.11 or newer. Pick a path by what you want:
 
-### Conda / mamba (recommended)
+| Path | Windows | macOS | Linux | Reproducibility | Effort |
+|---|:-:|:-:|:-:|---|---|
+| **Binder** (browser, zero install) | ✅ | ✅ | ✅ | good | none — click the badge |
+| **Docker** | ✅ | ✅ | ✅ | highest, identical on every OS | one build |
+| **Conda / mamba** (recommended local) | ✅ | ✅ | ✅ | high | one command |
+| **conda-lock** (exact per-platform pins) | ✅ | ✅ | ✅ | highest local | one command |
+| **pip + venv** | ⚠️ see notes | ✅ | ✅ | best-effort | needs system GEOS/PROJ |
 
-Conda-forge ships the compiled GEOS/PROJ/GDAL libraries that the geospatial
-steps need, so no system packages are required:
+The geospatial stack (geopandas, cartopy, pyproj, shapely) is what makes the
+choice matter: **conda-forge ships the compiled GEOS/PROJ/GDAL libraries on all
+three operating systems**, so the conda and container paths need no system
+packages and behave identically everywhere. The pip path needs those libraries
+installed separately, which is straightforward on macOS and Linux and awkward on
+native Windows. **On Windows, use conda, Docker, or Binder** (or WSL2 with the
+Linux instructions); the native-Windows pip path is not recommended.
+
+`run_all.sh` is a Bash script. On macOS and Linux it runs directly. On Windows,
+run it from **Git Bash** (bundled with [Git for Windows](https://git-scm.com/download/win))
+or **WSL2**, from the Docker image, or drive the scripts from PowerShell:
+
+```powershell
+Get-ChildItem analyses\[0-9][0-9]_*.py | Sort-Object Name | ForEach-Object { python $_.FullName }
+python analyses\make_map.py
+python analyses\make_figures.py
+```
+
+### Zero install — Binder
+
+Click the Binder badge at the top of this README. It builds the conda
+environment in the cloud from `environment.yml` (plus `postBuild`, which runs
+`pip install -e .`) and opens a Jupyter session with the repository ready to run.
+Nothing is installed on your machine. Good for a quick look or a spot check; for
+the full ~1-hour pipeline or exact numbers, use Docker or a local install.
+
+### Maximum reproducibility — Docker (any OS)
+
+A self-contained image with the conda environment and pandoc baked in. Identical
+on Windows, macOS, and Linux because the OS inside the container is fixed.
+Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+(Windows/macOS) or Docker Engine (Linux).
+
+```bash
+docker build -t phases .
+
+# macOS / Linux / Git Bash:
+docker run --rm -it \
+  -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" \
+  phases ./run_all.sh
+
+# Windows PowerShell (mounts written back to the host):
+docker run --rm -it -v "${PWD}\output:/repo/output" -v "${PWD}\figures:/repo/figures" phases ./run_all.sh
+```
+
+The mounts write the regenerated `output/` and `figures/` back to the host so you
+can diff them against the committed baselines. For a bit-for-bit image, pin the
+base to a digest (`FROM condaforge/miniforge3@sha256:...`) and build the
+environment from `conda-lock.yml`, as noted in the `Dockerfile` header.
+
+### Recommended local install — Conda / mamba (any OS)
 
 ```bash
 conda env create -f environment.yml      # or: mamba env create -f environment.yml
@@ -66,47 +121,45 @@ conda activate phases
 pip install -e .                          # makes the mls_emergence package importable
 ```
 
+Works the same on Windows, macOS (Intel and Apple Silicon), and Linux; no system
+libraries required. On Windows, run these in **Miniforge Prompt** or **Anaconda
+Prompt** (install [Miniforge](https://github.com/conda-forge/miniforge) first).
+
 For an exactly pinned, per-platform build (linux-64, osx-64, osx-arm64, win-64),
 install from the lockfile instead of `environment.yml`:
 
 ```bash
-pip install conda-lock                              # once
+pip install conda-lock                    # once
 conda-lock install --name phases conda-lock.yml
 conda activate phases
 pip install -e .
 ```
 
-### pip + venv
+### pip + venv (macOS / Linux; Windows via WSL2)
 
 This path needs the system GEOS and PROJ libraries first:
 
 ```bash
 # macOS:         brew install geos proj
 # Debian/Ubuntu: sudo apt-get install libgeos-dev libproj-dev proj-data proj-bin
-python3 -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate                 # Windows (Git Bash): source .venv/Scripts/activate
 pip install -r requirements.txt
 pip install -e .                          # makes the mls_emergence package importable
 ```
 
-### Docker
-
-A self-contained container (conda environment baked in):
-
-```bash
-docker build -t phases .
-docker run --rm -it \
-  -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" \
-  phases ./run_all.sh
-```
+Building the manuscript (optional) also needs pandoc; the conda and Docker paths
+include it, the pip path does not (`brew install pandoc` / `apt-get install pandoc`).
 
 ### Checking the install
 
 ```bash
-python3 -c "import mls_emergence, geopandas, cartopy; print('environment OK')"
+python -c "import mls_emergence, geopandas, cartopy, pymc; print('environment OK')"
 ```
 
-If that prints `environment OK`, every analysis script will run. The repository
-is self-contained and has no dependency on any sibling repository.
+If that prints `environment OK`, every analysis script will run (`pymc` covers
+the Bayesian analyses `38`–`44`). The repository is self-contained and has no
+dependency on any sibling repository.
 
 ## Reproducing the analysis
 
