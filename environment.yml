@@ -7,9 +7,10 @@
 #
 # Conda-forge ships the compiled GEOS / PROJ / GDAL libraries the geospatial
 # stack needs, so no system geos/proj packages are required (unlike the pip
-# path in README.md). Version floors match requirements.txt; the analyses were
-# last run with the versions noted there. For an exactly pinned, per-platform
-# install, use the lockfile instead:
+# path in README.md). Core/geospatial version floors match requirements.txt;
+# the Bayesian stack is pinned exactly in the pip: section below so the MCMC
+# tables reproduce. For an exactly pinned, per-platform install, use the
+# lockfile instead:
 #   conda-lock install --name phases conda-lock.yml
 name: phases
 channels:
@@ -30,3 +31,13 @@ dependencies:
   - xlrd>=2.0
   - pandoc>=3.0          # builds the manuscript in docs/manuscript
   - pip
+  - pip:
+    # Bayesian stack (analyses 38-44), pinned to the tested versions. Installed
+    # via pip in every path so the conda and pip environments agree on
+    # pytensor 3.1.3, the version that reproduces the deposited MCMC result
+    # tables bit-for-bit. conda-forge pairs pymc 6.1.0 with a newer pytensor
+    # (3.2.x), which would shift the trailing digits, so these come from pip.
+    - pymc==6.1.0
+    - pytensor==3.1.3
+    - arviz==1.2.0
+    - h5netcdf==1.8.1

@@ -144,8 +144,16 @@ This path needs the system GEOS and PROJ libraries first:
 # Debian/Ubuntu: sudo apt-get install libgeos-dev libproj-dev proj-data proj-bin
 python3 -m venv .venv
 source .venv/bin/activate                 # Windows (Git Bash): source .venv/Scripts/activate
-pip install -r requirements.txt
+pip install -r requirements.txt           # core/geo floored, Bayesian stack pinned exactly
 pip install -e .                          # makes the mls_emergence package importable
+```
+
+For a bit-for-bit pip environment (the full transitive closure pinned to the
+tested versions, including the MCMC stack), install from the lock file instead:
+
+```bash
+pip install -r requirements-lock.txt
+pip install -e .
 ```
 
 Building the manuscript (optional) also needs pandoc; the conda and Docker paths
@@ -181,12 +189,17 @@ realizations each), `34_emergence_robustness.py` (a 432-run factor grid),
 `19_abc_transmission.py` (40,000 ABC simulations). Each caches its per-run
 results to `output/`, so re-runs are fast.
 
-The Bayesian analyses (`38`–`41`) need PyMC and arviz, installed by
-`requirements.txt`. `39_abc_smc_validation.py` is among the heaviest (a few
-hundred short MCMC fits, parallelized across cores). PyMC/PyTensor numerical
-output can shift across library versions, so the pinned versions in
-`requirements.txt` reproduce the deposited MCMC result tables exactly; a
-different PyMC version may change the trailing digits.
+The Bayesian analyses (`38`–`44`) need PyMC and arviz. `39_abc_smc_validation.py`
+is among the heaviest (a few hundred short MCMC fits, parallelized across cores).
+PyMC/PyTensor numerical output shifts across library versions, so the Bayesian
+stack is pinned to exact versions (`pymc==6.1.0`, `pytensor==3.1.3`,
+`arviz==1.2.0`, `h5netcdf==1.8.1`) in `requirements.txt`, `environment.yml`, and
+`conda-lock.yml` alike. `pytensor` is the pin that fixes the trailing digits;
+conda-forge pairs `pymc` with a newer `pytensor`, so all paths install the
+Bayesian stack from pip to keep them identical. For a fully pinned environment
+(the complete transitive closure at the deposited versions), install from
+`requirements-lock.txt` (pip) or `conda-lock.yml` (conda). Non-Bayesian results
+are seeded and reproduce byte-for-byte on any supported version.
 
 To regenerate a single figure or result, run its script directly. For example:
 
@@ -265,7 +278,7 @@ docs/manuscript/  the manuscript (MAIN_TEXT.md, SUPPLEMENTAL_TEXT.md, references
 figures/          manuscript figures (committed); run_all.sh regenerates them
 output/           generated result tables and Monte Carlo caches (created by run_all.sh)
 run_all.sh        reproduce every analysis and figure
-environment.yml / conda-lock.yml / requirements.txt / Dockerfile / postBuild   reproducible environments
+environment.yml / conda-lock.yml / requirements.txt / requirements-lock.txt / Dockerfile / postBuild   reproducible environments
 pyproject.toml    package metadata for `pip install -e .`
 ```
 
