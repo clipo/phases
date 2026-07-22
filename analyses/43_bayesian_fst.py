@@ -104,8 +104,8 @@ def main(fast=False):
          f"- Posterior median F_ST = {s['fst_median']:.4f} "
          f"(mean {s['fst_mean']:.4f}), 95% credible interval "
          f"[{s['fst_hdi95'][0]:.4f}, {s['fst_hdi95'][1]:.4f}].",
-         f"- Flat prior on F_ST itself, so the estimate is not pulled toward the "
-         f"drift level by the prior.",
+         "- Flat prior on F_ST itself, so the estimate is not pulled toward the "
+         "drift level by the prior.",
          f"- Prior sensitivity (Beta(1,3) prior on F): median "
          f"{s_alt['fst_median']:.4f}, 95% CI "
          f"[{s_alt['fst_hdi95'][0]:.4f}, {s_alt['fst_hdi95'][1]:.4f}].", "",

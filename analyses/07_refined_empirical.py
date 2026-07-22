@@ -671,15 +671,10 @@ def main() -> None:
     dropped_zero = inp.dropped_zero
     have_coords_ids = inp.have_coords_ids
     cc_c = inp.cc_c
-    M = inp.M
-    ordinate = inp.ordinate
     inertia_frac = inp.inertia_frac
     ca = inp.ca
     idx = inp.idx
-    coord_set = inp.coord_set
     cluster_of = inp.cluster_of
-    geo_full = inp.geo_full
-    geo_pos = inp.geo_pos
     rc = inp.rc
     n_prov = inp.n_prov
     prov_date = inp.prov_date

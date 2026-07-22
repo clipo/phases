@@ -31,7 +31,6 @@ sys.path.insert(0, str(ROOT / "analyses"))
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import Patch  # noqa: E402
 import pandas as pd  # noqa: E402
 import make_figures as mf  # noqa: E402
 demo = importlib.import_module("25_drift_vs_groups_demo")

@@ -10,14 +10,14 @@ def _mod():
     return importlib.import_module("44_bayesian_fst_validation")
 
 
-def test_simulate_groups_higher_f_gives_higher_plugin():
+def test_simulate_bn_higher_f_gives_higher_plugin():
     from mls_emergence.signatures.variance import cultural_fst
     a44 = _mod()
     p_anc = np.array([0.4, 0.35, 0.25])
     sizes = np.array([200, 200, 200])
     rng = np.random.default_rng(0)
-    lo = np.mean([cultural_fst(a44.simulate_groups(0.02, p_anc, sizes, rng)[0].astype(float))
+    lo = np.mean([cultural_fst(a44.simulate_bn(0.02, p_anc, sizes, rng)[0].astype(float))
                   for _ in range(15)])
-    hi = np.mean([cultural_fst(a44.simulate_groups(0.30, p_anc, sizes, rng)[0].astype(float))
+    hi = np.mean([cultural_fst(a44.simulate_bn(0.30, p_anc, sizes, rng)[0].astype(float))
                   for _ in range(15)])
     assert hi > lo

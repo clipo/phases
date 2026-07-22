@@ -40,12 +40,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.colors import Normalize, LinearSegmentedColormap  # noqa: E402
 from matplotlib.cm import ScalarMappable  # noqa: E402
-from matplotlib.patches import Rectangle  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
 import pandas as pd  # noqa: E402
 import geopandas as gpd  # noqa: E402
-import cartopy.io.shapereader as shpreader  # noqa: E402
-from shapely.geometry import box  # noqa: E402
 import make_figures as mf  # noqa: E402  (house style + DECORATED_TYPES, basin members)
 import make_map as mm  # noqa: E402  (river basemap + river-network distance)
 m33 = importlib.import_module("33_time_aware_emergence")

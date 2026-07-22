@@ -38,7 +38,6 @@ from matplotlib.lines import Line2D  # noqa: E402
 import geopandas as gpd  # noqa: E402
 from shapely.geometry import Point, MultiPoint, box  # noqa: E402
 from shapely.ops import unary_union, voronoi_diagram  # noqa: E402
-import cartopy.io.shapereader as shpreader  # noqa: E402
 import make_figures as mf  # noqa: E402
 import make_map as mm  # noqa: E402
 m35 = importlib.import_module("35_basin_pullout")
