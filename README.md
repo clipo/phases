@@ -57,8 +57,9 @@ with Python 3.11 or newer. Pick a path by what you want:
 
 | Path | Windows | macOS | Linux | Reproducibility | Effort |
 |---|:-:|:-:|:-:|---|---|
+| **Prebuilt image** (`docker pull`, zero build) | ✅ | ✅ | ✅ | highest, identical on every OS | none — pull and run |
 | **Binder** (browser, zero install) | ✅ | ✅ | ✅ | good | none — click the badge |
-| **Docker** | ✅ | ✅ | ✅ | highest, identical on every OS | one build |
+| **Docker** (build locally) | ✅ | ✅ | ✅ | highest, identical on every OS | one build |
 | **Conda / mamba** (recommended local) | ✅ | ✅ | ✅ | high | one command |
 | **conda-lock** (exact per-platform pins) | ✅ | ✅ | ✅ | highest local | one command |
 | **pip + venv** | ⚠️ see notes | ✅ | ✅ | best-effort | needs system GEOS/PROJ |
@@ -80,6 +81,30 @@ Get-ChildItem analyses\[0-9][0-9]_*.py | Sort-Object Name | ForEach-Object { pyt
 python analyses\make_map.py
 python analyses\make_figures.py
 ```
+
+### Zero build — prebuilt image (GHCR)
+
+A prebuilt image is published to the GitHub Container Registry, so you can run
+the whole pipeline without building anything. It has the pinned conda + pip
+environment (including the Bayesian stack) and pandoc baked in.
+
+```bash
+docker pull ghcr.io/clipo/phases:1.0.0
+
+# macOS / Linux / Git Bash (mount output/ and figures/ back to a repo clone):
+docker run --rm -it \
+  -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" \
+  ghcr.io/clipo/phases:1.0.0 ./run_all.sh
+
+# Windows PowerShell:
+docker run --rm -it -v "${PWD}\output:/repo/output" -v "${PWD}\figures:/repo/figures" ghcr.io/clipo/phases:1.0.0 ./run_all.sh
+```
+
+The image is `linux/amd64`; on Apple Silicon it runs under Docker Desktop's
+emulation. It is rebuilt from the `Dockerfile` by the
+`.github/workflows/publish-image.yml` GitHub Actions workflow (on a version tag
+or a manual run). Until the paper is published the package may be private, in
+which case `docker login ghcr.io` with a GitHub token is required first.
 
 ### Zero install — Binder
 
