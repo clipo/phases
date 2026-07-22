@@ -30,12 +30,10 @@ rising trend in both indicators toward the contact end would be the dynamic
 signature of an approaching transition (the "brink"); its absence is concordant
 with the static negative.
 
-Writes output/tempo_mode_ews.md + figures/figS2_dynamic.png (legacy two-panel
-diagnostic; the manuscript's three-panel Figure S6 is built by 42_figS6_dynamic.py),
-the merged
-dynamic-sufficiency figure (panel A = ABC posterior from output/abc_posterior.npz,
-written by 19_abc_transmission.py; panel B = tempo-and-mode Akaike weights). The
-early-warning result is in the .md but is not figured. Run 19 before 20.
+Writes output/tempo_mode_ews.md and output/tempo_akaike.npz (the tempo-and-mode
+Akaike weights). The three-panel manuscript Figure S6 is assembled separately by
+42_figS6_dynamic.py from these caches; this script no longer draws its own
+standalone figure. The early-warning result is in the .md but is not figured.
 
 Usage: .venv/bin/python analyses/20_tempo_mode_ews.py
 """
@@ -55,13 +53,8 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import os  # noqa: E402
-os.environ.setdefault("MLS_FIG_COLOR", "1")  # supplement figure is online-only; render in color
-
 import matplotlib  # noqa: E402
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_ORANGE, save  # noqa: E402
+matplotlib.use("Agg")  # headless backend for make_figures' pyplot use
 import make_figures as mf  # noqa: E402
 res = importlib.import_module("17_basin_results")
 
@@ -312,47 +305,16 @@ def main():
           "time domain rather than only on static states."]
     OUT.write_text("\n".join(L), encoding="utf-8")
 
-    # ---- merged dynamic-sufficiency figure (Figure S4): ABC posterior + tempo ----
-    # Panel A is the ABC posterior (computed and saved by 19_abc_transmission.py);
-    # panel B is the tempo-and-mode Akaike weights computed above. EWS is reported
-    # in the text/output only, not figured.
-    fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))
-    abc_npz = ROOT / "output" / "abc_posterior.npz"
-    if abc_npz.exists():
-        z = np.load(abc_npz)
-        axA.hist(z["post_b"], bins=25, density=True, color=OI_BLUE, alpha=0.6, label="whole")
-        axA.hist(z["early"], bins=25, density=True, histtype="step",
-                 color=OI_ORANGE, lw=1.3, label="early half")
-        axA.hist(z["late"], bins=25, density=True, histtype="step",
-                 color=OI_VERMIL, lw=1.3, label="late half")
-        axA.axvline(0, color="0.3", ls="--", lw=1.0)
-        axA.set_xlabel("transmission bias b (0 = neutral)")
-        axA.set_ylabel("posterior density")
-        axA.legend(frameon=False, fontsize=7)
-    else:
-        axA.text(0.5, 0.5, "run 19_abc_transmission.py first",
-                 ha="center", va="center", transform=axA.transAxes, fontsize=8)
-    xpos = np.arange(len(MODELS))
+    # ---- persist the tempo-and-mode Akaike weights for the manuscript figure ----
+    # The three-panel Figure S6 (ABC-SMC posterior + SBC calibration + tempo-mode)
+    # is assembled by 42_figS6_dynamic.py from these caches, so this script only
+    # computes and saves the tempo-mode weights. The early-warning signals are in
+    # the .md output above, not figured.
     type_means = [np.mean(type_weight[m]) if type_weight[m] else 0 for m in MODELS]
     div_w = [w_div[m] for m in MODELS]
-    # persist the tempo-mode Akaike weights so the merged manuscript figure
-    # (Figure S6, assembled by 42_figS6_dynamic.py after the ABC-SMC/SBC scripts
-    # run) can reuse them without recomputing.
     np.savez(ROOT / "output" / "tempo_akaike.npz",
              models=np.array(MODELS), type_means=np.array(type_means, float),
              div_w=np.array(div_w, float))
-    axB.bar(xpos - 0.2, type_means, width=0.4, color=OI_BLUE, label="type trajectories (mean)")
-    axB.bar(xpos + 0.2, div_w, width=0.4, color=OI_ORANGE, label="diversity trajectory")
-    axB.set_xticks(xpos)
-    axB.set_xticklabels(MODELS, fontsize=8)
-    axB.set_ylabel("Akaike weight")
-    axB.set_ylim(0, 1)
-    axB.legend(frameon=False, fontsize=7)
-    # Figure S6 is now the three-panel merged figure assembled by
-    # 42_figS6_dynamic.py (ABC-SMC posterior + SBC calibration + tempo-mode);
-    # this two-panel version is retained as a legacy diagnostic under a
-    # different name so it does not overwrite the manuscript figure.
-    save(fig, "figS2_dynamic")
 
     print(f"wrote {OUT}")
     print("\n".join(L))
