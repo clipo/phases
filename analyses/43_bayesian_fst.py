@@ -49,14 +49,79 @@ BF_FAST = dict(draws=500, chains=2)
 ALT_PRIOR = ("beta", 1.0, 3.0)   # a sterner prior (more mass on low F_ST)
 
 
-def basin_group_counts(inp):
-    """Observed basin between-cluster counts (n_clusters, K) and sizes."""
-    ids = list(inp.have_coords_ids)
-    labels = np.array([inp.cluster_of[a] for a in ids])
-    counts_have = inp.counts.loc[ids].to_numpy(float)
+def basin_group_counts(inp, scope: str = "basin"):
+    """Observed between-cluster counts (n_clusters, K) and sizes.
+
+    ``scope="basin"`` (default) restricts to the canonical drainage-basin
+    membership in ``data/processed/basin_members_curated.txt`` (29 assemblages)
+    and re-selects the number of spatial clusters on the BASIN's coordinates by
+    the same silhouette rule analysis 07 uses. That gives k = 3, which is the
+    "three spatial clusters" the manuscript describes.
+
+    ``scope="region"`` reproduces the pre-2026-08-31 behavior: the whole curated
+    set with coordinates (55 assemblages) grouped by ``inp.cluster_of``, whose k
+    is selected on the wider set and comes out at 5. It is retained because it
+    is a legitimate quantity at a different spatial scale, not because it was
+    the intent here.
+
+    HISTORY. Until 2026-08-31 this function ignored the basin membership
+    entirely and always returned the 55-assemblage grouping, while being named
+    ``basin_group_counts`` and feeding a report headed "Observed St. Francis
+    basin". Restricting properly moves the Gini-Simpson readout from 0.0327 to
+    0.0179. Measured in ``analyses/47_basin_scope_check.py``; see
+    ``output/findings/basin_scope_check.md`` and
+    ``docs/CODE_REVIEW_2026-08-31.md`` F18. No manuscript number was affected,
+    because the manuscript figures reach the data through
+    ``make_figures._load_curated()``, which does apply the membership.
+    """
+    if scope not in ("basin", "region"):
+        raise ValueError(f"scope must be 'basin' or 'region', got {scope!r}")
+
+    ids_all = [str(a) for a in inp.have_coords_ids]
+    counts_all = inp.counts.loc[list(inp.have_coords_ids)].to_numpy(float)
+
+    if scope == "region":
+        ids = ids_all
+        labels = np.array([inp.cluster_of[a] for a in inp.have_coords_ids])
+        counts_use = counts_all
+    else:
+        import make_figures as mf
+        members = mf._basin_members("curated")
+        keep = [i for i, a in enumerate(ids_all) if a in members]
+        if not keep:
+            raise RuntimeError(
+                "no assemblage in prepare_inputs() is in the canonical basin "
+                "membership; data/processed/basin_members_curated.txt is stale "
+                "or the id conventions have diverged")
+        ids = [ids_all[i] for i in keep]
+        counts_use = counts_all[keep]
+        coords_b = np.asarray(inp.cc_c)[keep]
+        labels = _basin_cluster_labels(coords_b)
+
     uniq = np.unique(labels)
-    gc = np.array([counts_have[labels == c].sum(axis=0) for c in uniq])
+    gc = np.array([counts_use[labels == c].sum(axis=0) for c in uniq])
     return gc, gc.sum(axis=1)
+
+
+def _basin_cluster_labels(coords, seed: int = 7, kmin: int = 2, kmax: int = 6):
+    """Analysis 07's cluster rule, applied to whatever coordinates it is given.
+
+    k is the value in [kmin, kmax] maximizing mean silhouette. Kept identical to
+    ``07_refined_empirical`` so the basin grouping is produced by the same rule
+    as the regional one, differing only in the point set it sees.
+    """
+    from mls_emergence.signatures.assortativity import _kmeans_labels
+    silhouette_mean = importlib.import_module("07_refined_empirical").silhouette_mean
+    sil = {k: silhouette_mean(coords, _kmeans_labels(coords, k, seed=seed))
+           for k in range(kmin, kmax + 1)}
+    return _kmeans_labels(coords, max(sil, key=sil.get), seed=seed)
+
+
+def fitted_basin_ids(inp) -> list:
+    """The assemblage ids the default (basin) fit actually uses. For tests."""
+    import make_figures as mf
+    members = mf._basin_members("curated")
+    return sorted(str(a) for a in inp.have_coords_ids if str(a) in members)
 
 
 def main(fast=False):
@@ -70,7 +135,8 @@ def main(fast=False):
     cfg = FAST if fast else FULL
     bf_cfg = BF_FAST if fast else BF_FULL
     inp = a07.prepare_inputs()
-    gc, _sizes = basin_group_counts(inp)
+    gc, _sizes = basin_group_counts(inp)          # scope="basin" by default
+    a43_ids = fitted_basin_ids(inp)
 
     # (1) BN cultural F_ST parameter, uniform prior
     idata = sample_fst(gc, random_seed=0, **cfg)
@@ -89,12 +155,40 @@ def main(fast=False):
     def _flat(diag):
         ds = diag.dataset if hasattr(diag, "dataset") else diag
         return np.concatenate([np.atleast_1d(v.values).ravel() for v in ds.data_vars.values()])
-    rhat = float(np.max(_flat(az.rhat(idata))))
-    ess = float(np.min(_flat(az.ess(idata))))
-    ndiv = int(idata.sample_stats["diverging"].sum())
+
+    def _diagnostics(id_, label):
+        """Full rule-16 set. Applied to EVERY fit, including sensitivity refits.
+
+        Until 2026-08-31 only the uniform-prior fit was diagnosed and the
+        Beta(1,3) refit -- the stated defense of the prior -- reported an
+        interval with nothing behind it. See docs/CODE_REVIEW_2026-08-31.md F11.
+        """
+        rhat = float(np.max(_flat(az.rhat(id_))))
+        ess_bulk = float(np.min(_flat(az.ess(id_))))
+        ess_tail = float(np.min(_flat(az.ess(id_, method="tail"))))
+        div = int(id_.sample_stats["diverging"].sum())
+        ntot = int(id_.sample_stats["diverging"].size)
+        td = id_.sample_stats.get("tree_depth")
+        n_td = int((td >= 10).sum()) if td is not None else -1
+        eb = id_.sample_stats.get("energy")
+        if eb is not None:
+            e = np.asarray(eb.values)
+            de = np.diff(e, axis=1)
+            ebfmi = float(np.min((de ** 2).mean(axis=1) / e.var(axis=1)))
+        else:
+            ebfmi = float("nan")
+        return (f"- {label}: max R-hat = {rhat:.4f} (want < 1.01); "
+                f"min bulk ESS = {ess_bulk:.0f}; min tail ESS = {ess_tail:.0f}; "
+                f"divergences = {div}/{ntot} ({100 * div / ntot:.2f}%); "
+                f"treedepth >= 10 = {n_td}; min E-BFMI = {ebfmi:.3f} "
+                f"(want > 0.3).")
+
+    diag_lines = [_diagnostics(idata, "uniform prior (primary)"),
+                  _diagnostics(idata_alt, "Beta(1,3) prior (sensitivity refit)")]
 
     L = ["# Bayesian cultural F_ST for the basin (Balding-Nichols model)", "",
-         f"Observed St. Francis basin, {gc.shape[0]} spatial clusters, "
+         f"Observed St. Francis basin (canonical drainage membership, "
+         f"{len(a43_ids)} assemblages), {gc.shape[0]} spatial clusters, "
          f"{gc.shape[1]} decorated types. Balding-Nichols Dirichlet-multinomial "
          f"(F ~ Uniform(0,1), per-cluster frequencies marginalized), "
          f"{cfg['draws']} draws x {cfg['chains']} chains "
@@ -137,9 +231,8 @@ def main(fast=False):
          "this panmixia Bayes factor. It is reported here for parity with the "
          "hyperlocality analysis and as a model-adequacy check, not as the "
          "structure test.", "",
-         "## MCMC diagnostics (uniform-prior fit)", "",
-         f"- max R-hat = {rhat:.4f} (want < 1.01); min ESS = {ess:.0f}; "
-         f"divergences = {ndiv}.", ""]
+         "## MCMC diagnostics", "",
+         *diag_lines, ""]
 
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

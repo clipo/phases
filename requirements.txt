@@ -17,6 +17,8 @@ shapely>=2.0         # (tested 2.1.2)
 cartopy>=0.22        # (tested 0.25.0)
 openpyxl>=3.1        # (tested 3.1.5) reads the .xlsx source tables
 xlrd>=2.0            # (tested 2.0.2) reads the legacy .xls source tables
+h5py>=3.10           # (tested 3.16.0) HDF5 backend h5netcdf dispatches to;
+                     #   without it idata.to_netcdf() raises
 
 # Bayesian analyses (ABC-SMC transmission bias; hierarchical convergence model).
 # PyMC/PyTensor numerical output shifts across versions, so these four are
