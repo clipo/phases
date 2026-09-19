@@ -27,12 +27,18 @@ bibliographic entries for every source cited below are in
 `mainfort-pfg-cpl` holds decorated classes only. The Phillips, Ford and Griffin
 collections record 71 type columns including plain wares; the analysis uses 10
 decorated classes, and `Barton/Kent/MPI` collapses Barton Incised, Kent
-Incised, and Mound Place Incised. The additions are not re-transcriptions
-of the same sherds: Lipo's contribution is new material, collected and
-identified in his own fieldwork and reported in Lipo (2001). Where an
-assemblage was counted by more than one project, the counts are **summed
-rather than chosen between**, which is why the merge raises the sherd totals
-that a frequency-seriation and drift analysis depends on.
+Incised, and Mound Place Incised. The merge exists to raise sample
+sizes, which a frequency seriation and a drift calibration both depend on.
+Where an assemblage was counted by more than one project the counts are
+**summed rather than chosen between**, and part of what is summed is new
+material rather than a recount of the same sherds: Lipo (2001, Ch. 5)
+documents controlled surface collections and limited excavation carried out in
+1996-97 at seven deposits, six of them recollections of sites Phillips, Ford
+and Griffin had sampled. Six of the seven are in the 29-assemblage basin set
+used here: Belle Meade, Cramor Place, Nickel, Rose Mound, Holden Lake, and
+Castile Landing; the seventh, Beck, falls outside it. The remaining
+Lipo-compiled rows carry Phillips, Ford and Griffin counts rather than new
+collections.
 
 Reconciling the analysis sheet against its component sheets gives, for the 55
 assemblages:
@@ -40,12 +46,12 @@ assemblages:
 | Composition of the row | Assemblages | In the 29-assemblage basin set |
 |---|---|---|
 | Mainfort (1996) alone | 35 | 13 |
-| Mainfort (1996) + Lipo field collections, summed class by class | 16 | 12 |
-| Lipo field collections alone | 1 | 1 |
+| Mainfort (1996) + Lipo (2001) compilation, summed class by class | 16 | 12 |
+| Lipo (2001) alone (Holden Lake, a 1996-97 collection) | 1 | 1 |
 | Not yet reconciled to a combination of the component sheets | 3 | 3 |
 
 Parkin is one of the merged rows: 3,495 sherds from Mainfort plus 1,303 from
-Lipo's collections, giving the 4,798 the analyses use. Some component rows are keyed by LMV
+the Lipo (2001) compilation, giving the 4,798 the analyses use. Some component rows are keyed by LMV
 Survey grid number rather than site name (13-N-15 is Nickel, 12-N-3 is Rose
 Mound, 13-P-8 is Lake Cormorant, 13-N-21 is Castile Landing). The three
 unreconciled rows are Kent Place, Barton Ranch, and Cramor Place, whose merged
