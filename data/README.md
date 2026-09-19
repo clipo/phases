@@ -15,12 +15,43 @@ bibliographic entries for every source cited below are in
 |---|---|---|
 | `PFGData_sherds.csv` | Assemblage-by-type sherd counts (site name, site number, 27 ceramic types) for the Lower Mississippi Survey collections, the 266-assemblage source matrix. | Phillips, Ford & Griffin (1951), transcribed into machine-readable form by Lipo (2001). |
 | `PFGData_types.csv` | Attribute table for the culture-historical types (type name, temper, surface treatment, decoration). | Phillips, Ford & Griffin (1951). |
-| `mainfort-pfg-cpl.csv` | Curated decorated-class count matrix (assemblage x 10 collapsed decorated classes) used for the basin and valley transmission analyses; assemblages keyed by LMV Survey trinomial/grid designation. | Decorated counts from Phillips, Ford & Griffin (1951) / Lipo (2001); assemblage set follows the phase assignments of Mainfort (1996b). |
+| `mainfort-pfg-cpl.xlsx`, `mainfort-pfg-cpl.csv` | Merged decorated-class count matrix (assemblage x 10 collapsed decorated classes), the source of every transmission result; assemblages keyed by LMV Survey trinomial/grid designation. The workbook also carries the three component sheets, so the merge can be checked. The CSV is the analysis sheet alone. | Decorated classes from Phillips, Ford & Griffin (1951), with additions from Lipo (2001) and Mainfort (1996). Counts are merged, not selected; see "How the merged matrix was built" below. |
 | `mainfort-pfg-cplXY.txt` | Latitude/longitude for the curated assemblages. | Georeferenced from the Lower Mississippi Survey site files. |
 | `pfg-cpl-frequency.csv` | Seriation-ordered decorated-class frequency matrix (seriation number, assemblage, classes). | Derived from the PFG counts; ordering from frequency seriation (Lipo 2001). |
 | `williams1954_cmv_counts.tsv` | Southeast-Missouri (central-valley) decorated and plain type counts by site, with physiographic region, printed page, type, count, percent, and stated total. | Transcribed from the tables in Williams (1954). |
 | `14CDatesFromMainfort2001.csv` | Radiocarbon determinations for the central valley (sample ID, provenience, uncorrected years BP, published 1-sigma calibrated range). | Compiled by Mainfort (2001). |
 | `intcal20.14c` | IntCal20 atmospheric radiocarbon calibration curve. | Reimer et al. (2020); distributed with the curve, used to recalibrate the Mainfort dates. |
+
+### How the merged matrix was built
+
+`mainfort-pfg-cpl` holds decorated classes only. The Phillips, Ford and Griffin
+collections record 71 type columns including plain wares; the analysis uses 10
+decorated classes, and `Barton/Kent/MPI` collapses Barton Incised, Kent
+Incised, and Mound Place Incised. Where an assemblage was counted by more than
+one project, the counts are **summed rather than chosen between**, which raises
+the sherd totals a frequency-seriation and drift analysis depends on.
+
+Reconciling the analysis sheet against its component sheets gives, for the 55
+assemblages:
+
+| Composition of the row | Assemblages | In the 29-assemblage basin set |
+|---|---|---|
+| Mainfort (1996) alone | 35 | 13 |
+| Mainfort (1996) + Lipo (2001), summed class by class | 16 | 12 |
+| Lipo (2001) alone | 1 | 1 |
+| Not yet reconciled to a combination of the component sheets | 3 | 3 |
+
+Parkin is one of the merged rows: 3,495 sherds from Mainfort plus 1,303 from
+Lipo, giving the 4,798 the analyses use. Some component rows are keyed by LMV
+Survey grid number rather than site name (13-N-15 is Nickel, 12-N-3 is Rose
+Mound, 13-P-8 is Lake Cormorant, 13-N-21 is Castile Landing). The three
+unreconciled rows are Kent Place, Barton Ranch, and Cramor Place, whose merged
+totals exceed what the component sheets account for under the class mapping
+used to check them.
+
+Counts were reconciled on 2026-09-19 by summing the component sheets and
+comparing class by class; the composition above is that measurement, not a
+description of intent.
 
 ## `processed/` — derived (regenerable)
 
