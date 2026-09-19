@@ -36,21 +36,16 @@ import numpy as np
 
 
 def _col_violations(freqs: np.ndarray) -> int:
-    """Direction changes beyond a single peak in one frequency column.
+    """Count valleys: each fall-to-rise reversal violates a single peak.
 
-    A perfectly unimodal column has at most one direction change (ascending
-    then descending, or monotone in one direction).  Each change beyond the
-    first counts as one violation.
+    Flat steps are ignored. Zero agrees with ``is_unimodal`` at tolerance zero,
+    and the count is invariant under reversal of the entire ordering.
     """
     diffs = np.sign(np.diff(freqs))
     diffs = diffs[diffs != 0]
     if len(diffs) < 2:
         return 0
-    # Number of sign changes in the non-zero-difference sequence.
-    n_changes = int((np.diff(diffs) != 0).sum())
-    # A unimodal column has at most 1 change (rise then fall); violations are
-    # any changes beyond that first one.
-    return max(0, n_changes - 1)
+    return int(((diffs[:-1] < 0) & (diffs[1:] > 0)).sum())
 
 
 def unimodality_violation(matrix: np.ndarray) -> int:
@@ -72,7 +67,8 @@ def is_unimodal(freqs: np.ndarray, tol: float = 0.0) -> bool:
     f = np.asarray(freqs, dtype=float)
     if f.size < 3:
         return True
-    # Reduce the sequence to its significant direction changes.
+    # Scan for a second peak: once the sequence has fallen, any later rise is
+    # a second peak and breaks unimodality.
     seen_fall = False
     prev = f[0]
     for x in f[1:]:

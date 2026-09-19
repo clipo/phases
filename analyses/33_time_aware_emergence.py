@@ -23,7 +23,7 @@ Reports whether the synthetic assemblages (a) seriate, (b) form spatially
 coherent, elevated-F_ST communities (phase-like structure), and (c) match the
 observed level of structure better than the contemporaneous case.
 
-Writes output/time_aware_emergence.md and figures/figS4_emergent_phases.png.
+Writes output/time_aware_emergence.md and figures/figS3_emergent_phases.png.
 
 Usage: PYTHONPATH=src python3 analyses/33_time_aware_emergence.py
 """
@@ -43,21 +43,21 @@ sys.path.insert(0, str(ROOT / "src"))
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.colors import Normalize  # noqa: E402
+from matplotlib.colors import Normalize, LinearSegmentedColormap  # noqa: E402
 from matplotlib.cm import ScalarMappable  # noqa: E402
+from matplotlib.patches import Rectangle  # noqa: E402
 import matplotlib.patheffects as pe  # noqa: E402
 import pandas as pd  # noqa: E402
 import geopandas as gpd  # noqa: E402
-import cartopy.io.shapereader as shpreader  # noqa: E402
-from shapely.geometry import box  # noqa: E402
 import make_figures as mf  # noqa: E402  (applies house style on import)
 import make_map as mm  # noqa: E402  (reuse the fig1 river basemap)
 sd = importlib.import_module("23_phases_vs_spatial_drift")
+res = importlib.import_module("17_basin_results")
 from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
 from scipy.stats import spearmanr  # noqa: E402
 
 OUT_MD = ROOT / "output" / "time_aware_emergence.md"
-OUT_FIG = ROOT / "figures" / "figS4_emergent_phases.png"
+OUT_FIG = ROOT / "figures" / "figS3_emergent_phases.png"
 OUT_RUNS = ROOT / "output" / "time_aware_runs.csv"
 OUT_PARKIN = ROOT / "output" / "time_aware_parkin_prob.csv"
 N_CONS = 500       # consensus realizations for the Parkin co-membership map
@@ -183,6 +183,9 @@ def compute_consensus(coords, ranks, totals, pk, dist_km=None):
         lab_co, _, fco = fst_communities(Mco, seed=s)
         same_tt += (lab_tt == lab_tt[pk]).astype(float)
         same_co += (lab_co == lab_co[pk]).astype(float)
+        # Simulated matrix: orientation is irrelevant because the correlation
+        # is taken in absolute value below, and anchoring a simulated sequence
+        # against real 14C dates would be meaningless.
         ca, _, _ = mf.correspondence_axis(Mtt)
         r = spearmanr(ranks, ca).correlation
         fst_tt.append(f); fst_co.append(fco); nc_tt.append(nc)
@@ -191,6 +194,27 @@ def compute_consensus(coords, ranks, totals, pk, dist_km=None):
             print(f"  ... {s + 1}/{N_CONS} runs", flush=True)
     return (same_co / N_CONS, same_tt / N_CONS, np.array(fst_tt),
             np.array(fst_co), np.array(nc_tt, float), np.array(rho))
+
+
+def _distance_clause(rho_tt: float, rho_co: float) -> str:
+    """Describe the time-transgressive distance gradient from the measured value.
+
+    This sentence used to assert "co-membership no longer falls with distance"
+    with the number merely interpolated, so it stated its conclusion whatever
+    the data said. That went unnoticed while the sequence was ordered by the
+    unoriented CA1 axis; on the 14C-oriented axis the correlation is strongly
+    negative and the hardcoded claim was simply false. The wording is now
+    derived from the value it reports.
+    """
+    if abs(rho_tt) < 0.20:
+        return (f"co-membership no longer falls with distance (Spearman rho = "
+                f"{rho_tt:+.2f}, against {rho_co:+.2f} for the contemporaneous "
+                f"snapshot).")
+    direction = "falls" if rho_tt < 0 else "rises"
+    strength = "more steeply than" if abs(rho_tt) > abs(rho_co) else "less steeply than"
+    return (f"co-membership still {direction} with distance from Parkin "
+            f"(Spearman rho = {rho_tt:+.2f}), {strength} in the contemporaneous "
+            f"snapshot ({rho_co:+.2f}).")
 
 
 def main():
@@ -203,8 +227,16 @@ def main():
     lon, lat = coords[:, 1], coords[:, 0]
     pk = parkin_index(names)
 
-    # observed seriation position (CA1), oriented and rank-normalized to [0,1]
-    ca1, _, frac = mf.correspondence_axis(counts)
+    # Observed seriation position (CA1), oriented and rank-normalized to [0,1].
+    # The orientation is not cosmetic here: `ranks` sets the time axis that
+    # sample_time_transgressive draws against, so a flipped axis pairs each
+    # assemblage's coordinates with the wrong end of the drift field. CA1's sign
+    # is arbitrary, so it is anchored against the pooled 14C medians by
+    # 17_basin_results.oriented_ca. This comment previously claimed orientation
+    # that the code did not perform.
+    ca_ser, _n_anchor = res.oriented_ca(counts_df)
+    ca1 = ca_ser.to_numpy(float)
+    _, _, frac = mf.correspondence_axis(counts)
     order = np.argsort(ca1)
     ranks = np.empty(n)
     ranks[order] = np.linspace(0, 1, n)
@@ -218,6 +250,12 @@ def main():
     E, Nm = gpts.x.to_numpy(), gpts.y.to_numpy()
 
     # consensus across N_CONS realizations (cached for fast re-plotting)
+    # River-network distances are needed whether or not the consensus runs are
+    # cached: the reported co-membership gradient is measured on this metric.
+    river_km, _, access_km, rinfo = mm.river_distance_matrix(coords)
+    print(f"river network: largest component {rinfo['largest_component']} nodes, "
+          f"max access {rinfo['max_access_km']:.1f} km, "
+          f"{rinfo['n_unreachable']} unreachable pairs")
     if OUT_RUNS.exists() and OUT_PARKIN.exists():
         runs = pd.read_csv(OUT_RUNS)
         pkdf = pd.read_csv(OUT_PARKIN)
@@ -229,10 +267,6 @@ def main():
         P_tt = pkdf["P_tt"].to_numpy()
         print(f"loaded cached consensus from {OUT_RUNS.name}, {OUT_PARKIN.name}")
     else:
-        river_km, _, access_km, rinfo = mm.river_distance_matrix(coords)
-        print(f"river network: largest component {rinfo['largest_component']} nodes, "
-              f"max access {rinfo['max_access_km']:.1f} km, "
-              f"{rinfo['n_unreachable']} unreachable pairs")
         P_co, P_tt, fst_tt, fst_co, nc_tt, rho = compute_consensus(
             coords, ranks, totals, pk, dist_km=river_km)
         pd.DataFrame({"seed": np.arange(N_CONS), "nc": nc_tt, "fst_tt": fst_tt,
@@ -243,9 +277,16 @@ def main():
     nc_tt = np.asarray(nc_tt, float)
     nonpk = np.arange(n) != pk
     P = P_co  # panel A shows the contemporaneous (pure-space) co-membership
+    # Distance from Parkin, on the same river-network metric the copying kernel
+    # uses. This correlation was previously taken against straight-line distance
+    # (sd.geo_km) while the caption described it as river distance; the two are
+    # reported side by side now so the metric cannot drift from the label again.
+    river_pk = np.asarray(river_km, float)[pk]
     geo_pk = sd.geo_km(coords)[pk]
-    rho_co = spearmanr(geo_pk[nonpk], P_co[nonpk]).correlation
-    rho_tt = spearmanr(geo_pk[nonpk], P_tt[nonpk]).correlation
+    rho_co = spearmanr(river_pk[nonpk], P_co[nonpk]).correlation
+    rho_tt = spearmanr(river_pk[nonpk], P_tt[nonpk]).correlation
+    rho_co_straight = spearmanr(geo_pk[nonpk], P_co[nonpk]).correlation
+    rho_tt_straight = spearmanr(geo_pk[nonpk], P_tt[nonpk]).correlation
 
     # ---- figure: A = P(shares Parkin's community) on the river basemap;
     #              B = drift reproduces the observed between-group F_ST ----
@@ -256,23 +297,17 @@ def main():
 
     margin = 12_000.0
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
-    # Background matches main-text Figure 9 (and Figure 1): unshaded land with the
-    # river basemap, the eastern side populated from Natural Earth hydrology.
-    mm.basin_basemap(axA, ext, geology=False, grayscale=True,
-                     show_counties=False, show_states=False)
-    _river_clip = box(ext[0], ext[2], ext[1], ext[3])
-    for _ne_name in ("rivers_north_america", "rivers_lake_centerlines"):
-        try:
-            _ne_fn = shpreader.natural_earth(resolution="10m", category="physical", name=_ne_name)
-            _ne_riv = gpd.read_file(_ne_fn).to_crs("EPSG:26915").clip(_river_clip)
-            if not _ne_riv.empty:
-                _ne_riv.plot(ax=axA, color="0.6", linewidth=0.5, zorder=4.5)
-        except Exception as _exc:
-            print(f"Natural Earth {_ne_name} skipped: {_exc}")
+    # Grayscale base to match Figure 1: uniform land tone plus the no-geology,
+    # gray-hydrology basemap (American Antiquity prints without color).
+    axA.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
+                            facecolor="0.93", edgecolor="none", zorder=-5))
+    mm.basin_basemap(axA, ext, geology=False, grayscale=True)
 
     norm = Normalize(0.0, 1.0)
-    # Online-only supplement: viridis probability scale (colorblind-safe).
-    cmap = plt.get_cmap("viridis")
+    # Truncated Greys so the lowest probabilities are still a visible mid-gray on
+    # the light land rather than white; markers keep black edges for definition.
+    cmap = LinearSegmentedColormap.from_list(
+        "greys_t", plt.get_cmap("Greys")(np.linspace(0.20, 1.0, 256)))
     axA.scatter(E[nonpk], Nm[nonpk], c=P[nonpk], cmap=cmap, norm=norm, s=54,
                 edgecolor="black", linewidth=0.5, zorder=10)
     axA.scatter([E[pk]], [Nm[pk]], marker="*", s=320, c="white",
@@ -329,12 +364,13 @@ def main():
         f"- Contemporaneous (pure spatial drift) snapshot, shown in Figure 8A: mean "
         f"P = {P_co[nonpk].mean():.2f} (range {P_co[nonpk].min():.2f}-{P_co[nonpk].max():.2f}) "
         f"across the other {n - 1} assemblages; co-membership falls with distance from "
-        f"Parkin (Spearman rho = {rho_co:+.2f}), the intuitive spatial gradient.",
+        f"Parkin (Spearman rho = {rho_co:+.2f} on river-network distance, "
+        f"{rho_co_straight:+.2f} straight-line), the intuitive spatial gradient.",
         f"- Time-transgressive sampling: mean P = {P_tt[nonpk].mean():.2f} "
-        f"(range {P_tt[nonpk].min():.2f}-{P_tt[nonpk].max():.2f}); co-membership no longer "
-        f"falls with distance (Spearman rho = {rho_tt:+.2f}) because assemblages at "
-        "different seriation positions carry different repertoires, so membership reflects "
-        "space and time jointly.",
+        f"(range {P_tt[nonpk].min():.2f}-{P_tt[nonpk].max():.2f}); "
+        f"{_distance_clause(rho_tt, rho_co)} Assemblages at different seriation "
+        "positions carry different repertoires, so membership reflects space and "
+        "time jointly.",
         "- Either way, no assemblage is a certain member (P = 1) or non-member (P = 0) of "
         "Parkin's group: membership is graded and probabilistic, so the 'phase' has no "
         "stable membership.",

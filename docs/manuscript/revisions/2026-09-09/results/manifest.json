@@ -1,0 +1,59 @@
+{
+  "fingerprint": "7a66c250138c36f5212728a929bc50bd12018856ca658683c068a2514ca91e78",
+  "config": {
+    "k": "observed class count",
+    "steps": 1800,
+    "n_records": 90,
+    "burnin": 1200,
+    "window": 8,
+    "models": [
+      "pooled",
+      "uniform"
+    ],
+    "tolerance": 0.1,
+    "calib_n_ind": [
+      120,
+      2000,
+      10000
+    ],
+    "calib_innovations": [
+      0.0002,
+      0.0005,
+      0.001,
+      0.002,
+      0.004,
+      0.008,
+      0.012,
+      0.024,
+      0.048,
+      0.1,
+      0.2
+    ],
+    "calib_mixings": [
+      0.001,
+      0.002,
+      0.005,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "calib_reps": 6,
+    "length": 24.0,
+    "baseline_reps": 500,
+    "grid_reps": 30,
+    "sensitivity_reps": 50,
+    "lengths": [
+      12.0,
+      24.0
+    ],
+    "leaks": [
+      1.0,
+      0.5,
+      0.1,
+      0.03
+    ]
+  }
+}

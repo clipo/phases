@@ -1,0 +1,7 @@
+region,model,innovation,mixing,n_ind,matched,n_matched,n_cells
+basin,pooled,0.0002,0.005,10000,True,61,297
+basin,uniform,0.0002,0.2,120,True,1,297
+valley,pooled,0.002,0.005,2000,True,71,297
+valley,uniform,0.0002,0.1,120,False,0,297
+cmv,pooled,0.012,0.005,120,True,10,297
+cmv,uniform,0.0002,0.005,120,False,0,297

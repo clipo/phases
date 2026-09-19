@@ -265,8 +265,8 @@ def rank_size(area: pd.Series):
 # ---------------------------------------------------------------------------
 def load_curated():
     """Curated decorated counts + lat/long (already in the XY file)."""
-    cur = pd.read_csv(
-        DATA / "raw" / "mainfort-pfg-cpl.csv"
+    cur = pd.read_excel(
+        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
@@ -290,10 +290,10 @@ def load_curated():
 def load_broad():
     """Broad PFG/LMV settlement set + lat/long (UTM->geographic via pyproj) +
     LMV-22 binary/quantitative features."""
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
 
@@ -315,7 +315,7 @@ def load_broad():
     bm["lon"] = lon
 
     # LMV-22 features joined by Number.
-    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
+    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")
@@ -477,8 +477,8 @@ def main() -> None:
     ca = pd.Series(ordinate, index=counts.index, name="ca")
 
     # 14C anchor (basin assemblages only)
-    rc = pd.read_csv(
-        DATA / "raw" / "14CDatesFromMainfort2001.csv"
+    rc = pd.read_excel(
+        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     rc["cal_mid"] = rc["Calibrated Date A.D. (1 Sigma)"].map(parse_cal_midpoint)
@@ -568,7 +568,7 @@ def main() -> None:
     SIGS = ["neutral_departure", "fst", "spatial_boundary"]
     SIG_LABELS = {
         "neutral_departure": "Neutral departure",
-        "fst": "Cultural $F_{ST}$",
+        "fst": "Cultural F_ST",
         "spatial_boundary": "Spatial boundary excess",
     }
 
@@ -600,9 +600,9 @@ def main() -> None:
         v = panel[s].dropna()
         slope = ols_slope(v.index.to_numpy(float), v.values)
         if len(v) >= 3:
-            rho, pval = spearmanr(v.index.to_numpy(float), v.values)
+            rho, _ = spearmanr(v.index.to_numpy(float), v.values)
         else:
-            rho, _pval = np.nan, np.nan
+            rho, _ = np.nan, np.nan
         bslopes = []
         for _ in range(800):
             samp = list(rng.choice(have_ids, size=len(have_ids), replace=True))
@@ -1015,7 +1015,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "parkin_basin_restricted.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
+    (OUTPUT / "parkin_basin_restricted.md").write_text("\n".join(lines))
 
     # console: NEUTRAL, no raw coordinates
     print("Parkin-phase / St. Francis basin-restricted re-run complete.")

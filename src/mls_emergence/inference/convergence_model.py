@@ -34,7 +34,19 @@ def build_convergence_model(y, se, t, b_ser_obs, se_ser, *,
 
 
 def sample_convergence(y, se, t, b_ser_obs, se_ser, *, draws=2000, tune=2000,
-                       chains=4, target_accept=0.9, random_seed=0, **priors):
+                       chains=4, target_accept=0.99, random_seed=0, **priors):
+    """Sample the convergence model. See build_convergence_model.
+
+    target_accept defaults to 0.99, not PyMC's 0.9. Measured 2026-08-31: at 0.9
+    this model produces 7 divergences per 1000 draws and a tau R-hat of 1.0112
+    on clean synthetic data with a strong correctly-specified signal, which is
+    the easiest case it will ever see. Divergences fall to 1 at 0.95 and to zero
+    at 0.99, with ESS improving monotonically, so the geometry is sound and the
+    default step size was simply too coarse for the funnel in tau. The only
+    production call site (analyses/40_hierarchical_convergence.py) already
+    passed 0.99 explicitly; a default every real caller must override is not a
+    default (rule 4). See output/findings/convergence_model_geometry.md.
+    """
     model = build_convergence_model(y, se, t, b_ser_obs, se_ser, **priors)
     with model:
         idata = pm.sample(draws=draws, tune=tune, chains=chains,

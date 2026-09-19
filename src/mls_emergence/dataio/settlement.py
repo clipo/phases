@@ -1,14 +1,9 @@
-"""Load and join the Lower Mississippi Valley settlement tables.
-
-Reads the LMV site-location and attribute tables (the Lipo & Dunnell regional
-database) and joins them to the PFG ceramic assemblages by grid designation,
-normalizing grid ids to absorb digit-0/letter-O transcription errors and
-compound-site suffixes. See data/README.md for provenance.
-"""
 from __future__ import annotations
 import re
 from pathlib import Path
 import pandas as pd
+
+ZONE_SHEETS = ["Locations-Zone-15", "Locations-Zone-16"]
 
 # Matches the canonical grid format: <digits>-<token>-<digits>
 # with an optional compound suffix starting with '/'
@@ -44,8 +39,16 @@ def normalize_grid(site_id: str) -> str:
 
 
 def load_lmv(path: str | Path) -> pd.DataFrame:
-    """Load the combined LMV site-location table (both UTM zones)."""
-    return pd.read_csv(path)
+    """Load the combined LMV site-location table (both UTM zones).
+
+    Accepts the combined CSV export (as in the public release) or the original
+    LMVData.xlsx, whose two UTM zone sheets are concatenated.
+    """
+    path = Path(path)
+    if path.suffix.lower() == ".csv":
+        return pd.read_csv(path)
+    frames = [pd.read_excel(path, sheet_name=s) for s in ZONE_SHEETS]
+    return pd.concat(frames, ignore_index=True)
 
 
 def join_pfg_to_lmv(counts: pd.DataFrame, lmv: pd.DataFrame):

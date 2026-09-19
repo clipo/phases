@@ -1,4 +1,25 @@
-"""40_hierarchical_convergence.py - Bayesian convergence posterior.
+"""
+DEMOTED 2026-09-02 by author ruling. Its headline quantity,
+P(all four signatures rise), is NOT reported in the manuscript and is not to be
+reported from it.
+
+Two reasons, and the second is the substantive one. First, this model's
+likelihood takes per-cell standard errors from 800 assemblage BOOTSTRAP rebuilds
+and treats them as known (build_panel_and_ses -> np.nanstd(boot, axis=0)), which
+rule 18 removes as a basis for inference; the model is Bayesian in form with a
+resampling estimate at its core. Second, and decisively, the statistic
+aggregates four signatures of which the main text says three "are not reliable
+discriminators at this resolution, and we treat them as weak corroboration
+only". A joint probability over four things, three disavowed, reads as stronger
+evidence than its components support.
+
+What replaces it: the one signature the record can resolve, cultural F_ST, has
+its trend reported as a posterior by analyses/50_perbin_bayesian_fst.py, which
+fits Balding-Nichols per seriation bin so the uncertainty is generative rather
+than resampled. The other three are reported descriptively.
+
+Kept runnable for provenance. Do not report p_convergence.
+40_hierarchical_convergence.py - Bayesian convergence posterior.
 
 Builds the three-signature CA panel and per-cell bootstrap SEs plus the
 seriation fragmentation slope (all reusing analysis 07's prepare_inputs), fits

@@ -1,15 +1,13 @@
-"""make_figures.py — house-style figure pipeline for the manuscript.
+"""make_figures.py — house-style figure pipeline for mls-emergence.
 
-Generates the house-style main-text figures this module owns (CA ordination,
-empirical four-signature trajectory, IDSS structure, settlement rank-size) and
-the supplemental criterion-validation figure (Figure S1), to figures/ using
-analyses/figstyle.py house style (Okabe-Ito palette, sans-serif, 300 dpi).
-Reuses data-loading and computation logic from prior analysis scripts; does not
-recompute from scratch where avoidable.
+Generates nine figures (F2-F7, S2, S3, S5) to figures/ using
+analyses/figstyle.py house style (Okabe-Ito, DejaVu Sans, 300 dpi, 7 in).
+Reuses data-loading and computation logic from prior analysis scripts
+(analyses/04-08); does not recompute from scratch where avoidable.
 
-Data policy: site coordinates are sensitive. This script never prints raw
-coordinates to stdout, and figures use centered or relative frames with no
-axis-scale tick labels where required.
+Data policy: data/ is gitignored and location-sensitive. This script NEVER
+prints raw coordinates to stdout. Figures use centered/relative frames with
+no axis-scale tick labels where required by the data policy.
 
 Usage:
     .venv/bin/python analyses/make_figures.py
@@ -34,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from figstyle import save, save_all, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK, OIC_BLUE, OIC_VERMIL  # noqa: F401  (save_all re-exported as mf.save_all)
+from figstyle import save, save_all, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK  # noqa: F401  (save_all re-exported as mf.save_all)
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -49,7 +47,7 @@ from mls_emergence.validation.harness import (
     run_blind, discriminates, signatures_over_axis, SIGNATURE_COLUMNS,
 )
 from mls_emergence.validation.mechanisms import (
-    gen_group_emergence, gen_aggregated_conformity, gen_patchiness, gen_drift_space,
+    gen_group_emergence, gen_aggregated_signaling, gen_patchiness, gen_drift_space,
 )
 
 DATA = ROOT / "data"
@@ -197,7 +195,7 @@ def _basin_members(which: str) -> set:
 def fig4_validation() -> None:
     GENERATORS = {
         "group_emergence": gen_group_emergence,
-        "aggregated_conformity": gen_aggregated_conformity,
+        "aggregated_signaling": gen_aggregated_signaling,
         "patchiness": gen_patchiness,
         "drift_space": gen_drift_space,
     }
@@ -218,7 +216,7 @@ def fig4_validation() -> None:
 
     genuine_corr = pooled_corr(gen_group_emergence, AUDIT_SEEDS[:8])
     mimic_corrs = {
-        "aggregated_conformity": pooled_corr(gen_aggregated_conformity, AUDIT_SEEDS[:8]),
+        "aggregated_signaling": pooled_corr(gen_aggregated_signaling, AUDIT_SEEDS[:8]),
         "patchiness": pooled_corr(gen_patchiness, AUDIT_SEEDS[:8]),
         "drift_space": pooled_corr(gen_drift_space, AUDIT_SEEDS[:8]),
     }
@@ -227,16 +225,17 @@ def fig4_validation() -> None:
 
     LABELS = {
         "group_emergence": "Group emergence\n(genuine)",
-        "aggregated_conformity": "Aggregated\nconformity",
+        "aggregated_signaling": "Aggregated\nsignaling",
         "patchiness": "Spatial\npatchiness",
         "drift_space": "Isolation by\ndistance",
     }
-    SIG_LABELS = ["Neutral departure", "Seriability", "Cultural $F_{ST}$", "Spatial boundary"]
-    # Color (online-only supplement); marker and line style also vary per signature.
-    SIG_COLORS = ["#0072B2", "#E69F00", "#009E73", "#D55E00"]
+    SIG_LABELS = ["Neutral departure", "Seriability", "Cultural F_ST", "Spatial boundary"]
+    # Grayscale: distinct marker and line style per signature so the four series
+    # read apart without color.
+    SIG_COLORS = ["0.0", "0.45", "0.0", "0.45"]
     SIG_MARKERS = ["o", "s", "^", "D"]
     SIG_LS = ["-", "--", ":", "-."]
-    MECH_ORDER = ["group_emergence", "aggregated_conformity", "patchiness", "drift_space"]
+    MECH_ORDER = ["group_emergence", "aggregated_signaling", "patchiness", "drift_space"]
 
     fig = plt.figure(figsize=(7, 6.5))
     gs_main = fig.add_gridspec(2, 2, left=0.07, right=0.65, hspace=0.50, wspace=0.45)
@@ -253,7 +252,7 @@ def fig4_validation() -> None:
         conv = verdict[mech]["convergent"]
         ax.set_title(
             LABELS[mech] + ("\n* CONVERGENT" if conv else ""),
-            fontsize=8, pad=3, color=OIC_VERMIL if conv else "black",
+            fontsize=8, pad=3, color=OI_VERMIL if conv else "black",
         )
         ax.set_xlabel("Ordinal step", fontsize=7)
         ax.set_ylabel("Signature value", fontsize=7)
@@ -267,24 +266,24 @@ def fig4_validation() -> None:
 
     ax_ins = fig.add_subplot(gs_inset[0, 0])
     bar_vals = [genuine_meanabs] + list(mimic_meanabs.values())
-    bar_colors = [OIC_VERMIL] + [OIC_BLUE] * 3
+    bar_colors = [OI_VERMIL] + [OI_BLUE] * 3
     bpos = np.arange(len(bar_vals))
     ax_ins.bar(bpos, bar_vals, color=bar_colors, width=0.6, edgecolor="none")
     ax_ins.set_xticks(bpos)
-    short_labels = ["Genuine\nemergence", "Agg.\nconformity", "Patchiness", "Drift\n(IBD)"]
+    short_labels = ["Genuine\nemergence", "Agg.\nsignaling", "Patchiness", "Drift\n(IBD)"]
     ax_ins.set_xticklabels(short_labels, fontsize=6)
     ax_ins.set_ylabel("Mean |r| among\nfour signatures", fontsize=7)
     ax_ins.tick_params(labelsize=6)
     ax_ins.axhline(0, color="0.8", linewidth=0.5)
 
-    save(fig, "figS1_validation")
-    print("figS1_validation.png written")
+    save(fig, "fig2_validation")
+    print("fig2_validation.png written")
 
 
 # ---------------------------------------------------------------------------
 # F3: CA ordination of the curated decorated set
 # ---------------------------------------------------------------------------
-def fig3_ca_ordination() -> None:
+def fig4_ca_ordination() -> None:
     counts, coords_ll = _load_curated()
     M = counts.to_numpy(float)
     ca1, ca2, inertia_frac1 = correspondence_axis(M)
@@ -361,15 +360,15 @@ def fig3_ca_ordination() -> None:
     ax.axhline(0, color="0.85", linewidth=0.5, zorder=0)
     ax.axvline(0, color="0.85", linewidth=0.5, zorder=0)
 
-    save(fig, "fig3_ca_ordination")
-    print("fig3_ca_ordination.png written")
+    save(fig, "fig4_ca_ordination")
+    print("fig4_ca_ordination.png written")
 
 
 # ---------------------------------------------------------------------------
 # F6: IDSS group structure — two-panel: group-size histogram + bridge-rank lollipop
 # (Replaces the unreadable force-directed hairball of fig5_idss_network.)
 # ---------------------------------------------------------------------------
-def fig6_idss_structure() -> None:
+def fig7_idss_structure() -> None:
     counts, coords_ll = _load_curated()
     M = counts.to_numpy(float)
     idx = list(counts.index)
@@ -502,8 +501,8 @@ def fig6_idss_structure() -> None:
     ax_right.legend(handles=handles_right, frameon=False, fontsize=7,
                     loc="lower right")
 
-    save(fig, "fig6_idss_structure")
-    print("fig6_idss_structure.png written")
+    save(fig, "fig7_idss_structure")
+    print("fig7_idss_structure.png written")
 
 
 # ---------------------------------------------------------------------------
@@ -581,7 +580,7 @@ def fig5_idss_network() -> None:
 # ---------------------------------------------------------------------------
 # F5: Empirical signature trajectory (from 07) with bootstrap CIs
 # ---------------------------------------------------------------------------
-def fig5_empirical_trajectory() -> None:
+def fig6_empirical_trajectory() -> None:
     counts, coords_ll = _load_curated()
     coords_df = coords_ll.dropna()
     have_coords_ids = list(coords_df.index)
@@ -674,7 +673,7 @@ def fig5_empirical_trajectory() -> None:
     SIGS = ["neutral_departure", "seriation", "fst", "spatial_boundary"]
     SIG_LABELS = {"neutral_departure": "Neutral departure (θF/θE)",
                   "seriation": "Seriation fragmentation",
-                  "fst": "Cultural $F_{ST}$",
+                  "fst": "Cultural F_ST",
                   "spatial_boundary": "Spatial boundary excess"}
     SIG_COLORS = {"neutral_departure": OI_BLUE, "seriation": OI_PURPLE,
                   "fst": OI_ORANGE, "spatial_boundary": OI_GREEN}
@@ -747,14 +746,14 @@ def fig5_empirical_trajectory() -> None:
     for ax in axes[1, :]:
         ax.set_xlabel("CA seriation bin (early to late)", fontsize=8)
     fig.tight_layout()
-    save(fig, "fig5_empirical_trajectory")
-    print("fig5_empirical_trajectory.png written")
+    save(fig, "fig6_empirical_trajectory")
+    print("fig6_empirical_trajectory.png written")
 
 
 # ---------------------------------------------------------------------------
 # F7: Settlement mound-height ranking (basin set, like-for-like field) + bar inset
 # ---------------------------------------------------------------------------
-def fig7_ranksize() -> None:
+def fig8_ranksize() -> None:
     broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
@@ -843,8 +842,8 @@ def fig7_ranksize() -> None:
     ax_bar.spines["right"].set_visible(False)
     ax_bar.axhline(0, color="0.8", linewidth=0.5)
 
-    save(fig, "fig7_ranksize")
-    print("fig7_ranksize.png written")
+    save(fig, "fig8_ranksize")
+    print("fig8_ranksize.png written")
 
 
 # ---------------------------------------------------------------------------
@@ -853,20 +852,20 @@ def fig7_ranksize() -> None:
 def main() -> None:
 
     print("Generating F3 (CA ordination)...")
-    fig3_ca_ordination()
+    fig4_ca_ordination()
 
-    print("Generating S6 (idealized validation)...")
-    fig4_validation()  # saves figS1_validation (the idealized-data validation; moved to Supplement)
+    print("Generating S1 (idealized validation)...")
+    fig4_validation()  # saves fig2_validation (the idealized-data validation, Supplement)
 
     # Fig 4 (record-matched recovery) and Fig 5 (size-controlled empirical trajectory) are
     # generated by analyses/21_signal_recovery.py, which owns the rarefaction machinery.
-    # fig5_empirical_trajectory() below produces the RAW (uncontrolled) version and is retired.
+    # fig6_empirical_trajectory() below produces the RAW (uncontrolled) version and is retired.
 
     print("Generating F6 (IDSS group structure)...")
-    fig6_idss_structure()
+    fig7_idss_structure()
 
     print("Generating F7 (rank-size + inset)...")
-    fig7_ranksize()
+    fig8_ranksize()
 
 
     print("\nAll figures written to figures/.")

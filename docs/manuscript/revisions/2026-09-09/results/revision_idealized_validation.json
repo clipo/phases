@@ -1,0 +1,34 @@
+{
+  "group_emergence": {
+    "hits": 493,
+    "total": 500,
+    "interval": [
+      0.9713683838166639,
+      0.9943532389296755
+    ]
+  },
+  "aggregated_signaling": {
+    "hits": 0,
+    "total": 500,
+    "interval": [
+      0.0,
+      0.007350610051907784
+    ]
+  },
+  "patchiness": {
+    "hits": 0,
+    "total": 500,
+    "interval": [
+      0.0,
+      0.007350610051907784
+    ]
+  },
+  "drift_space": {
+    "hits": 0,
+    "total": 500,
+    "interval": [
+      0.0,
+      0.007350610051907784
+    ]
+  }
+}

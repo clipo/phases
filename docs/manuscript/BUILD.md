@@ -1,3 +1,9 @@
+# September 2026 revision
+
+`MAIN_TEXT.md` and `SUPPLEMENTAL_TEXT.md` are edited directly (the template
+assembly used on 2026-09-09 was retired). Regenerate figures with analyses 21,
+47, 48, 50, and 29 before building; then use the pandoc commands below.
+
 # Building the manuscript Word/PDF files
 
 The `.docx`/`.pdf` outputs are gitignored build products; regenerate them from the

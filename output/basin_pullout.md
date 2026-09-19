@@ -4,8 +4,8 @@ All 55 Mainfort-PFG decorated LMV assemblages (8 Parkin-phase, 47 in other phase
 
 ## Pull-out of the Parkin phase
 - Mean P(shares Parkin's community): Parkin phase 0.88 (range 0.84-0.91) vs other phases 0.68 (range 0.05-0.87).
-- Separation of Parkin from other phases by P: AUC = 0.88 (Mann-Whitney p = 7.6e-04). This separation is what drift on the river network predicts: Parkin-phase assemblages lie near Parkin and so co-occur in its community more than distant assemblages do.
-- Per run, Parkin's emergent community is 19% Parkin-phase (precision) and captures 89% of Parkin-phase assemblages (recall); mean 2.1 communities (range 2-3).
+- Separation of Parkin from other phases by P: AUC = 0.88 (Mann-Whitney p = 7.3e-04). This separation is what drift on the river network predicts: Parkin-phase assemblages lie near Parkin and so co-occur in its community more than distant assemblages do.
+- Per run, Parkin's emergent community is 19% Parkin-phase (precision) and captures 90% of Parkin-phase assemblages (recall); mean 2.1 communities (range 2-3).
 - Observed Parkin-vs-others F_ST = 0.012 against a drift null of 0.005 (95% 0.003 to 0.009, max 0.017); 0.4% of drift runs reach or exceed the observed value (observed at the 99.6th percentile of the null).
 - Leave-one-out jackknife (matched per-drop null): relabeling single Parkin assemblages into the comparison group moves the observed F_ST to 0.007-0.013; 7 of 8 single drops stay outside their matched drift null, so the contrast is not driven by any one assemblage. Dropping Parkin gives the lowest value, F_ST = 0.007.
 

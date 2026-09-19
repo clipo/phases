@@ -362,8 +362,8 @@ def prepare_inputs() -> PanelInputs:
     # =======================================================================
     # Load curated decorated set
     # =======================================================================
-    cur = pd.read_csv(
-        DATA / "raw" / "mainfort-pfg-cpl.csv"
+    cur = pd.read_excel(
+        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
@@ -395,8 +395,8 @@ def prepare_inputs() -> PanelInputs:
     # =======================================================================
     # 2. Maximized 14C matching (do this before CA orientation)
     # =======================================================================
-    rc = pd.read_csv(
-        DATA / "raw" / "14CDatesFromMainfort2001.csv"
+    rc = pd.read_excel(
+        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     cal_col = "Calibrated Date A.D. (1 Sigma)"
@@ -407,7 +407,7 @@ def prepare_inputs() -> PanelInputs:
     # Broad PFG site names (for the secondary path: a 14C provenience that maps
     # to a broad site that does NOT exist in the curated decorated set cannot be
     # placed on the CA axis; report it honestly).
-    broad_raw = pd.read_csv(DATA / "raw" / "PFGData_sherds.csv")
+    broad_raw = pd.read_excel(DATA / "raw" / "PFGData.xlsx")
     broad_names = (
         broad_raw["Site Name"].dropna().astype(str).str.strip().unique()
         if "Site Name" in broad_raw.columns else []
@@ -861,7 +861,7 @@ def main() -> None:
     SIGS = ["neutral_departure", "fst", "spatial_boundary"]
     SIG_LABELS = {
         "neutral_departure": "Neutral departure",
-        "fst": "Cultural $F_{ST}$",
+        "fst": "Cultural F_ST",
         "spatial_boundary": "Spatial boundary excess",
     }
 
@@ -912,9 +912,9 @@ def main() -> None:
         v = panel[s].dropna()
         slope = ols_slope(v.index.to_numpy(float), v.values)
         if len(v) >= 3:
-            rho, pval = spearmanr(v.index.to_numpy(float), v.values)
+            rho, _ = spearmanr(v.index.to_numpy(float), v.values)
         else:
-            rho, _pval = np.nan, np.nan
+            rho, _ = np.nan, np.nan
         # bootstrap: resample assemblages, rebuild 6-bin panel, refit slope
         bslopes = []
         for _ in range(800):
@@ -1021,7 +1021,7 @@ def main() -> None:
     contrast = {}
     for metric, label in [
         ("neutral_departure", "Neutral departure"),
-        ("fst", "Cultural $F_{ST}$"),
+        ("fst", "Cultural F_ST"),
         ("spatial_boundary", "Spatial boundary excess"),
         ("n_idss_groups", "IDSS n_groups (fragmentation)"),
     ]:
@@ -1057,14 +1057,14 @@ def main() -> None:
     # =======================================================================
     emit("## 6. Corrected Parkin record (settlement-level cross-check)")
     emit()
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bmatched = joined.dropna(subset=["Easting", "Northing"]).copy()
 
-    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
+    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")
@@ -1134,7 +1134,7 @@ def main() -> None:
     if len(area) >= 2:
         ranks = np.arange(1, len(area) + 1)
         A = np.vstack([np.log(ranks), np.ones_like(ranks)]).T
-        slope_rs, intercept_rs = np.linalg.lstsq(A, np.log(area.values), rcond=None)[0]
+        slope_rs, _ = np.linalg.lstsq(A, np.log(area.values), rcond=None)[0]
         primacy = float(area.iloc[0] / area.iloc[1])
         largest_id = area.index[0]
         parkin_area_rank = (int((area.index == PARKIN_BROAD).argmax() + 1)
@@ -1186,15 +1186,15 @@ def main() -> None:
     # (b) early-vs-late structural contrast bar
     fig, ax = plt.subplots(figsize=(7, 4.2))
     mets = ["neutral_departure", "fst", "spatial_boundary", "n_idss_groups"]
-    labs = ["Neutral\ndeparture", "Cultural\n$F_{ST}$", "Boundary\nexcess",
+    labs = ["Neutral\ndeparture", "Cultural\nF_ST", "Boundary\nexcess",
             "IDSS\nn_groups"]
     # scale each metric by its early/late magnitude so all four share an axis
     earlyv, latev = [], []
     for m in mets:
-        e, lv = eb[m], lb[m]
-        denom = max(abs(e), abs(lv), 1e-9)
-        earlyv.append(e / denom)
-        latev.append(lv / denom)
+        early, late = eb[m], lb[m]
+        denom = max(abs(early), abs(late), 1e-9)
+        earlyv.append(early / denom)
+        latev.append(late / denom)
     xpos = np.arange(len(mets))
     ax.bar(xpos - 0.18, earlyv, width=0.36, color=OKABE["sky"], label="early third")
     ax.bar(xpos + 0.18, latev, width=0.36, color=OKABE["vermillion"], label="late third")
@@ -1276,7 +1276,7 @@ def main() -> None:
     )
     emit("- Early- vs late-CA-third structural contrast (late - early):")
     for m, label in [("neutral_departure", "Neutral departure"),
-                     ("fst", "Cultural $F_{ST}$"),
+                     ("fst", "Cultural F_ST"),
                      ("spatial_boundary", "Spatial boundary excess"),
                      ("n_idss_groups", "IDSS n_groups")]:
         c = contrast[m]
@@ -1391,7 +1391,7 @@ def main() -> None:
     )
     emit()
 
-    OUTPUT.joinpath("empirical_refined.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
+    OUTPUT.joinpath("empirical_refined.md").write_text("\n".join(lines))
 
     # console: neutral, no coordinates
     print("Phase 5 refined empirical re-test complete.")

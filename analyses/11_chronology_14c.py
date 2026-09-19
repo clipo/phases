@@ -1,6 +1,6 @@
 """11_chronology_14c.py — Bayesian-style radiocarbon chronology for the basin.
 
-Uses the 109 Mainfort (2001) determinations in data/raw/14CDatesFromMainfort2001.csv
+Uses the Mainfort (2001) determinations in data/raw/14CDatesFromMainfort2001.xls
 (parsed to BP +/- error) and the IntCal20 curve (data/raw/intcal20.14c) to:
 
 1. Calibrate every date (standard probabilistic calibration against IntCal20).
@@ -12,7 +12,7 @@ Uses the 109 Mainfort (2001) determinations in data/raw/14CDatesFromMainfort2001
    median calendar age and correlate with CA1 seriation position. This converts
    the manuscript's weakest assumption (5 anchors, p=0.39) into a corpus-based test.
 
-Writes output/chronology_14c.md and figures/figS7_chronology.png. Read-only on
+Writes output/chronology_14c.md and figures/figS6_chronology.png. Read-only on
 the manuscript.
 
 Usage: .venv/bin/python analyses/11_chronology_14c.py
@@ -30,9 +30,6 @@ from scipy.stats import spearmanr
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
-
-import os  # noqa: E402
-os.environ.setdefault("MLS_FIG_COLOR", "1")  # supplement figure is online-only; render in color
 
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
@@ -78,7 +75,7 @@ def calibrate(bp: float, err: float, grid: np.ndarray) -> np.ndarray:
 
 
 def parse_dates() -> pd.DataFrame:
-    df = pd.read_csv(DATA / "14CDatesFromMainfort2001.csv")
+    df = pd.read_excel(DATA / "14CDatesFromMainfort2001.xls")
     df = df[df["Uncorrected Years BP."].notna()].copy()
     # Drop exact-duplicate determinations (the Mainfort file lists Hazel TX-848
     # twice). Same lab number with a DIFFERENT age is kept (e.g. Snodgrass
@@ -220,8 +217,8 @@ def main() -> None:
                          fontsize=6, xytext=(4, 3), textcoords="offset points")
         axR.set_xlabel("CA1 seriation position")
         axR.set_ylabel("Pooled median cal AD")
-    save(fig, "figS7_chronology")
-    L.append("Figure: figures/figS7_chronology.png (basin + Parkin SPD with contact "
+    save(fig, "figS6_chronology")
+    L.append("Figure: figures/figS6_chronology.png (basin + Parkin SPD with contact "
              "line; CA1 vs pooled median calendar age, point size ~ n dates).")
 
     OUT.write_text("\n".join(L), encoding="utf-8")

@@ -4,16 +4,16 @@ Grid: interaction length [12.0, 18.0, 24.0, 36.0] km, between-node mixing [0.01,
 Observed data: 2 communities, between-group F_ST = 0.043.
 
 ## Headline robustness
-- Phase-like structure (>= 2 emergent communities): 99.8% of runs.
-- Emergent F_ST at or below the observed value: 85% of runs.
-- Emergent F_ST within a factor of two of observed (0.022-0.086): 53% of runs.
-- Mean emergent communities 2.2 (range 1-3); mean F_ST 0.028; mean seriation |rho| 0.44.
+- Phase-like structure (>= 2 emergent communities): 430 of 432 runs (99.5%).
+- Emergent F_ST at or below the observed value: 426 of 430 runs (99.1%).
+- Emergent F_ST within a factor of two of observed (0.022-0.086): 73 of 430 runs (17.0%).
+- Mean emergent communities 2.3 (range 1-4); mean F_ST 0.013; mean seriation |rho| 0.50.
 
 ## Marginal effects (mean +/- sd)
-- F_ST by interaction length (km): 12: 0.028±0.017; 18: 0.029±0.019; 24: 0.028±0.017; 36: 0.026±0.015
-- F_ST by between-node mixing: 0.01: 0.034±0.022; 0.02: 0.026±0.015; 0.05: 0.022±0.010
-- F_ST by innovation rate: 0.006: 0.043±0.018; 0.012: 0.025±0.009; 0.024: 0.014±0.005
-- communities by interaction length (km): 12: 2.269±0.443; 18: 2.213±0.409; 24: 2.120±0.353; 36: 2.130±0.336
+- F_ST by interaction length (km): 12: 0.016±0.012; 18: 0.013±0.010; 24: 0.011±0.008; 36: 0.010±0.007
+- F_ST by between-node mixing: 0.01: 0.015±0.011; 0.02: 0.012±0.009; 0.05: 0.010±0.007
+- F_ST by innovation rate: 0.006: 0.022±0.009; 0.012: 0.011±0.005; 0.024: 0.004±0.002
+- communities by interaction length (km): 12: 2.481±0.616; 18: 2.287±0.472; 24: 2.176±0.427; 36: 2.139±0.346
 
 Interpretation: across stochastic replicates and the full factor grid, neutral drift on the real geography reliably produces phase-like, spatially coherent communities, and the between-group F_ST stays at or near the observed level rather than the much higher value bounded groups would leave. The appearance of phase structure is a generic outcome of distance-structured drift on this layout, not an artifact of one tuned parameter set. F_ST is essentially flat across interaction length and falls with more mixing or more innovation, as expected.
 

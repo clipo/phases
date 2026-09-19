@@ -212,8 +212,8 @@ def main() -> None:
     emit()
 
     # -- Load curated counts ------------------------------------------------
-    cur = pd.read_csv(
-        DATA / "raw" / "mainfort-pfg-cpl.csv"
+    cur = pd.read_excel(
+        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
     ).dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
@@ -258,8 +258,8 @@ def main() -> None:
     )
 
     # -- 14C dates ----------------------------------------------------------
-    rc = pd.read_csv(
-        DATA / "raw" / "14CDatesFromMainfort2001.csv"
+    rc = pd.read_excel(
+        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     cal_col = "Calibrated Date A.D. (1 Sigma)"
@@ -570,16 +570,16 @@ def main() -> None:
     emit("## Settlement level (broad PFG/LMV set)")
     emit()
 
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     n_broad_before = len(broad_counts)
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, unmatched = join_pfg_to_lmv(broad_counts, lmv)
     bmatched = joined.dropna(subset=["Easting", "Northing"]).copy()
 
-    # Clean binary features from LMVData-22March2006.csv, joined by Number.
-    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
+    # Clean binary features from LMVData-22March2006.xls, joined by Number.
+    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")
@@ -756,7 +756,7 @@ def main() -> None:
     x = panel.index.to_numpy(float)
     specs = [
         ("neutral_departure", OKABE["blue"], "Neutral departure"),
-        ("fst", OKABE["orange"], "Cultural $F_{ST}$"),
+        ("fst", OKABE["orange"], "Cultural F_ST"),
         ("spatial_boundary", OKABE["green"], "Spatial boundary excess"),
     ]
     for col, color, label in specs:
@@ -1022,7 +1022,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "empirical_findings_v2.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
+    (OUTPUT / "empirical_findings_v2.md").write_text("\n".join(lines))
 
     # Console: NEUTRAL, no coordinates.
     print("Phase 5 v2 two-level empirical application complete.")

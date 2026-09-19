@@ -32,21 +32,18 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import os  # noqa: E402
-os.environ.setdefault("MLS_FIG_COLOR", "1")  # supplement figure is online-only; render in color
-
 import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import make_figures as mf  # noqa: E402
-from figstyle import save, OI_BLUE, OI_ORANGE  # noqa: E402
+from figstyle import save, OI_BLUE, OI_ORANGE, panel_label  # noqa: E402
 
 OUT = ROOT / "output" / "neiman_distance_and_fit.md"
 N_BINS = 6
 
 
 def main():
-    counts, coords = mf._load_curated()        # basin 53
+    counts, coords = mf._load_curated()        # canonical drainage basin, 29
     M = counts.to_numpy(float)
     N = M.sum(1, keepdims=True)
     P = M / N                                   # type proportions per assemblage
@@ -59,7 +56,6 @@ def main():
     D = ((P[:, None, :] - P[None, :, :]) ** 2).sum(-1)   # squared Euclidean
     mean_d = D.sum(1) / (D.shape[0] - 1)
     tE = np.array([mf.theta_e(r) for r in M])
-    np.array([mf.theta_f(r) for r in M])
     fin = np.isfinite(tE) & (tE > 0)
     rho_d, p_d = spearmanr(tE[fin], mean_d[fin])
 
@@ -153,6 +149,8 @@ def main():
 
     # --- Figure S3: the Neiman interassemblage-distance result ---
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))
+    panel_label(axA, "A")
+    panel_label(axB, "B")
     x, y = tE[fin], mean_d[fin]
     axA.scatter(x, y, s=20, color=OI_BLUE, alpha=0.8, edgecolor="none")
     # No OLS line: the reported statistic is the (rank-based) Spearman rho, which
@@ -175,7 +173,7 @@ def main():
     axB.set_ylabel("mean within-bin distance")
     axB.text(0.05, 0.95, rf"$\rho$ = {rho_traj:+.2f} (n.s.)", transform=axB.transAxes,
              ha="left", va="top", fontsize=9)
-    save(fig, "figS2_neiman")
+    save(fig, "figS1_neiman")
 
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")

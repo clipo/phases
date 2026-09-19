@@ -3,9 +3,23 @@
 Defines the St. Francis basin (the Parkin-phase analysis unit) HYDROLOGICALLY:
 assemblages/sites within DRAINAGE_KM of the St. Francis / Tyronza / L'Anguille
 drainage (LMVHydrology). This replaces the earlier latitude cut (lat >= 34.5),
-which admitted Mississippi-River-proximal sites (Walls, Chuccalissa, Hollywood,
-Upper Nodena) that are 30+ km from the St. Francis drainage and within a few km
-of the Mississippi. The stricter nearest-drainage watershed rule (closer to the
+which admitted Mississippi-River-proximal sites well outside the drainage.
+
+Measured distances to the St. Francis system, 2026-08-31 (this script's own
+geometry, DRAINAGE_KM = 20):
+
+    Walls          35.25 km   excluded
+    Chuccalissa    41.25 km   excluded
+    Hollywood      18.50 km   RETAINED
+    Upper_Nodena   18.24 km   RETAINED
+    Parkin          0.19 km   retained
+
+An earlier version of this docstring named all four of Walls, Chuccalissa,
+Hollywood and Upper Nodena as "30+ km from the St. Francis drainage" and so as
+sites the hydrological rule removes. That is wrong for Hollywood and Upper
+Nodena, which sit at roughly 18 km and are inside the corridor. Corrected here
+against measurement rather than recollection (Verification Regime rules 1 and
+2). The substantive point stands for Walls and Chuccalissa. The stricter nearest-drainage watershed rule (closer to the
 St. Francis system than to the Mississippi) gives a smaller set (n=19 curated);
 the 20 km corridor (n=29) is used as primary for adequate sample size, with the
 watershed set available as a robustness check.
@@ -46,6 +60,21 @@ def sf_geom():
     return hydro[hydro["NAME"].isin(DRAINAGE)].to_crs(epsg=UTM).geometry.union_all()
 
 
+def mississippi_geom():
+    """The Mississippi channel, for the nearest-drainage watershed rule.
+
+    It is not available from LMVHydrology: that layer maps large rivers as
+    unnamed bank and shoreline features, so `NAME` carries no Mississippi entry
+    at all. LMVMajorRivers carries it as a named polygon, which is why the
+    watershed rule needs that layer and the corridor rule does not.
+    """
+    mr = gpd.read_file(SHP / "LMVMajorRivers.shp")
+    sel = mr[mr["RIVER_NAME"] == "Mississippi River"]
+    if sel.empty:
+        raise ValueError("no 'Mississippi River' feature in LMVMajorRivers.shp")
+    return sel.to_crs(epsg=UTM).geometry.union_all()
+
+
 def main():
     PROC.mkdir(parents=True, exist_ok=True)
     sf = sf_geom()
@@ -61,11 +90,22 @@ def main():
     cur_members = sorted(coords.index[cd <= DRAINAGE_KM])
     (PROC / "basin_members_curated.txt").write_text("\n".join(cur_members) + "\n")
 
+    # The stricter watershed set, used as the robustness check the main text
+    # cites. An assemblage qualifies when it is inside the corridor AND nearer
+    # to the St. Francis system than to the Mississippi. The docstring above has
+    # asserted n=19 for this set for some time without any code computing it,
+    # so the manuscript's robustness claim rested on a number the repository
+    # could not produce (rule 1). It is derived and written here instead. The
+    # count reproduces: 29 corridor, 19 watershed.
+    md = cp.geometry.distance(mississippi_geom()) / 1000.0
+    ws_members = sorted(coords.index[(cd <= DRAINAGE_KM) & (cd < md)])
+    (PROC / "basin_members_watershed.txt").write_text("\n".join(ws_members) + "\n")
+
     # broad settlement set (coords are UTM Easting/Northing)
-    broad = load_pfg_counts(ROOT / "data" / "raw" / "PFGData_sherds.csv")
+    broad = load_pfg_counts(ROOT / "data" / "raw" / "PFGData.xlsx")
     if not broad.index.is_unique:
         broad = broad.groupby(level=0).sum()
-    lmv = load_lmv(ROOT / "data" / "LMVData_locations.csv")
+    lmv = load_lmv(ROOT / "data" / "LMVData.xlsx")
     joined, _ = join_pfg_to_lmv(broad, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
     bp = gpd.GeoDataFrame(
@@ -78,8 +118,10 @@ def main():
 
     print(f"drainage corridor <= {DRAINAGE_KM:.0f} km of the St. Francis system")
     print(f"  curated basin: {len(cur_members)} assemblages")
+    print(f"  watershed subset (nearer St. Francis than Mississippi): "
+          f"{len(ws_members)} assemblages")
     print(f"  broad basin:   {len(broad_members)} sites")
-    print(f"  wrote {PROC/'basin_members_curated.txt'} and basin_members_broad.txt")
+    print(f"  wrote {PROC/'basin_members_curated.txt'}, basin_members_watershed.txt and basin_members_broad.txt")
     print("  curated members:", ", ".join(cur_members))
 
 

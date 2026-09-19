@@ -2,13 +2,13 @@
 
 Calibration of the Mainfort (2001) determinations against IntCal20 (Reimer et al. 2020). Probabilistic point calibration; SPDs are summed normalized calibrated densities. Calendar ages reported as AD.
 
-- Total parsed determinations: 109 across 14 proveniences.
-- St. Francis basin Parkin-phase subset: 41 dates from 7 sites (Callahan-Thompson, Clay Hill, Hazel, Kent, Neeley's Ferry, Parkin, Upper Nodena).
+- Total parsed determinations: 108 across 14 proveniences.
+- St. Francis basin Parkin-phase subset: 40 dates from 7 sites (Callahan-Thompson, Clay Hill, Hazel, Kent, Neeley's Ferry, Parkin, Upper Nodena).
 - Parkin (type site) alone: 19 dates.
 
 ## SPD span and the contact-truncation test
 
-- Basin SPD median: AD 1422; Parkin SPD median: AD 1483.
+- Basin SPD median: AD 1428; Parkin SPD median: AD 1483.
 - Basin SPD probability mass after contact (AD 1541): 0.29; after AD 1600: 0.18.
 - Parkin SPD mass after AD 1541: 0.37; after AD 1600: 0.23.
 
@@ -28,4 +28,4 @@ Proveniences matching curated basin assemblages: 5 (pooling 27 dates).
 
 **CA1 vs pooled median calendar age: Spearman rho = +0.70, p = 0.188** (n = 5 anchors). Compare the manuscript's prior 5-anchor single-date orientation (rho +0.50, p 0.39).
 
-Figure: figures/figS7_chronology.png (basin + Parkin SPD with contact line; CA1 vs pooled median calendar age, point size ~ n dates).
+Figure: figures/figS6_chronology.png (basin + Parkin SPD with contact line; CA1 vs pooled median calendar age, point size ~ n dates).

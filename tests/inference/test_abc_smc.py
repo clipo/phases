@@ -121,3 +121,49 @@ def test_bounded_prior_keeps_particles_in_support():
     assert abs(est - y_bar) < 0.15
     # n_sims now counts simulator calls only (finite, at least one per round)
     assert all(n >= 1 for n in res.n_sims)
+
+
+def test_weights_raise_rather_than_silently_going_uniform():
+    """F7. The linear-scale weight recursion underflowed to zero when the prior
+    log-density was strongly negative, and the guard replaced an all-zero vector
+    with UNIFORM weights: a plausible-looking result that has discarded the
+    importance-sampling correction entirely.
+
+    Probe: an ordinary prior must still produce non-uniform weights, or the test
+    would pass on a sampler that had stopped weighting at all."""
+    import numpy as np
+    import pytest
+    # NOTE: mls_emergence.inference re-exports the abc_smc FUNCTION, so the
+    # module has to be imported by its full path.
+    from mls_emergence.inference.abc_smc import abc_smc as run_smc
+
+    rng = np.random.default_rng(0)
+
+    def prior_sampler(r):
+        return r.uniform(-1.0, 1.0, size=2)
+
+    def simulator(theta, r):
+        return theta + r.normal(0, 0.1, size=2)
+
+    summary = lambda x: np.asarray(x, float)
+    distance = lambda a, b: float(np.sqrt(np.sum((a - b) ** 2)))
+    s_obs = np.array([0.0, 0.0])
+
+    # ordinary run: weights must vary, otherwise the probe below proves nothing
+    res = run_smc(prior_sampler, lambda th: 0.0, simulator, summary,
+                  distance, s_obs, n_particles=40, n_rounds=3, seed=1)
+    assert np.isclose(res.weights.sum(), 1.0)
+    assert res.weights.std() > 0, "weights are uniform; the probe cannot discriminate"
+
+    # a prior returning -inf everywhere after round 0 makes every weight
+    # non-finite; that must raise, not quietly become uniform
+    calls = {"n": 0}
+
+    def collapsing_logpdf(theta):
+        calls["n"] += 1
+        return 0.0 if calls["n"] <= 40 else -np.inf
+
+    with pytest.raises((FloatingPointError, RuntimeError)):
+        run_smc(prior_sampler, collapsing_logpdf, simulator, summary,
+                distance, s_obs, n_particles=40, n_rounds=3, seed=2,
+                max_sims_per_round=2000)
