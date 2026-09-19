@@ -25,4 +25,4 @@ CA axis oriented by radiocarbon so increasing = later.
 
 ## Settlement (broad basin)
 - Broad basin sites: 92.
-- Mound-height ranking: 55 sites with height > 0; Parkin rank 1/55 at 23 ft; tallest/second = 1.00.
+- Mound-height ranking: 55 sites with height > 0; Parkin rank 2/55 at 21.3 ft; tallest/second = 1.08.

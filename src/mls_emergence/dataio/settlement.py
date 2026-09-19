@@ -101,3 +101,52 @@ def join_pfg_to_lmv(counts: pd.DataFrame, lmv: pd.DataFrame):
         unmatched = sorted(raw_site_ids.tolist())
 
     return joined, unmatched
+
+
+# ---------------------------------------------------------------------------
+# Published corrections to the compiled settlement table
+# ---------------------------------------------------------------------------
+CORRECTIONS = "mound_height_corrections.csv"
+
+
+def load_height_corrections(path):
+    """Published mound measurements that supersede LMVData-22March2006.
+
+    The compiled table records one `Max Mound Height (ft)` per site with no
+    per-site provenance, and for some sites it disagrees with the excavation
+    literature. Rather than edit the compilation, corrections live in their own
+    committed file, each row naming the publication it comes from, so the
+    substitution is visible in the data rather than buried in a script.
+
+    Live rows: Parkin (11-N-1) at 21.3 ft with seven mounds, from Morse
+    (1981, 1990), replacing 23.0 ft and four mounds. That single row decides
+    whether Parkin ranks first in the basin, so it is data, not a constant.
+
+    Returns a frame indexed by normalized site number.
+    """
+    import pandas as pd
+    from pathlib import Path
+
+    df = pd.read_csv(Path(path))
+    df["_key"] = df["site_number"].astype(str).map(normalize_grid)
+    return df.drop_duplicates("_key").set_index("_key")
+
+
+def apply_height_corrections(heights, corrections, index_is_site_id=True):
+    """Substitute corrected heights into a site-indexed height series.
+
+    `heights` is indexed by site id as the caller holds it; matching is on the
+    normalized key so that 11-N-1 and 11-N-1/A meet. Returns a new series and
+    the list of site ids actually changed, which the caller should report
+    rather than assume (rule 1).
+    """
+    out = heights.copy()
+    changed = []
+    for site_id in list(out.index):
+        key = normalize_grid(str(site_id)) if index_is_site_id else str(site_id)
+        if key in corrections.index:
+            new = float(corrections.loc[key, "max_mound_height_ft"])
+            if out.loc[site_id] != new:
+                changed.append((str(site_id), float(out.loc[site_id]), new))
+            out.loc[site_id] = new
+    return out, changed

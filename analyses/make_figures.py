@@ -38,7 +38,10 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 from mls_emergence.dataio.pfg import load_pfg_counts
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
+from mls_emergence.dataio.settlement import (load_lmv, join_pfg_to_lmv,
+                                             normalize_grid,
+                                             load_height_corrections,
+                                             apply_height_corrections)
 from mls_emergence.signatures.neutral import theta_f, theta_e
 from mls_emergence.signatures.variance import cultural_fst
 from mls_emergence.signatures.assortativity import boundary_excess, _kmeans_labels, geo_distance
@@ -789,6 +792,15 @@ def fig8_ranksize() -> None:
     # required substituting Parkin's ~17-acre site area into a mound-area field,
     # was not a like-for-like comparison and is not used).
     mound_ht = pd.to_numeric(ext["Max Mound Height (ft)"], errors="coerce")
+    # Published measurements supersede the compilation where they exist
+    # (data/raw/mound_height_corrections.csv names the source per row). Parkin
+    # is 21.3 ft in Morse (1981, 1990), not the compilation's 23 ft, and that
+    # one row decides whether it ranks first in the basin.
+    corr = load_height_corrections(DATA / "raw" / "mound_height_corrections.csv")
+    mound_ht, ht_changed = apply_height_corrections(mound_ht, corr)
+    for sid, was, now in ht_changed:
+        print(f"fig8_ranksize: {sid} mound height {was:g} -> {now:g} ft "
+              f"({corr.loc[normalize_grid(sid), 'source_key']})")
     if PARKIN_BROAD in bmatched.index:
         mound.loc[PARKIN_BROAD] = True
         ditch.loc[PARKIN_BROAD] = True
@@ -813,7 +825,7 @@ def fig8_ranksize() -> None:
     if parkin_ht_rank:
         ax_main.plot(parkin_ht_rank, ht.loc[PARKIN_BROAD], "*", ms=15,
                      color=OI_BLACK, zorder=5,
-                     label=f"Parkin ({ht.loc[PARKIN_BROAD]:.0f} ft, rank {parkin_ht_rank}/{len(ht)})")
+                     label=f"Parkin ({ht.loc[PARKIN_BROAD]:.1f} ft, rank {parkin_ht_rank}/{len(ht)})")
     ax_main.set_xlabel("Rank")
     ax_main.set_ylabel("Maximum mound height (ft)")
     ax_main.text(0.96, 0.78,
