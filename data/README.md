@@ -46,21 +46,24 @@ assemblages:
 | Composition of the row | Assemblages | In the 29-assemblage basin set |
 |---|---|---|
 | Mainfort (1996) alone | 35 | 13 |
-| Mainfort (1996) + Lipo (2001) compilation, summed class by class | 16 | 12 |
+| Mainfort (1996) + Lipo (2001) compilation, summed class by class | 19 | 15 |
 | Lipo (2001) alone (Holden Lake, a 1996-97 collection) | 1 | 1 |
-| Not yet reconciled to a combination of the component sheets | 3 | 3 |
 
-Parkin is one of the merged rows: 3,495 sherds from Mainfort plus 1,303 from
-the Lipo (2001) compilation, giving the 4,798 the analyses use. Some component rows are keyed by LMV
-Survey grid number rather than site name (13-N-15 is Nickel, 12-N-3 is Rose
-Mound, 13-P-8 is Lake Cormorant, 13-N-21 is Castile Landing). The three
-unreconciled rows are Kent Place, Barton Ranch, and Cramor Place, whose merged
-totals exceed what the component sheets account for under the class mapping
-used to check them.
+Every row reconciles; nothing is left over. Parkin is one of the merged rows:
+3,495 sherds from Mainfort plus 1,303 from the Lipo (2001) compilation, giving
+the 4,798 the analyses use.
 
-Counts were reconciled on 2026-09-19 by summing the component sheets and
-comparing class by class; the composition above is that measurement, not a
-description of intent.
+The three sheets key the same assemblage three ways, which matters for anyone
+checking the merge. `Kent_Place` in the analysis sheet is `Kent` in Mainfort's
+sheet and `13-N-4` in Lipo's; likewise Barton Ranch (`Barton`, `11-O-10`) and
+Cramor Place (`Cramor`, `12-O-5`). Others appear under an LMV Survey grid
+number alone: 13-N-15 is Nickel, 12-N-3 is Rose Mound, 13-P-8 is Lake
+Cormorant, 13-N-21 is Castile Landing.
+
+The composition above is a measurement, not a statement of intent. It was
+produced on 2026-09-19 by summing the component sheets and comparing them class
+by class against the analysis sheet; the script is
+`scripts/reconcile_ceramic_matrix.py` in the working repository.
 
 ## `processed/` — derived (regenerable)
 
