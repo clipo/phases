@@ -21,6 +21,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from mls_emergence.dataio.coords import read_assemblage_xy
 from scipy.stats import spearmanr
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -46,7 +47,7 @@ def load_curated_full():
     cols = [c for c in DECORATED if c in cur.columns]
     counts = cur[cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
     counts = counts[counts.sum(axis=1) > 0]
-    xy = pd.read_csv(DATA / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     coords = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(pd.to_numeric, errors="coerce")

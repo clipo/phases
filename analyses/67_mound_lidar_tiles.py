@@ -70,6 +70,16 @@ OUT_DEFAULT = ROOT / "output" / "lidar"
 LRM_SIGMA_M = 40.0      # regional trend removed at this scale
 LRM_CLIP_M = 1.5        # colour saturation, so a 6 m mound does not flatten a 1 m one
 
+# Sites whose recorded coordinates do not sit on the mound. Without these a
+# rebuild silently re-centres the tile on the wrong ground: it happened to
+# 13-N-3 on 2026-09-19, undoing a correction made an hour earlier.
+#   13-N-3  the recorded point is 2.6 km southeast, with no mound within 2 km of
+#           it. This position is the mound the lidar shows in SW1/4 NW1/4 S14
+#           T3N R5E (Lee County), the legal description the author supplied.
+COORD_OVERRIDES = {
+    "13-N-3": (34.87130, -90.54478),
+}
+
 
 def webmerc(lat: float, lon: float) -> tuple[float, float]:
     x = R_EARTH * math.radians(lon)
@@ -126,14 +136,54 @@ def render(dem: Path, out_stub: Path) -> dict:
     v = (v + LRM_CLIP_M) / (2 * LRM_CLIP_M)
     rgb = cm.RdYlBu_r(v)[..., :3] * 255
     shade = np.clip(hs / 255.0, 0, 1)[..., None]
-    Image.fromarray((rgb * (0.45 + 0.55 * shade)).astype("uint8")).save(
+    # A 128-colour palette. The relief render is a smooth ramp, so quantising it
+    # is invisible at tracing zoom and cuts the tile from 1.25 MB to 0.44 MB —
+    # the difference between a handful of sites in one page and all of them.
+    Image.fromarray((rgb * (0.45 + 0.55 * shade)).astype("uint8")).convert(
+        "P", palette=Image.ADAPTIVE, colors=128).save(
         out_stub.with_suffix(".lrm.png"), optimize=True)
     Image.fromarray(np.clip(hs, 0, 255).astype("uint8")).save(
         out_stub.with_suffix(".hs.png"), optimize=True)
     hs_tif.unlink(missing_ok=True)
     return {"elev_min_m": float(z.min()), "elev_max_m": float(z.max()),
             "lrm_min_m": float(lrm.min()), "lrm_max_m": float(lrm.max()),
-            "lrm_sigma_m": LRM_SIGMA_M, "lrm_clip_m": LRM_CLIP_M}
+            "lrm_sigma_m": LRM_SIGMA_M, "lrm_clip_m": LRM_CLIP_M,
+            **detect(z, lrm)}
+
+
+def detect(z, lrm) -> dict:
+    """Is there anything mound-shaped in this tile, and how far off centre?
+
+    The recorded coordinates are not reliable: Parkin's sits 450 m from its
+    mound and 13-N-3's 2.6 km, with no mound at all in the tile built from it.
+    Rather than let someone hunt an empty field, each tile carries the strongest
+    compact relief feature it contains, so the tool can say up front whether the
+    window looks likely to hold a mound and roughly where.
+
+    Compact means relief above 1.5 m, 150 to 30,000 m2, and no more elongated
+    than 3:1 — which admits house pads and spoil piles as well as mounds. It is
+    a hint for the eye, never a determination.
+    """
+    from scipy.ndimage import label
+    lab, n = label(lrm > 1.5)
+    best = None
+    for i in range(1, n + 1):
+        sel = lab == i
+        a = int(sel.sum())
+        if not (150 <= a <= 30000):
+            continue
+        ys, xs = np.nonzero(sel)
+        wx, wy = xs.max() - xs.min() + 1, ys.max() - ys.min() + 1
+        if max(wx, wy) / max(1, min(wx, wy)) > 3:
+            continue
+        h = float(lrm[sel].max())
+        if best is None or h > best["relief_m"]:
+            best = {"relief_m": h, "area_m2": a,
+                    "offset_m": float(np.hypot(xs.mean() - z.shape[1] / 2,
+                                               ys.mean() - z.shape[0] / 2))}
+    if best is None:
+        return {"candidate": None}
+    return {"candidate": best}
 
 
 def basin_sites() -> pd.DataFrame:
@@ -197,14 +247,15 @@ def main() -> int:
     for sid, row in sites.iterrows():
         key = str(sid).replace("/", "_")
         stub = out / key
+        lat, lon = COORD_OVERRIDES.get(str(sid), (row["lat"], row["lon"]))
         try:
-            meta = fetch_dem(row["lat"], row["lon"], args.span,
-                             stub.with_suffix(".dem.tif"))
+            meta = fetch_dem(lat, lon, args.span, stub.with_suffix(".dem.tif"))
             meta.update(render(stub.with_suffix(".dem.tif"), stub))
         except Exception as exc:                       # noqa: BLE001
             print(f"{key}: FAILED ({exc})", file=sys.stderr)
             continue
         meta.update({"site_number": str(sid),
+                     "coordinate_overridden": str(sid) in COORD_OVERRIDES,
                      "site_name": str(row.get("site_name", "")).strip(),
                      "recorded_height_ft": float(row["height_ft"]),
                      "recorded_n_mounds": (None if pd.isna(row["n_mounds"])

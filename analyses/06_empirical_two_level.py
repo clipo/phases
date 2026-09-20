@@ -45,6 +45,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import spearmanr
 
 from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.coords import read_assemblage_xy
 from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
 from mls_emergence.signatures.neutral import theta_f, theta_e
 from mls_emergence.signatures.variance import cultural_fst
@@ -241,9 +242,7 @@ def main() -> None:
     emit(f"- Assemblages used for CA: {len(counts)}.")
 
     # -- Coordinates --------------------------------------------------------
-    xy = pd.read_csv(
-        DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t"
-    )
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
         "Assemblages"

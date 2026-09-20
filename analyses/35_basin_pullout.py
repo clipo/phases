@@ -50,6 +50,7 @@ res17 = importlib.import_module("17_basin_results")
 m36 = importlib.import_module("36_canonical_phase_map")
 from scipy.stats import mannwhitneyu  # noqa: E402
 from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
+from mls_emergence.dataio.coords import read_assemblage_xy
 
 DATA = ROOT / "data"
 OUT_MD = ROOT / "output" / "basin_pullout.md"
@@ -68,7 +69,7 @@ def load_full():
     type_cols = [c for c in mf.DECORATED_TYPES if c in cur.columns]
     counts = cur[type_cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
     counts = counts[counts.sum(axis=1) > 0]
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     coords = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(

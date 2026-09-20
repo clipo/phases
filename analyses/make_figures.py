@@ -38,6 +38,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
 from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.coords import read_assemblage_xy
 from mls_emergence.dataio.settlement import (load_lmv, join_pfg_to_lmv,
                                              normalize_grid,
                                              load_height_corrections,
@@ -167,7 +168,7 @@ def _load_curated():
     row_tot = counts.sum(axis=1)
     counts = counts[row_tot > 0]
     # Coordinates
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     coords_ll = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(
