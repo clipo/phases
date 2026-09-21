@@ -1,4 +1,23 @@
-"""16_basin_membership.py — canonical drainage-based basin membership.
+"""16_basin_membership.py — canonical basin membership, by phase.
+
+WHAT THE ANALYSIS UNIT IS (author ruling, 2026-09-20). The paper tests the
+phases of the St. Francis basin, so membership is phase membership: an
+assemblage is in the curated set when Mainfort (1996, Figure 1) assigns it to
+one of the five phases the Data section names — Parkin, Nodena, Kent, Walls or
+Parchman. The phases as drawn spill beyond the drainage, and the unit under
+test is the phase scheme, not the watershed.
+
+This replaces a 20 km corridor around the St. Francis / Tyronza / L'Anguille
+drainage, which was a geographic proxy for the same idea and disagreed with it
+both ways: it admitted five assemblages Mainfort places in no phase, and
+excluded nine that carry a phase label. The corridor distance is still measured
+and reported below, because how far the phases reach beyond the drainage is
+worth stating rather than assuming.
+
+The older, drainage-based note follows, kept because the measurements in it are
+still the record of what the corridor rule did.
+
+16_basin_membership.py — canonical drainage-based basin membership.
 
 Defines the St. Francis basin (the Parkin-phase analysis unit) HYDROLOGICALLY:
 assemblages/sites within DRAINAGE_KM of the St. Francis / Tyronza / L'Anguille
@@ -34,6 +53,8 @@ from __future__ import annotations
 
 import importlib
 import sys
+
+import numpy as np
 from pathlib import Path
 
 import geopandas as gpd
@@ -52,6 +73,11 @@ PROC = ROOT / "data" / "processed"
 SHP = ROOT / "data" / "Shapefiles"
 DRAINAGE = {"Saint Francis River", "Tyronza River", "L'Anguille River", "Saint Francis Floodway"}
 DRAINAGE_KM = 20.0
+
+# The five phases the Data section names for the basin. Tipton and Jones Bayou,
+# the other two in Figure 1, sit north and east of this scheme and are not part
+# of the unit under test.
+ST_FRANCIS_PHASES = ("Parkin", "Nodena", "Kent", "Walls", "Parchman")
 UTM = 26915
 
 
@@ -87,8 +113,32 @@ def main():
         geometry=gpd.points_from_xy(coords["Longitude"], coords["Latitude"]),
         crs="EPSG:4326").to_crs(epsg=UTM)
     cd = cp.geometry.distance(sf) / 1000.0
-    cur_members = sorted(coords.index[cd <= DRAINAGE_KM])
+
+    # Membership is Mainfort's phase label, not distance to water.
+    ph = importlib.import_module("36_canonical_phase_map")
+    labels, derived = ph.assign_phases_by_territory(
+        [str(i) for i in coords.index], coords[["Latitude", "Longitude"]].to_numpy(float))
+    in_phase = np.isin(labels, ST_FRANCIS_PHASES)
+    n_derived = int((in_phase & derived).sum())
+    print(f"  phase labels: {int(in_phase.sum()) - n_derived} from Mainfort's map, "
+          f"{n_derived} by territory containment "
+          f"({', '.join(sorted(coords.index[in_phase & derived]))})")
+    cur_members = sorted(coords.index[in_phase])
     (PROC / "basin_members_curated.txt").write_text("\n".join(cur_members) + "\n")
+
+    # How far the phase set reaches beyond the old corridor, stated rather than
+    # assumed: these are the assemblages on which the two rules disagree.
+    added = sorted(coords.index[in_phase & (cd > DRAINAGE_KM)])
+    dropped = sorted(coords.index[~in_phase & (cd <= DRAINAGE_KM)])
+    print(f"  phase rule: {len(cur_members)} assemblages in "
+          f"{', '.join(ST_FRANCIS_PHASES)}")
+    print(f"    beyond the {DRAINAGE_KM:.0f} km corridor but in a phase ({len(added)}): "
+          f"{', '.join(added) if added else 'none'}")
+    print(f"    inside the corridor but in no phase ({len(dropped)}): "
+          f"{', '.join(dropped) if dropped else 'none'}")
+    if len(added):
+        far = float(cd[in_phase].max())
+        print(f"    farthest phase member from the drainage: {far:.1f} km")
 
     # The stricter watershed set, used as the robustness check the main text
     # cites. An assemblage qualifies when it is inside the corridor AND nearer
@@ -98,7 +148,12 @@ def main():
     # could not produce (rule 1). It is derived and written here instead. The
     # count reproduces: 29 corridor, 19 watershed.
     md = cp.geometry.distance(mississippi_geom()) / 1000.0
-    ws_members = sorted(coords.index[(cd <= DRAINAGE_KM) & (cd < md)])
+    # The robustness set must be a SUBSET of the unit under test, or it tests
+    # something else. It is the phase members that are also hydrologically
+    # core: nearer the St. Francis system than the Mississippi. Under the old
+    # corridor rule this line ignored phase membership, which after the rule
+    # changed left it holding assemblages the primary set no longer contains.
+    ws_members = sorted(coords.index[in_phase & (cd < md)])
     (PROC / "basin_members_watershed.txt").write_text("\n".join(ws_members) + "\n")
 
     # broad settlement set (coords are UTM Easting/Northing)

@@ -10,14 +10,14 @@ Neutral pattern report. The four signatures (neutral departure, cultural F_ST, s
 
 ## 2. Ordinal axis (data note)
 
-The seriation-frequency file (pfg-cpl-frequency.csv) is the IDSS solution table: 102 numbered ordering positions over only 12 unique decorated assemblages (each repeated, spanning nearly the full range, constant counts). It cannot supply a single per-assemblage ordinal for the 258 sites. We therefore use it for the Parkin-region decorated seriation (Signature 2, below) and adopt the LMV 'Terminal Period' phase (F earliest -> A = contact/latest) as the working ordinal trajectory axis for the 258 sites.
+The seriation-frequency file (pfg-cpl-frequency.xlsx) is the IDSS solution table: 102 numbered ordering positions over only 12 unique decorated assemblages (each repeated, spanning nearly the full range, constant counts). It cannot supply a single per-assemblage ordinal for the 258 sites. We therefore use it for the Parkin-region decorated seriation (Signature 2, below) and adopt the LMV 'Terminal Period' phase (F earliest -> A = contact/latest) as the working ordinal trajectory axis for the 258 sites.
 - Decorated assemblages in the seriation file also matched in the 258: 10 (10-P-1, 11-N-1, 11-N-4, 11-N-9, 11-O-10, 13-N-16, 13-N-5, 13-O-10, 13-O-11, 13-O-5).
 - Sites with a usable Terminal Period phase: 238 / 255 (others coded '?' or blank).
 - Phase counts (ordinal: 1=F earliest ... 6=A contact): 1:4, 2:18, 3:11, 4:62, 5:82, 6:61.
 
 ## 3. Spatial clustering (k-means on coordinates)
 
-- Silhouette by k: k=4:0.499, k=5:0.455, k=6:0.425, k=7:0.422, k=8:0.392, k=9:0.380, k=10:0.393.
+- Silhouette by k: k=4:0.499, k=5:0.455, k=6:0.426, k=7:0.422, k=8:0.393, k=9:0.379, k=10:0.393.
 - Chosen k (max silhouette): **4**.
 - Cluster sizes: c0:39, c1:105, c2:31, c3:80.
 - Parkin (11-N-1) cluster: c1.
@@ -41,7 +41,7 @@ Panel (NaN where a signature is undefined for that bin):
 | 3 | 0.1896 | 0.0049 | -19.767 |
 | 4 | 0.8431 | 0.0120 | 21.054 |
 | 5 | 0.8442 | 0.0133 | 20.652 |
-| 6 | 0.6187 | 0.0299 | 22.574 |
+| 6 | 0.6187 | 0.0299 | 22.655 |
 
 Convergence score (z-averaged across the three bin-trajectory signatures; computed on complete bins only):
 
@@ -49,14 +49,14 @@ Convergence score (z-averaged across the three bin-trajectory signatures; comput
 - phase 3: -1.619
 - phase 4: 0.426
 - phase 5: 0.472
-- phase 6: 0.871
+- phase 6: 0.873
 
 Per-signature trend vs phase ordinal. OLS slope (positive = upward toward contact/A), Spearman rank correlation with the ordinal axis (monotone-trend test, robust to scale), and whether the bin series is monotone:
 
 - neutral_departure: slope = +0.02263 (over 6 bins); Spearman rho = +0.314 (p = 0.544); monotone = False
 - fst: slope = +0.00420 (over 5 bins); Spearman rho = +0.700 (p = 0.188); monotone = False
-- spatial_boundary: slope = +5.30802 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
-- convergence_score: slope = +0.41359; Spearman rho = +0.900 (p = 0.037)
+- spatial_boundary: slope = +5.31951 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
+- convergence_score: slope = +0.41381; Spearman rho = +0.900 (p = 0.037)
 
 ## 5. Parkin focus and Signature 2 (decorated seriation)
 
@@ -106,10 +106,10 @@ Trend label uses BOTH the OLS slope sign and the Spearman rank correlation. A si
 
 - Neutral departure: slope +0.02263, Spearman rho +0.314 -> **upward but non-monotone**.
 - Cultural F_ST: slope +0.00420, Spearman rho +0.700 -> **upward but non-monotone**.
-- Spatial boundary excess: slope +5.30802, Spearman rho +0.771 -> **upward but non-monotone**.
-- Convergence score: slope +0.41359, Spearman rho +0.900 -> **upward (monotone)**.
+- Spatial boundary excess: slope +5.31951, Spearman rho +0.771 -> **upward but non-monotone**.
+- Convergence score: slope +0.41381, Spearman rho +0.900 -> **upward (monotone)**.
 
-- Of the 3 bin-trajectory signatures: 3 trend upward toward contact (monotone or not), 0 flat/non-trending, 0 downward. Whether they CONVERGE (co-rise together) is the joint question; the convergence-score slope is +0.41359 (Spearman rho +0.900).
+- Of the 3 bin-trajectory signatures: 3 trend upward toward contact (monotone or not), 0 flat/non-trending, 0 downward. Whether they CONVERGE (co-rise together) is the joint question; the convergence-score slope is +0.41381 (Spearman rho +0.900).
 - Parkin: working-axis phase A (ordinal 6); decorated-seriation position rank 7/12; Signature 2 multi-membership in 5 co-seriable groups (bridge / two-lineage status present).
 - Settlement: rank-size slope -1.03, primacy 1.00, largest site is 20-M-5.
 

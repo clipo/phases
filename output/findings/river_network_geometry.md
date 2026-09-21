@@ -1,19 +1,19 @@
 # River-network geometry for the basin assemblages
 
-Produced by `analyses/61_river_network_geometry.py`. 29 assemblages, 406 pairs.
+Produced by `analyses/61_river_network_geometry.py`. 43 assemblages, 902 pairs.
 
 The along-waterway metric used by the copying kernel in `33_time_aware_emergence.py` and `34_emergence_robustness.py`.
 
 | quantity | value |
 |---|---|
-| assemblages connecting on the network | 29 of 29 |
-| river-graph largest component | 2016 nodes |
+| assemblages connecting on the network | 43 of 43 |
+| river-graph largest component | 2087 nodes |
 | unreachable pairs | 0 |
-| mean access distance to a mapped channel | 3.12 km |
-| max access distance | 10.6 km |
-| detour ratio, mean of per-pair ratios | 3.10 |
-| detour ratio, median of per-pair ratios | 2.39 |
-| detour ratio, ratio of mean distances | 2.67 |
+| mean access distance to a mapped channel | 3.85 km |
+| max access distance | 11.6 km |
+| detour ratio, mean of per-pair ratios | 3.32 |
+| detour ratio, median of per-pair ratios | 2.42 |
+| detour ratio, ratio of mean distances | 2.71 |
 
 ## Reading
 

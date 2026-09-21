@@ -6,28 +6,28 @@ Produced by `analyses/47_basin_scope_check.py`. Seed 0, 2000 draws x 4 chains, F
 
 | | A: as analysis 43 runs today | B: restricted to the basin |
 |---|---|---|
-| assemblages | **55** | **29** |
-| spatial clusters | 5 | 3 |
-| BN F_ST median | **0.0665** | **0.0731** |
-| BN 95% HDI | [0.0341, 0.1140] | [0.0220, 0.1579] |
-| Gini-Simpson median | 0.0327 | 0.0179 |
-| Gini-Simpson 95% HDI | [0.0301, 0.0352] | [0.0158, 0.0202] |
-| plug-in F_ST | 0.0330 | 0.0179 |
-| max R-hat | 1.0001 | 1.0004 |
-| min ESS | 4672 | 4299 |
+| assemblages | **55** | **43** |
+| spatial clusters | 5 | 5 |
+| BN F_ST median | **0.0754** | **0.0659** |
+| BN 95% HDI | [0.0392, 0.1305] | [0.0339, 0.1139] |
+| Gini-Simpson median | 0.0388 | 0.0277 |
+| Gini-Simpson 95% HDI | [0.0360, 0.0414] | [0.0254, 0.0300] |
+| plug-in F_ST | 0.0391 | 0.0280 |
+| max R-hat | 1.0001 | 1.0010 |
+| min ESS | 5939 | 4375 |
 | divergences | 0 | 0 |
 
 ## What is in A but not in the basin
 
-26 assemblages: `40LA007`, `40TP026`, `Beck`, `Bishop`, `Cheatham`, `Chuccalissa`, `Fullen`, `Graves_Lake`, `Hatchie`, `Irby`, `Jeter`, `Jones_Bayou`, `Lake_Cormorant`, `Mound_Place`, `Norfolk`, `Parchman`, `Porter`, `Pouncey`, `Rast`, `Richardsons_Landing`, `Salomon`, `Wall`, `Walls`, `Wilder`, `Woodlyn`, `Young`.
+12 assemblages: `40LA007`, `40TP026`, `Bishop`, `Fullen`, `Graves_Lake`, `Hatchie`, `Jeter`, `Jones_Bayou`, `Porter`, `Rast`, `Richardsons_Landing`, `Wilder`.
 
-Silhouette scores on the basin coordinates, k = 2..6: k=2: 0.5528, k=3: 0.6008, k=4: 0.5051, k=5: 0.4935, k=6: 0.4774. k=3 wins clearly, which is the "three spatial clusters" the manuscript describes. The k=5 in column A is the silhouette optimum for the wider curated set, not for the basin.
+Silhouette scores on the basin coordinates, k = 2..6: k=2: 0.4555, k=3: 0.4173, k=4: 0.5022, k=5: 0.5665, k=6: 0.5138. k=5 wins clearly, which is the "three spatial clusters" the manuscript describes. The k=5 in column A is the silhouette optimum for the wider curated set, not for the basin.
 
 ## Reading
 
 `prepare_inputs()` returns the whole curated set with coordinates. `43_bayesian_fst.basin_group_counts()` groups it by `inp.cluster_of` without restricting to `data/processed/basin_members_curated.txt`, so despite its name and despite the report headed "Observed St. Francis basin", column A is a regional quantity. The excluded 26 include `Walls`, `Wall`, `Chuccalissa` and `Parchman`, which are the Mississippi-proximal sites that `analyses/16_basin_membership.py` names in its own docstring as the reason the earlier latitude cut was replaced by the hydrological rule.
 
-The Gini-Simpson readout, the quantity that matches the manuscript's estimator, moves from 0.0327 to 0.0179, a 45 percent reduction. The BN parameter moves less but its interval widens as it should on 29 assemblages rather than 55. Both fits are numerically healthy, so this is a scope defect and not a sampling one.
+The Gini-Simpson readout, the quantity that matches the manuscript's estimator, moves from 0.0388 to 0.0277, a 29 percent reduction. The BN parameter moves less but its interval widens as it should on 29 assemblages rather than 55. Both fits are numerically healthy, so this is a scope defect and not a sampling one.
 
 ## Scope of the consequence
 

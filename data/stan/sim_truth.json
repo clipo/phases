@@ -6,7 +6,7 @@
       "tau": 0.5,
       "spatial_share": 0.8,
       "kernel": 1,
-      "sherds": 27924
+      "sherds": 36391
     },
     "10.0": {
       "rho": 10.0,
@@ -14,7 +14,7 @@
       "tau": 0.5,
       "spatial_share": 0.8,
       "kernel": 1,
-      "sherds": 27924
+      "sherds": 36391
     },
     "20.0": {
       "rho": 20.0,
@@ -22,7 +22,7 @@
       "tau": 0.5,
       "spatial_share": 0.8,
       "kernel": 1,
-      "sherds": 27924
+      "sherds": 36391
     },
     "40.0": {
       "rho": 40.0,
@@ -30,7 +30,7 @@
       "tau": 0.5,
       "spatial_share": 0.8,
       "kernel": 1,
-      "sherds": 27924
+      "sherds": 36391
     },
     "80.0": {
       "rho": 80.0,
@@ -38,7 +38,7 @@
       "tau": 0.5,
       "spatial_share": 0.8,
       "kernel": 1,
-      "sherds": 27924
+      "sherds": 36391
     }
   },
   "alpha": [

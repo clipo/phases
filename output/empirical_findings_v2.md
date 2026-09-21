@@ -26,8 +26,8 @@ Neutral pattern report on two datasets. TRANSMISSION level: a correspondence-ana
 
 ### 3. Spatial clustering of curated assemblages (k-means)
 
-- Silhouette by k: k=2:0.545, k=3:0.502, k=4:0.540, k=5:0.577, k=6:0.546; chosen k = 5.
-- Cluster sizes: c0:13, c1:11, c2:14, c3:4, c4:13.
+- Silhouette by k: k=2:0.550, k=3:0.505, k=4:0.519, k=5:0.557, k=6:0.536; chosen k = 5.
+- Cluster sizes: c0:4, c1:11, c2:12, c3:14, c4:14.
 - Parkin cluster: c1.
 
 ### 4. Four signatures along the CA axis
@@ -47,7 +47,7 @@ Bins (ca_bin, n assemblages, n clusters, CA range):
 | 0 | 1.1360 | 0.0606 | -2.720 | 18 |
 | 1 | 1.0434 | 0.0235 | -4.198 | 19 |
 | 2 | 0.6268 | 0.1306 | -8.113 | 11 |
-| 3 | 0.1968 | 0.0109 | -2.786 | 26 |
+| 3 | 0.1925 | 0.0047 | -0.014 | 26 |
 | 4 | 0.2399 | 0.0189 | 1.457 | 32 |
 | 5 | 0.3047 | 0.0140 | 7.811 | 32 |
 
@@ -55,10 +55,10 @@ Signature 2 (IDSS n_groups) is reported per bin where the bin is tractable (3-14
 
 Per-signature trend along the CA axis. OLS slope per bin (positive = rising toward later/contact), Spearman rank correlation with the ordered bin index, and monotonicity:
 
-- neutral_departure: slope = -0.19992 (over 6 bins); Spearman rho = -0.771 (p = 0.072); monotone = False
-- fst: slope = -0.01047 (over 6 bins); Spearman rho = -0.657 (p = 0.156); monotone = False
-- spatial_boundary: slope = +2.14117 (over 6 bins); Spearman rho = +0.600 (p = 0.208); monotone = False
-- convergence_score: slope = -0.11490; Spearman rho = -0.486 (p = 0.329) (over 6 complete bins).
+- neutral_departure: slope = -0.20004 (over 6 bins); Spearman rho = -0.771 (p = 0.072); monotone = False
+- fst: slope = -0.01065 (over 6 bins); Spearman rho = -0.657 (p = 0.156); monotone = False
+- spatial_boundary: slope = +2.22037 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
+- convergence_score: slope = -0.10858; Spearman rho = -0.486 (p = 0.329) (over 6 complete bins).
 
 ### 5. Parkin link (transmission level)
 
@@ -107,12 +107,12 @@ Per-signature trend along the CA axis. OLS slope per bin (positive = rising towa
 
 Trend labels use both the OLS slope sign and the Spearman rank correlation; with only a handful of bins these are descriptive, not inferential.
 
-- Neutral departure: slope -0.19992, Spearman rho -0.771 -> **downward but non-monotone**.
-- Cultural F_ST: slope -0.01047, Spearman rho -0.657 -> **downward but non-monotone**.
-- Spatial boundary excess: slope +2.14117, Spearman rho +0.600 -> **upward but non-monotone**.
-- Convergence score: slope -0.11490, Spearman rho -0.486 -> **downward (non-monotone)**.
+- Neutral departure: slope -0.20004, Spearman rho -0.771 -> **downward but non-monotone**.
+- Cultural F_ST: slope -0.01065, Spearman rho -0.657 -> **downward but non-monotone**.
+- Spatial boundary excess: slope +2.22037, Spearman rho +0.771 -> **upward but non-monotone**.
+- Convergence score: slope -0.10858, Spearman rho -0.486 -> **downward (non-monotone)**.
 
-- Of the 3 continuous signatures: 1 trend upward toward later, 0 flat/non-trending, 2 downward. Convergence-score slope -0.11490 (rho -0.486).
+- Of the 3 continuous signatures: 1 trend upward toward later, 0 flat/non-trending, 2 downward. Convergence-score slope -0.10858 (rho -0.486).
 - CA<->14C: Spearman +0.500 on 5 anchors (p 0.391); CA axis already time-ordered.
 - Parkin (transmission): CA position rank 45/55 (late); 14C AD 1459; Signature-2 bridge status as reported in section 5.
 - Parkin (settlement): mound present True, ditch coded False (see data note), height 23 ft.

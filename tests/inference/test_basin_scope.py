@@ -47,8 +47,12 @@ def test_basin_fit_uses_exactly_the_canonical_membership(inp, a43):
     assert fitted == expected, (
         f"fitted set differs from the membership file: "
         f"{sorted(fitted ^ expected)}")
-    # The membership file is 29 assemblages; all of them carry coordinates.
-    assert len(fitted) == 29
+    # The membership file is 43 assemblages; all of them carry coordinates.
+    # It went 29 -> 30 on 2026-09-19 (Beck's coordinate corrected) and 30 -> 43
+    # on 2026-09-20, when membership became phase membership rather than a
+    # drainage corridor. The count is pinned deliberately: an accidental change
+    # of scope should fail here rather than quietly alter every basin number.
+    assert len(fitted) == 43
 
 
 @pytest.mark.data
@@ -57,11 +61,31 @@ def test_region_scope_is_genuinely_different(inp, a43):
     gc_b, _ = a43.basin_group_counts(inp, scope="basin")
     gc_r, _ = a43.basin_group_counts(inp, scope="region")
 
-    # Cluster counts differ: k is re-selected on the basin's own coordinates.
-    assert gc_b.shape[0] == 3, "basin should give three spatial clusters"
-    assert gc_r.shape[0] == 5, "region should give five"
-    # And the region pools strictly more sherds, because it pools more sites.
-    assert gc_r.sum() > gc_b.sum()
+    # The original defect (F18) was the basin scope silently fitting the whole
+    # curated set. The discriminator used to be the cluster count, which
+    # differed three against five; at 43 assemblages both scopes select five,
+    # and the sherd totals now differ by only about 4 percent, so neither
+    # separates the accounts any more. What still does is membership: the
+    # region scope reaches twelve assemblages the phase set excludes, and a
+    # regression to fitting everything would pull them in.
+    outside = {"40LA007", "40TP026", "Bishop", "Fullen", "Graves_Lake", "Hatchie",
+               "Jeter", "Jones_Bayou", "Porter", "Rast", "Richardsons_Landing",
+               "Wilder"}
+    fitted = set(a43.fitted_basin_ids(inp))
+    assert not (fitted & outside), (
+        "basin scope pulled in assemblages the phase set excludes: "
+        f"{sorted(fitted & outside)}")
+    assert outside <= {str(a) for a in inp.have_coords_ids}, (
+        "the probe's own reference list has drifted from the curated set")
+    # And the difference between the two scopes is exactly those twelve. The
+    # expected sherd total is read off the counts table, not from either scope's
+    # return value, so the rival account -- "the scope argument changes nothing
+    # that matters" -- fails here on a quantity the code path cannot supply.
+    extra = float(inp.counts.loc[sorted(outside)].to_numpy(float).sum())
+    assert extra > 0
+    assert gc_r.sum() - gc_b.sum() == pytest.approx(extra, rel=1e-9), (
+        f"region minus basin is {gc_r.sum() - gc_b.sum():.0f} sherds; the twelve "
+        f"assemblages outside the phase set hold {extra:.0f}")
     # Same type vocabulary either way; only the grouping and scope change.
     assert gc_b.shape[1] == gc_r.shape[1]
 

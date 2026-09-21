@@ -1,0 +1,6 @@
+cluster,n_assemblages,sherds,observed_term,share_of_observed,drift_median_term,excess,members
+1,4,762,0.012058147520161239,0.430407576687696,0.00014679402049441975,82.1433153717567,"Dundee, Parchman, Salomon, West_Mounds"
+2,3,433,0.003163585638633966,0.11292209073506468,0.00017637817038610652,17.936378587603066,"Carson_Lake, Notgrass, Upper_Nodena"
+3,11,6756,0.006732408577818061,0.24030885808995167,0.0005120780351424161,13.147231702577681,"Big_Eddy, Castile_Landing, Clay_Hill, Connor, Cramor_Place, Davis, Grant, Kent_Place, Nickel, Soudan, Starkley"
+0,10,15580,0.005611250181448329,0.20028985287727477,0.001455602088722377,3.8549341368240837,"Barton_Ranch, Cummins, Fortune, Holden_Lake, Neeleys_Ferry, Parkin, Rose_Mound, Turnbow, Vernon_Paul, Williamson"
+4,15,12860,0.0004502569070766259,0.016071621610012972,0.0009912267191688738,0.4542421005904264,"Beck, Belle_Meade, Cheatham, Chuccalissa, Commerce, Hollywood, Irby, Lake_Cormorant, Mound_Place, Norfolk, Pouncey, Wall, Walls, Woodlyn, Young"

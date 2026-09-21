@@ -31,7 +31,7 @@ WHAT IS SWEPT. Per-site populations are drawn lognormal with the calibrated cell
 population as the arithmetic mean and a coefficient of variation from 0 (the
 current uniform model) upward. The lognormal is a stand-in for a settlement-size
 distribution, not an estimate of one: mound height, the only size proxy in
-`LMVData.xlsx` with usable coverage, joins for 23 of the 29 basin assemblages
+`LMVData.xlsx` with usable coverage, and joins for most of the basin set
 and `Max Mound Area` is empty, so a per-site population cannot be defended
 directly. The question here is therefore how much inequality it would TAKE, which
 the sweep can answer, rather than how much there was, which these data cannot.
@@ -80,11 +80,18 @@ def populations(n_sites, mean_n, cv, rng):
     return np.maximum(np.rint(n), 2).astype(np.int64)
 
 
+CORRECTIONS_CSV = "mound_height_corrections.csv"
+
+
 def empirical_cv():
     """How unequal the basin's settlements actually were, as far as we can tell.
 
-    `data/LMVData-22March2006.xls` carries maximum mound height for 23 of the 29
-    basin assemblages. It is the only size field in that table with usable
+    `data/LMVData-22March2006.xls` carries maximum mound height for most of the
+    basin assemblages; the count and the denominator are both measured at write
+    time rather than typed, because this docstring said "23 of the 29" and the
+    report said "34 of the 29" after the set grew to 43 -- the numerator was
+    recomputed and the denominator was a literal.
+    It is the only size field in that table with usable
     coverage: `Area` is a region label (St. Francis, Memphis, SEMO) rather than a
     site area, and `Max Mound Area (sq ft)` is empty throughout.
 
@@ -103,12 +110,37 @@ def empirical_cv():
     d = d.drop_duplicates("_k").set_index("_k")
     h = pd.to_numeric(
         d.reindex([norm(i) for i in b.index])["Max Mound Height (ft)"],
-        errors="coerce").dropna().to_numpy(float) + 1.0
-    out = {}
+        errors="coerce").dropna()
+
+    # The published corrections apply here too. This script read the compiled
+    # table directly and so kept Parkin at the compilation's 23.0 ft while
+    # Figure 8 and 17_basin_results used Morse's 21.3 ft -- the same field
+    # carrying two values in one repository (rule 7). Matching is by site name
+    # through the compilation's own Number column, because the corrections file
+    # is keyed by site number and this frame is keyed by assemblage name.
+    from mls_emergence.dataio.settlement import (load_height_corrections,
+                                                 normalize_grid)
+    corr = load_height_corrections(ROOT / "data" / "raw" / CORRECTIONS_CSV)
+    num_by_key = {norm(r["Name"]): normalize_grid(str(r["Number"]))
+                  for _, r in d.reset_index().iterrows()}
+    applied = []
+    for key in list(h.index):
+        site = num_by_key.get(key)
+        if site in corr.index:
+            new_h = float(corr.loc[site, "max_mound_height_ft"])
+            if h.loc[key] != new_h:
+                applied.append(f"{key} {h.loc[key]} -> {new_h} ft")
+                h.loc[key] = new_h
+    for line in applied:
+        print(f"  mound height correction: {line}", flush=True)
+
+    h = h.to_numpy(float) + 1.0
+    out = {"_corrections": applied}
     for power, label in ((1, "height"), (2, "height squared"), (3, "height cubed")):
         v = h ** power
         out[label] = float(v.std(ddof=1) / v.mean())
     out["_n"] = int(h.size)
+    out["_n_total"] = int(len(b.index))
     return out
 
 
@@ -135,7 +167,8 @@ def write_report(rows) -> None:
     emp = empirical_cv()
     L += ["", "## How much inequality was there?", "",
           f"Maximum mound height in `data/LMVData-22March2006.xls` covers "
-          f"{emp['_n']} of the 29 basin assemblages and is the only size field in that "
+          f"{emp['_n']} of the {emp['_n_total']} basin assemblages and is the only size "
+          "field in that "
           "table with usable coverage (`Area` is a region label, `Max Mound Area` is "
           "empty). Height is not population, so the implied inequality is given as a "
           "bracket over three scalings:", ""]

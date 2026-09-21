@@ -69,17 +69,24 @@ ALT_PRIOR = ("uniform",)          # reported alongside, per rule 20(b)
 def basin_group_counts(inp, scope: str = "basin"):
     """Observed between-cluster counts (n_clusters, K) and sizes.
 
-    ``scope="basin"`` (default) restricts to the canonical drainage-basin
-    membership in ``data/processed/basin_members_curated.txt`` (29 assemblages)
-    and re-selects the number of spatial clusters on the BASIN's coordinates by
-    the same silhouette rule analysis 07 uses. That gives k = 3, which is the
-    "three spatial clusters" the manuscript describes.
+    ``scope="basin"`` (default) restricts to the canonical membership in
+    ``data/processed/basin_members_curated.txt`` (43 assemblages: those the
+    St. Francis phase territories contain, per
+    ``analyses/16_basin_membership.py``) and re-selects the number of spatial
+    clusters on the BASIN's coordinates by the same silhouette rule analysis 07
+    uses. That gives k = 5, which is the "five spatial clusters" the manuscript
+    describes. It gave k = 3 while the membership was the 29-assemblage
+    drainage corridor; the selection is made on the coordinates in hand, never
+    fixed, so the count moves when the set does.
 
     ``scope="region"`` reproduces the pre-2026-08-31 behavior: the whole curated
     set with coordinates (55 assemblages) grouped by ``inp.cluster_of``, whose k
-    is selected on the wider set and comes out at 5. It is retained because it
-    is a legitimate quantity at a different spatial scale, not because it was
-    the intent here.
+    is also selected on the wider set. It is retained because it is a legitimate
+    quantity at a different spatial scale, not because it was the intent here.
+    The twelve assemblages it adds sit outside the phase territories and carry
+    1,710 sherds, so the two scopes differ in membership far more than in
+    sherd count; ``tests/inference/test_basin_scope.py`` discriminates on the
+    membership for that reason.
 
     HISTORY. Until 2026-08-31 this function ignored the basin membership
     entirely and always returned the 55-assemblage grouping, while being named

@@ -16,7 +16,7 @@ Subset n by latitude cut:
 | >= 35.0 | 31 | 55 | [35.005, 35.839] | [35.005, 35.617] |
 
 - Curated assemblages EXCLUDED at lat < 34.5 (2): Salomon (34.35), Parchman (34.36) (the southern St-Francis-type outliers; Winterville is not in the curated decorated set at all).
-- Broad St-Francis-flagged sites below the cut (1): 17-M-2 (33.95). All other St-Francis-flagged sites are at lat >= 34.76.
+- Broad St-Francis-flagged sites below the cut (1): 17-M-2 (33.95). All other St-Francis-flagged sites are at lat >= 34.77.
 - Parkin: curated lat 35.276, broad (11-N-1) lat 35.276 -> in the basin at every cut.
 
 ## 1. Transmission signatures + convergence (basin curated set)
@@ -27,47 +27,47 @@ Basin curated decorated set (lat >= 34.5): **n = 53** assemblages, 10 decorated 
 - 14C anchors within the basin: 5; CA<->14C Spearman = +0.500 (p = 0.391); axis kept (already increasing with time, or too few anchors).
 - The basin time anchor is WEAK (5 anchors): the CA axis is essentially a relative seriation ordinate; per-bin slopes are not rates.
 
-- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.560, k=3:0.523, k=4:0.563, k=5:0.529, k=6:0.503; chosen k = 4.
-  cluster sizes: c0:13, c1:14, c2:11, c3:15.
+- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.565, k=3:0.527, k=4:0.541, k=5:0.502, k=6:0.471; chosen k = 2.
+  cluster sizes: c0:15, c1:38.
 
 ### Four signatures along the CA axis (6 bins)
 
 Bins (ca_bin, n assemblages, n within-basin clusters represented):
-- bin 0: n=9, clusters=3
+- bin 0: n=9, clusters=2
 - bin 1: n=9, clusters=2
-- bin 2: n=9, clusters=4
-- bin 3: n=8, clusters=4
-- bin 4: n=9, clusters=3
-- bin 5: n=9, clusters=2
+- bin 2: n=9, clusters=2
+- bin 3: n=8, clusters=2
+- bin 4: n=9, clusters=1
+- bin 5: n=9, clusters=1
 
 | ca_bin | neutral_departure | fst | spatial_boundary |
 |---|---|---|---|
-| 0 | 1.3619 | 0.0293 | 5.782 |
+| 0 | 0.7922 | 0.0261 | 5.782 |
 | 1 | 1.2129 | 0.0016 | -4.396 |
-| 2 | 0.5108 | 0.0208 | 2.786 |
-| 3 | 0.4255 | 0.0915 | 84.847 |
-| 4 | 0.1262 | 0.0135 | -8.317 |
-| 5 | 0.3047 | 0.0140 | 7.811 |
+| 2 | 0.4291 | 0.0010 | 2.786 |
+| 3 | 0.3763 | 0.0082 | -32.985 |
+| 4 | 0.0246 | nan | -8.317 |
+| 5 | 0.2070 | nan | 7.811 |
 
 Per-signature trend along the CA axis (OLS slope, bootstrap 95% CI over assemblages, Spearman rho):
 
 | signature | OLS slope | bootstrap 95% CI | Spearman rho | CI excludes 0 |
 |---|---|---|---|---|
-| Neutral departure | -0.24662 | [-0.34092, -0.12300] | -0.943 | yes |
-| Cultural F_ST | +0.00086 | [-0.00779, +0.01146] | -0.143 | no |
-| Spatial boundary excess | +2.29835 | [-11.88868, +5.28212] | +0.143 | no |
+| Neutral departure | -0.18696 | [-0.32452, -0.11593] | -0.886 | yes |
+| Cultural F_ST | -0.00541 | [-0.01419, +0.01152] | -0.400 | no |
+| Spatial boundary excess | -1.06827 | [-12.14661, +5.02374] | -0.029 | no |
 
-- convergence_score: slope = -0.14373; Spearman rho = -0.600 (p = 0.208) over 6 complete bins.
-- Of 3 signatures within the basin: 0 trend up (rho>+0.3), 1 trend down (rho<-0.3); 1 have a bootstrap slope CI excluding 0. Convergence (H1) requires all three rising together with CIs above 0.
+- convergence_score: slope = -0.61688; Spearman rho = -1.000 (p = 0.000) over 4 complete bins.
+- Of 3 signatures within the basin: 0 trend up (rho>+0.3), 2 trend down (rho<-0.3); 1 have a bootstrap slope CI excluding 0. Convergence (H1) requires all three rising together with CIs above 0.
 
 ### Bin-count sensitivity (basin)
 
 Spearman rho of each signature with the ordered bin index:
 | signature | 4 bins | 6 bins | 8 bins |
 |---|---|---|---|
-| Neutral departure | -1.000 | -0.943 | -0.929 |
-| Cultural F_ST | -0.800 | -0.143 | +0.024 |
-| Spatial boundary excess | +0.000 | +0.143 | -0.619 |
+| Neutral departure | -1.000 | -0.886 | -0.738 |
+| Cultural F_ST | -0.500 | -0.400 | -0.100 |
+| Spatial boundary excess | +0.000 | -0.029 | -0.619 |
 
 ## 2. IDSS group structure + Parkin bridge (basin curated set)
 
@@ -104,7 +104,7 @@ Parkin's LMV Max Mound Area is coded 0; substituting the documented site area (~
 
 ## 4. Comparison to whole-LMV (NEUTRAL)
 
-Transmission level. Whole-LMV (scripts 06/07): the four signatures did not co-rise toward contact; the convergence-score slope was slightly negative; the IDSS structure was a fragmented, overlapping-lineage system with Parkin a high-degree bridge. Within the basin (lat >= 34.5, n = 53): 0/3 continuous signatures trend up, 1/3 trend down, 1/3 have a bootstrap slope CI excluding zero; convergence-score slope -0.1437 (rho -0.600). The IDSS structure remains fragmented and Parkin remains a high-degree bridge (rank 4/53 at cont=0.1).
+Transmission level. Whole-LMV (scripts 06/07): the four signatures did not co-rise toward contact; the convergence-score slope was slightly negative; the IDSS structure was a fragmented, overlapping-lineage system with Parkin a high-degree bridge. Within the basin (lat >= 34.5, n = 53): 0/3 continuous signatures trend up, 2/3 trend down, 1/3 have a bootstrap slope CI excluding zero; convergence-score slope -0.6169 (rho -1.000). The IDSS structure remains fragmented and Parkin remains a high-degree bridge (rank 4/53 at cont=0.1).
 
 Settlement level (the picture most likely to change). Whole-LMV LMV-coded mound-area rank-size: slope -1.04, primacy 1.00, largest = 20-M-5 (no primacy). Within the basin: slope -0.88, primacy 1.89, largest = 13-M-1. With the corrected Parkin site area, whole-LMV: slope -1.26, primacy 16.38, Parkin rank 1/56; within-basin: slope -1.58, primacy 41.14, Parkin rank 1/20.
 

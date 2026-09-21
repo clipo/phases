@@ -42,6 +42,33 @@ SIG_LABEL = {"neutral": "neutral departure", "seriability": "IDSS groups per ass
              "fst": "cultural $F_{ST}$", "spatial": "spatial boundary"}
 
 
+def _s_star_text(p) -> str:
+    """The detection threshold, or why there isn't one.
+
+    When power never reaches the target anywhere on the strength grid, s* is
+    nan: the record cannot detect closure at any strength tested, which is a
+    finding, not a missing number. Printing "nan" invites it to be read as a
+    failed computation or, worse, copied into prose as though it were a value
+    (rule 17: a quantity that is not identified is reported as not identified).
+    """
+    import numpy as _np
+    if _np.isfinite(p["s_star"]):
+        return f"{p['s_star']:.2f}"
+    pw = _np.asarray(p["power"], dtype=float)
+    return (f"not reached at any strength tested (peak power {pw.max():.2f} at "
+            f"s = {S_GRID[int(pw.argmax())]:.1f})")
+
+
+def _penalty_text(power) -> str:
+    """The cost of time-averaging, when both thresholds exist to compare."""
+    import numpy as _np
+    a, b = power[1]["s_star"], power[3]["s_star"]
+    if _np.isfinite(a) and _np.isfinite(b):
+        return f"{b - a:+.2f}"
+    return ("not comparable, because the time-averaged threshold is never "
+            "reached on this grid")
+
+
 def zipf_base(K):
     p = 1.0 / np.arange(1, K + 1)
     return p / p.sum()
@@ -328,9 +355,9 @@ def main():
     for si, s in enumerate(S_GRID):
         L.append(f"| {s:.1f} | {power[1]['power'][si]:.2f} | {power[3]['power'][si]:.2f} |")
     L += ["",
-          f"- Detection threshold s* = {power[1]['s_star']:.2f} (no averaging) / "
-          f"{power[3]['s_star']:.2f} (time-averaged): the weakest emergence recovered at power "
-          f">= {POWER_TARGET:.0%}. Time-averaging penalty {power[3]['s_star']-power[1]['s_star']:+.2f}.",
+          f"- Detection threshold s* = {_s_star_text(power[1])} (no averaging) / "
+          f"{_s_star_text(power[3])} (time-averaged): the weakest emergence recovered at power "
+          f">= {POWER_TARGET:.0%}. Time-averaging penalty: {_penalty_text(power)}.",
           f"- Null (s=0) F_ST trend mean {power[1]['null_mean']:+.2f}; detection threshold "
           f"{thr1:+.2f}.",
           "- Thresholds use 400 separate null calibration draws per window; the s = 0 test row "

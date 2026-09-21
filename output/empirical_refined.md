@@ -32,7 +32,7 @@ Primary run uses the IDSS continuity threshold cont=0.1 (see note: cont=0.30 of 
 - Number of maximal co-seriable groups (cont=0.1): **127**. Largest group sizes: [4, 4, 4, 4, 4, 4, 4, 4] (max group size = 4).
 - Group-size distribution {size: n_groups}: {1: 5, 2: 41, 3: 61, 4: 20}. The structure is highly FRAGMENTED: many small overlapping windows, no single large ordering covering the set. This matches Lipo et al. 2015, where the largest LMV solution held only four assemblages.
 - Multi-membership (bridge) assemblages: 47 of 55 belong to more than one maximal group.
-- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.617 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
+- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.613 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
 - **Parkin** belongs to 17 maximal groups (bridge = True); bridge rank 4 of 55 by membership count (cont=0.1). Top bridge assemblages: Pouncey(21), Fortune(21), Cheatham(19), Parkin(17), Vernon_Paul(17), Young(14).
 
 Bin/continuity sensitivity of the IDSS structure:
@@ -52,9 +52,9 @@ Bin/continuity sensitivity of the IDSS structure:
 Spearman rho of each signature with the ordered bin index:
 | signature | 4 bins | 6 bins | 8 bins |
 |---|---|---|---|
-| Neutral departure | -1.000 | -0.771 | -0.833 |
-| Cultural F_ST | -0.600 | -0.657 | -0.500 |
-| Spatial boundary excess | +0.000 | +0.600 | -0.071 |
+| Neutral departure | -1.000 | -0.771 | -0.857 |
+| Cultural F_ST | -0.600 | -0.657 | -0.429 |
+| Spatial boundary excess | +0.000 | +0.771 | -0.071 |
 
 - Sign stability across bin counts: Neutral departure=stable, Cultural F_ST=stable, Spatial boundary excess=UNSTABLE.
 
@@ -62,9 +62,9 @@ Spearman rho of each signature with the ordered bin index:
 
 | signature | OLS slope | bootstrap 95% CI | Spearman rho | CI excludes 0 |
 |---|---|---|---|---|
-| Neutral departure | -0.19992 | [-0.32422, -0.11635] | -0.771 | yes |
-| Cultural F_ST | -0.01047 | [-0.02051, +0.00233] | -0.657 | no |
-| Spatial boundary excess | +2.14117 | [-12.28149, +5.25047] | +0.600 | no |
+| Neutral departure | -0.20004 | [-0.32226, -0.11967] | -0.771 | yes |
+| Cultural F_ST | -0.01065 | [-0.02053, +0.00208] | -0.657 | no |
+| Spatial boundary excess | +2.22037 | [-12.18899, +4.97797] | +0.771 | no |
 
 - Of 3 signatures: 1 trend up (rho>+0.3), 2 trend down (rho<-0.3); 1 have a bootstrap slope CI that excludes 0. For convergence (H1) all three should rise together with CIs above 0.
 
@@ -78,7 +78,7 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 |---|---|---|---|---|---|
 | Neutral departure | 1.1619 | 0.2726 | -0.8893 | [-1.2781, -0.5009] | higher early (CI excludes 0) |
 | Cultural F_ST | 0.0349 | 0.0194 | -0.0155 | [-0.0747, +0.0185] | higher early |
-| Spatial boundary excess | -7.1697 | -11.1685 | -3.9988 | [-52.5953, +39.2152] | higher early |
+| Spatial boundary excess | -7.1697 | -12.5813 | -5.4116 | [-57.0015, +38.2627] | higher early |
 | IDSS n_groups (fragmentation) | 19.0000 | 50.0000 | +31.0000 | [-2.0500, +22.0250] | higher late |
 
 - JOINT structural reading: 1 of 4 structural signatures are higher in the late third; 1 of 4 have a bootstrap CI that excludes 0. Bounded-group consolidation (H1) predicts higher F_ST, higher boundary excess, higher within-group neutral departure, AND MORE IDSS groups jointly in the late third with CIs above 0.
@@ -101,17 +101,17 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 ## 8. Pattern summary (NEUTRAL, no verdict)
 
 - 14C anchoring: 5 curated assemblages have a 14C date (of 14 dated proveniences); CA<->14C Spearman +0.500 (p 0.391). The anchor stays weak; the axis is essentially relative.
-- IDSS Signature 2: 127 maximal co-seriable groups at cont=0.1, max group size 4, 47/55 bridge assemblages. Highly fragmented (many small overlapping windows). Parkin is a high-degree bridge (rank 4/55). Groups are spatially clustered (within/between distance ratio 0.62).
+- IDSS Signature 2: 127 maximal co-seriable groups at cont=0.1, max group size 4, 47/55 bridge assemblages. Highly fragmented (many small overlapping windows). Parkin is a high-degree bridge (rank 4/55). Groups are spatially clustered (within/between distance ratio 0.61).
 - Signature-2 fragmentation vs CA position: rho +0.709, slope +6.3665, bootstrap CI [+4.4555, +8.5837] (excludes 0).
 - Four continuous signatures along the CA axis (6 bins):
-  - Neutral departure: slope -0.19992, rho -0.771, CI [-0.32422, -0.11635] (excludes 0); bin-count sign stable.
-  - Cultural F_ST: slope -0.01047, rho -0.657, CI [-0.02051, +0.00233] (spans 0); bin-count sign stable.
-  - Spatial boundary excess: slope +2.14117, rho +0.600, CI [-12.28149, +5.25047] (spans 0); bin-count sign UNSTABLE.
+  - Neutral departure: slope -0.20004, rho -0.771, CI [-0.32226, -0.11967] (excludes 0); bin-count sign stable.
+  - Cultural F_ST: slope -0.01065, rho -0.657, CI [-0.02053, +0.00208] (spans 0); bin-count sign stable.
+  - Spatial boundary excess: slope +2.22037, rho +0.771, CI [-12.18899, +4.97797] (spans 0); bin-count sign UNSTABLE.
   Convergence requires all three rising together with CIs above 0: 1 rise, 1 have a CI excluding 0.
 - Early- vs late-CA-third structural contrast (late - early):
   - Neutral departure: -0.8893 (CI excludes 0).
   - Cultural F_ST: -0.0155 (CI spans 0).
-  - Spatial boundary excess: -3.9988 (CI spans 0).
+  - Spatial boundary excess: -5.4116 (CI spans 0).
   - IDSS n_groups: +31.0000 (CI spans 0).
   Joint bounded-group consolidation requires all four higher late with CIs above 0: 1/4 higher late, 1/4 CI excludes 0.
 - Settlement (corrected Parkin): Parkin is a fortified (ditched + palisaded) 7-mound town; mound-area rank-size slope -1.26, primacy 16.38. The LMV ditch/area fields under-record fortification; regional ditch counts are a floor.

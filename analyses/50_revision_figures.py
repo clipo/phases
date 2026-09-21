@@ -390,7 +390,24 @@ def main():
     prev = json.loads(fv.read_text()) if fv.exists() else {}
     if not prev and (RESULTS_FALLBACK / "figure_values.json").exists():
         prev = json.loads((RESULTS_FALLBACK / "figure_values.json").read_text())
+    # Merge, but only for figures this script can still produce. A key it no
+    # longer emits at all is an orphan: nothing recomputes it, so it survives
+    # every rerun and reads as current. `fig11` sat here at the 29-assemblage
+    # F_ST for a day after the set changed to 30, and was quoted as though it
+    # were fresh.
+    producible = {name for name, _, _ in todo} | {"fig8", "fig9", "_written"}
+    orphans = sorted(set(prev) - producible)
+    for k in orphans:
+        prev.pop(k)
+    if orphans:
+        print(f"dropped orphaned figure values, no longer produced here: {orphans}")
     prev.update(out)
+    # Keep each block's own write time, so a value carried over from an earlier
+    # run is legible as carried over rather than passing for fresh.
+    from datetime import datetime
+    stamps = dict(prev.get("_written", {}))
+    stamps.update({k: datetime.now().isoformat(timespec="seconds") for k in out})
+    prev["_written"] = {k: v for k, v in stamps.items() if k in prev}
     fv.write_text(json.dumps(prev, indent=2, default=float))
     print(json.dumps(out, indent=2, default=float))
 

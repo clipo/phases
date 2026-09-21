@@ -42,7 +42,7 @@ C. INNOVATION THAT RESPECTS BOUNDARIES. This is the departure the manuscript
    This is the one departure that could move OFF the trade-off, because it raises
    differentiation without raising the drift rate.
 
-Usage: .venv/bin/python analyses/65_other_departures.py [--fast] [--only A|B|C] [--report-only]
+Usage: .venv/bin/python analyses/65_other_departures.py [--fast] [--reps N] [--only A|B|C] [--report-only]
        [--regions basin,cmv] [--strengths 0.1,0.12,...] [--tag NAME]
        [--save-draws]
 """
@@ -69,6 +69,12 @@ FAST = "--fast" in sys.argv
 REPORT_ONLY = "--report-only" in sys.argv
 SAVE_DRAWS = "--save-draws" in sys.argv
 N_REAL = 60 if FAST else 250
+if "--reps" in sys.argv:
+    # An explicit override, so a conclusion that rests on this script can be
+    # re-measured at a draw count chosen for the question rather than at the
+    # default. 250 is enough to rank the cells; it is not enough to call a
+    # 10 percent diversity tolerance near its edge.
+    N_REAL = int(sys.argv[sys.argv.index("--reps") + 1])
 ONLY = None
 if "--only" in sys.argv:
     ONLY = sys.argv[sys.argv.index("--only") + 1].upper()

@@ -59,8 +59,18 @@ def drift_record(weights, *, k=10, n_ind=120, mixing=.02, innovation=.012,
     w = np.asarray(weights, float)
     if w.ndim != 2 or w.shape[0] != w.shape[1] or (w < 0).any() or not np.allclose(w.sum(1), 1):
         raise ValueError("weights must be a row-stochastic square matrix")
-    if not 0 <= mixing <= 1 or not 0 <= innovation <= 1:
+    # `mixing` may be one rate for every node, or one per node. The second form
+    # is what analyses/73_connectivity_mixing.py needs. Because `w` is
+    # row-stochastic, a scalar mixing gives every node the same total external
+    # influence however isolated it is: the kernel decides WHO you copy, never
+    # HOW MUCH. A per-node vector lets total copying fall with connectivity,
+    # which is the assumption the scalar form makes silently.
+    mix = np.asarray(mixing, float)
+    if mix.ndim not in (0, 1) or (mix.ndim == 1 and mix.shape[0] != len(w)):
+        raise ValueError("mixing must be a scalar or one rate per node")
+    if not (np.all(mix >= 0) and np.all(mix <= 1)) or not 0 <= innovation <= 1:
         raise ValueError("mixing and innovation must be probabilities")
+    mixing = mix if mix.ndim == 0 else mix[:, None]
     # n_ind may be one population for every node, or one per node. The second
     # form is what analyses/64_unequal_populations.py needs: drift rate goes as
     # 1/N, so equal populations everywhere is a substantive assumption, not a

@@ -41,8 +41,14 @@ MANAGED_PREFIXES = [
 ]
 # Individually published tracked files at the repo root.
 MANAGED_ROOT_FILES = ["pyproject.toml", "MANIFEST.md"]
-# Never published, whatever git says.
-EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md"}
+# Never published, whatever git says. `sync_drive.sh` is the authors' own
+# working tool: it names a private Google Drive folder and does nothing for
+# reproduction, so it is a working document in the same sense as CLAUDE.md.
+# `rerun_pipeline.sh` is excluded for a different reason: it reads its step
+# order from `output/rerun/order.txt`, which output/* gitignores and the
+# release therefore does not carry, so a reader who ran it would get a script
+# that cannot start. The release's own `run_all.sh` is the reproduction path.
+EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh"}
 # Left to the release repo: licensing, citation, container, CI, its own README.
 UNMANAGED = {
     "README.md", "LICENSE", "LICENSE-data", "CITATION.cff", ".zenodo.json",

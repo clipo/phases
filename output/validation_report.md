@@ -12,56 +12,56 @@ Panels shown for seed 42. Columns: neutral_departure, seriability, fst, spatial_
 
 ```
    neutral_departure  seriability    fst  spatial_boundary
-0              0.351        -51.0  0.003            -0.842
-1              0.637        -33.0  0.617           132.717
-2              0.739        -29.0  0.796           151.168
-3              0.793        -18.0  0.902           155.443
-4              0.874        -20.0  0.966           140.493
-5              0.915         -8.0  0.980           189.572
+0              0.351        -30.0  0.003            -0.842
+1              0.637        -20.0  0.617           132.717
+2              0.739        -18.0  0.796           151.168
+3              0.793        -11.0  0.902           155.443
+4              0.874        -12.0  0.966           140.493
+5              0.915         -5.0  0.980           189.572
 6              0.942         -2.0  0.992           161.234
-7              0.959         -5.0  0.997           161.528
+7              0.959         -3.0  0.997           161.528
 ```
 
 ### aggregated_signaling
 
 ```
    neutral_departure  seriability    fst  spatial_boundary
-0              0.303        -48.0  0.003             2.167
-1              0.628        -41.0  0.005             1.452
-2              0.735        -28.0  0.003            -0.738
-3              0.723        -15.0  0.003            -0.190
-4              0.860        -12.0  0.004             0.667
-5              0.889         -8.0  0.003            -0.167
-6              0.954        -10.0  0.002            -0.238
-7              0.949         -8.0  0.003             0.214
+0              0.303        -29.0  0.003             2.167
+1              0.628        -25.0  0.005             1.452
+2              0.735        -17.0  0.003            -0.738
+3              0.723        -10.0  0.003            -0.190
+4              0.860         -7.0  0.004             0.667
+5              0.889         -5.0  0.003            -0.167
+6              0.954         -6.0  0.002            -0.238
+7              0.949         -5.0  0.003             0.214
 ```
 
 ### patchiness
 
 ```
    neutral_departure  seriability    fst  spatial_boundary
-0              0.351        -51.0  0.304            64.808
-1              0.312        -42.0  0.293            62.967
-2              0.329        -48.0  0.293            67.735
-3              0.313        -54.0  0.295            64.935
-4              0.270        -59.0  0.279            67.335
-5              0.293        -56.0  0.289            65.160
-6              0.324        -52.0  0.301            67.399
-7              0.290        -48.0  0.297            67.321
+0              0.351        -29.0  0.304            64.808
+1              0.312        -27.0  0.293            62.967
+2              0.329        -27.0  0.293            67.735
+3              0.313        -30.0  0.295            64.935
+4              0.270        -34.0  0.279            67.335
+5              0.293        -32.0  0.289            65.160
+6              0.324        -29.0  0.301            67.399
+7              0.290        -28.0  0.297            67.321
 ```
 
 ### drift_space
 
 ```
    neutral_departure  seriability    fst  spatial_boundary
-0              0.295        -50.0  0.239             0.747
-1              0.283        -50.0  0.234             3.294
-2              0.338        -53.0  0.253            -1.653
-3              0.287        -58.0  0.233             0.108
-4              0.313        -57.0  0.251             0.822
-5              0.321        -55.0  0.252             0.936
-6              0.314        -56.0  0.236             2.175
-7              0.284        -49.0  0.241            -1.186
+0              0.295        -29.0  0.239             0.747
+1              0.283        -31.0  0.234             3.294
+2              0.338        -31.0  0.253            -1.653
+3              0.287        -34.0  0.233             0.108
+4              0.313        -33.0  0.251             0.822
+5              0.321        -31.0  0.252             0.936
+6              0.314        -32.0  0.236             2.175
+7              0.284        -28.0  0.241            -1.186
 ```
 
 ## 2. Discrimination verdict
@@ -70,10 +70,10 @@ Threshold on standardized ordinal slope: 0.1.
 
 | mechanism | neutral_departure | seriability | fst | spatial_boundary | CONVERGENT |
 |---|---|---|---|---|---|
-| group_emergence | +0.300 | +0.340 | +0.343 | +0.292 | **True** |
-| aggregated_signaling | +0.289 | +0.298 | +0.000 | -0.002 | **False** |
-| patchiness | -0.006 | +0.034 | +0.000 | -0.001 | **False** |
-| drift_space | -0.007 | +0.015 | +0.002 | -0.000 | **False** |
+| group_emergence | +0.300 | +0.325 | +0.343 | +0.292 | **True** |
+| aggregated_signaling | +0.289 | +0.307 | +0.000 | -0.002 | **False** |
+| patchiness | -0.006 | +0.041 | +0.000 | -0.001 | **False** |
+| drift_space | -0.007 | -0.002 | +0.002 | -0.000 | **False** |
 
 Each cell is the standardized ordinal slope of that signature. A mechanism is convergent only when all four are above threshold.
 
@@ -95,8 +95,8 @@ If the four signatures were near-perfectly correlated under ALL processes, conve
 
 ```
                    neutral_departure  seriability   fst  spatial_boundary
-neutral_departure               1.00         0.91  0.97              0.85
-seriability                     0.91         1.00  0.90              0.75
+neutral_departure               1.00         0.92  0.97              0.85
+seriability                     0.92         1.00  0.90              0.75
 fst                             0.97         0.90  1.00              0.87
 spatial_boundary                0.85         0.75  0.87              1.00
 ```
@@ -108,12 +108,12 @@ Mean absolute off-diagonal correlation: **0.88**.
 |---|---|
 | group_emergence (genuine) | 0.88 |
 | aggregated_signaling | 0.21 |
-| patchiness | 0.29 |
-| drift_space | 0.19 |
+| patchiness | 0.28 |
+| drift_space | 0.18 |
 
 **Interpretation.**
 
-The four signatures are strongly correlated (mean |r| = 0.88) ONLY under genuine emergence, where a single coupled process drives between-group divergence and within-group conformity together so all four co-rise. Under the mimics the same four signatures are nearly independent (mean |r| roughly 0.19-0.29). Convergence is therefore NOT a built-in artifact of correlated metrics: the signatures move together precisely when, and only when, a genuine group-forming process couples their causes. Each mimic decouples those causes (conformity without divergence; static divergence; smooth isolation-by-distance) and so fails the convergence test on at least one signature.
+The four signatures are strongly correlated (mean |r| = 0.88) ONLY under genuine emergence, where a single coupled process drives between-group divergence and within-group conformity together so all four co-rise. Under the mimics the same four signatures are nearly independent (mean |r| roughly 0.18-0.28). Convergence is therefore NOT a built-in artifact of correlated metrics: the signatures move together precisely when, and only when, a genuine group-forming process couples their causes. Each mimic decouples those causes (conformity without divergence; static divergence; smooth isolation-by-distance) and so fails the convergence test on at least one signature.
 
 ## 4. Verdict
 

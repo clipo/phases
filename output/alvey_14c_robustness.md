@@ -30,18 +30,18 @@ Neeley's Ferry (3CS24) is absent from Alvey; Callahan-Thompson (23MI71) and Park
 
 | assemblage | n dates | median cal AD | CA1 |
 |---|---|---|---|
-| Upper_Nodena | 1 | 1343 | -1.795 |
-| Kent_Place | 2 | 1466 | -0.738 |
-| Parkin | 19 | 1483 | +0.198 |
-| Neeleys_Ferry | 2 | 1513 | +0.247 |
-| Clay_Hill | 3 | 1596 | -0.556 |
+| Upper_Nodena | 1 | 1343 | -1.604 |
+| Kent_Place | 2 | 1466 | -0.719 |
+| Parkin | 19 | 1483 | +0.195 |
+| Neeleys_Ferry | 2 | 1513 | +0.204 |
+| Clay_Hill | 3 | 1596 | -0.522 |
 
 **AFTER (+ Alvey net-new)** (n = 5 anchors, 32 dates pooled): Spearman rho = +0.70, p = 0.188
 
 | assemblage | n dates | median cal AD | CA1 |
 |---|---|---|---|
-| Upper_Nodena | 6 | 1447 | -1.795 |
-| Kent_Place | 2 | 1466 | -0.738 |
-| Parkin | 19 | 1483 | +0.198 |
-| Neeleys_Ferry | 2 | 1513 | +0.247 |
-| Clay_Hill | 3 | 1596 | -0.556 |
+| Upper_Nodena | 6 | 1447 | -1.604 |
+| Kent_Place | 2 | 1466 | -0.719 |
+| Parkin | 19 | 1483 | +0.195 |
+| Neeleys_Ferry | 2 | 1513 | +0.204 |
+| Clay_Hill | 3 | 1596 | -0.522 |

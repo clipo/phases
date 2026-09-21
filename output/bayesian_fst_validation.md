@@ -21,7 +21,7 @@ Coverage of the BN F parameter is checked against the generating F; coverage of 
 |---|---|---|---|---|
 | 0.020 | 0.0169 | 40 | +0.0428 | +0.0192 |
 | 0.050 | 0.0300 | 40 | +0.0478 | +0.0207 |
-| 0.100 | 0.0728 | 40 | +0.0506 | +0.0163 |
+| 0.100 | 0.0728 | 40 | +0.0506 | +0.0164 |
 | 0.200 | 0.1740 | 40 | +0.0406 | -0.0016 |
 | 0.350 | 0.3141 | 40 | +0.0171 | -0.0297 |
 | 0.500 | 0.3214 | 40 | +0.0578 | +0.0216 |
@@ -31,17 +31,17 @@ Mean absolute bias at small sizes: plug-in = 0.0621, posterior median = 0.0481 (
 ## 4. Simulation-based calibration (BN F parameter)
 
 - 200 datasets drawn from the prior; rank of true F within its posterior binned into 20 bins.
-- Chi-square uniformity: chi2 = 19.60, p = 0.419 (want p > 0.05, i.e. not distinguishable from uniform).
+- Chi-square uniformity: chi2 = 19.00, p = 0.457 (want p > 0.05, i.e. not distinguishable from uniform).
 - KS uniformity: D = 0.050, p = 0.680.
 
 ## 5. MCMC health on the real St. Francis basin fit
 
 - 5 spatial clusters, 10 decorated types; default target_accept (no funnel-taming needed).
-- max R-hat = 1.0007 (want < 1.01); min ESS = 4672; divergences = 0.
-- BN F_ST median = 0.0665, 95% CI [0.0341, 0.1140].
-- Gini-Simpson readout median = 0.0327, 95% CI [0.0301, 0.0352]; plug-in = 0.0330 (inside the interval).
+- max R-hat = 1.0010 (want < 1.01); min ESS = 4375; divergences = 0.
+- BN F_ST median = 0.0659, 95% CI [0.0339, 0.1139].
+- Gini-Simpson readout median = 0.0277, 95% CI [0.0254, 0.0300]; plug-in = 0.0280 (inside the interval).
 
 ## 6. Bayes-factor sanity
 
-- Panmixia-generated data: 2 ln BF10 = -8.61 (strong for panmixia).
+- Panmixia-generated data: 2 ln BF10 = -8.45 (strong for panmixia).
 - Strongly-structured data (F=0.30): 2 ln BF10 = 392.29 (very strong for structure).

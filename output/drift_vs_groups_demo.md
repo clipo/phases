@@ -1,15 +1,15 @@
 # Spatial drift vs bounded groups: which best explains the basin?
 
-Observed (n = 29 curated assemblages), two generative
+Observed (n = 43 curated assemblages), two generative
 models on the same coordinate layout, 150 seeds each. A model 'brackets'
 the observed statistic if the observed value falls in its 95% envelope.
 
 | statistic | observed | spatial-drift 95% | bounded-groups 95% | consistent with |
 |---|---|---|---|---|
-| distance-decay r | -0.301 | [-0.598, -0.149] | [-0.713, -0.595] | drift |
-| modularity Q | +0.057 | [+0.040, +0.146] | [+0.321, +0.487] | drift |
-| boundary excess (BR) | +43.438 | [+9.461, +46.247] | [+67.182, +115.506] | drift |
-| cultural $F_{ST}$ | +0.043 | [+0.027, +0.121] | [+0.107, +0.180] | drift |
+| distance-decay r | -0.360 | [-0.384, +0.011] | [-0.595, -0.447] | drift |
+| modularity Q | +0.057 | [+0.045, +0.097] | [+0.212, +0.361] | drift |
+| boundary excess (BR) | +48.009 | [+14.979, +46.272] | [+48.650, +93.811] | neither |
+| cultural $F_{ST}$ | +0.040 | [+0.033, +0.139] | [+0.095, +0.308] | drift |
 
 Reading: where the observed value sits inside the spatial-drift envelope
 but outside the bounded-groups envelope, neutral drift on geography is

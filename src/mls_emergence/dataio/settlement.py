@@ -46,9 +46,9 @@ def load_lmv(path: str | Path) -> pd.DataFrame:
     """
     path = Path(path)
     if path.suffix.lower() == ".csv":
-        return pd.read_csv(path)
+        return apply_site_coordinate_corrections(pd.read_csv(path))
     frames = [pd.read_excel(path, sheet_name=s) for s in ZONE_SHEETS]
-    return pd.concat(frames, ignore_index=True)
+    return apply_site_coordinate_corrections(pd.concat(frames, ignore_index=True))
 
 
 def join_pfg_to_lmv(counts: pd.DataFrame, lmv: pd.DataFrame):
@@ -107,6 +107,7 @@ def join_pfg_to_lmv(counts: pd.DataFrame, lmv: pd.DataFrame):
 # Published corrections to the compiled settlement table
 # ---------------------------------------------------------------------------
 CORRECTIONS = "mound_height_corrections.csv"
+SITE_CORRECTIONS = "settlement_coordinate_corrections.csv"
 
 
 def load_height_corrections(path):
@@ -150,3 +151,47 @@ def apply_height_corrections(heights, corrections, index_is_site_id=True):
                 changed.append((str(site_id), float(out.loc[site_id]), new))
             out.loc[site_id] = new
     return out, changed
+
+
+def apply_site_coordinate_corrections(lmv, path=None, verbose: bool = True):
+    """Replace settlement coordinates that the PFG site table contradicts.
+
+    `LMVData` positions four basin sites well away from where Phillips, Ford
+    and Griffin put them, in one case by 50 km. Each correction here is PFG's
+    own UTM, kept only where PFG's stated section contains it and the
+    compilation's coordinate does not (checked against the BLM PLSS cadastral
+    service, 2026-09-19); 13-N-3 also agrees with the legal description the
+    author supplied and with the mound the lidar shows there.
+
+    These coordinates set basin membership and the settlement figure's site
+    set. They are NOT the assemblage coordinates that the transmission analysis
+    uses — those live in `mainfort-pfg-cplXY.txt` and are corrected in
+    `dataio/coords.py`.
+    """
+    if path is None:
+        path = Path(__file__).resolve().parents[3] / "data" / "raw" / SITE_CORRECTIONS
+    path = Path(path)
+    if not path.exists():
+        return lmv
+    corr = pd.read_csv(path)
+    corr["_k"] = corr["site_number"].astype(str).map(normalize_grid)
+    key = next((c for c in lmv.columns if "Number" in str(c)), None)
+    if key is None:
+        return lmv
+    out = lmv.copy()
+    keys = out[key].astype(str).map(lambda v: normalize_grid(v) if isinstance(v, str) else "")
+    for _, row in corr.iterrows():
+        sel = keys == row["_k"]
+        if not sel.any():
+            continue
+        before = (float(out.loc[sel, "Easting"].iloc[0]),
+                  float(out.loc[sel, "Northing"].iloc[0]))
+        out.loc[sel, "Easting"] = float(row["easting"])
+        out.loc[sel, "Northing"] = float(row["northing"])
+        out.loc[sel, "Zone"] = int(row["zone"])
+        if verbose:
+            d = ((float(row["easting"]) - before[0]) ** 2
+                 + (float(row["northing"]) - before[1]) ** 2) ** 0.5
+            print(f"settlement coordinate correction: {row['site_number']} moved "
+                  f"{d / 1000:.2f} km [{str(row['source'])[:60]}...]")
+    return out

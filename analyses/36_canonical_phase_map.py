@@ -93,6 +93,44 @@ def assign_phases(names, coords=None):
     return np.array([MAINFORT.get(str(nm), "unassigned") for nm in names])
 
 
+def assign_phases_by_territory(names, coords):
+    """Phase label per assemblage, filling Mainfort's gaps by territory.
+
+    Mainfort's map covers 44 of the 55 curated assemblages. The other eleven are
+    not placed outside the phases; they are simply not on his map, several of
+    them because they were collected later (Holden Lake is one of Lipo's 1996-97
+    collections and has no PFG site number). Dropping them would exclude
+    assemblages on the ground the phases claim, which is the ground the test is
+    about.
+
+    So an unmapped assemblage takes the phase of the territory it falls in,
+    where territories are built exactly as Figure 1 builds them: every point
+    belongs to its nearest assemblage, and those areas are merged by phase. The
+    reasoning is the paper's own. A phase is drawn as a bounded area, and the
+    claim under test is that the area was a community. Assemblages inside it
+    therefore belong in the test: if the phase is a community, they should
+    resemble one another, and if it is not, they should not. Leaving them out
+    because a 1996 map did not list them would decide part of the question by
+    omission.
+
+    Returns (labels, derived), where `derived` marks the labels this function
+    supplied rather than Mainfort. Quote the two separately when it matters: a
+    territory label is our construction, not his determination (rule 13).
+    """
+    labels = assign_phases(names)
+    xy = np.asarray(coords, dtype=float)
+    mapped = labels != "unassigned"
+    derived = ~mapped
+    if not mapped.any():
+        return labels, derived
+    for i in np.where(derived)[0]:
+        d = np.hypot((xy[mapped, 0] - xy[i, 0]) * 111.32,
+                     (xy[mapped, 1] - xy[i, 1]) * 111.32
+                     * np.cos(np.radians(xy[i, 0])))
+        labels[i] = labels[mapped][int(np.argmin(d))]
+    return labels, derived
+
+
 def main():
     counts_df, coords_df = m35.load_full()
     names = [str(x) for x in counts_df.index]
