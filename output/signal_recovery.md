@@ -7,7 +7,7 @@ The s = 0 baseline is a fixed shared Zipf profile with multinomial sampling, not
 ## The sample-size confound
 
 - Assemblage sample size trends with seriation position at Spearman rho = +0.61, so a size-sensitive signature can rise or fall along the axis through sampling alone.
-- Raw (uncontrolled) empirical F_ST trend = -0.80 (the Figure 5 value); after rarefaction it is -0.048 (Monte Carlo 95% interval [-0.061, -0.035] over 4000 draws; a single rarefaction has SD 0.42, so this statistic is not stable in sign at a few hundred draws). The raw rise is a sampling artifact.
+- Raw (uncontrolled) empirical F_ST trend = -0.80 (the Figure 5 value); after rarefaction it is -0.048, averaged over 4000 draws (single-rarefaction 2.5th to 97.5th percentiles -0.80 to +0.40, SD 0.42: the record does not resolve the sign of this trend). The Monte Carlo standard error of the 4000-draw mean is 0.007; it describes the compute budget, not the record, and is not the interval to quote (rule 6). The raw rise is a sampling artifact.
 
 ## Which signatures recover the injected emergence (rarefied, no averaging)
 
@@ -49,7 +49,7 @@ The s = 0 baseline is a fixed shared Zipf profile with multinomial sampling, not
 
 ## Empirical placement (size-controlled)
 
-- Rarefied empirical F_ST trend = -0.06 [-0.80, +0.40].
+- Rarefied empirical F_ST trend = -0.048 [-0.80, +0.40] (single-rarefaction 2.5th to 97.5th percentiles over 4000 draws; the same estimator as above).
 - On the recovery curve this corresponds to a nominal injected strength s ~ 0.00, below the resolution limit s* = 0.80 that this record can reliably detect.
 - The data show no resolvable emergence: the faint trend is not distinguishable from the no-emergence null at this resolution.
 - The rarefaction percentiles condition on the observed sites, partition and ordering; they are not a confidence interval over all archaeological uncertainties. The signed trend reverses with axis orientation.

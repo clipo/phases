@@ -2,8 +2,10 @@
 """Does the drift shortfall depend on which tally an assemblage's counts come from?
 
 Every assemblage in the analysis matrix takes its counts from ONE source
-(scripts/build_analysis_matrix.py): Mainfort's (2003) table, or Lipo's (2001)
-compilation where that is the larger tally of the same material. The two are
+(scripts/build_analysis_matrix.py): PFGData.xlsx, the survey's counts alone, or Lipo's (2001)
+compilation where his tab holds the assemblage. (An earlier version of this
+docstring and its labels said "Mainfort's table" for the first kind; the matrix
+has held no Mainfort rows since 2026-09-21.) The two are
 not independent collections, since Mainfort's numbers are Lipo's, which are
 the Phillips-Ford-Griffin counts plus additions. What differs between them is
 completeness, and with it sample size. If the rows from one source sit in
@@ -80,14 +82,14 @@ def main() -> int:
     merged = np.array([str(src.loc[n, "source_used"]).startswith("Lipo") for n in names])
 
     L = ["# Is the drift shortfall an artefact of merging data sources?", "",
-         f"Basin phase set, {len(names)} assemblages: {int((~merged).sum())} rows taken from "
-         f"Mainfort's table and {int(merged.sum())} from Lipo's (2001) compilation, which holds "
+         f"Basin phase set, {len(names)} assemblages: {int((~merged).sum())} rows carrying the "
+         f"survey's counts alone (PFGData.xlsx) and {int(merged.sum())} carrying Lipo's (2001) compilation, which holds "
          f"the Phillips-Ford-Griffin counts plus his 1996-97 field collections. The two are "
          f"tallies of the same material, so each assemblage uses one of them, the larger, and "
          f"none is a sum (scripts/build_analysis_matrix.py).", "",
          "## 1. Is source confounded with place?", "",
-         "| cluster | assemblages | from Mainfort | from Lipo | sherds, from Mainfort | "
-         "sherds, from Lipo |", "|---|---|---|---|---|---|"]
+         "| cluster | assemblages | survey alone | Lipo compilation | sherds, survey alone | "
+         "sherds, Lipo compilation |", "|---|---|---|---|---|---|"]
     for g in np.unique(labels):
         s = labels == g
         L.append(f"| {int(g)} ({', '.join([n for n, x in zip(names, s) if x][:3])}...) | "
@@ -95,7 +97,7 @@ def main() -> int:
                  f"{int(m[s & ~merged].sum()):,} | {int(m[s & merged].sum()):,} |")
 
     L += ["", "## 2. Do the sources differ once place is held?", "",
-          "| cluster | F_ST, Mainfort rows against Lipo rows | random splits of the same "
+          "| cluster | F_ST, survey-alone rows against compilation rows | random splits of the same "
           "sizes, median (5th-95th) | position |", "|---|---|---|---|"]
     rng = np.random.default_rng(78)
     for g in np.unique(labels):
@@ -127,10 +129,10 @@ def main() -> int:
                               and (~merged & (labels == g)).sum() >= 1
                               and (merged & (labels == g)).sum() >= 1])
     shared &= np.isin(labels, np.unique(labels[merged]))
-    subsets = {"all 43": np.ones(len(names), bool), "rows from Mainfort's table": ~merged,
-               "rows from Lipo's compilation": merged,
-               "rows from Mainfort's table, shared clusters only": ~merged & shared,
-               "rows from Lipo's compilation, shared clusters only": merged & shared}
+    subsets = {"all 43": np.ones(len(names), bool), "rows carrying the survey's counts alone": ~merged,
+               "rows carrying Lipo's compilation": merged,
+               "rows carrying the survey's counts alone, shared clusters only": ~merged & shared,
+               "rows carrying Lipo's compilation, shared clusters only": merged & shared}
     sims = {k: [] for k in subsets}
     for seed in range(args.reps):
         f = rev.simulate(data, 99000 + seed, MODEL, **rates)
@@ -153,7 +155,7 @@ def main() -> int:
                  f"{int(np.median(m[sel].sum(1)))} | {obs:.4f} | "
                  f"{np.median(d):.4f} ({np.percentile(d, 2.5):.4f}-"
                  f"{np.percentile(d, 97.5):.4f}) | **{obs / np.median(d):.1f}x** |")
-    L += ["", "**Source and sample size are not separable here.** The rows from Mainfort's table "
+    L += ["", "**Source and sample size are not separable here.** The rows carrying the survey's counts alone "
           "are also the small",
           "ones, so a larger shortfall among them may be an analyst or collection-regime "
           "effect, or",

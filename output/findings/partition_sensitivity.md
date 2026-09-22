@@ -2,7 +2,7 @@
 
 Produced by `analyses/59_partition_sensitivity.py` (full). F15 measurements M1 and M3. Basin, 28 assemblages, Beta(1,10) prior throughout. Not a test: this is the spread of the posterior across choices we made, reported as a spread.
 
-**Pre-stated threshold.** The reported F_ST is 0.0179 with a 95 percent interval of width 0.0044. A choice that moves the median by more than that matters more than the data's own uncertainty. This was written down before the numbers were seen.
+**Pre-stated threshold.** The reported F_ST is 0.0063 with a 95 percent interval of width 0.0025. A choice that moves the median by more than that matters more than the data's own uncertainty. This was written down before the numbers were seen.
 
 ## M1. Sensitivity to k
 
@@ -14,7 +14,7 @@ Produced by `analyses/59_partition_sensitivity.py` (full). F15 measurements M1 a
 | 5 | 0.4691 | **0.0302** | [0.0267, 0.0342] | 1.0014 | 3671 | 0/6000 |
 | 6 | 0.3715 | **0.0301** | [0.0265, 0.0340] | 1.0019 | 3698 | 0/6000 |
 
-Across k = 2 to 6 the posterior median spans 0.0062 to 0.0302, a spread of **0.0240**, against a reported interval width of 0.0044. **That is 5.5 times the data's own uncertainty**, so the choice of k matters more than the evidence the data carry about F_ST.
+Across k = 2 to 6 the posterior median spans 0.0062 to 0.0302, a spread of **0.0240**, against a reported interval width of 0.0025. **That is 9.6 times the data's own uncertainty**, so the choice of k matters more than the evidence the data carry about F_ST.
 
 ## M3. Sensitivity to the k-means seed at k = 2
 

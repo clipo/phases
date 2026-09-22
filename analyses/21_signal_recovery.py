@@ -299,7 +299,10 @@ def main():
         power[w] = dict(thr=thr, power=pw, s_star=float(S_GRID[above[0]]) if len(above) else float("nan"),
                         null_mean=float(np.nanmean(Tmat[0])))
     thr1 = power[1]["thr"]
-    emp_fst_mean = float(np.nanmean(emp_fst))
+    # One definition of this statistic (rule 6): the 4,000-draw estimator
+    # `trend`, not the 400-draw B_EMP mean, which printed -0.06 beside its
+    # own -0.048 in this file until 2026-09-22.
+    emp_fst_mean = trend["mean"]
     s_star1 = power[1]["s_star"]
     # nominal injected strength the empirical F_ST trend corresponds to (curve is monotone increasing)
     fst_curve = persig["fst"]
@@ -310,7 +313,8 @@ def main():
     # injected alternative, not an empirical confidence bound on s).
     summary = dict(n=n, k=k, n_bins=N_BINS, depth=NRARE, seeds=N_SEEDS,
                    raw=raw_emp, empirical=rar_emp_mean,
-                   empirical_fst_interval=np.nanpercentile(emp_fst, [2.5, 97.5]).tolist(),
+                   empirical_fst_trend=trend,  # the one definition (rule 6)
+                   empirical_fst_interval=[trend["p_lo"], trend["p_hi"]],
                    strengths=S_GRID.tolist(), response={sg: v.tolist() for sg, v in persig.items()},
                    power={str(w): {key: value.tolist() if isinstance(value, np.ndarray) else value
                                    for key, value in row.items()} for w, row in power.items()})
@@ -333,10 +337,11 @@ def main():
         f"- Assemblage sample size trends with seriation position at Spearman rho = {size_conf:+.2f}, "
         f"so a size-sensitive signature can rise or fall along the axis through sampling alone.",
         f"- Raw (uncontrolled) empirical F_ST trend = {raw_emp['fst']:+.2f} (the Figure 5 value); "
-        f"after rarefaction it is {trend['mean']:+.3f} "
-        f"(Monte Carlo 95% interval [{trend['lo']:+.3f}, {trend['hi']:+.3f}] over "
-        f"{trend['n_draws']} draws; a single rarefaction has SD {trend['sd']:.2f}, so this "
-        f"statistic is not stable in sign at a few hundred draws). "
+        f"after rarefaction it is {trend['mean']:+.3f}, averaged over {trend['n_draws']} draws "
+        f"(single-rarefaction 2.5th to 97.5th percentiles {trend['p_lo']:+.2f} to {trend['p_hi']:+.2f}, "
+        f"SD {trend['sd']:.2f}: the record does not resolve the sign of this trend). "
+        f"The Monte Carlo standard error of the {trend['n_draws']}-draw mean is {trend['se']:.3f}; "
+        f"it describes the compute budget, not the record, and is not the interval to quote (rule 6). "
         f"The raw rise is a sampling artifact.",
         "",
         "## Which signatures recover the injected emergence (rarefied, no averaging)", "",
@@ -363,8 +368,9 @@ def main():
           "- Thresholds use 400 separate null calibration draws per window; the s = 0 test row "
           "estimates the achieved false-positive rate independently.", "",
           "## Empirical placement (size-controlled)", "",
-          f"- Rarefied empirical F_ST trend = {emp_fst_mean:+.2f} "
-          f"[{np.nanpercentile(emp_fst,2.5):+.2f}, {np.nanpercentile(emp_fst,97.5):+.2f}].",
+          f"- Rarefied empirical F_ST trend = {emp_fst_mean:+.3f} "
+          f"[{trend['p_lo']:+.2f}, {trend['p_hi']:+.2f}] (single-rarefaction 2.5th to 97.5th "
+          f"percentiles over {trend['n_draws']} draws; the same estimator as above).",
           f"- On the recovery curve this corresponds to a nominal injected strength s ~ "
           f"{nominal_s:.2f}, {'at or above' if emp_resolvable else 'below'} the resolution limit "
           f"s* = {s_star1:.2f} that this record can reliably detect.",

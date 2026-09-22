@@ -2,10 +2,16 @@
 
 F15 measurement M2, per
 `docs/superpowers/plans/2026-09-02-f15-partition-dependence.md`. Run because M1
-met its trigger: across k = 2 to 6 the posterior median spans 0.0147 to 0.0347,
-a spread of 0.0200 against a reported 95 percent interval width of 0.0044, so
-the choice of k moves the answer about four and a half times more than the data
-do.
+met its trigger: the spread of the posterior median across k = 2 to 6 exceeds
+the reported 95 percent interval width. The current values are read from M1's
+own output (`output/findings/partition_sensitivity.md`) at write time rather
+than typed here; the 2026-09-03 version of this docstring carried the numbers of
+the superseded 34-assemblage set (0.0147 to 0.0347 against 0.0044).
+
+THE GRAIN. K below is the grain at which the reported F_ST is defined, which is
+the k the silhouette criterion selects in M1: k = 2 on the 28-assemblage matrix
+(restated 2026-09-22; it was 3 on the superseded set). The k-means partition at
+that grain is the one `output/bayesian_fst.md` reports.
 
 THE QUESTION M1 LEAVES OPEN. M1 shows the GRAIN matters. It does not say whether,
 at a fixed grain, the particular partition k-means found is special. If an
@@ -53,7 +59,7 @@ from figstyle import OI_BLUE, OI_VERMIL, save  # noqa: E402
 a59 = importlib.import_module("59_partition_sensitivity")
 
 OUT_MD = ROOT / "output" / "findings" / "partition_ensemble.md"
-K = 3
+K = 2                                # silhouette-selected grain, analysis 59 M1
 N_PART = 30 if "--fast" in sys.argv else 150
 PRIOR = ("beta", 1.0, 10.0)
 CFG = dict(draws=600, tune=800, chains=2, target_accept=0.95)
@@ -69,6 +75,22 @@ def random_voronoi(coords, k, rng, min_per_cell=2, tries=500):
         if len(np.unique(lab)) == k and np.all(np.bincount(lab, minlength=k) >= min_per_cell):
             return lab
     return None
+
+
+def _ordinal(x):
+    n = int(round(x))
+    suf = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suf}"
+
+
+def _m1_spread():
+    """The across-k spread M1 measured, read from its own output (rule 1)."""
+    import re
+    md = (ROOT / "output" / "findings" / "partition_sensitivity.md").read_text(encoding="utf-8")
+    m = re.search(r"a spread of \*\*([0-9.]+)\*\*, against a reported interval width", md)
+    if not m:
+        raise RuntimeError("partition_sensitivity.md does not carry M1's spread; run analysis 59 first")
+    return float(m.group(1))
 
 
 def main(fast=False):
@@ -98,6 +120,7 @@ def main(fast=False):
     print(f"our partition sits at the {pct:.0f}th percentile of the ensemble")
 
     inside = 20.0 <= pct <= 80.0
+    m1_spread = _m1_spread()
     L = ["# Is our partition special, or just one of many?", "",
          f"Produced by `analyses/60_partition_ensemble.py` "
          f"({'FAST' if fast else 'full'}). F15 measurement M2. Basin, "
@@ -113,32 +136,31 @@ def main(fast=False):
          f"| ensemble median | {np.median(meds):.4f} |",
          f"| ensemble 5th to 95th percentile | {np.percentile(meds,5):.4f} to {np.percentile(meds,95):.4f} |",
          f"| ensemble full range | {meds.min():.4f} to {meds.max():.4f} |",
-         f"| **our partition's position in the ensemble** | **{pct:.0f}th percentile** |",
+         f"| **our partition's position in the ensemble** | **{_ordinal(pct)} percentile** |",
          "", "## Reading", ""]
     if inside:
-        L += [f"Our partition sits at the {pct:.0f}th percentile, which is "
+        L += [f"Our partition sits at the {_ordinal(pct)} percentile, which is "
               f"unremarkable. At this grain the specific partition k-means found "
               f"is **one draw from a family of equally defensible partitions**, "
               f"and the F_ST defined on it is not a property the data single out.",
               "",
-              f"Combined with M1, where the median moved 0.0200 across k against "
-              f"a data-driven interval width of 0.0044, the picture is that the "
+              f"Combined with M1, where the median moved {m1_spread:.4f} across k against "
+              f"a data-driven interval width of {a59.REPORTED_WIDTH:.4f}, the picture is that the "
               f"reported F_ST is set mostly by **how finely the field is chopped** "
               f"and hardly at all by which particular chopping is used. That is "
               f"the same claim this paper makes about culture-historical phases, "
               f"turned on its own instrument."]
     else:
-        L += [f"Our partition sits at the {pct:.0f}th percentile of the ensemble, "
+        L += [f"Our partition sits at the {_ordinal(pct)} percentile of the ensemble, "
               f"outside the 20th to 80th band set in advance. It is doing "
               f"something the alternatives do not, and the current framing has a "
               f"measured defence rather than only an assertion."]
     L += ["", "## What follows", "",
           "The partition-free alternative is already in hand and needs no such "
-          "defence: the spatial GP reproduces the observed F_ST "
-          "(posterior predictive 0.0178 [0.0152, 0.0210] against 0.0179, "
-          "Bayesian p = 0.470) while containing no partition at all, and reports "
-          "`spatial_share` = 0.96 [0.89, 0.99]. The framing decision this "
-          "measurement feeds is recorded in "
+          "defence: the spatial GP contains no partition at all. Its predictive "
+          "check on the observed F_ST is in `output/findings/gp_posterior_predictive.md` "
+          "and its spatial share in `output/findings/gp_basin_fit.md`; they are "
+          "not copied here. The framing decision this measurement feeds is recorded in "
           "`docs/superpowers/plans/2026-09-02-f15-partition-dependence.md`.", ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

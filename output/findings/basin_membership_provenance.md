@@ -3,6 +3,13 @@
 Date: 2026-08-31. Found while attempting item 0 task 1 step 4 (regenerate the
 baseline). Not a modeling defect; a provenance defect.
 
+**Addendum 2026-09-22.** The counts below (29 curated, 92 broad) are the
+sets as they stood on 2026-09-04. Since the 2026-09-21 rulings (Parchman out on
+geography, 75-decorated-sherd minimum, phase membership rule) the curated set
+holds 28 assemblages; `tests/inference/test_basin_scope.py` pins it and
+`analyses/16_basin_membership.py` prints what it drops. The provenance chain
+described here is unchanged.
+
 **Status: CLOSED 2026-08-31.** Author ruled option 1 ("you can track that .shp
 file"), the share was mounted, and the shapefile set is now in the repository
 and verified.

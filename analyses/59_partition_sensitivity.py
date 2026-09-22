@@ -20,8 +20,12 @@ those choices, reported as a spread. No null is constructed and no p-value is
 computed.
 
 WHAT WOULD COUNT AS A PROBLEM, stated before the numbers arrive so it cannot be
-adjusted afterwards. The reported F_ST is 0.0179 with a 95 percent credible
-interval of about [0.0157, 0.0201], a width of 0.004. If varying k moves the
+adjusted afterwards. The reported F_ST (Gini-Simpson readout of the basin fit,
+`output/bayesian_fst.md`, 28 assemblages, two clusters) is 0.0063 with a 95
+percent credible interval of [0.0050, 0.0075], a width of 0.0025. (Restated on
+2026-09-22 for the rebuilt 28-assemblage matrix; the 2026-08 version read 0.0179
+with width 0.0044 on the superseded 34-assemblage, three-cluster set. The
+threshold's FORM, spread against interval width, is unchanged.) If varying k moves the
 posterior median by MORE than that width, then the choice of k matters more than
 the data's own uncertainty, and the partition-based quantity is carrying a
 researcher choice as if it were a result.
@@ -51,7 +55,8 @@ SEEDS = list(range(1, 21))
 PRIOR = ("beta", 1.0, 10.0)          # the adopted primary prior (D-31)
 FULL = dict(draws=1500, tune=1500, chains=4, target_accept=0.95)
 FAST = dict(draws=400, tune=600, chains=2, target_accept=0.95)
-REPORTED_WIDTH = 0.0044              # width of the reported 95% CI, [0.0157, 0.0201]
+REPORTED_FST = 0.0063               # output/bayesian_fst.md, Gini-Simpson readout, k=2
+REPORTED_WIDTH = 0.0025              # width of the reported 95% CI, [0.0050, 0.0075]
 
 
 def basin_inputs():
@@ -135,7 +140,7 @@ def main(fast=False):
          f"Basin, {coords.shape[0]} assemblages, Beta(1,10) prior throughout. "
          f"Not a test: this is the spread of the posterior across choices we "
          f"made, reported as a spread.", "",
-         f"**Pre-stated threshold.** The reported F_ST is 0.0179 with a 95 "
+         f"**Pre-stated threshold.** The reported F_ST is {REPORTED_FST:.4f} with a 95 "
          f"percent interval of width {REPORTED_WIDTH:.4f}. A choice that moves "
          f"the median by more than that matters more than the data's own "
          f"uncertainty. This was written down before the numbers were seen.", "",
@@ -200,7 +205,7 @@ def main(fast=False):
                 yerr=[[m1[k]["med"] - m1[k]["lo"] for k in ks],
                       [m1[k]["hi"] - m1[k]["med"] for k in ks]],
                 fmt="o-", color=OI_BLUE, ms=4, capsize=3, label="posterior by k")
-    ax.axhline(0.0179, color=OI_VERMIL, ls="--", lw=1, label="reported (k=3)")
+    ax.axhline(REPORTED_FST, color=OI_VERMIL, ls="--", lw=1, label="reported (k=2)")
     ax.set_xlabel("number of spatial clusters k"); ax.set_ylabel("cultural $F_{ST}$")
     ax.set_xticks(ks); ax.legend(frameon=False, fontsize=7)
     fig.tight_layout(); save(fig, "fig_partition_sensitivity")
