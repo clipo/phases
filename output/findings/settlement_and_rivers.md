@@ -6,17 +6,17 @@
 
 | channels | sites, median km (quartiles) | random points, median km (quartiles) |
 |---|---|---|
-| every mapped channel | **1.35** (0.48-2.86) | 2.33 (0.90-4.53) |
-| major rivers only | **1.88** (0.64-4.53) | 3.61 (1.38-7.17) |
+| every mapped channel | **1.25** (0.51-2.86) | 2.33 (0.89-4.53) |
+| major rivers only | **1.82** (0.58-4.63) | 3.62 (1.38-7.17) |
 
 ## 2. Is that what makes settlement clumped?
 
-Clark-Evans ratio of the late-period sites: **0.64**; of the 28 analysed assemblages: **0.63** (1 is random, below 1 is clumped).
+Clark-Evans ratio of the late-period sites: **0.64**; of the 28 analysed assemblages: **0.64** (1 is random, below 1 is clumped).
 
 | random points placed at the sites' own distances from | Clark-Evans ratio, median of 300 (2.5th-97.5th) |
 |---|---|
-| every mapped channel | 1.02 (0.89-1.13) |
-| major rivers only | 0.98 (0.86-1.09) |
+| every mapped channel | 1.02 (0.88-1.14) |
+| major rivers only | 0.99 (0.87-1.11) |
 
 Settlement is tied to the rivers and it is clumped, but the first does not produce the second:
 points that hug the rivers exactly as closely as the sites do are close to randomly spaced. The sites

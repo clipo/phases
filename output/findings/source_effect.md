@@ -28,11 +28,11 @@ Between-cluster F_ST at k = 5, the same clusters throughout, against 200 calibra
 
 | subset | assemblages | clusters represented | median sherds per assemblage | observed F_ST | drift median (95 percent) | shortfall |
 |---|---|---|---|---|---|---|
-| all 43 | 28 | 5 | 251 | 0.0307 | 0.0063 (0.0021-0.0165) | **4.9x** |
-| rows carrying the survey's counts alone | 9 | 4 | 181 | 0.0998 | 0.0112 (0.0028-0.0391) | **8.9x** |
-| rows carrying Lipo's compilation | 19 | 5 | 424 | 0.0261 | 0.0077 (0.0027-0.0197) | **3.4x** |
-| rows carrying the survey's counts alone, shared clusters only | 9 | 4 | 181 | 0.0998 | 0.0112 (0.0028-0.0391) | **8.9x** |
-| rows carrying Lipo's compilation, shared clusters only | 15 | 4 | 424 | 0.0295 | 0.0054 (0.0017-0.0159) | **5.4x** |
+| all 43 | 28 | 5 | 251 | 0.0307 | 0.0065 (0.0021-0.0210) | **4.8x** |
+| rows carrying the survey's counts alone | 9 | 4 | 181 | 0.0998 | 0.0107 (0.0040-0.0388) | **9.3x** |
+| rows carrying Lipo's compilation | 19 | 5 | 424 | 0.0261 | 0.0077 (0.0024-0.0215) | **3.4x** |
+| rows carrying the survey's counts alone, shared clusters only | 9 | 4 | 181 | 0.0998 | 0.0107 (0.0040-0.0388) | **9.3x** |
+| rows carrying Lipo's compilation, shared clusters only | 15 | 4 | 424 | 0.0295 | 0.0056 (0.0017-0.0217) | **5.2x** |
 
 **Source and sample size are not separable here.** The rows carrying the survey's counts alone are also the small
 ones, so a larger shortfall among them may be an analyst or collection-regime effect, or

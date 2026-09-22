@@ -46,9 +46,62 @@ def load_lmv(path: str | Path) -> pd.DataFrame:
     """
     path = Path(path)
     if path.suffix.lower() == ".csv":
-        return apply_site_coordinate_corrections(pd.read_csv(path))
-    frames = [pd.read_excel(path, sheet_name=s) for s in ZONE_SHEETS]
-    return apply_site_coordinate_corrections(pd.concat(frames, ignore_index=True))
+        lmv = pd.read_csv(path)
+    else:
+        frames = [pd.read_excel(path, sheet_name=s) for s in ZONE_SHEETS]
+        lmv = pd.concat(frames, ignore_index=True)
+    return convert_pfg_datum(apply_site_coordinate_corrections(lmv))
+
+
+PFG_SOURCE_PREFIX = "PFG"
+
+
+def convert_pfg_datum(lmv: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
+    """Read PFG-sourced UTMs as NAD27 and express them in NAD83, in place.
+
+    The compilation copies Phillips, Ford and Griffin's UTMs verbatim (for the
+    basin's assemblage sites they are identical to the PFG site table, digit
+    for digit), and PFG's UTMs are NAD27 (docs/METHODS_DECISIONS.md, 2026-09-21
+    datum finding). Every consumer of this table projects Easting/Northing as
+    EPSG:26915 or 26916, so a NAD27 value read that way sits about 209 m south
+    of the site. Rows whose `Source` begins with "PFG", and rows the
+    settlement correction table replaced with PFG UTMs, are converted from
+    EPSG:267zz to EPSG:269zz here, once, so consumers need no change. The
+    result carries a `Datum` column saying which rows moved. Rows from other
+    compilers are left as recorded: their datum is not established and this
+    function does not guess.
+    """
+    from pyproj import Transformer
+    out = lmv.copy()
+    out["Datum"] = "as recorded"
+    if "Source" not in out.columns:
+        return out
+    src = out["Source"].astype(str).str.strip()
+    corrected = out["_datum_corrected"] if "_datum_corrected" in out.columns else False
+    sel = (src.str.startswith(PFG_SOURCE_PREFIX) | corrected) \
+        & out["Easting"].notna() & out["Northing"].notna() & out["Zone"].notna()
+    zones = sorted(set(out.loc[sel, "Zone"].astype(int)))
+    bad = [z for z in zones if z not in (15, 16)]
+    if bad:
+        raise ValueError(f"PFG-sourced rows carry UTM zones outside 15/16: {bad}")
+    shifts = []
+    for z in zones:
+        tr = Transformer.from_crs(f"EPSG:267{z}", f"EPSG:269{z}", always_xy=True)
+        m = sel & (out["Zone"].astype(float) == z)
+        e, n = out.loc[m, "Easting"].astype(float).to_numpy(), out.loc[m, "Northing"].astype(float).to_numpy()
+        e2, n2 = tr.transform(e, n)
+        shifts.extend(((e2 - e) ** 2 + (n2 - n) ** 2) ** 0.5)
+        out.loc[m, "Easting"] = e2
+        out.loc[m, "Northing"] = n2
+        out.loc[m, "Datum"] = "NAD27 read from PFG, converted to NAD83"
+    if "_datum_corrected" in out.columns:
+        out = out.drop(columns=["_datum_corrected"])
+    if verbose and shifts:
+        import numpy as np
+        s = np.asarray(shifts)
+        print(f"settlement datum: {len(s)} PFG-sourced rows converted NAD27 -> NAD83, "
+              f"shift {np.median(s):.0f} m (range {s.min():.0f} to {s.max():.0f} m)")
+    return out
 
 
 def join_pfg_to_lmv(counts: pd.DataFrame, lmv: pd.DataFrame):
@@ -189,6 +242,10 @@ def apply_site_coordinate_corrections(lmv, path=None, verbose: bool = True):
         out.loc[sel, "Easting"] = float(row["easting"])
         out.loc[sel, "Northing"] = float(row["northing"])
         out.loc[sel, "Zone"] = int(row["zone"])
+        # These replacements are PFG's own UTMs, so they are NAD27 like the rest.
+        if "_datum_corrected" not in out.columns:
+            out["_datum_corrected"] = False
+        out.loc[sel, "_datum_corrected"] = True
         if verbose:
             d = ((float(row["easting"]) - before[0]) ** 2
                  + (float(row["northing"]) - before[1]) ** 2) ** 0.5

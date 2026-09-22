@@ -7,12 +7,12 @@ The along-waterway metric used by the copying kernel in `33_time_aware_emergence
 | quantity | value |
 |---|---|
 | assemblages connecting on the network | 28 of 28 |
-| river-graph largest component | 1939 nodes |
+| river-graph largest component | 1942 nodes |
 | unreachable pairs | 0 |
-| mean access distance to a mapped channel | 2.75 km |
+| mean access distance to a mapped channel | 2.74 km |
 | max access distance | 8.1 km |
-| detour ratio, mean of per-pair ratios | 3.68 |
-| detour ratio, median of per-pair ratios | 2.91 |
+| detour ratio, mean of per-pair ratios | 3.67 |
+| detour ratio, median of per-pair ratios | 2.90 |
 | detour ratio, ratio of mean distances | 3.11 |
 
 ## Reading
@@ -28,10 +28,10 @@ Chi-square distance between decorated-class profiles, 378 pairs.
 
 | | rank correlation with ceramic distance |
 |---|---|
-| straight-line distance | 0.358 |
+| straight-line distance | 0.357 |
 | river-network distance | 0.238 |
-| river, straight-line held fixed | -0.026 |
-| straight-line, river held fixed | 0.277 |
+| river, straight-line held fixed | -0.024 |
+| straight-line, river held fixed | 0.275 |
 
 The two metrics correlate at 0.710. If the pottery followed the waterways, the river
 metric would carry information the straight-line one lacks. Read the third row for that. A null
@@ -43,8 +43,8 @@ may be measuring the wrong rivers.
 
 | pairs | n | straight-line | river | river, straight-line held fixed | straight-line, river held fixed |
 |---|---|---|---|---|---|
-| within a phase | 119 | 0.400 | 0.277 | 0.094 | 0.313 |
-| between phases | 259 | 0.318 | 0.102 | -0.109 | 0.320 |
+| within a phase | 119 | 0.397 | 0.276 | 0.094 | 0.310 |
+| between phases | 259 | 0.316 | 0.103 | -0.108 | 0.318 |
 
 ### The phases as units
 
@@ -54,7 +54,7 @@ Pooled class profile per phase; distances are means over member pairs.
 |---|---|---|---|---|
 | Parkin - Walls | 0.361 | 54.2 | 192.8 | 3.56 |
 | Kent - Walls | 0.424 | 30.9 | 93.6 | 3.03 |
-| Kent - Parkin | 0.459 | 52.4 | 127.9 | 2.44 |
+| Kent - Parkin | 0.459 | 52.5 | 128.0 | 2.44 |
 
 Across the 3 phase pairs ceramic distance rank-correlates -0.500 with straight-line distance and -0.500 with river distance. Ten pairs is indicative, no more.
 
@@ -64,5 +64,5 @@ network, and they are what the drift model's copying kernel uses.
 
 ## The grain of the record
 
-Nearest-neighbour spacing of the 28 assemblages: median 4.3 km, quartiles 3.2 to 8.0 km. No spatial statistic here
+Nearest-neighbour spacing of the 28 assemblages: median 4.3 km, quartiles 3.3 to 8.0 km. No spatial statistic here
 can resolve structure much finer than that.

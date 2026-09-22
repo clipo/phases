@@ -346,12 +346,15 @@ def figS5(sets, s, base):
             misfit = np.sqrt(f.loss)
             ax.scatter(misfit[~f.matched], f.fst_median[~f.matched], s=9, marker=mk, facecolor="none",
                        edgecolor=color, linewidth=0.6, label=f"{rev.MODEL_LABEL[model]}, unmatched")
-            ax.scatter(misfit[f.matched], f.fst_median[f.matched], s=16, marker=mk, color=color,
-                       label=f"{rev.MODEL_LABEL[model]}, diversity-matched")
+            # Matched cells are drawn at their stage-2 (fifty-seed) median, the
+            # value the selection is made on; unmatched cells have only the screen.
+            y2 = f.stage2_fst_median.where(f.stage2_fst_median.notna(), f.fst_median)
+            ax.scatter(misfit[f.matched], y2[f.matched], s=16, marker=mk, color=color,
+                       label=f"{rev.MODEL_LABEL[model]}, diversity-matched (50 seeds)")
         ax.axvline(np.sqrt(3) * rev.CONFIG["tolerance"], color="0.7", lw=0.8)
         ax.set_xscale("log"); ax.set_yscale("log")
         ax.set_xlabel("diversity misfit (root summed squared relative error)", fontsize=7)
-        ax.set_ylabel(r"partition $F_{ST}$ (median of calibration draws)", fontsize=7)
+        ax.set_ylabel(r"partition $F_{ST}$ (median; 6 seeds unmatched, 50 matched)", fontsize=7)
         ax.text(0.03, 0.03, label, transform=ax.transAxes, fontsize=7.5)
         panel_label(ax, "AB"[list(axes).index(ax)])
     axes[0].legend(fontsize=5, frameon=False, loc="upper right")
@@ -361,8 +364,11 @@ def figS5(sets, s, base):
         obs = s["observed"][region][metric]
         for model in (MAIN, ALT):
             f = calib[(calib.region == region) & (calib.model == model) & calib.matched]
-            out[f"{region}/{model}"] = dict(n_matched=int(len(f)), max_fst=float(f.fst_median.max()) if len(f) else None,
-                                             n_reaching_observed=int((f.fst_median >= obs).sum()))
+            f2 = f[f.stage2_matched.astype(bool)]
+            out[f"{region}/{model}"] = dict(n_matched=int(len(f)), n_matched_stage2=int(len(f2)),
+                                             max_fst_stage2=float(f2.stage2_fst_median.max()) if len(f2) else None,
+                                             n_reaching_observed_stage2=int((f2.stage2_fst_median >= obs).sum()),
+                                             n_covering_observed_stage2=int(((f2.stage2_lo <= obs) & (obs <= f2.stage2_hi)).sum()))
     return out
 
 

@@ -31,7 +31,7 @@ Primary run uses the IDSS continuity threshold cont=0.1 (see note: cont=0.30 of 
 - Number of maximal co-seriable groups (cont=0.1): **34**. Largest group sizes: [4, 4, 3, 3, 3, 3, 3, 3] (max group size = 4).
 - Group-size distribution {size: n_groups}: {1: 8, 2: 13, 3: 11, 4: 2}. The structure is highly FRAGMENTED: many small overlapping windows, no single large ordering covering the set. This matches Lipo et al. 2015, where the largest LMV solution held only four assemblages.
 - Multi-membership (bridge) assemblages: 18 of 28 belong to more than one maximal group.
-- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.628 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
+- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.629 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
 - **Parkin** belongs to 3 maximal groups (bridge = True); bridge rank 10 of 28 by membership count (cont=0.1). Top bridge assemblages: Barton_Ranch(6), Williamson(6), Rose_Mound(6), Belle_Meade(5), Cramor_Place(4), Neeleys_Ferry(4).
 
 Bin/continuity sensitivity of the IDSS structure:

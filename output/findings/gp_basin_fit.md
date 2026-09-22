@@ -1,6 +1,6 @@
 # The basin spatial GP: the fit behind the reported variance share
 
-Produced by `analyses/02_spatial/05_basin_fit.R` on 2026-09-21.
+Produced by `analyses/02_spatial/05_basin_fit.R` on 2026-09-22.
 
 Basin contract `data/stan/basin_composition.json`: 28 assemblages, 10 decorated classes.
 
@@ -11,13 +11,13 @@ for completeness and is NOT reportable as a number: see the verdict below.
 
 | model | rung | passed | verdict | spatial_share | 95% CI | rho median | rho 95% CI |
 |---|---|---|---|---|---|---|---|
-| composition_gp | 2 | **no** | ridge | 0.997 | [0.975, 1.000] | 193.1 | [94.2, 292.1] |
-| composition_gp_marginal | 2 | **no** | ridge | 0.996 | [0.973, 1.000] | 194.5 | [94.6, 292.0] |
+| composition_gp | 2 | **no** | ridge | 0.997 | [0.973, 1.000] | 195.8 | [96.0, 292.2] |
+| composition_gp_marginal | 2 | **no** | ridge | 0.996 | [0.972, 1.000] | 195.5 | [97.4, 291.9] |
 
 ## Diagnostics (rule 16: reported for every fit, without exception)
 
-- composition_gp (rung 2): R-hat 1.0070 | bulk ESS 576 | tail ESS 6344 | divergences 0/12000 (0.00%) | treedepth>=10 12000 | E-BFMI 0.771
-- composition_gp_marginal (rung 2): R-hat 1.0029 | bulk ESS 2383 | tail ESS 5985 | divergences 0/12000 (0.00%) | treedepth>=10 12000 | E-BFMI 0.741
+- composition_gp (rung 2): R-hat 1.0147 | bulk ESS 449 | tail ESS 5933 | divergences 0/12000 (0.00%) | treedepth>=10 12000 | E-BFMI 0.783
+- composition_gp_marginal (rung 2): R-hat 1.0038 | bulk ESS 2588 | tail ESS 7272 | divergences 0/12000 (0.00%) | treedepth>=10 12000 | E-BFMI 0.681
 
 ## Reading
 

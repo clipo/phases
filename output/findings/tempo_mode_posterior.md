@@ -8,17 +8,17 @@ Replaces AICc and Akaike weights over four time-series models with the posterior
 
 | parameter | meaning | median | 95% CI | reading |
 |---|---|---|---|---|
-| alpha | mean reversion; ~0 is BM, large is Stasis | 0.785 | [0.046, 11.107] | consistent with a random walk, no resolved attractor |
-| mu | directional drift per bin; 0 is unbiased | -0.0622 | [-0.1644, +0.0287] | P(mu > 0) = 0.063; no resolved direction |
+| alpha | mean reversion; ~0 is BM, large is Stasis | 0.765 | [0.045, 10.661] | consistent with a random walk, no resolved attractor |
+| mu | directional drift per bin; 0 is unbiased | -0.0608 | [-0.1537, +0.0355] | P(mu > 0) = 0.071; no resolved direction |
 
 ## Diagnostics (rule 16)
 
-- empirical: R-hat 1.0017, min ESS 1139, divergences 28/8000 (0.35%), E-BFMI 0.619
-- recovery: R-hat 1.4985, min ESS 8, divergences 1269/8000, E-BFMI 0.606
+- empirical: R-hat 1.0078, min ESS 980, divergences 18/8000 (0.23%), E-BFMI 0.612
+- recovery: R-hat 1.1779, min ESS 16, divergences 1079/8000, E-BFMI 0.585
 
 ## Rule 20(c): recovery of a directional series
 
-`mu ~ Normal(0, 0.5)` is centred on zero, which is the paper's own conclusion, so it is sympathetic. A series simulated with a true drift of +0.040 per bin returns **+0.0378** [-0.0131, +0.0810], covering the truth.
+`mu ~ Normal(0, 0.5)` is centred on zero, which is the paper's own conclusion, so it is sympathetic. A series simulated with a true drift of +0.040 per bin returns **+0.0377** [-0.0111, +0.0772], covering the truth.
 
 A real directional signal is recovered, so a near-zero mu on the diversity trajectory is a statement about the data.
 

@@ -46,8 +46,8 @@ Larger NRARE keeps more rare types; if neutral/seriation climb with depth, their
 
 | k | neutral | seriability | fst | spatial |
 |---|---|---|---|---|
-| 3 | -0.25 | -0.25 | +0.86 | +0.11 |
-| 4 | +0.02 | -0.10 | +0.85 | +0.12 |
+| 3 | -0.26 | -0.21 | +0.81 | -0.02 |
+| 4 | +0.03 | -0.01 | +0.89 | +0.03 |
 | 5 | +0.08 | -0.14 | +0.91 | -0.04 |
 
 At k=3 the spatial boundary and F_ST summarize one partition; if the spatial signature climbs at k=4,5 its weakness is a low-cluster-count artifact.

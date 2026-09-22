@@ -9,7 +9,7 @@ Not a test: no null and no p-value. This locates our partition inside an ensembl
 | | cultural F_ST |
 |---|---|
 | **the k-means partition we use** | **0.0063** [0.0051, 0.0075] |
-| ensemble median | 0.0068 |
+| ensemble median | 0.0067 |
 | ensemble 5th to 95th percentile | 0.0007 to 0.0153 |
 | ensemble full range | 0.0002 to 0.0210 |
 | **our partition's position in the ensemble** | **43rd percentile** |

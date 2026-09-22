@@ -4,20 +4,20 @@ Does the whole-LMV no-convergence result hold within the St. Francis basin (the 
 
 ## 0. Basin definition and subset sizes
 
-- Whole-LMV curated decorated set: 38 assemblages (all with coordinates), lat [34.353, 35.617], lon [-90.724, -89.978].
-- Whole-LMV broad settlement set (matched to coordinates): 255 sites, lat [33.032, 35.617], lon [-91.379, -89.978]. Coordinates computed from UTM (EPSG:26915 -> EPSG:4326).
+- Whole-LMV curated decorated set: 38 assemblages (all with coordinates), lat [34.353, 35.619], lon [-90.724, -89.978].
+- Whole-LMV broad settlement set (matched to coordinates): 255 sites, lat [33.034, 35.619], lon [-91.379, -89.978]. Coordinates computed from UTM (EPSG:26915 -> EPSG:4326).
 - Largest inter-site latitude gap in the curated set: 34.521 -> 34.756 (gap 0.235). The primary cut lat >= 34.5 sits in this gap.
 
 Subset n by latitude cut:
 | lat cut | curated n | broad n | curated lat range | broad lat range |
 |---|---|---|---|---|
-| >= 34.0 | 38 | 174 | [34.353, 35.617] | [34.005, 35.617] |
-| >= 34.5 | 36 | 110 | [34.521, 35.617] | [34.502, 35.617] |
-| >= 35.0 | 17 | 55 | [35.005, 35.617] | [35.005, 35.617] |
+| >= 34.0 | 38 | 174 | [34.353, 35.619] | [34.007, 35.619] |
+| >= 34.5 | 36 | 110 | [34.521, 35.619] | [34.504, 35.619] |
+| >= 35.0 | 17 | 55 | [35.006, 35.619] | [35.006, 35.619] |
 
 - Curated assemblages EXCLUDED at lat < 34.5 (2): Salomon (34.35), Parchman (34.36) (the southern St-Francis-type outliers; Winterville is not in the curated decorated set at all).
 - Broad St-Francis-flagged sites below the cut (1): 17-M-2 (33.95). All other St-Francis-flagged sites are at lat >= 34.77.
-- Parkin: curated lat 35.276, broad (11-N-1) lat 35.276 -> in the basin at every cut.
+- Parkin: curated lat 35.276, broad (11-N-1) lat 35.278 -> in the basin at every cut.
 
 ## 1. Transmission signatures + convergence (basin curated set)
 
@@ -27,7 +27,7 @@ Basin curated decorated set (lat >= 34.5): **n = 36** assemblages, 10 decorated 
 - 14C anchors within the basin: 5; CA<->14C Spearman = +0.500 (p = 0.391); axis flipped so increasing = later.
 - The basin time anchor is WEAK (5 anchors): the CA axis is essentially a relative seriation ordinate; per-bin slopes are not rates.
 
-- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.485, k=3:0.527, k=4:0.521, k=5:0.494, k=6:0.487; chosen k = 3.
+- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.485, k=3:0.527, k=4:0.521, k=5:0.488, k=6:0.488; chosen k = 3.
   cluster sizes: c0:11, c1:3, c2:22.
 
 ### Four signatures along the CA axis (4 bins)
@@ -51,7 +51,7 @@ Per-signature trend along the CA axis (OLS slope, bootstrap 95% CI over assembla
 |---|---|---|---|---|
 | Neutral departure | -0.30306 | [-0.71108, -0.12982] | -1.000 | yes |
 | Cultural F_ST | -0.00403 | [-0.01412, +0.04878] | +0.200 | no |
-| Spatial boundary excess | -4.73277 | [-21.61052, +28.05751] | -0.400 | no |
+| Spatial boundary excess | -4.73277 | [-22.03854, +29.07639] | -0.400 | no |
 
 - convergence_score: slope = -0.46597; Spearman rho = -0.800 (p = 0.200) over 4 complete bins.
 - Of 3 signatures within the basin: 0 trend up (rho>+0.3), 2 trend down (rho<-0.3); 1 have a bootstrap slope CI excluding 0. Convergence (H1) requires all three rising together with CIs above 0.

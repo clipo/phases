@@ -18,7 +18,23 @@ Gini-Simpson diversity. A cell is diversity-matched when all three fall within
 diversity-matched cell whose median partition F_ST is highest, so that the
 drift comparison is the one most favorable to drift; if no cell matches, the
 minimum-loss cell is used and flagged. Between-group statistics are recorded
-for every cell but never enter the matching criterion. Outputs include complete replicate tables and an
+for every cell but never enter the matching criterion.
+
+THE SELECTION IS TWO-STAGE (2026-09-22). Stage 1 screens the whole grid at
+``calib_reps`` (six) seeds per cell. Stage 2 re-simulates every stage-1
+matched cell at ``calib_stage2_reps`` (fifty) fresh seeds, re-checks the
+diversity match on those, and picks the cell with the highest fifty-seed
+median among the cells still matched. The single-stage rule was the maximum of
+some fifty six-seed medians, i.e. the extreme of sampling noise: a 209 m datum
+shift in 13 of 28 coordinates, which changed no partition and no plug-in
+F_ST, moved the winner from (120 learners, innovation 0.024, mixing 0.01) to
+(2,000, 0.001, 0.01), and `scripts/measure_calibration_stability.py` showed
+the old winner's six-seed median had been a threefold overestimate of its
+fifty-seed median. The stage-2 columns (``stage2_*``) are written to
+``calibration.csv`` beside the stage-1 ones; Figure S4 plots the stage-2
+medians for matched cells. If no cell survives stage 2, the highest stage-2
+median among the stage-1 matched cells is used and flagged unmatched.
+Outputs include complete replicate tables and an
 input/code/config fingerprint; a cache is reused only when it matches.
 """
 from pathlib import Path
@@ -58,6 +74,7 @@ CONFIG = dict(k="observed class count", steps=1800, n_records=90,
               calib_n_ind=[120, 2000, 10000],
               calib_innovations=[.0002, .0005, .001, .002, .004, .008, .012, .024, .048, .1, .2],
               calib_mixings=[.001, .002, .005, .01, .02, .05, .1, .2, .4], calib_reps=6, length=24.,
+              calib_stage2_reps=50,
               baseline_reps=500, grid_reps=30, sensitivity_reps=50,
               lengths=[12., 24.], leaks=[1., .5, .1, .03])
 REGION_LABEL = {"basin": "St. Francis basin", "valley": "Parkin partition", "cmv": "SE Missouri"}
@@ -183,10 +200,38 @@ def calibrate(name, data, model):
                                  **{f"sim_{k}": v for k, v in mean.items()}, **{f"obs_{k}": v for k, v in obs.items()}))
     frame = pd.DataFrame(rows)
     matched = frame[frame.matched]
-    best = matched.loc[matched.fst_median.idxmax()] if len(matched) else frame.loc[frame.loss.idxmin()]
+    # Stage 2: fresh seeds on every stage-1 matched cell; the match is re-checked
+    # and the winner chosen on these, never on the six-seed screen.
+    for col in ["stage2_matched", "stage2_fst_median", "stage2_lo", "stage2_hi", "stage2_loss"]:
+        frame[col] = np.nan
+    frame["stage2_matched"] = False
+    n2 = int(CONFIG["calib_stage2_reps"])
+    for idx, r in matched.iterrows():
+        sims, fst = [], []
+        for seed in range(n2):
+            f = simulate(data, 70000 + 100 * idx + seed, model, innovation=float(r.innovation),
+                         mixing=float(r.mixing), n_ind=int(r.n_ind))
+            m = sample_record(f, data["ranks"], totals, np.random.default_rng(71000 + 100 * idx + seed))
+            sims.append(diversity(m)); fst.append(fst_by(m, part))
+        mean = {key: float(np.mean([s[key] for s in sims])) for key in obs}
+        rel = {key: abs(mean[key] - obs[key]) / obs[key] for key in obs}
+        fst = np.asarray(fst, float); fst = fst[np.isfinite(fst)]
+        frame.loc[idx, "stage2_matched"] = bool(max(rel.values()) <= CONFIG["tolerance"])
+        frame.loc[idx, "stage2_loss"] = float(sum(v ** 2 for v in rel.values()))
+        frame.loc[idx, "stage2_fst_median"] = float(np.median(fst))
+        frame.loc[idx, "stage2_lo"] = float(np.percentile(fst, 2.5))
+        frame.loc[idx, "stage2_hi"] = float(np.percentile(fst, 97.5))
+    matched2 = frame[frame.stage2_matched.astype(bool)]
+    if len(matched2):
+        best = matched2.loc[matched2.stage2_fst_median.idxmax()]; how = "stage2"
+    elif len(matched):
+        best = matched.loc[frame.loc[matched.index, "stage2_fst_median"].idxmax()]; how = "stage1_only"
+    else:
+        best = frame.loc[frame.loss.idxmin()]; how = "min_loss"
     frame["selected"] = (frame.n_ind == best.n_ind) & (frame.innovation == best.innovation) & (frame.mixing == best.mixing)
     rates = dict(innovation=float(best.innovation), mixing=float(best.mixing), n_ind=int(best.n_ind))
-    return frame, rates, dict(matched=bool(best.matched), n_matched=int(len(matched)), n_cells=int(len(frame)))
+    return frame, rates, dict(matched=bool(how == "stage2"), n_matched=int(len(matched)),
+                              n_matched_stage2=int(len(matched2)), n_cells=int(len(frame)), selection=how)
 
 
 def worker(args):
@@ -288,7 +333,10 @@ def summarize(sets):
         frame = base[(base.region == r.region) & (base.model == r.model) & (base.sampling == "time_transgressive")]
         result["calibration"].append(dict(region=r.region, model=r.model, innovation=r.innovation,
             mixing=r.mixing, n_ind=int(r.n_ind), matched=bool(r.matched), n_matched=int(r.n_matched),
+            n_matched_stage2=int(r.n_matched_stage2), selection=str(r.selection),
             n_cells=int(r.n_cells), loss=float(sel.loss),
+            stage2=dict(fst_median=float(sel.stage2_fst_median), lo=float(sel.stage2_lo), hi=float(sel.stage2_hi),
+                        n_reps=int(CONFIG["calib_stage2_reps"])),
             observed={k: float(sel[f"obs_{k}"]) for k in ["hs", "rich", "ht"]},
             achieved={k: _pct(frame[k]) for k in ["hs", "rich", "ht"]}))
     for (model, name, kind), frame in base.groupby(["model", "region", "sampling"]):
@@ -322,12 +370,14 @@ def summarize(sets):
              "Gini-Simpson diversity, richness, and pooled diversity before comparison. "
              "Fixed observed repertoire; full eight-slice windows; 1,200-generation burn-in.", "",
              "## Calibration", "",
-             "| Region | Model | N | Innovation | Mixing | Matched cells | Obs H_S / rich / H_T | Achieved (baseline median) |",
-             "|---|---|---:|---:|---:|---:|---|---|"]
+             "| Region | Model | N | Innovation | Mixing | Matched cells (stage 1 / stage 2) | Stage-2 F_ST median [95%] | Obs H_S / rich / H_T | Achieved (baseline median) |",
+             "|---|---|---:|---:|---:|---:|---|---|---|"]
     for r in result["calibration"]:
         o, a = r["observed"], r["achieved"]
         lines.append(f"| {r['region']} | {r['model']} | {r['n_ind']} | {r['innovation']:.4f} | {r['mixing']:.3f} | "
-                     f"{r['n_matched']}/{r['n_cells']}{'' if r['matched'] else ' (unmatched; min loss)'} | "
+                     f"{r['n_matched']} / {r['n_matched_stage2']} of {r['n_cells']}"
+                     f"{'' if r['matched'] else ' (unmatched; ' + r['selection'] + ')'} | "
+                     f"{r['stage2']['fst_median']:.4f} [{r['stage2']['lo']:.4f}, {r['stage2']['hi']:.4f}] | "
                      f"{o['hs']:.3f} / {o['rich']:.2f} / {o['ht']:.3f} | "
                      f"{a['hs']['median']:.3f} / {a['rich']['median']:.2f} / {a['ht']['median']:.3f} |")
     lines += ["", "## Baseline comparisons (upper-tail Monte Carlo p, add-one)", "",

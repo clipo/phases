@@ -74,11 +74,56 @@ def tables() -> dict[str, list[str]]:
     return t
 
 
+def _calibration_tables() -> dict[str, list[str]]:
+    """Tables S2 and S3 from analysis 47's summary.json (added 2026-09-22)."""
+    import pandas as pd
+    s = json.loads((OUT / "revision_2026_09" / "summary.json").read_text())
+    t: dict[str, list[str]] = {}
+    label = {"pooled": "pooled profile", "uniform": "uniform"}
+    rows = ["| Set | Innovation model | Matched cells (of 297; six-seed screen / fifty-seed re-check) | "
+            "Selected N, innovation, mixing | Observed H_S / richness / H_T | Achieved H_S / richness / H_T |",
+            "|---|---|---:|---|---|---|"]
+    for c in s["calibration"]:
+        if c["region"] != "basin":
+            continue
+        o, a = c["observed"], c["achieved"]
+        flag = "" if c["matched"] else f" (unmatched; {c['selection']})"
+        rows.append(f"| St. Francis basin | {label[c['model']]} | {c['n_matched']} / {c['n_matched_stage2']}{flag} | "
+                    f"{c['n_ind']:,}, {c['innovation']:g}, {c['mixing']:g} | "
+                    f"{o['hs']:.3f} / {o['rich']:.2f} / {o['ht']:.3f} | "
+                    f"{a['hs']['median']:.3f} / {a['rich']['median']:.2f} / {a['ht']['median']:.3f} |")
+    t["**Table S2.**"] = rows
+    base = next(r for r in s["comparisons"] if r["region"] == "basin" and r["model"] == "pooled"
+                and r["sampling"] == "time_transgressive" and r["metric"] == "spatial_fst")
+    cal = next(c for c in s["calibration"] if c["region"] == "basin" and c["model"] == "pooled")
+    obs = s["observed"]["basin"]
+    rows = ["| Set | Case | Median [95%] | Frac. reaching obs. | H_S | Richness |", "|---|---|---|---:|---:|---:|",
+            f"| Basin (observed {obs['spatial_fst']:.4f}; H_S {obs['hs']:.2f}, richness {obs['rich']:.1f}) | baseline | "
+            f"{base['median']:.4f} [{base['lo']:.4f}, {base['hi']:.4f}] | {base['p_upper']:.3f} | "
+            f"{cal['achieved']['hs']['median']:.2f} | {cal['achieved']['rich']['median']:.1f} |"]
+    names = [("longer_burnin", "burn-in 2,400"), ("monomorphic_burnin", "monomorphic start, burn-in"),
+             ("monomorphic_no_burnin", "monomorphic start, no burn-in"), ("innovation_halved", "innovation halved"),
+             ("innovation_doubled", "innovation doubled"), ("mixing_halved", "mixing halved"), ("mixing_doubled", "mixing doubled")]
+    sens = {r["case"]: r for r in s["sensitivity"] if r["region"] == "basin" and r["model"] == "pooled"
+            and r["metric"] == "spatial_fst"}
+    for key, name in names:
+        r = sens[key]
+        rows.append(f"| | {name} | {r['median']:.4f} [{r['lo']:.4f}, {r['hi']:.4f}] | {r['p_upper']:.3f} | "
+                    f"{r['hs']:.2f} | {r['rich']:.1f} |")
+    for leak in (0.5, 0.1, 0.03):
+        r = next(x for x in s["boundary_grid"] if x["region"] == "basin" and x["model"] == "pooled"
+                 and x["length"] == 24.0 and x["leak"] == leak and x["metric"] == "spatial_fst")
+        rows.append(f"| | boundary, multiplier {leak:g} (24 km) | {r['median']:.4f} [{r['lo']:.4f}, {r['hi']:.4f}] | "
+                    f"{r['p_upper']:.3f} | | |")
+    t["**Table S3.**"] = rows
+    return t
+
+
 def main() -> int:
     check = "--check" in sys.argv
     s = SI.read_text(encoding="utf-8")
     new = s
-    for heading, lines in tables().items():
+    for heading, lines in {**tables(), **_calibration_tables()}.items():
         # heading paragraph, blank line, then a contiguous block of table rows
         pat = re.compile(r"(" + re.escape(heading) + r"[^\n]*\n\n)((?:\|[^\n]*\n)+)")
         found = pat.findall(new)
@@ -91,7 +136,7 @@ def main() -> int:
         print("SI relaxation tables are STALE; run without --check.", file=sys.stderr)
         return 1
     SI.write_text(new, encoding="utf-8")
-    print("rewrote the four relaxation tables in", SI.name)
+    print("rewrote the four relaxation tables and Tables S2 and S3 in", SI.name)
     return 0
 
 
