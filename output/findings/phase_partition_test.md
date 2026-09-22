@@ -1,27 +1,27 @@
 # Are the phase boundaries where the differences are?
 
-Basin phase set, 43 assemblages, 5 phases (Kent 10, Nodena 3, Parchman 4, Parkin 11, Walls 15).
-Phase partition cultural F_ST **0.0259**, within-group inertia **161.8 km^2** per assemblage.
+Basin phase set, 28 assemblages, 3 phases (Kent 8, Parkin 11, Walls 9).
+Phase partition cultural F_ST **0.0110**, within-group inertia **189.9 km^2** per assemblage.
 
 | partition ensemble | median F_ST | median inertia (km^2) | the phases sit at |
 |---|---|---|---|
-| labels shuffled, n = 2000 | 0.0091 | (geography destroyed) | above 1,994 of 2,000 draws |
-| same sizes, boundaries at random, n = 1000 | 0.0277 | 424 | **33rd pct** (30th-36th) |
-| same sizes, compactness matched, n = 1000 | 0.0290 | 335 | **22nd pct** (20th-25th) |
+| labels shuffled, n = 2000 | 0.0047 | (geography destroyed) | above 1,832 of 2,000 draws |
+| same sizes, boundaries at random, n = 1000 | 0.0154 | 268 | **18th pct** (15th-20th) |
+| same sizes, compactness matched, n = 1000 | 0.0171 | 224 | **5th pct** (4th-6th) |
 
 Percentiles are one-sided empirical percentiles of the ensemble, with the
 2.5th-97.5th range over 2000 resamples of the same draw count in brackets.
 
 ## Did the compactness match hold?
 
-The phases' inertia is 161.8 km^2 per assemblage. The random-boundary
-ensemble's median is 424 (291-588); the compactness-matched ensemble's is 335 (226-461).
+The phases' inertia is 189.9 km^2 per assemblage. The random-boundary
+ensemble's median is 268 (194-490); the compactness-matched ensemble's is 224 (190-267).
 The match is one-sided: the comparison partitions are looser than the phases,
 not tighter, because the phases sit essentially at the compactness optimum for
 these group sizes.
 
-Across the random-boundary draws, inertia and F_ST correlate at Spearman -0.05, and
-across the compactness-matched draws at +0.23. So differentiation here is NOT
+Across the random-boundary draws, inertia and F_ST correlate at Spearman -0.01, and
+across the compactness-matched draws at +0.46. So differentiation here is NOT
 a simple function of how tight the groups are, and the looseness above does not
 by itself bias the comparison. The superseded greedy generator did show such a
 coupling (-0.35), which is a fact about that generator's fractured partitions
@@ -29,10 +29,10 @@ rather than about this statistic. Panel B plots both clouds.
 
 ## What the compactness search recovers
 
-Of 1000 restarts, **6** (0.6 percent) returned the phase partition
-exactly (adjusted Rand index 1.0); the mean ARI with the phases is 0.50.
-The lowest inertia found anywhere in the search is 159.8 km^2 against the phases'
-161.8, so the phases are within 1.2 percent of the most compact 5-way division
+Of 1000 restarts, **153** (15.3 percent) returned the phase partition
+exactly (adjusted Rand index 1.0); the mean ARI with the phases is 0.73.
+The lowest inertia found anywhere in the search is 189.9 km^2 against the phases'
+189.9, so the phases are within 0.0 percent of the most compact 3-way division
 of these assemblages at these group sizes.
 
 ## Reading

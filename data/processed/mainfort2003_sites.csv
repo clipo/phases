@@ -1,0 +1,43 @@
+# Coordinates for the 39 sites of Mainfort (2003) Table 1, assembled 2026-09-21 for the replication analysis.
+# Each row names where its coordinate came from. The MainfortXY sheet is Mainfort's own; the other two sources are this project's.
+# Not independently verified against legal descriptions except where the assemblage file carries a published correction.
+site,phase_mainfort2003,latitude,longitude,coordinate_source
+Porter,Jones Bayou,35.698,-89.779,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+40LA7,Jones Bayou,35.8385102245547,-89.6232994729673,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Hatchie,Tipton,35.5362568751622,-89.8698335289193,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Richardson's Lg.,Tipton,35.502,-89.948,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Wilder,Tipton,35.453,-89.973,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Jones Bayou,Jones Bayou,35.719,-89.772,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Fullen,Jones Bayou,35.704,-89.862,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Jeter,Walls,35.269,-90.062,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Rast,Tipton,35.391,-89.993,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Lake Cormorant,Walls,34.9188201752458,-90.1999901176501,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Upper Nodena,Nodena,35.5991892723571,-89.9777622044878,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Notgrass,Nodena,35.5364834637009,-90.103393146291,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Sweat,Jones Bayou,35.728,-89.899,Spatial Data sheet of mainfort-pfg-cpl.xlsx (settlement compilation)
+Irby,Walls,34.9160106532038,-90.1562810983098,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Castile Lg.,Parkin,34.9757726710613,-90.6776586485965,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Hollywood,Kent,34.7755203880878,-90.3706029487772,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Commerce,Kent,34.8160842405021,-90.3822554139,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Rose Mound,Parkin,35.2343566446948,-90.6103194724242,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Cramor,Kent,35.00457926,-90.48566315,mainfort-pfg-cplXY.txt (with published corrections applied on read)
+Neeley's Ferry,Parkin,35.3397858955491,-90.5409910186774,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Turnbow,Parkin,35.4386003843396,-90.5243302023608,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Williamson,Parkin,35.305,-90.581,mainfort-pfg-cplXY.txt (with published corrections applied on read)
+Barton Ranch,Parkin,35.37716748,-90.38940636,mainfort-pfg-cplXY.txt (with published corrections applied on read)
+Parkin,Parkin,35.276,-90.556,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Woodlyn,Walls,34.96,-90.219,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Beck,Horseshoe Lake,34.916,-90.156,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Nickel,Kent,34.9612185826458,-90.5428340560875,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Carson Lake,Walls,35.597,-90.047,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Mound Place,Horseshoe Lake,35.079,-90.239,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Young,Horseshoe Lake,35.085,-90.325,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Starkley,Kent,34.757403,-90.561158,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Walls,Walls,34.9842780388338,-90.2089766185731,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Chucalissa,Walls,35.055,-90.122,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Graves Lake,Tipton,35.597,-89.886,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Kent,Kent,34.81,-90.531,mainfort-pfg-cplXY.txt (with published corrections applied on read)
+Clay Hill,Kent,34.877,-90.7241951628073,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Soudan,Kent,34.824462,-90.666218,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Davis,Kent,34.863687,-90.514832,MainfortXY sheet of mainfort-pfg-cpl.xlsx
+Belle Meade,Horseshoe Lake,34.921,-90.4454915527859,MainfortXY sheet of mainfort-pfg-cpl.xlsx

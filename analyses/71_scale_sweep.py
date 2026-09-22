@@ -46,7 +46,12 @@ sys.path.insert(0, str(ROOT / "src"))
 
 OUT_MD = ROOT / "output" / "findings" / "scale_sweep.md"
 OUT_CSV = ROOT / "output" / "findings" / "scale_sweep.csv"
-K_RANGE = range(2, 7)
+K_RANGE = range(2, 13)
+# Through k = 12 so the comparison can be read against group RADIUS in km
+# (analyses/75_groupness_surface.py), not only against k. Past k = 7 the
+# partition starts isolating single assemblages, which is why `min_group` is
+# carried on every row: a group of one matches its own profile exactly and
+# adds between-group variance for an arithmetic reason.
 MODEL = "pooled"          # the calibrated drift model the main text reports
 
 
@@ -63,6 +68,8 @@ def main() -> int:
     data = sets["basin"]
     m_obs = counts.to_numpy(int)
     centred = coords.to_numpy(float) - coords.to_numpy(float).mean(0)
+    t74 = importlib.import_module("74_phase_partition_test")
+    pts_km = t74.km_xy(coords.to_numpy(float))
 
     labels = {k: mf._kmeans_labels(centred, k, seed=7) for k in K_RANGE}
     sil = {k: mf.silhouette_mean(centred, labels[k]) for k in K_RANGE}
@@ -89,7 +96,9 @@ def main() -> int:
         d = np.array(sims[k], dtype=float)
         d = d[np.isfinite(d)]
         lo, med, hi = np.percentile(d, [2.5, 50, 97.5])
-        rows.append(dict(k=k, silhouette=sil[k], observed=observed[k],
+        rows.append(dict(k=k, radius_km=float(np.sqrt(t74.inertia(pts_km, labels[k]))),
+                         min_group=int(np.bincount(labels[k]).min()),
+                         silhouette=sil[k], observed=observed[k],
                          drift_median=med, drift_lo=lo, drift_hi=hi,
                          above_interval=bool(observed[k] > hi),
                          shortfall=observed[k] / med if med > 0 else float("nan"),

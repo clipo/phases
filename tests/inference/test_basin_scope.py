@@ -52,42 +52,49 @@ def test_basin_fit_uses_exactly_the_canonical_membership(inp, a43):
     # on 2026-09-20, when membership became phase membership rather than a
     # drainage corridor. The count is pinned deliberately: an accidental change
     # of scope should fail here rather than quietly alter every basin number.
-    assert len(fitted) == 43
+    # 29 -> 30 (Beck's coordinate, 2026-09-19) -> 43 (phase membership,
+    # 2026-09-20) -> 38 (2026-09-21, matrix rebuilt from PFGData and Lipo's
+    # compilation; five basin assemblages known only from Mainfort's table
+    # left) -> 28 (2026-09-21, author rulings: Parchman out on geography, a
+    # 75-decorated-sherd minimum, and Nodena's one survivor not carried as a
+    # phase of one).
+    assert len(fitted) == 28
 
 
 @pytest.mark.data
-def test_region_scope_is_genuinely_different(inp, a43):
-    """The probe. If basin and region agreed, F18 would have been harmless."""
+def test_region_scope_is_the_matrix_and_basin_scope_applies_the_rules(inp, a43):
+    """Two probes. The matrix must not contain the assemblages known only
+    from Mainfort's table (a loader falling back to the raw workbook would put
+    them back), and the basin scope must exclude, by name, the ten assemblages
+    the membership rules remove while the region scope keeps them. The sherd
+    totals are read off the processed matrix, not off either scope.
+    """
+    gone = {"40LA007", "40TP026", "Bishop", "Fullen", "Graves_Lake", "Hatchie",
+            "Jeter", "Jones_Bayou", "Porter", "Rast", "Richardsons_Landing",
+            "Wilder", "Chuccalissa", "Soudan", "Wall", "West_Mounds", "Young"}
+    present = {str(a) for a in inp.counts.index}
+    assert not (gone & present), (
+        f"assemblages known only from Mainfort's table are back in the matrix: "
+        f"{sorted(gone & present)}; is a reader using the raw workbook?")
+    # Excluded by the membership rules: Parchman's three on geography, six
+    # under 75 decorated sherds, and Nodena's lone survivor. They stay in the
+    # matrix file and must be absent from the INPUTS, since 07 now applies the
+    # membership before fitting the correspondence axis (2026-09-22).
+    excluded = {"Dundee", "Parchman", "Salomon", "Cheatham", "Connor", "Norfolk",
+                "Notgrass", "Pouncey", "Upper_Nodena", "Carson_Lake"}
+    import pandas as pd
+    mat = pd.read_csv(ROOT / "data" / "processed" / "analysis_matrix.csv")
+    assert excluded <= set(mat["Assemblages"].astype(str)), "excluded rows should stay in the matrix file"
+    assert not (excluded & present), sorted(excluded & present)
+    fitted = set(a43.fitted_basin_ids(inp))
+    assert not (excluded & fitted), sorted(excluded & fitted)
     gc_b, _ = a43.basin_group_counts(inp, scope="basin")
     gc_r, _ = a43.basin_group_counts(inp, scope="region")
-
-    # The original defect (F18) was the basin scope silently fitting the whole
-    # curated set. The discriminator used to be the cluster count, which
-    # differed three against five; at 43 assemblages both scopes select five,
-    # and the sherd totals now differ by only about 4 percent, so neither
-    # separates the accounts any more. What still does is membership: the
-    # region scope reaches twelve assemblages the phase set excludes, and a
-    # regression to fitting everything would pull them in.
-    outside = {"40LA007", "40TP026", "Bishop", "Fullen", "Graves_Lake", "Hatchie",
-               "Jeter", "Jones_Bayou", "Porter", "Rast", "Richardsons_Landing",
-               "Wilder"}
-    fitted = set(a43.fitted_basin_ids(inp))
-    assert not (fitted & outside), (
-        "basin scope pulled in assemblages the phase set excludes: "
-        f"{sorted(fitted & outside)}")
-    assert outside <= {str(a) for a in inp.have_coords_ids}, (
-        "the probe's own reference list has drifted from the curated set")
-    # And the difference between the two scopes is exactly those twelve. The
-    # expected sherd total is read off the counts table, not from either scope's
-    # return value, so the rival account -- "the scope argument changes nothing
-    # that matters" -- fails here on a quantity the code path cannot supply.
-    extra = float(inp.counts.loc[sorted(outside)].to_numpy(float).sum())
-    assert extra > 0
-    assert gc_r.sum() - gc_b.sum() == pytest.approx(extra, rel=1e-9), (
-        f"region minus basin is {gc_r.sum() - gc_b.sum():.0f} sherds; the twelve "
-        f"assemblages outside the phase set hold {extra:.0f}")
-    # Same type vocabulary either way; only the grouping and scope change.
-    assert gc_b.shape[1] == gc_r.shape[1]
+    # With the membership applied at load, the two scopes coincide, and the
+    # total is pinned against the matrix file restricted by the members list.
+    members = set((ROOT / "data" / "processed" / "basin_members_curated.txt").read_text().split())
+    pinned = int(mat[mat["Assemblages"].isin(members)].iloc[:, 1:].to_numpy().sum())
+    assert int(gc_b.sum()) == int(gc_r.sum()) == pinned == 14101
 
 
 @pytest.mark.data

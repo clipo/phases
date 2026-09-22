@@ -6,18 +6,18 @@ Effective population size and innovation rate are drawn from the POOLED ABC-SMC 
 
 ## Result
 
-Observed per-bin Gini-Simpson diversity: 0.689, 0.650, 0.609, 0.534, 0.438, 0.322.
+Observed per-bin Gini-Simpson diversity: 0.661, 0.731, 0.588, 0.599, 0.551, 0.457.
 
 | posterior | bins inside the 95% predictive interval | Bayesian predictive p |
 |---|---|---|
-| **pooled** | **6/6** | **0.621** |
-| seed 101 alone | 6/6 | 0.670 |
-| seed 202 alone | 6/6 | 0.544 |
-| seed 303 alone | 6/6 | 0.738 |
-| seed 404 alone | 6/6 | 0.521 |
-| seed 505 alone | 6/6 | 0.425 |
+| **pooled** | **6/6** | **0.885** |
+| seed 101 alone | 6/6 | 0.634 |
+| seed 202 alone | 6/6 | 0.885 |
+| seed 303 alone | 6/6 | 0.907 |
+| seed 404 alone | 6/6 | 0.915 |
+| seed 505 alone | 6/6 | 0.802 |
 
-Across single-seed posteriors the predictive p ranges 0.425 to 0.738 and the bins-inside count ranges 6 to 6 of 6. That spread is the dependency `analyses/55_abc_stability.py` measured (N median 98 to 263 across seeds) propagating into the check, and it is the reason the pooled row is the one to report.
+Across single-seed posteriors the predictive p ranges 0.634 to 0.915 and the bins-inside count ranges 6 to 6 of 6. That spread is the dependency `analyses/55_abc_stability.py` measured (N median 98 to 263 across seeds) propagating into the check, and it is the reason the pooled row is the one to report.
 
 ## Reading
 

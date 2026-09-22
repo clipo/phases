@@ -64,6 +64,7 @@ from mls_emergence.signatures.assortativity import (
 )
 from mls_emergence.signatures.seriation import seriation_groups
 from mls_emergence.signatures.convergence import convergence_score, time_derivative
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -266,9 +267,7 @@ def rank_size(area: pd.Series):
 # ---------------------------------------------------------------------------
 def load_curated():
     """Curated decorated counts + lat/long (already in the XY file)."""
-    cur = pd.read_excel(
-        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
-    ).dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
         "Assemblages"

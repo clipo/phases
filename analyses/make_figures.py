@@ -53,6 +53,7 @@ from mls_emergence.validation.harness import (
 from mls_emergence.validation.mechanisms import (
     gen_group_emergence, gen_aggregated_signaling, gen_patchiness, gen_drift_space,
 )
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 
 DATA = ROOT / "data"
 FIGURES = ROOT / "figures"
@@ -158,9 +159,7 @@ def zscore_series(s: pd.Series) -> pd.Series:
 # Load shared curated data once
 # ---------------------------------------------------------------------------
 def _load_curated():
-    cur = pd.read_csv(
-        DATA / "raw" / "mainfort-pfg-cpl.csv"
-    ).dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     type_cols = [c for c in DECORATED_TYPES if c in cur.columns]

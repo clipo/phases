@@ -59,9 +59,15 @@ run "analyses/make_figures.py"
 # another script's output, add it to this list or renumber it above its
 # inputs.
 echo
+#   02_spatial/04_posterior_predictive.R reads output/gp_real_*.rds, which
+#                     02_spatial/05_basin_fit.R writes (found 2026-09-22: the
+#                     check had been comparing the previous run's fit with the
+#                     current data on every rerun)
 echo "=== second pass: figures whose inputs are produced later in the order ==="
 run "analyses/42_figS6_dynamic.py"
 run "analyses/56_neutrality_ppc.py"
+echo "=== second pass: the spatial model's predictive check, on the fit it checks ==="
+Rscript "analyses/02_spatial/04_posterior_predictive.R" || fail=$((fail + 1))
 
 echo "=================================================================="
 echo "Done. ${fail} script(s) reported a non-zero exit."

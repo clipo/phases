@@ -77,7 +77,23 @@ DRAINAGE_KM = 20.0
 # The five phases the Data section names for the basin. Tipton and Jones Bayou,
 # the other two in Figure 1, sit north and east of this scheme and are not part
 # of the unit under test.
-ST_FRANCIS_PHASES = ("Parkin", "Nodena", "Kent", "Walls", "Parchman")
+# Author rulings, 2026-09-21. Parchman is out on geography: its three
+# assemblages lie across the Mississippi in Coahoma County (Parchman itself is
+# SW1/4 NW1/4 S30 T29N R3W, the Mississippi survey grid), 30 to 46 km from the
+# nearest other assemblage and 77 km from the centroid of the rest. It is not a
+# phase of the St. Francis basin under any definition, and its 236 decorated
+# sherds carried a third of the drift residual on their own.
+ST_FRANCIS_PHASES = ("Parkin", "Nodena", "Kent", "Walls")
+# A minimum decorated-sherd count, because a between-cluster term computed on
+# a few dozen sherds is mostly noise and an "excess over drift" built on it is
+# a ratio of two small numbers. 75 removes Cheatham (19), Connor (38),
+# Norfolk (49), Notgrass (38), Pouncey (62) and Upper Nodena (47).
+MIN_DECORATED = 75
+# A phase left with fewer members than this cannot carry a between-group term
+# and, as a singleton, would be handed its own cluster and inflate F_ST for an
+# arithmetic reason. Nodena is the case: the 75-sherd rule leaves Carson Lake
+# alone, and it is treated as unassigned rather than as a phase of one.
+MIN_PHASE_MEMBERS = 2
 UTM = 26915
 
 
@@ -118,7 +134,19 @@ def main():
     ph = importlib.import_module("36_canonical_phase_map")
     labels, derived = ph.assign_phases_by_territory(
         [str(i) for i in coords.index], coords[["Latitude", "Longitude"]].to_numpy(float))
+    labels = np.asarray(labels)
     in_phase = np.isin(labels, ST_FRANCIS_PHASES)
+    n_sherds = counts.reindex(coords.index).sum(axis=1).to_numpy(float)
+    too_small = n_sherds < MIN_DECORATED
+    print(f"  under {MIN_DECORATED} decorated sherds, dropped: "
+          f"{', '.join(f'{a} ({int(k)})' for a, k in zip(coords.index[in_phase & too_small], n_sherds[in_phase & too_small]))}")
+    in_phase &= ~too_small
+    for phase in ST_FRANCIS_PHASES:
+        members = coords.index[in_phase & (labels == phase)]
+        if 0 < len(members) < MIN_PHASE_MEMBERS:
+            print(f"  {phase} is left with {len(members)} member ({', '.join(members)}); "
+                  f"fewer than {MIN_PHASE_MEMBERS}, so it is not carried as a phase")
+            in_phase &= ~(labels == phase)
     n_derived = int((in_phase & derived).sum())
     print(f"  phase labels: {int(in_phase.sum()) - n_derived} from Mainfort's map, "
           f"{n_derived} by territory containment "

@@ -2,22 +2,22 @@
 
 Produced by `analyses/57_fst_prior_predictive.py` (full, 4000 draws per prior). Closes F2 and supplies rule 20(a) for the Balding-Nichols prior.
 
-Design: the St. Francis basin as analysis 43 fits it, 5 spatial clusters over 10 decorated classes at the real per-cluster sherd totals [15580, 762, 433, 6756, 12860]. **Observed Gini-Simpson F_ST = 0.0280.**
+Design: the St. Francis basin as analysis 43 fits it, 2 spatial clusters over 10 decorated classes at the real per-cluster sherd totals [7317, 6784]. **Observed Gini-Simpson F_ST = 0.0062.**
 
 ## Induced prior predictive distribution of F_ST
 
 | prior | median | 95% predictive interval | P(F_ST > 0.30) |
 |---|---|---|---|
-| Uniform(0,1) | 0.366 | [0.014, 1.000] | **0.564** |
-| Beta(1,3) | 0.130 | [0.005, 0.730] | **0.211** |
-| Beta(1,10) | 0.040 | [0.002, 0.268] | **0.016** |
-| Beta(2,20) | 0.047 | [0.006, 0.211] | **0.006** |
+| Uniform(0,1) | 0.236 | [0.004, 1.000] | **0.439** |
+| Beta(1,3) | 0.087 | [0.003, 0.682] | **0.168** |
+| Beta(1,10) | 0.026 | [0.001, 0.247] | **0.015** |
+| Beta(2,20) | 0.032 | [0.003, 0.185] | **0.003** |
 
 ## Reading
 
-Before seeing any data, `F ~ Uniform(0, 1)` expects a median Gini-Simpson F_ST of **0.366** at this design and puts **56 percent** of its mass above 0.30. The observed value is 0.0280. Nobody holds the belief that decorated-ceramic assemblages a few tens of kilometres apart in one drainage are that strongly differentiated, so on the scale that matters the flat prior is not uninformative; it is strongly and wrongly informative.
+Before seeing any data, `F ~ Uniform(0, 1)` expects a median Gini-Simpson F_ST of **0.236** at this design and puts **44 percent** of its mass above 0.30. The observed value is 0.0062. Nobody holds the belief that decorated-ceramic assemblages a few tens of kilometres apart in one drainage are that strongly differentiated, so on the scale that matters the flat prior is not uninformative; it is strongly and wrongly informative.
 
-`Beta(1, 10)` expects a median of 0.040 with 2 percent above 0.30, which is a defensible prior belief for this setting.
+`Beta(1, 10)` expects a median of 0.026 with 2 percent above 0.30, which is a defensible prior belief for this setting.
 
 ## The family constraint
 

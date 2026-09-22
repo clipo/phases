@@ -6,13 +6,13 @@ Estimand: the correlation of van der Waerden normal scores, the rank-based Bayes
 
 | claim | n | frequentist rho | p | **posterior median** | **95% CI** | **P(r > 0)** |
 |---|---|---|---|---|---|---|
-| divergence trajectory (MAIN TEXT) | 6 | +0.829 | 0.042 | **+0.699** | [-0.012, +0.905] | 0.974 |
-| diversity-distance (SUPPLEMENTAL) | 43 | -0.257 | 0.096 | **-0.204** | [-0.445, +0.096] | 0.086 |
+| divergence trajectory (MAIN TEXT) | 6 | +0.029 | 0.957 | **+0.087** | [-0.531, +0.634] | 0.597 |
+| diversity-distance (SUPPLEMENTAL) | 28 | -0.176 | 0.371 | **-0.140** | [-0.435, +0.204] | 0.218 |
 
 ## Diagnostics (rule 16, every fit)
 
-- divergence trajectory (MAIN TEXT): r = +0.699 [-0.012, +0.905], P(r > 0) = 0.974, n = 6 | R-hat 1.0010, bulk ESS 2177, tail ESS 2550, divergences 0/8000 (0.00%), treedepth>=10 0, E-BFMI 1.151
-- diversity-distance (SUPPLEMENTAL): r = -0.204 [-0.445, +0.096], P(r > 0) = 0.086, n = 43 | R-hat 1.0009, bulk ESS 3212, tail ESS 3087, divergences 0/8000 (0.00%), treedepth>=10 0, E-BFMI 1.092
+- divergence trajectory (MAIN TEXT): r = +0.087 [-0.531, +0.634], P(r > 0) = 0.597, n = 6 | R-hat 1.0012, bulk ESS 2626, tail ESS 2467, divergences 0/8000 (0.00%), treedepth>=10 0, E-BFMI 1.112
+- diversity-distance (SUPPLEMENTAL): r = -0.140 [-0.435, +0.204], P(r > 0) = 0.218, n = 28 | R-hat 1.0012, bulk ESS 3054, tail ESS 3090, divergences 0/8000 (0.00%), treedepth>=10 0, E-BFMI 1.138
 
 ## Reading
 

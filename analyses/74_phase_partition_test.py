@@ -293,6 +293,8 @@ def main() -> int:
     )).to_csv(OUT_CSV, index=False)
 
     sweep = pd.read_csv(SWEEP_CSV) if SWEEP_CSV.exists() else None
+    if sweep is not None:
+        sweep = sweep[sweep.k <= 6]      # 71 sweeps to k = 12 for Figure 13; panel A shows 2 to 6
 
     fig = plt.figure(figsize=(7.2, 2.9))
     gs = fig.add_gridspec(1, 3, wspace=0.42)
@@ -307,6 +309,8 @@ def main() -> int:
         axA.set_xlabel("number of spatial groups (k)")
         axA.set_ylabel("cultural $F_{ST}$")
         axA.set_xticks(list(sweep.k))
+        from matplotlib.ticker import MultipleLocator as _ML
+        axA.yaxis.set_major_locator(_ML(0.01))
         axA.legend(fontsize=6, frameon=False, loc="upper left")
     else:
         axA.text(.5, .5, "run 71_scale_sweep.py", ha="center", transform=axA.transAxes)
@@ -333,7 +337,8 @@ def main() -> int:
     # manuscript never states -- its documented "finer axis ticks still slip"
     # limit. Matching the other panels' tick values keeps scaffolding out of
     # the comparison.
-    axB.set_yticks([0.01, 0.02, 0.03, 0.04])
+    from matplotlib.ticker import MultipleLocator
+    axB.yaxis.set_major_locator(MultipleLocator(0.01))
     axB.legend(handles=handles, fontsize=5.5, frameon=True, framealpha=0.92,
                edgecolor="0.8", loc="lower right", handletextpad=0.5,
                borderpad=0.4)
@@ -342,7 +347,7 @@ def main() -> int:
     axC = fig.add_subplot(gs[0, 2])
     axC.hist(opt, bins=26, color="0.78", edgecolor="0.55", lw=.4)
     axC.axvline(fst_phase, color="0.1", lw=1.8)
-    axC.set_xticks([0.02, 0.03, 0.04])
+    axC.xaxis.set_major_locator(MultipleLocator(0.01))
     axC.annotate(f"the phases\n{fst_phase:.4f}\n{ordinal(pct_opt)} percentile\n"
                  f"of this ensemble",
                  xy=(fst_phase, axC.get_ylim()[1] * .78), xytext=(6, 0),

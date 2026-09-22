@@ -6,22 +6,22 @@ Produced by `analyses/62_gini_simpson_bias.py`.
 
 | bin | sherds | plug-in | unbiased | difference |
 |---|---|---|---|---|
-| 0 | 2229 | 0.6887 | 0.6890 | +0.0003 |
-| 1 | 2580 | 0.6495 | 0.6498 | +0.0003 |
-| 2 | 5566 | 0.6087 | 0.6088 | +0.0001 |
-| 3 | 8062 | 0.5337 | 0.5338 | +0.0001 |
-| 4 | 11584 | 0.4383 | 0.4383 | +0.0000 |
-| 5 | 6370 | 0.3225 | 0.3225 | +0.0001 |
+| 0 | 813 | 0.6612 | 0.6620 | +0.0008 |
+| 1 | 818 | 0.7306 | 0.7315 | +0.0009 |
+| 2 | 2210 | 0.5878 | 0.5880 | +0.0003 |
+| 3 | 3107 | 0.5986 | 0.5988 | +0.0002 |
+| 4 | 4638 | 0.5514 | 0.5515 | +0.0001 |
+| 5 | 2515 | 0.4571 | 0.4573 | +0.0002 |
 
-Bins pool thousands of sherds, so the bias is at most 0.04 percent and the declining trajectory is unchanged (Spearman -1.000 either way).
+Bins pool thousands of sherds, so the bias is at most 0.12 percent and the declining trajectory is unchanged (Spearman -1.000 either way).
 
 ## 2. The size-controlled F_ST trajectory trend
 
-Groups here are cluster-by-bin cells on rarefied data, holding 50 to 200 sherds (median 125), which is where the bias bites.
+Groups here are cluster-by-bin cells on rarefied data, holding 50 to 250 sherds (median 150), which is where the bias bites.
 
-- plug-in trend  **-0.7559**
-- unbiased trend **-0.7539**
-- shift +0.0020, over 800 rarefactions
+- plug-in trend  **-0.0408**
+- unbiased trend **-0.0912**
+- shift -0.0505, over 800 rarefactions
 
 ## 3. Does the inferred closure strength move?
 
@@ -29,11 +29,11 @@ The recovery curve is built by scoring synthetic assemblages with the same estim
 
 | injected s | plug-in curve | unbiased curve | shift |
 |---|---|---|---|
-| 0.0 | -0.6743 | +0.0914 | +0.7657 |
-| 0.2 | -0.3562 | +0.3971 | +0.7533 |
-| 0.4 | +0.6152 | +0.8124 | +0.1971 |
-| 0.6 | +0.9152 | +0.9476 | +0.0324 |
-| 0.8 | +0.9781 | +0.9762 | -0.0019 |
+| 0.0 | +0.1567 | +0.0833 | -0.0733 |
+| 0.2 | +0.2933 | +0.2467 | -0.0467 |
+| 0.4 | +0.6400 | +0.6100 | -0.0300 |
+| 0.6 | +0.8667 | +0.8833 | +0.0167 |
+| 0.8 | +0.9667 | +0.9567 | -0.0100 |
 
 Inverting each curve at its own observed value gives an implied closure strength of **nan** under the plug-in and **nan** under the unbiased estimator.
 

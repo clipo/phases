@@ -45,7 +45,7 @@ def cpl(k):
     ids=[gid] if gid else [i for i in c['id'] if norm(g2n.get(i,i))==k]
     sub=c[c['id'].isin(ids)]
     return sub[TY].apply(pd.to_numeric,errors='coerce').fillna(0).sum().reindex(TY).fillna(0).values
-tal={}
+tal={}; share={}
 for _,r in u.iterrows():
     k=r['k']; uv=r[TY].astype(float).values; src={'Mainfort':mainfort(k),'CPL':cpl(k)}
     hit='unreconciled'
@@ -54,7 +54,16 @@ for _,r in u.iterrows():
             if np.allclose(sum(src[s] for s in combo),uv): hit='+'.join(combo); break
         if hit!='unreconciled': break
     tal[str(r['Assemblages'])]=hit
+    share[str(r['Assemblages'])]=float(src['CPL'].sum()/uv.sum()) if uv.sum() and 'CPL' in hit else 0.0
 mem={ln.strip() for ln in open('data/processed/basin_members_curated.txt') if ln.strip()}
 print("all 55:",dict(Counter(tal.values())))
-print("basin 29:",dict(Counter(v for a,v in tal.items() if a in mem)))
+print(f"basin {len(mem)}:",dict(Counter(v for a,v in tal.items() if a in mem)))
+# Written out so analyses can ask whether source is confounded with place
+# (analyses/78_source_effect.py). `cpl_share` is the fraction of a row's sherds
+# that come from Lipo's compilation, zero for a Mainfort-only row.
+pd.DataFrame({'assemblage':list(tal),'source':list(tal.values()),
+              'cpl_share':[share[a] for a in tal],
+              'in_basin':[a in mem for a in tal]}).to_csv(
+    'data/processed/assemblage_sources.csv',index=False)
+print("wrote data/processed/assemblage_sources.csv")
 print("unreconciled:",[a for a,v in tal.items() if v=='unreconciled'])

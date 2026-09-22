@@ -1,73 +1,73 @@
 # What recovers the phase scheme: the pottery, or the map?
 
-Basin phase set, 43 assemblages, 5 phases, 10 decorated classes.
-9 assemblages carry a phase this project derived by territory, a geographic
-rule; they are EXCLUDED from the column the conclusion rests on, leaving 34
+Basin phase set, 28 assemblages, 3 phases, 10 decorated classes.
+3 assemblages carry a phase this project derived by territory, a geographic
+rule; they are EXCLUDED from the column the conclusion rests on, leaving 25
 assemblages Mainfort himself assigned.
 
 Agreement is the adjusted Rand index: 0 in expectation for unrelated partitions, 1 for
 identical ones. Weight 0 is the site map alone; the last row is the pottery alone.
 
-| composition transform | weight on composition | ARI, all 43 | ARI, Mainfort's 34 | k-means seed range |
+| composition transform | weight on composition | ARI, all 43 | ARI, Mainfort's 25 | k-means seed range |
 |---|---|---|---|---|
-| raw | **map alone** | 0.741 | **0.678** | 0.678-1.000 |
-| raw | 0.1 | 0.669 | **0.678** | 0.678-0.815 |
-| raw | 0.25 | 0.726 | **0.740** | 0.623-0.815 |
-| raw | 0.5 | 0.653 | **0.682** | 0.623-0.740 |
-| raw | 1 | 0.504 | **0.522** | 0.443-0.697 |
-| raw | 2 | 0.457 | **0.465** | 0.225-0.523 |
-| raw | 4 | 0.144 | **0.159** | 0.153-0.465 |
-| raw | 8 | 0.142 | **0.159** | 0.099-0.198 |
-| raw | 32 | 0.088 | **0.077** | 0.052-0.142 |
-| raw | pottery alone | 0.088 | **0.077** | 0.052-0.142 |
-| clr | **map alone** | 0.741 | **0.678** | 0.678-1.000 |
-| clr | 0.1 | 0.790 | **0.815** | 0.678-0.815 |
-| clr | 0.25 | 0.732 | **0.737** | 0.682-0.815 |
-| clr | 0.5 | 0.732 | **0.737** | 0.682-0.740 |
-| clr | 1 | 0.647 | **0.659** | 0.522-0.737 |
-| clr | 2 | 0.494 | **0.514** | 0.257-0.697 |
-| clr | 4 | 0.271 | **0.246** | 0.165-0.519 |
-| clr | 8 | 0.195 | **0.200** | 0.126-0.246 |
-| clr | 32 | 0.150 | **0.129** | 0.126-0.206 |
-| clr | pottery alone | 0.149 | **0.126** | 0.126-0.206 |
-| chisq | **map alone** | 0.741 | **0.678** | 0.678-1.000 |
-| chisq | 0.1 | 0.790 | **0.815** | 0.678-0.815 |
-| chisq | 0.25 | 0.790 | **0.815** | 0.815-0.815 |
-| chisq | 0.5 | 0.732 | **0.740** | 0.678-0.815 |
-| chisq | 1 | 0.699 | **0.737** | 0.590-0.753 |
-| chisq | 2 | 0.453 | **0.465** | 0.171-0.753 |
-| chisq | 4 | 0.176 | **0.196** | 0.139-0.516 |
-| chisq | 8 | 0.161 | **0.179** | 0.127-0.232 |
-| chisq | 32 | 0.137 | **0.144** | 0.112-0.204 |
-| chisq | pottery alone | 0.137 | **0.138** | 0.087-0.175 |
+| raw | **map alone** | 0.889 | **1.000** | 0.607-1.000 |
+| raw | 0.1 | 0.889 | **1.000** | 0.607-1.000 |
+| raw | 0.25 | 0.695 | **0.766** | 0.671-0.766 |
+| raw | 0.5 | 0.527 | **0.533** | 0.533-0.533 |
+| raw | 1 | 0.527 | **0.533** | 0.533-0.533 |
+| raw | 2 | 0.064 | **0.092** | 0.092-0.423 |
+| raw | 4 | 0.064 | **0.092** | 0.082-0.092 |
+| raw | 8 | 0.064 | **0.092** | 0.082-0.092 |
+| raw | 32 | 0.056 | **0.082** | 0.082-0.082 |
+| raw | pottery alone | 0.056 | **0.082** | 0.082-0.082 |
+| clr | **map alone** | 0.889 | **1.000** | 0.607-1.000 |
+| clr | 0.1 | 0.889 | **1.000** | 0.766-1.000 |
+| clr | 0.25 | 0.695 | **0.766** | 0.671-0.766 |
+| clr | 0.5 | 0.527 | **0.533** | 0.533-0.766 |
+| clr | 1 | 0.527 | **0.533** | 0.533-0.533 |
+| clr | 2 | 0.064 | **0.092** | 0.092-0.533 |
+| clr | 4 | 0.064 | **0.092** | 0.082-0.103 |
+| clr | 8 | 0.064 | **0.092** | 0.082-0.103 |
+| clr | 32 | 0.056 | **0.082** | 0.082-0.111 |
+| clr | pottery alone | 0.056 | **0.082** | 0.082-0.111 |
+| chisq | **map alone** | 0.889 | **1.000** | 0.607-1.000 |
+| chisq | 0.1 | 0.560 | **0.607** | 0.607-1.000 |
+| chisq | 0.25 | 0.560 | **0.607** | 0.607-0.766 |
+| chisq | 0.5 | 0.560 | **0.607** | 0.607-0.766 |
+| chisq | 1 | 0.560 | **0.607** | 0.607-0.766 |
+| chisq | 2 | 0.291 | **0.292** | 0.292-0.533 |
+| chisq | 4 | 0.291 | **0.292** | 0.292-0.292 |
+| chisq | 8 | 0.222 | **0.215** | 0.143-0.292 |
+| chisq | 32 | 0.222 | **0.215** | 0.143-0.292 |
+| chisq | pottery alone | 0.222 | **0.215** | 0.143-0.292 |
 
 ## Does the verdict depend on the algorithm?
 
 | transform | algorithm | map alone | pottery alone |
 |---|---|---|---|
-| raw | kmeans | 0.678 | 0.077 |
-| raw | ward | 0.678 | 0.109 |
-| raw | average | 0.603 | 0.109 |
-| clr | kmeans | 0.678 | 0.126 |
-| clr | ward | 0.678 | 0.122 |
-| clr | average | 0.603 | 0.199 |
-| chisq | kmeans | 0.678 | 0.138 |
-| chisq | ward | 0.678 | 0.259 |
-| chisq | average | 0.603 | 0.143 |
+| raw | kmeans | 1.000 | 0.082 |
+| raw | ward | 0.607 | 0.082 |
+| raw | average | 0.537 | 0.082 |
+| clr | kmeans | 1.000 | 0.082 |
+| clr | ward | 0.607 | 0.111 |
+| clr | average | 0.537 | 0.111 |
+| chisq | kmeans | 1.000 | 0.215 |
+| chisq | ward | 0.607 | 0.204 |
+| chisq | average | 0.537 | -0.002 |
 
 ## How much of the log-ratio answer is the zero convention?
 
-168 of 430 cells (39 percent) are zero, so the log-ratio transform
+105 of 280 cells (38 percent) are zero, so the log-ratio transform
 cannot be computed without deciding what a zero is worth. Map plus log-ratio composition
 at half weight, on Mainfort's assemblages, under five conventions:
 
 | zero convention | ARI |
 |---|---|
-| pseudocount 0.5 (the default here) | 0.737 |
-| pseudocount 5.0 | 0.682 |
-| floor 2.0x min positive | 0.815 |
-| floor 0.5x min positive | 0.902 |
-| floor 0.1x min positive | 1.000 |
+| pseudocount 0.5 (the default here) | 0.533 |
+| pseudocount 5.0 | 0.533 |
+| floor 2.0x min positive | 0.607 |
+| floor 0.5x min positive | 0.607 |
+| floor 0.1x min positive | 0.766 |
 
 A convention that amplifies absence harder gives a better match, up to a
 perfect one. That is a property of the convention, not of the pottery, and it
@@ -76,7 +76,7 @@ the reading below uses.
 
 ## Reading
 
-Partitions carrying the phases' own group sizes with boundaries placed at random agree with the phases at a median ARI of 0.356 (400 draws), which is what
+Partitions carrying the phases' own group sizes with boundaries placed at random agree with the phases at a median ARI of 0.566 (400 draws), which is what
 the group sizes manufacture on their own.
 
 The site map alone recovers the published scheme well above what the group

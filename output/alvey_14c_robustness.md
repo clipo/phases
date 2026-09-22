@@ -26,22 +26,20 @@ Neeley's Ferry (3CS24) is absent from Alvey; Callahan-Thompson (23MI71) and Park
 
 ## Seriation axis vs calendar age: before vs after
 
-**BEFORE (Mainfort only)** (n = 5 anchors, 27 dates pooled): Spearman rho = +0.70, p = 0.188
+**BEFORE (Mainfort only)** (n = 4 anchors, 26 dates pooled): Spearman rho = +0.40, p = 0.600
 
 | assemblage | n dates | median cal AD | CA1 |
 |---|---|---|---|
-| Upper_Nodena | 1 | 1343 | -1.604 |
-| Kent_Place | 2 | 1466 | -0.719 |
-| Parkin | 19 | 1483 | +0.195 |
-| Neeleys_Ferry | 2 | 1513 | +0.204 |
-| Clay_Hill | 3 | 1596 | -0.522 |
+| Kent_Place | 2 | 1466 | -1.112 |
+| Parkin | 19 | 1483 | +0.189 |
+| Neeleys_Ferry | 2 | 1513 | +0.272 |
+| Clay_Hill | 3 | 1596 | -0.835 |
 
-**AFTER (+ Alvey net-new)** (n = 5 anchors, 32 dates pooled): Spearman rho = +0.70, p = 0.188
+**AFTER (+ Alvey net-new)** (n = 4 anchors, 26 dates pooled): Spearman rho = +0.40, p = 0.600
 
 | assemblage | n dates | median cal AD | CA1 |
 |---|---|---|---|
-| Upper_Nodena | 6 | 1447 | -1.604 |
-| Kent_Place | 2 | 1466 | -0.719 |
-| Parkin | 19 | 1483 | +0.195 |
-| Neeleys_Ferry | 2 | 1513 | +0.204 |
-| Clay_Hill | 3 | 1596 | -0.522 |
+| Kent_Place | 2 | 1466 | -1.112 |
+| Parkin | 19 | 1483 | +0.189 |
+| Neeleys_Ferry | 2 | 1513 | +0.272 |
+| Clay_Hill | 3 | 1596 | -0.835 |

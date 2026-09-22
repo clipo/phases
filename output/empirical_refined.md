@@ -4,46 +4,45 @@ This pass re-tests the prior result (no convergence at the transmission level; l
 
 ## 0. Data
 
-- Curated decorated assemblages used: 55 (10 types: Parkin_Punctated, Barton/Kent/MPI, Painted, Fortune_Noded, Ranch_Incised, Walls_Engraved, Wallace_Incised, Rhodes_Incised, Vernon_Paul_Applique, Hull_Engraved).
-- Assemblages with coordinates: 55.
-- CA first non-trivial axis inertia fraction: 0.479.
+- Curated decorated assemblages used: 28 (10 types: Parkin_Punctated, Barton/Kent/MPI, Painted, Fortune_Noded, Ranch_Incised, Walls_Engraved, Wallace_Incised, Rhodes_Incised, Vernon_Paul_Applique, Hull_Engraved).
+- Assemblages with coordinates: 28.
+- CA first non-trivial axis inertia fraction: 0.478.
 
 ## 1/2. Maximized 14C matching
 
 - 14C samples with a provenience: 110; aggregated to 14 unique proveniences.
-- Proveniences matched to a curated decorated assemblage (improved normalization: generic suffixes stripped, longest-overlap containment): **5**.
+- Proveniences matched to a curated decorated assemblage (improved normalization: generic suffixes stripped, longest-overlap containment): **4**.
   Matched provenience -> assemblage (mean 1-sigma calendar AD, n samples):
   - Clay Hill -> Clay_Hill: AD 1689 (n=3)
   - Kent -> Kent_Place: AD 1466 (n=2)
   - Neeley's Ferry -> Neeleys_Ferry: AD 1484 (n=2)
   - Parkin -> Parkin: AD 1459 (n=20)
-  - Upper Nodena -> Upper_Nodena: AD 1354 (n=1)
-- Proveniences that exist as BROAD PFG sites but are NOT in the curated decorated set (cannot be placed on the CA axis): 4 (Callahan-Thompson, Denton Mounds, Moon, Turner).
+- Proveniences that exist as BROAD PFG sites but are NOT in the curated decorated set (cannot be placed on the CA axis): 5 (Callahan-Thompson, Denton Mounds, Moon, Turner, Upper Nodena).
 - Proveniences absent from both curated and broad sets (different drainages / phases): 5 (Hazel, Hess, Lilbourn, Powers Fort, Snodgrass).
-- HONEST CEILING: the dated-provenience pool is 14, but only 5 of those proveniences correspond to assemblages in the curated decorated set. The 14C anchor for the CA axis is bounded by these 5 points, not by the full 14. The remaining dated sites (Powers-phase and other-drainage sites such as Powers Fort, Snodgrass, Turner, Lilbourn, Hazel, Hess, Moon, Denton Mounds, Callahan-Thompson) are outside the curated decorated set.
+- HONEST CEILING: the dated-provenience pool is 14, but only 4 of those proveniences correspond to assemblages in the curated decorated set. The 14C anchor for the CA axis is bounded by these 4 points, not by the full 14. The remaining dated sites (Powers-phase and other-drainage sites such as Powers Fort, Snodgrass, Turner, Lilbourn, Hazel, Hess, Moon, Denton Mounds, Callahan-Thompson) are outside the curated decorated set.
 
-- CA<->14C Spearman on the 5 anchors = +0.500 (p = 0.391); axis kept (already increasing with time).
-- PLAIN STATEMENT: with only 5 anchors (< 10), the absolute time anchor remains weak. The CA axis is essentially a RELATIVE seriation ordinate; the calendar orientation is directional, not a calibrated chronology. This is the principal reason the cross-sectional structural test (section 5) is run as a chronology-light complement.
+- CA<->14C Spearman on the 4 anchors = +0.000 (p = 1.000); axis kept (already increasing with time).
+- PLAIN STATEMENT: with only 4 anchors (< 10), the absolute time anchor remains weak. The CA axis is essentially a RELATIVE seriation ordinate; the calendar orientation is directional, not a calibrated chronology. This is the principal reason the cross-sectional structural test (section 5) is run as a chronology-light complement.
 
 ## 3. Signature 2 via the real IDSS group structure (curated set)
 
 Primary run uses the IDSS continuity threshold cont=0.1 (see note: cont=0.30 of Lipo et al. 2015 over-saturates this broadly overlapping decorated matrix and exceeds the solver caps). Group counts and Parkin's bridge rank are reported across cont in [0.05, 0.1, 0.2] for sensitivity.
 
-- Number of maximal co-seriable groups (cont=0.1): **127**. Largest group sizes: [4, 4, 4, 4, 4, 4, 4, 4] (max group size = 4).
-- Group-size distribution {size: n_groups}: {1: 5, 2: 41, 3: 61, 4: 20}. The structure is highly FRAGMENTED: many small overlapping windows, no single large ordering covering the set. This matches Lipo et al. 2015, where the largest LMV solution held only four assemblages.
-- Multi-membership (bridge) assemblages: 47 of 55 belong to more than one maximal group.
-- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.613 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
-- **Parkin** belongs to 17 maximal groups (bridge = True); bridge rank 4 of 55 by membership count (cont=0.1). Top bridge assemblages: Pouncey(21), Fortune(21), Cheatham(19), Parkin(17), Vernon_Paul(17), Young(14).
+- Number of maximal co-seriable groups (cont=0.1): **34**. Largest group sizes: [4, 4, 3, 3, 3, 3, 3, 3] (max group size = 4).
+- Group-size distribution {size: n_groups}: {1: 8, 2: 13, 3: 11, 4: 2}. The structure is highly FRAGMENTED: many small overlapping windows, no single large ordering covering the set. This matches Lipo et al. 2015, where the largest LMV solution held only four assemblages.
+- Multi-membership (bridge) assemblages: 18 of 28 belong to more than one maximal group.
+- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.628 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
+- **Parkin** belongs to 3 maximal groups (bridge = True); bridge rank 10 of 28 by membership count (cont=0.1). Top bridge assemblages: Barton_Ranch(6), Williamson(6), Rose_Mound(6), Belle_Meade(5), Cramor_Place(4), Neeleys_Ferry(4).
 
 Bin/continuity sensitivity of the IDSS structure:
 | cont | n_groups | max_size | n_bridge | Parkin_memberships | Parkin_bridge_rank |
 |---|---|---|---|---|---|
-| 0.05 | 53 | 3 | 17 | 2 | 11/55 |
-| 0.1 | 127 | 4 | 47 | 17 | 4/55 |
-| 0.2 | 693 | 7 | 55 | 88 | 8/55 |
+| 0.05 | 20 | 3 | 1 | 1 | 2/28 |
+| 0.1 | 34 | 4 | 18 | 3 | 10/28 |
+| 0.2 | 96 | 5 | 27 | 19 | 1/28 |
 
-- Signature-2 TREND (proper): per-assemblage count of distinct co-seriable groups vs CA position: Spearman rho = +0.709 (p = 0.000), OLS slope = +6.3665. Positive => later-CA assemblages participate in MORE distinct (non-co-seriable) groups (fragmentation / assortment RISING toward later); negative => fewer (coherence rising).
-  bootstrap 95% CI on the Signature-2 fragmentation slope: [+4.4555, +8.5837] (excludes 0).
+- Signature-2 TREND (proper): per-assemblage count of distinct co-seriable groups vs CA position: Spearman rho = -0.540 (p = 0.003), OLS slope = -1.4342. Positive => later-CA assemblages participate in MORE distinct (non-co-seriable) groups (fragmentation / assortment RISING toward later); negative => fewer (coherence rising).
+  bootstrap 95% CI on the Signature-2 fragmentation slope: [-2.2618, -0.7014] (excludes 0).
 
 ## 4. Four signatures along the CA axis (bootstrap CIs + bin sensitivity)
 
@@ -52,36 +51,36 @@ Bin/continuity sensitivity of the IDSS structure:
 Spearman rho of each signature with the ordered bin index:
 | signature | 4 bins | 6 bins | 8 bins |
 |---|---|---|---|
-| Neutral departure | -1.000 | -0.771 | -0.857 |
-| Cultural F_ST | -0.600 | -0.657 | -0.429 |
-| Spatial boundary excess | +0.000 | +0.771 | -0.071 |
+| Neutral departure | +0.400 | +0.429 | +0.310 |
+| Cultural F_ST | +0.000 | +0.400 | -0.400 |
+| Spatial boundary excess | -0.400 | +0.200 | -0.400 |
 
-- Sign stability across bin counts: Neutral departure=stable, Cultural F_ST=stable, Spatial boundary excess=UNSTABLE.
+- Sign stability across bin counts: Neutral departure=stable, Cultural F_ST=UNSTABLE, Spatial boundary excess=UNSTABLE.
 
 ### 4b. Primary panel (6 bins) with bootstrap 95% CI on the slope
 
 | signature | OLS slope | bootstrap 95% CI | Spearman rho | CI excludes 0 |
 |---|---|---|---|---|
-| Neutral departure | -0.20004 | [-0.32226, -0.11967] | -0.771 | yes |
-| Cultural F_ST | -0.01065 | [-0.02053, +0.00208] | -0.657 | no |
-| Spatial boundary excess | +2.22037 | [-12.18899, +4.97797] | +0.771 | no |
+| Neutral departure | +0.30512 | [+0.08993, +0.48183] | +0.429 | yes |
+| Cultural F_ST | +0.00076 | [-0.05221, +0.07078] | +0.400 | no |
+| Spatial boundary excess | +0.51494 | [-8.38513, +12.37512] | +0.200 | no |
 
-- Of 3 signatures: 1 trend up (rho>+0.3), 2 trend down (rho<-0.3); 1 have a bootstrap slope CI that excludes 0. For convergence (H1) all three should rise together with CIs above 0.
+- Of 3 signatures: 2 trend up (rho>+0.3), 0 trend down (rho<-0.3); 1 have a bootstrap slope CI that excludes 0. For convergence (H1) all three should rise together with CIs above 0.
 
 ## 5. Cross-sectional structural contrast (early CA-third vs late CA-third)
 
-Early CA-third (n=18) vs late CA-third (n=18). This tests for bounded-group STRUCTURE without trusting the weak time anchor: do the four signatures JOINTLY indicate stronger boundaries in the late third than the early third?
+Early CA-third (n=9) vs late CA-third (n=9). This tests for bounded-group STRUCTURE without trusting the weak time anchor: do the four signatures JOINTLY indicate stronger boundaries in the late third than the early third?
 
 The 'late-early' column is the observed point-estimate difference; the bootstrap 95% CI (on the resampled difference) gives its uncertainty.
 
 | signature | early | late | late-early | bootstrap 95% CI | direction |
 |---|---|---|---|---|---|
-| Neutral departure | 1.1619 | 0.2726 | -0.8893 | [-1.2781, -0.5009] | higher early (CI excludes 0) |
-| Cultural F_ST | 0.0349 | 0.0194 | -0.0155 | [-0.0747, +0.0185] | higher early |
-| Spatial boundary excess | -7.1697 | -12.5813 | -5.4116 | [-57.0015, +38.2627] | higher early |
-| IDSS n_groups (fragmentation) | 19.0000 | 50.0000 | +31.0000 | [-2.0500, +22.0250] | higher late |
+| Neutral departure | 0.1099 | 1.3683 | +1.2584 | [+0.7889, +1.8190] | higher late (CI excludes 0) |
+| Cultural F_ST | 0.0028 | 0.0054 | +0.0026 | [-0.0091, +0.0183] | higher late |
+| Spatial boundary excess | 42.2252 | 6.6817 | -35.5435 | [-110.2472, +64.7477] | higher early |
+| IDSS n_groups (fragmentation) | 11.0000 | 8.0000 | -3.0000 | [-5.0000, +3.0000] | higher early |
 
-- JOINT structural reading: 1 of 4 structural signatures are higher in the late third; 1 of 4 have a bootstrap CI that excludes 0. Bounded-group consolidation (H1) predicts higher F_ST, higher boundary excess, higher within-group neutral departure, AND MORE IDSS groups jointly in the late third with CIs above 0.
+- JOINT structural reading: 2 of 4 structural signatures are higher in the late third; 1 of 4 have a bootstrap CI that excludes 0. Bounded-group consolidation (H1) predicts higher F_ST, higher boundary excess, higher within-group neutral departure, AND MORE IDSS groups jointly in the late third with CIs above 0.
 
 ## 6. Corrected Parkin record (settlement-level cross-check)
 
@@ -100,27 +99,27 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 
 ## 8. Pattern summary (NEUTRAL, no verdict)
 
-- 14C anchoring: 5 curated assemblages have a 14C date (of 14 dated proveniences); CA<->14C Spearman +0.500 (p 0.391). The anchor stays weak; the axis is essentially relative.
-- IDSS Signature 2: 127 maximal co-seriable groups at cont=0.1, max group size 4, 47/55 bridge assemblages. Highly fragmented (many small overlapping windows). Parkin is a high-degree bridge (rank 4/55). Groups are spatially clustered (within/between distance ratio 0.61).
-- Signature-2 fragmentation vs CA position: rho +0.709, slope +6.3665, bootstrap CI [+4.4555, +8.5837] (excludes 0).
+- 14C anchoring: 4 curated assemblages have a 14C date (of 14 dated proveniences); CA<->14C Spearman +0.000 (p 1.000). The anchor stays weak; the axis is essentially relative.
+- IDSS Signature 2: 34 maximal co-seriable groups at cont=0.1, max group size 4, 18/28 bridge assemblages. Highly fragmented (many small overlapping windows). Parkin is a high-degree bridge (rank 10/28). Groups are spatially clustered (within/between distance ratio 0.63).
+- Signature-2 fragmentation vs CA position: rho -0.540, slope -1.4342, bootstrap CI [-2.2618, -0.7014] (excludes 0).
 - Four continuous signatures along the CA axis (6 bins):
-  - Neutral departure: slope -0.20004, rho -0.771, CI [-0.32226, -0.11967] (excludes 0); bin-count sign stable.
-  - Cultural F_ST: slope -0.01065, rho -0.657, CI [-0.02053, +0.00208] (spans 0); bin-count sign stable.
-  - Spatial boundary excess: slope +2.22037, rho +0.771, CI [-12.18899, +4.97797] (spans 0); bin-count sign UNSTABLE.
-  Convergence requires all three rising together with CIs above 0: 1 rise, 1 have a CI excluding 0.
+  - Neutral departure: slope +0.30512, rho +0.429, CI [+0.08993, +0.48183] (excludes 0); bin-count sign stable.
+  - Cultural F_ST: slope +0.00076, rho +0.400, CI [-0.05221, +0.07078] (spans 0); bin-count sign UNSTABLE.
+  - Spatial boundary excess: slope +0.51494, rho +0.200, CI [-8.38513, +12.37512] (spans 0); bin-count sign UNSTABLE.
+  Convergence requires all three rising together with CIs above 0: 2 rise, 1 have a CI excluding 0.
 - Early- vs late-CA-third structural contrast (late - early):
-  - Neutral departure: -0.8893 (CI excludes 0).
-  - Cultural F_ST: -0.0155 (CI spans 0).
-  - Spatial boundary excess: -5.4116 (CI spans 0).
-  - IDSS n_groups: +31.0000 (CI spans 0).
-  Joint bounded-group consolidation requires all four higher late with CIs above 0: 1/4 higher late, 1/4 CI excludes 0.
+  - Neutral departure: +1.2584 (CI excludes 0).
+  - Cultural F_ST: +0.0026 (CI spans 0).
+  - Spatial boundary excess: -35.5435 (CI spans 0).
+  - IDSS n_groups: -3.0000 (CI spans 0).
+  Joint bounded-group consolidation requires all four higher late with CIs above 0: 2/4 higher late, 1/4 CI excludes 0.
 - Settlement (corrected Parkin): Parkin is a fortified (ditched + palisaded) 7-mound town; mound-area rank-size slope -1.26, primacy 16.38. The LMV ditch/area fields under-record fortification; regional ditch counts are a floor.
 
 Plain statement on whether the refinement changes the prior no-convergence picture: see section 10.
 
 ## 9. Caveats (explicit)
 
-- The 14C anchor did NOT improve materially: improved name normalization still yields only 5 curated assemblages with a date, because most dated proveniences are Powers-phase / other-drainage sites absent from the curated decorated set. The CA axis is a RELATIVE seriation ordinate; per-bin slopes are not rates.
+- The 14C anchor did NOT improve materially: improved name normalization still yields only 4 curated assemblages with a date, because most dated proveniences are Powers-phase / other-drainage sites absent from the curated decorated set. The CA axis is a RELATIVE seriation ordinate; per-bin slopes are not rates.
 - The IDSS continuity threshold matters: cont=0.30 (Lipo et al. 2015) over-saturates this broadly overlapping decorated matrix and exceeds the solver caps, so cont=0.1 is used as primary and sensitivity is reported across [0.05, 0.1, 0.2]. Absolute group counts scale with cont; the bridge STRUCTURE (Parkin high, system fragmented) is the stable finding.
 - The signatures share the type-frequency substrate and are partly correlated; some co-movement is expected without a single causal process. Bins are few and uneven; per-bin estimates from small bins are noisy, which is why bootstrap CIs are reported.
 - The early-vs-late IDSS n_groups bootstrap collapses duplicate rows created by resampling-with-replacement (identical assemblages are trivially co-seriable and only inflate the search), so its resampled group counts run lower than the duplicate-free point estimate; the point difference (+groups in the late third) therefore sits above the bootstrap CI, which spans 0. Read the IDSS contrast as suggestive of more late-third groups but NOT robust under resampling.
@@ -129,7 +128,7 @@ Plain statement on whether the refinement changes the prior no-convergence pictu
 
 ## 10. For team interpretation (H1 vs H2; no verdict)
 
-Status of the no-convergence picture after refinement (NEUTRAL): of the three continuous transmission signatures, 1 rise and 2 fall along the CA axis, and 1 of three have a bootstrap slope CI that excludes zero. In the chronology-light early-vs-late contrast, 1 of four structural signatures are higher in the late third and 1 of four have a CI excluding zero. The improved 14C match did not strengthen the time anchor (5 dated curated assemblages). These are the observed quantities; whether they amount to convergence is the team's call.
+Status of the no-convergence picture after refinement (NEUTRAL): of the three continuous transmission signatures, 2 rise and 0 fall along the CA axis, and 1 of three have a bootstrap slope CI that excludes zero. In the chronology-light early-vs-late contrast, 2 of four structural signatures are higher in the late third and 1 of four have a CI excluding zero. The improved 14C match did not strengthen the time anchor (4 dated curated assemblages). These are the observed quantities; whether they amount to convergence is the team's call.
 
 - Consistent with H1 (nascent emergence / consolidation) IF the three continuous signatures rise JOINTLY with CIs above zero, the IDSS fragmentation trend and early-vs-late contrast point the same way, and Parkin sits as a late high-degree bridge in a system tightening toward contact.
 - Consistent with H2 (stable non-consolidation; Rees 2001) IF the signatures do NOT rise jointly, the slope CIs span zero, and the early-vs-late contrast shows no coherent bounded-group strengthening, i.e. a persistently fragmented, overlapping-lineage system.

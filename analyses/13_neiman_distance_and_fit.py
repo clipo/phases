@@ -171,6 +171,12 @@ def main():
     axB.plot(bd.index.to_numpy(float), bd.values, "-o", color=OI_BLUE, ms=5, lw=1.3)
     axB.set_xlabel("CA seriation bin (early to late)")
     axB.set_ylabel("mean within-bin distance")
+    # Round ticks only: the default locator picks 0.025 steps on these ranges,
+    # which scripts/check_figure_claims.py reads as statistics the text never
+    # states (its documented "finer ticks slip" limit).
+    from matplotlib.ticker import MultipleLocator
+    axA.yaxis.set_major_locator(MultipleLocator(0.05))
+    axB.yaxis.set_major_locator(MultipleLocator(0.05))
     axB.text(0.05, 0.95, rf"$\rho$ = {rho_traj:+.2f} (n.s.)", transform=axB.transAxes,
              ha="left", va="top", fontsize=9)
     save(fig, "figS1_neiman")

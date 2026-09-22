@@ -22,6 +22,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 from scipy.stats import spearmanr
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,7 +41,7 @@ RISE = 0.30  # Spearman threshold for "rising"
 
 def load_curated_full():
     """Curated decorated set WITHOUT the basin latitude filter (whole-LMV, 55)."""
-    cur = pd.read_excel(DATA / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort").dropna(
+    cur = read_analysis_matrix().dropna(
         subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
@@ -130,8 +131,12 @@ def main():
                 conv = all((x is not np.nan and np.isfinite(x) and x > RISE) for x in (rn, rf, rs))
                 any_conv = any_conv or conv
                 kshow = f"{kused}" if kspec == "auto" else f"{kspec}"
-                L.append(f"| {latcut} | {n} | {nb} | {kshow} | {rn:+.2f} | {rf:+.2f} | "
-                         f"{rs:+.2f} | {'YES' if conv else 'no'} |")
+                # An undefined trend is a finding about the design (too few bins
+                # with two or more clusters in them, or too few assemblages per
+                # bin), so it is written out as that and never as "nan".
+                show = lambda v: f"{v:+.2f}" if np.isfinite(v) else "undefined"
+                L.append(f"| {latcut} | {n} | {nb} | {kshow} | {show(rn)} | {show(rf)} | "
+                         f"{show(rs)} | {'YES' if conv else 'no'} |")
     L += ["",
           f"**Across all {3*3*3} grid cells, convergence (all three continuous signatures "
           f"rising together) appears in: {'AT LEAST ONE cell' if any_conv else 'NO cell'}.** "

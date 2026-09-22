@@ -51,6 +51,7 @@ m36 = importlib.import_module("36_canonical_phase_map")
 from scipy.stats import mannwhitneyu  # noqa: E402
 from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
 from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 
 DATA = ROOT / "data"
 OUT_MD = ROOT / "output" / "basin_pullout.md"
@@ -63,7 +64,7 @@ N_CONS = 500
 def load_full():
     """All Mainfort-PFG decorated assemblages with coordinates, WITHOUT the
     drainage-basin restriction (the inverse of make_figures._load_curated)."""
-    cur = pd.read_csv(DATA / "raw" / "mainfort-pfg-cpl.csv").dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     type_cols = [c for c in mf.DECORATED_TYPES if c in cur.columns]

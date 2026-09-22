@@ -75,12 +75,14 @@ sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
 OUT_MD = ROOT / "output" / "findings" / "groupness_surface.md"
-SWEEP_CSV = ROOT / "output" / "findings" / "scale_km_sweep.csv"
+SWEEP_CSV = ROOT / "output" / "findings" / "scale_sweep.csv"   # written by 71_scale_sweep.py
 FIG = "fig13_groupness_surface"
 BANDWIDTH_KM = 15.0
 N_ALT = 200               # alternative partitions the phase boundaries are judged against
 MIN_WEIGHT = 2.0          # effective assemblages behind a grid point
-PHASES = ("Parkin", "Nodena", "Kent", "Walls", "Parchman")
+# The phases present in the curated set are read from the labels rather than
+# listed here: Parchman left the set on 2026-09-21, and a literal list would
+# have kept drawing a boundary for a phase with no members.
 
 
 def turnover_field(pts_km, props, gx, gy, bandwidth, min_weight):
@@ -259,6 +261,8 @@ def main() -> int:
             cb = fig.colorbar(im, ax=ax, fraction=0.035, pad=0.02)
             cb.set_label("compositional turnover\n(per km)", fontsize=5.5)
             cb.ax.tick_params(labelsize=5)
+            from matplotlib.ticker import MultipleLocator as _ML
+            cb.ax.yaxis.set_major_locator(_ML(0.01))   # the colorbar's ticks are read too
 
     axC = fig.add_subplot(gs[0, 2])
     if sweep is not None:
@@ -268,6 +272,8 @@ def main() -> int:
                  marker="o", ms=3, label="observed")
         axC.set_xlabel("group radius (km)")
         axC.set_ylabel("cultural $F_{ST}$")
+        from matplotlib.ticker import MultipleLocator
+        axC.yaxis.set_major_locator(MultipleLocator(0.01))   # round ticks only (check_figure_claims)
         axC.invert_xaxis()
         axC.legend(fontsize=5.5, frameon=False, loc="upper left")
     fs.panel_label(axC, "C")
@@ -315,14 +321,14 @@ def main() -> int:
     else:
         L += ["No internal boundaries were recovered; nothing to report here.", ""]
     if sweep is not None:
-        first = sweep[sweep.above].iloc[0] if sweep.above.any() else None
-        inside = sweep[~sweep.above]
+        first = sweep[sweep.above_interval].iloc[0] if sweep.above_interval.any() else None
+        inside = sweep[~sweep.above_interval]
         L += ["## At what spatial scale does drift stop accounting for it?", "",
               "| group radius (km) | k | observed F_ST | drift 95% upper | above? | smallest group |",
               "|---|---|---|---|---|---|"]
         for _, r in sweep.iterrows():
             L.append(f"| {r.radius_km:.1f} | {int(r.k)} | {r.observed:.4f} | "
-                     f"{r.drift_hi:.4f} | {'yes' if r.above else 'no'} | "
+                     f"{r.drift_hi:.4f} | {'yes' if r.above_interval else 'no'} | "
                      f"{int(r.min_group)} |")
         L += [""]
         if first is not None and len(inside):

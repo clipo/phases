@@ -121,6 +121,23 @@ def main(fast=False):
     cfg = FAST if fast else FULL
     inp = a07.prepare_inputs()
     y, se, t, labels = build_panel_and_ses(inp, n_bins=6, n_boot=cfg["n_boot"], seed=0)
+    if not np.all(np.isfinite(y)):
+        # Some seriation bins hold assemblages of a single spatial cluster
+        # (on the 28-assemblage set, the first and fifth), so a between-cluster
+        # F_ST does not exist there. Fitting anyway gave a
+        # posterior whose max R-hat printed as "nan", which is a number nobody
+        # should be shown (rules 16 and 17). This model is demoted and
+        # unreported; it says why it cannot run and stops.
+        bad = [(labels[i], int(j)) for i, j in zip(*np.where(~np.isfinite(y)))]
+        msg = ("# Hierarchical convergence model: NOT FIT\n\n"
+               f"The panel has undefined cells: {bad} (signature, bin). A bin whose "
+               "assemblages all fall in one spatial cluster has no between-cluster F_ST.\n"
+               "This model is demoted and not reported; see "
+               "`output/findings/perbin_bayesian_fst.md`, which handles the same bin "
+               "explicitly.\n")
+        (ROOT / "output" / "hierarchical_convergence.md").write_text(msg, encoding="utf-8")
+        print(msg)
+        return
     b_ser_obs, se_ser = seriation_slope_and_se(inp, n_boot=cfg["n_boot"], seed=1)
 
     idata = sample_convergence(y, se, t, b_ser_obs, se_ser,

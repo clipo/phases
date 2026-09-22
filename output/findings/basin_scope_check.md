@@ -6,28 +6,28 @@ Produced by `analyses/47_basin_scope_check.py`. Seed 0, 2000 draws x 4 chains, F
 
 | | A: as analysis 43 runs today | B: restricted to the basin |
 |---|---|---|
-| assemblages | **55** | **43** |
-| spatial clusters | 5 | 5 |
-| BN F_ST median | **0.0754** | **0.0659** |
-| BN 95% HDI | [0.0392, 0.1305] | [0.0339, 0.1139] |
-| Gini-Simpson median | 0.0388 | 0.0277 |
-| Gini-Simpson 95% HDI | [0.0360, 0.0414] | [0.0254, 0.0300] |
-| plug-in F_ST | 0.0391 | 0.0280 |
-| max R-hat | 1.0001 | 1.0010 |
-| min ESS | 5939 | 4375 |
+| assemblages | **28** | **28** |
+| spatial clusters | 2 | 2 |
+| BN F_ST median | **0.1011** | **0.1011** |
+| BN 95% HDI | [0.0114, 0.2422] | [0.0114, 0.2422] |
+| Gini-Simpson median | 0.0062 | 0.0062 |
+| Gini-Simpson 95% HDI | [0.0051, 0.0076] | [0.0051, 0.0076] |
+| plug-in F_ST | 0.0062 | 0.0062 |
+| max R-hat | 1.0011 | 1.0011 |
+| min ESS | 3257 | 3257 |
 | divergences | 0 | 0 |
 
 ## What is in A but not in the basin
 
-12 assemblages: `40LA007`, `40TP026`, `Bishop`, `Fullen`, `Graves_Lake`, `Hatchie`, `Jeter`, `Jones_Bayou`, `Porter`, `Rast`, `Richardsons_Landing`, `Wilder`.
+0 assemblages: .
 
-Silhouette scores on the basin coordinates, k = 2..6: k=2: 0.4555, k=3: 0.4173, k=4: 0.5022, k=5: 0.5665, k=6: 0.5138. k=5 wins clearly, which is the "three spatial clusters" the manuscript describes. The k=5 in column A is the silhouette optimum for the wider curated set, not for the basin.
+Silhouette scores on the basin coordinates, k = 2..6: k=2: 0.5290, k=3: 0.5015, k=4: 0.4686, k=5: 0.4691, k=6: 0.3715. k=2 wins clearly, which is the "three spatial clusters" the manuscript describes. The k=5 in column A is the silhouette optimum for the wider curated set, not for the basin.
 
 ## Reading
 
 `prepare_inputs()` returns the whole curated set with coordinates. `43_bayesian_fst.basin_group_counts()` groups it by `inp.cluster_of` without restricting to `data/processed/basin_members_curated.txt`, so despite its name and despite the report headed "Observed St. Francis basin", column A is a regional quantity. The excluded 26 include `Walls`, `Wall`, `Chuccalissa` and `Parchman`, which are the Mississippi-proximal sites that `analyses/16_basin_membership.py` names in its own docstring as the reason the earlier latitude cut was replaced by the hydrological rule.
 
-The Gini-Simpson readout, the quantity that matches the manuscript's estimator, moves from 0.0388 to 0.0277, a 29 percent reduction. The BN parameter moves less but its interval widens as it should on 29 assemblages rather than 55. Both fits are numerically healthy, so this is a scope defect and not a sampling one.
+The Gini-Simpson readout, the quantity that matches the manuscript's estimator, moves from 0.0062 to 0.0062, a 0 percent reduction. The BN parameter moves less but its interval widens as it should on 29 assemblages rather than 55. Both fits are numerically healthy, so this is a scope defect and not a sampling one.
 
 ## Scope of the consequence
 

@@ -100,6 +100,103 @@ def main() -> None:
         "distance matrix itself, never a summary of it.",
         "",
     ]
+    # Which distance does the pottery follow? Added 2026-09-21. The supplement
+    # justified the river metric as the more faithful representation of how
+    # potters could interact; that is a claim about the record and this measures
+    # it. Chi-square distance between decorated-class profiles, rank-correlated
+    # with each metric, and each metric with the other held fixed (partial rank
+    # correlation by residualising ranks). Descriptive (rule 18).
+    from scipy.stats import rankdata, spearmanr
+    m = counts.to_numpy(float)
+    prof = m / m.sum(1, keepdims=True)
+    cm = prof.mean(0)
+    X = prof / np.sqrt(np.where(cm > 0, cm, 1.0))
+    cer = np.sqrt(((X[:, None, :] - X[None, :, :]) ** 2).sum(2))[iu][ok]
+    rr, gg = r[ok], g[ok]
+
+    def partial(y, x, z):
+        ry, rx, rz = rankdata(y), rankdata(x), rankdata(z)
+        ey = ry - np.polyval(np.polyfit(rz, ry, 1), rz)
+        ex = rx - np.polyval(np.polyfit(rz, rx, 1), rz)
+        return float(np.corrcoef(ey, ex)[0, 1])
+
+    nn = np.where(np.eye(n, dtype=bool), np.inf, geo).min(1)
+    L += [
+        "",
+        "## Which distance does the pottery follow?",
+        "",
+        f"Chi-square distance between decorated-class profiles, {int(ok.sum())} pairs.",
+        "",
+        "| | rank correlation with ceramic distance |",
+        "|---|---|",
+        f"| straight-line distance | {spearmanr(cer, gg).statistic:.3f} |",
+        f"| river-network distance | {spearmanr(cer, rr).statistic:.3f} |",
+        f"| river, straight-line held fixed | {partial(cer, rr, gg):.3f} |",
+        f"| straight-line, river held fixed | {partial(cer, gg, rr):.3f} |",
+        "",
+        f"The two metrics correlate at {spearmanr(rr, gg).statistic:.3f}. If the pottery "
+        "followed the waterways, the river",
+        "metric would carry information the straight-line one lacks. Read the third row "
+        "for that. A null",
+        "there does not show that waterways were unimportant: the network is MODERN "
+        "hydrography, and the",
+        "St. Francis, Tyronza and Mississippi have all moved since these sites were "
+        "occupied, so the metric",
+        "may be measuring the wrong rivers.",
+    ]
+    # The comparison that matters is BETWEEN phases (author, 2026-09-21). Within
+    # a phase sites are close and the two metrics barely differ; whether the
+    # waterways structured interaction is a question about pairs in different
+    # phases, and about the phases taken as units.
+    import itertools
+    ph = importlib.import_module("36_canonical_phase_map")
+    lab = np.array(ph.assign_phases_by_territory([str(i) for i in counts.index], coords)[0])
+    same = (lab[:, None] == lab[None, :])[iu][ok]
+    L += ["", "### Within phases and between them", "",
+          "| pairs | n | straight-line | river | river, straight-line held fixed | "
+          "straight-line, river held fixed |", "|---|---|---|---|---|---|"]
+    for label, sel in (("within a phase", same), ("between phases", ~same)):
+        L.append(f"| {label} | {int(sel.sum())} | {spearmanr(cer[sel], gg[sel]).statistic:.3f} | "
+                 f"{spearmanr(cer[sel], rr[sel]).statistic:.3f} | "
+                 f"{partial(cer[sel], rr[sel], gg[sel]):.3f} | "
+                 f"{partial(cer[sel], gg[sel], rr[sel]):.3f} |")
+    phases = sorted(set(lab))
+    rows = []
+    for a, b in itertools.combinations(phases, 2):
+        ia, ib = np.where(lab == a)[0], np.where(lab == b)[0]
+        pa = m[ia].sum(0) / m[ia].sum()
+        pb = m[ib].sum(0) / m[ib].sum()
+        w = np.sqrt(np.where(cm > 0, cm, 1.0))
+        rows.append((f"{a} - {b}", float(np.sqrt((((pa - pb) / w) ** 2).sum())),
+                     float(geo[np.ix_(ia, ib)].mean()), float(R[np.ix_(ia, ib)].mean())))
+    rows.sort(key=lambda t: t[1])
+    L += ["", "### The phases as units", "",
+          "Pooled class profile per phase; distances are means over member pairs.", "",
+          "| phase pair | ceramic distance | straight-line km | river km | detour |",
+          "|---|---|---|---|---|"]
+    for nm, cd_, g_, r_ in rows:
+        L.append(f"| {nm} | {cd_:.3f} | {g_:.1f} | {r_:.1f} | {r_ / g_:.2f} |")
+    cds = [t[1] for t in rows]
+    L += ["", f"Across the {len(rows)} phase pairs ceramic distance rank-correlates "
+              f"{spearmanr(cds, [t[2] for t in rows]).statistic:.3f} with straight-line "
+              f"distance and {spearmanr(cds, [t[3] for t in rows]).statistic:.3f} with river "
+              "distance. Ten pairs is indicative, no more.", "",
+          "The largest detours join phases on the St. Francis to phases on the Mississippi, "
+          "which the network can",
+          "connect only through their confluence far to the south. Those distances describe "
+          "the routing of the modern",
+          "network, and they are what the drift model's copying kernel uses.",
+    ]
+    L += [
+        "",
+        "## The grain of the record",
+        "",
+        f"Nearest-neighbour spacing of the {n} assemblages: median {np.median(nn):.1f} km, "
+        f"quartiles {np.percentile(nn, 25):.1f} to {np.percentile(nn, 75):.1f} km. No "
+        "spatial statistic here",
+        "can resolve structure much finer than that.",
+    ]
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[6:19]))

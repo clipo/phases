@@ -66,6 +66,7 @@ from mls_emergence.signatures.assortativity import (
     geo_distance,
 )
 from mls_emergence.signatures.seriation import seriation_solutions
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -363,9 +364,7 @@ def prepare_inputs() -> PanelInputs:
     # =======================================================================
     # Load curated decorated set
     # =======================================================================
-    cur = pd.read_excel(
-        DATA / "raw" / "mainfort-pfg-cpl.xlsx", sheet_name="pfg-cpl-mainfort"
-    ).dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
         "Assemblages"
@@ -375,6 +374,21 @@ def prepare_inputs() -> PanelInputs:
     row_tot = counts.sum(axis=1)
     dropped_zero = list(counts.index[row_tot <= 0])
     counts = counts[row_tot > 0]
+
+    # Restrict to the basin membership BEFORE the correspondence axis is fit,
+    # so the ordinal chronology, the seriation structure and every panel built
+    # here are on the same 28 assemblages the rest of the paper analyses.
+    # Until 2026-09-22 this ran on every row of the matrix with a coordinate,
+    # which after the membership rules of 2026-09-21 (Parchman out, 75-sherd
+    # minimum) meant 38 against the paper's 28: the CA axis was fit on ten
+    # assemblages the analysis excludes, and Parkin's bridge rank was reported
+    # among 38. The membership list is the one 16_basin_membership.py writes.
+    members_file = DATA / "processed" / "basin_members_curated.txt"
+    members = {ln.strip() for ln in members_file.read_text().splitlines() if ln.strip()}
+    absent = sorted(members - set(counts.index))
+    if absent:
+        raise ValueError(f"basin members absent from the analysis matrix: {absent}")
+    counts = counts.loc[[a for a in counts.index if a in members]]
 
     xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()

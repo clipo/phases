@@ -218,9 +218,15 @@ def main() -> int:
         print(f"rewrote {OUT_MD} from {len(rows)} saved cells")
         return 0
     sets = r47.load_sets()
+    # The calibrated cell comes from the CURRENT calibration, written by
+    # 47_revision_analysis.py. Until 2026-09-21 this read a frozen copy under
+    # docs/manuscript/revisions/2026-09-09/, the 29-assemblage calibration
+    # (10,000 learners, 0.0002, 0.005), so after the move to the 43-assemblage
+    # phase set every relaxation ran at a cell the current calibration did not
+    # select (2,000, 0.0005, 0.02), while the positive control used the right
+    # one. The two were compared in one table.
     summary = json.loads(
-        (ROOT / "docs" / "manuscript" / "revisions" / "2026-09-09" / "results"
-         / "summary.json").read_text())
+        (ROOT / "output" / "revision_2026_09" / "summary.json").read_text())
     calib = {(c["region"], c["model"]): c for c in summary["calibration"]}
 
     rows = []

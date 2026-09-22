@@ -16,16 +16,15 @@ Reading: the basin occupation SPD is concentrated in the 14th-16th centuries and
 
 ## Seriation axis vs calendar age (corpus-based re-test)
 
-Proveniences matching curated basin assemblages: 5 (pooling 27 dates).
+Proveniences matching curated basin assemblages: 4 (pooling 26 dates).
 
 | assemblage | n dates | median cal AD | CA1 |
 |---|---|---|---|
-| Upper_Nodena | 1 | 1343 | -1.604 |
-| Kent_Place | 2 | 1466 | -0.719 |
-| Parkin | 19 | 1483 | +0.195 |
-| Neeleys_Ferry | 2 | 1513 | +0.204 |
-| Clay_Hill | 3 | 1596 | -0.522 |
+| Kent_Place | 2 | 1466 | -1.112 |
+| Parkin | 19 | 1483 | +0.189 |
+| Neeleys_Ferry | 2 | 1513 | +0.272 |
+| Clay_Hill | 3 | 1596 | -0.835 |
 
-**CA1 vs pooled median calendar age: Spearman rho = +0.70, p = 0.188** (n = 5 anchors). Compare the manuscript's prior 5-anchor single-date orientation (rho +0.50, p 0.39).
+**CA1 vs pooled median calendar age: Spearman rho = +0.40, p = 0.600** (n = 4 anchors). Compare the manuscript's prior 5-anchor single-date orientation (rho +0.50, p 0.39).
 
 Figure: figures/figS6_chronology.png (basin + Parkin SPD with contact line; CA1 vs pooled median calendar age, point size ~ n dates).

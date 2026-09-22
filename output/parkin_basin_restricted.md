@@ -4,16 +4,16 @@ Does the whole-LMV no-convergence result hold within the St. Francis basin (the 
 
 ## 0. Basin definition and subset sizes
 
-- Whole-LMV curated decorated set: 55 assemblages (all with coordinates), lat [34.353, 35.839], lon [-90.724, -89.623].
+- Whole-LMV curated decorated set: 38 assemblages (all with coordinates), lat [34.353, 35.617], lon [-90.724, -89.978].
 - Whole-LMV broad settlement set (matched to coordinates): 255 sites, lat [33.032, 35.617], lon [-91.379, -89.978]. Coordinates computed from UTM (EPSG:26915 -> EPSG:4326).
-- Largest inter-site latitude gap in the curated set: 34.546 -> 34.756 (gap 0.210). The primary cut lat >= 34.5 sits in this gap.
+- Largest inter-site latitude gap in the curated set: 34.521 -> 34.756 (gap 0.235). The primary cut lat >= 34.5 sits in this gap.
 
 Subset n by latitude cut:
 | lat cut | curated n | broad n | curated lat range | broad lat range |
 |---|---|---|---|---|
-| >= 34.0 | 55 | 174 | [34.353, 35.839] | [34.005, 35.617] |
-| >= 34.5 | 53 | 110 | [34.521, 35.839] | [34.502, 35.617] |
-| >= 35.0 | 31 | 55 | [35.005, 35.839] | [35.005, 35.617] |
+| >= 34.0 | 38 | 174 | [34.353, 35.617] | [34.005, 35.617] |
+| >= 34.5 | 36 | 110 | [34.521, 35.617] | [34.502, 35.617] |
+| >= 35.0 | 17 | 55 | [35.005, 35.617] | [35.005, 35.617] |
 
 - Curated assemblages EXCLUDED at lat < 34.5 (2): Salomon (34.35), Parchman (34.36) (the southern St-Francis-type outliers; Winterville is not in the curated decorated set at all).
 - Broad St-Francis-flagged sites below the cut (1): 17-M-2 (33.95). All other St-Francis-flagged sites are at lat >= 34.77.
@@ -21,65 +21,61 @@ Subset n by latitude cut:
 
 ## 1. Transmission signatures + convergence (basin curated set)
 
-Basin curated decorated set (lat >= 34.5): **n = 53** assemblages, 10 decorated types. Basin broad settlement set: **n = 110** sites.
+Basin curated decorated set (lat >= 34.5): **n = 36** assemblages, 10 decorated types. Basin broad settlement set: **n = 110** sites.
 
-- CA first non-trivial axis inertia fraction: 0.475.
-- 14C anchors within the basin: 5; CA<->14C Spearman = +0.500 (p = 0.391); axis kept (already increasing with time, or too few anchors).
+- CA first non-trivial axis inertia fraction: 0.469.
+- 14C anchors within the basin: 5; CA<->14C Spearman = +0.500 (p = 0.391); axis flipped so increasing = later.
 - The basin time anchor is WEAK (5 anchors): the CA axis is essentially a relative seriation ordinate; per-bin slopes are not rates.
 
-- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.565, k=3:0.527, k=4:0.541, k=5:0.502, k=6:0.471; chosen k = 2.
-  cluster sizes: c0:15, c1:38.
+- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.485, k=3:0.527, k=4:0.521, k=5:0.494, k=6:0.487; chosen k = 3.
+  cluster sizes: c0:11, c1:3, c2:22.
 
-### Four signatures along the CA axis (6 bins)
+### Four signatures along the CA axis (4 bins)
 
 Bins (ca_bin, n assemblages, n within-basin clusters represented):
-- bin 0: n=9, clusters=2
-- bin 1: n=9, clusters=2
+- bin 0: n=9, clusters=3
+- bin 1: n=9, clusters=3
 - bin 2: n=9, clusters=2
-- bin 3: n=8, clusters=2
-- bin 4: n=9, clusters=1
-- bin 5: n=9, clusters=1
+- bin 3: n=9, clusters=2
 
 | ca_bin | neutral_departure | fst | spatial_boundary |
 |---|---|---|---|
-| 0 | 0.7922 | 0.0261 | 5.782 |
-| 1 | 1.2129 | 0.0016 | -4.396 |
-| 2 | 0.4291 | 0.0010 | 2.786 |
-| 3 | 0.3763 | 0.0082 | -32.985 |
-| 4 | 0.0246 | nan | -8.317 |
-| 5 | 0.2070 | nan | 7.811 |
+| 0 | 1.2367 | 0.0035 | 19.326 |
+| 1 | 0.5329 | 0.0611 | 13.737 |
+| 2 | 0.3797 | 0.0108 | 29.566 |
+| 3 | 0.2776 | 0.0069 | -1.726 |
 
 Per-signature trend along the CA axis (OLS slope, bootstrap 95% CI over assemblages, Spearman rho):
 
 | signature | OLS slope | bootstrap 95% CI | Spearman rho | CI excludes 0 |
 |---|---|---|---|---|
-| Neutral departure | -0.18696 | [-0.32452, -0.11593] | -0.886 | yes |
-| Cultural F_ST | -0.00541 | [-0.01419, +0.01152] | -0.400 | no |
-| Spatial boundary excess | -1.06827 | [-12.14661, +5.02374] | -0.029 | no |
+| Neutral departure | -0.30306 | [-0.71108, -0.12982] | -1.000 | yes |
+| Cultural F_ST | -0.00403 | [-0.01412, +0.04878] | +0.200 | no |
+| Spatial boundary excess | -4.73277 | [-21.61052, +28.05751] | -0.400 | no |
 
-- convergence_score: slope = -0.61688; Spearman rho = -1.000 (p = 0.000) over 4 complete bins.
+- convergence_score: slope = -0.46597; Spearman rho = -0.800 (p = 0.200) over 4 complete bins.
 - Of 3 signatures within the basin: 0 trend up (rho>+0.3), 2 trend down (rho<-0.3); 1 have a bootstrap slope CI excluding 0. Convergence (H1) requires all three rising together with CIs above 0.
 
 ### Bin-count sensitivity (basin)
 
 Spearman rho of each signature with the ordered bin index:
-| signature | 4 bins | 6 bins | 8 bins |
-|---|---|---|---|
-| Neutral departure | -1.000 | -0.886 | -0.738 |
-| Cultural F_ST | -0.500 | -0.400 | -0.100 |
-| Spatial boundary excess | +0.000 | -0.029 | -0.619 |
+| signature | 3 bins | 4 bins |
+|---|---|---|
+| Neutral departure | -0.500 | -1.000 |
+| Cultural F_ST | -0.500 | +0.200 |
+| Spatial boundary excess | -0.500 | -0.400 |
 
 ## 2. IDSS group structure + Parkin bridge (basin curated set)
 
 | cont | n_groups | max_size | n_bridge | Parkin_memberships | Parkin_bridge_rank |
 |---|---|---|---|---|---|
-| 0.05 | 51 | 3 | 17 | 2 | 11/53 |
-| 0.1 | 124 | 4 | 45 | 17 | 4/53 |
-| 0.2 | 683 | 7 | 53 | 88 | 8/53 |
+| 0.05 | 28 | 3 | 2 | 2 | 1/36 |
+| 0.1 | 43 | 4 | 22 | 4 | 9/36 |
+| 0.2 | 173 | 5 | 35 | 26 | 4/36 |
 
-- Primary (cont=0.1): 124 maximal co-seriable groups within the basin, max group size 4, 45/53 bridge assemblages.
-- **Parkin** within the basin: belongs to 17 maximal groups (bridge = True); bridge rank 4/53 by membership count (cont=0.1).
-- Signature-2 fragmentation trend within the basin (per-assemblage group count vs CA position): Spearman rho = +0.677 (p = 0.000), OLS slope = +5.9622.
+- Primary (cont=0.1): 43 maximal co-seriable groups within the basin, max group size 4, 22/36 bridge assemblages.
+- **Parkin** within the basin: belongs to 4 maximal groups (bridge = True); bridge rank 9/36 by membership count (cont=0.1).
+- Signature-2 fragmentation trend within the basin (per-assemblage group count vs CA position): Spearman rho = +0.567 (p = 0.000), OLS slope = +1.9549.
 
 ## 3. Within-basin settlement cross-check (rank-size + Parkin rank)
 
@@ -104,7 +100,7 @@ Parkin's LMV Max Mound Area is coded 0; substituting the documented site area (~
 
 ## 4. Comparison to whole-LMV (NEUTRAL)
 
-Transmission level. Whole-LMV (scripts 06/07): the four signatures did not co-rise toward contact; the convergence-score slope was slightly negative; the IDSS structure was a fragmented, overlapping-lineage system with Parkin a high-degree bridge. Within the basin (lat >= 34.5, n = 53): 0/3 continuous signatures trend up, 2/3 trend down, 1/3 have a bootstrap slope CI excluding zero; convergence-score slope -0.6169 (rho -1.000). The IDSS structure remains fragmented and Parkin remains a high-degree bridge (rank 4/53 at cont=0.1).
+Transmission level. Whole-LMV (scripts 06/07): the four signatures did not co-rise toward contact; the convergence-score slope was slightly negative; the IDSS structure was a fragmented, overlapping-lineage system with Parkin a high-degree bridge. Within the basin (lat >= 34.5, n = 36): 0/3 continuous signatures trend up, 2/3 trend down, 1/3 have a bootstrap slope CI excluding zero; convergence-score slope -0.4660 (rho -0.800). The IDSS structure remains fragmented and Parkin remains a high-degree bridge (rank 9/36 at cont=0.1).
 
 Settlement level (the picture most likely to change). Whole-LMV LMV-coded mound-area rank-size: slope -1.04, primacy 1.00, largest = 20-M-5 (no primacy). Within the basin: slope -0.88, primacy 1.89, largest = 13-M-1. With the corrected Parkin site area, whole-LMV: slope -1.26, primacy 16.38, Parkin rank 1/56; within-basin: slope -1.58, primacy 41.14, Parkin rank 1/20.
 
@@ -117,7 +113,7 @@ Plain statement: the whole-LMV NO-CONVERGENCE finding HOLDS within the basin at 
 
 ## 6. Caveats
 
-- The basin curated set is small (n = 53); the per-bin trajectory and its bootstrap CIs are noisy. Treat per-bin slopes as descriptive, not inferential.
+- The basin curated set is small (n = 36); the per-bin trajectory and its bootstrap CIs are noisy. Treat per-bin slopes as descriptive, not inferential.
 - The 14C anchor within the basin is sparse (5 assemblages); the CA axis is a RELATIVE seriation ordinate, not calendar time.
 - The IDSS continuity threshold matters (cont=0.30 of Lipo et al. 2015 over-saturates this matrix); cont=0.1 is primary with sensitivity across [0.05, 0.1, 0.2]. Absolute group counts scale with cont; the bridge structure is the stable finding.
 - The broad PFG set is a mound-biased ceramic-collection subset, not a random settlement sample; within-basin settlement proportions are not population rates.

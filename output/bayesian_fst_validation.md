@@ -36,10 +36,10 @@ Mean absolute bias at small sizes: plug-in = 0.0621, posterior median = 0.0481 (
 
 ## 5. MCMC health on the real St. Francis basin fit
 
-- 5 spatial clusters, 10 decorated types; default target_accept (no funnel-taming needed).
-- max R-hat = 1.0010 (want < 1.01); min ESS = 4375; divergences = 0.
-- BN F_ST median = 0.0659, 95% CI [0.0339, 0.1139].
-- Gini-Simpson readout median = 0.0277, 95% CI [0.0254, 0.0300]; plug-in = 0.0280 (inside the interval).
+- 2 spatial clusters, 10 decorated types; default target_accept (no funnel-taming needed).
+- max R-hat = 1.0011 (want < 1.01); min ESS = 3257; divergences = 0.
+- BN F_ST median = 0.1011, 95% CI [0.0114, 0.2422].
+- Gini-Simpson readout median = 0.0062, 95% CI [0.0051, 0.0076]; plug-in = 0.0062 (inside the interval).
 
 ## 6. Bayes-factor sanity
 

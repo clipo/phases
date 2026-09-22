@@ -21,7 +21,7 @@ Config: full, 20 worker process(es). SBC n=200 (particles 300, rounds 5); covera
 
 ## 3. Cross-check vs rejection ABC (analysis 19)
 
-- ABC-SMC b = +0.001 [-0.026, +0.029].
-- Rejection ABC b = +0.029 [-0.028, +0.065].
-- Posterior-mean gap = 0.029 (should be within Monte-Carlo error).
+- ABC-SMC b = +0.003 [-0.035, +0.038].
+- Rejection ABC b = +0.019 [-0.062, +0.054].
+- Posterior-mean gap = 0.016 (should be within Monte-Carlo error).
 - Overlay: figures/abc_smc_crosscheck.

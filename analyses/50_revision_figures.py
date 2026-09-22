@@ -226,6 +226,8 @@ def figS9(sets, s, base, grid):
                              groups=np.nanpercentile(grp, [2.5, 97.5]).tolist(), p_groups=rev.tail(obs, grp))
     axb.set_yticks([1, 0]); axb.set_yticklabels(["LMV basin", "CMV (Miss.)"], fontsize=8); axb.set_ylim(-0.6, 1.7)
     axb.set_xlabel("between-cluster cultural $F_{ST}$")
+    from matplotlib.ticker import MultipleLocator as _ML
+    axb.xaxis.set_major_locator(_ML(0.01))   # round ticks only (check_figure_claims)
     axb.legend(handles=[Patch(color=GRAY_MAIN, label="calibrated drift, pooled-profile innovation (95%)"),
                         Patch(color=GRAY_ALT, label="calibrated drift, uniform innovation (95%)"),
                         Patch(color=GRAY_GROUP, label="bounded groups, multiplier 0.03 (95%)"),
@@ -252,6 +254,12 @@ def figS3(sets, s, base, grid, rates):
         ax.hist(grp[key], bins=12, color=GRAY_GROUP, alpha=0.8, density=True, label="bounded groups")
         ax.axvline(obs[key], color="black", lw=1.4)
         ax.set_xlabel(lab); ax.set_yticks([])
+        # Round ticks only: the default locator picks 0.005 steps on these
+        # ranges, which scripts/check_figure_claims.py reads as statistics
+        # the text never states (its documented "finer ticks slip" limit).
+        from matplotlib.ticker import MultipleLocator as _ML
+        if key in ("spatial_fst", "Q"):
+            ax.xaxis.set_major_locator(_ML(0.01))
         panel_label(ax, "ABCD"[j])
         summary[key] = dict(obs=obs[key], drift=np.nanpercentile(drift[key], [2.5, 97.5]).tolist(),
                             groups=np.nanpercentile(grp[key], [2.5, 97.5]).tolist(),
