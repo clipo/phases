@@ -1,6 +1,8 @@
 # Mainfort 2003, Southeastern Archaeology 22(2):178, Table 1, "Ceramic Sherd Counts from Sites Used in Analysis".
 # Transcribed 2026-09-21 from the page image of the published PDF (the table is printed sideways and OCR fails on it).
-# NOT YET VERIFIED by a second reader; check against the PDF before anything depends on a single cell (rule 12).
+# Verified by a second reader (Lipo, 2026-09-22) against the PDF. The one row the self-check flags, Hatchie, is
+# confirmed cell for cell (373,388,32,6,4,4,9,0,0,0,1,1); its typed columns sum to 818 against the printed Total of
+# 814, so the discrepancy is in the source's own total, not in the transcription. No analysis uses the printed Total.
 # Table note: "Row totals include miscellaneous shell-tempered sherds not used", so the columns need not sum to Total.
 site,phase,Mississippi_Plain,Bell_Plain,Parkin_Punctated,Barton_Incised,Kent_Incised,Ranch_Incised,Old_Town_Red,Nodena_Red_and_White,Rhodes_Incised,Walls_Engraved,Vernon_Paul_Applique,Fortune_Noded,Total
 Porter,Jones Bayou,1047,515,64,5,1,1,83,1,0,4,1,7,1780

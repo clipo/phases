@@ -13,7 +13,7 @@
 
 Workbook-only sites, whose source is not yet recorded: 40TP026, Big_Eddy, Bishop, Cheatham, Connor, Cummins, Dundee, Fortune, Grant, Norfolk, Parchman, Pouncey, Salomon, Vernon Paul, Wall, West_Mounds.
 
-Transcription self-check: rows whose typed columns exceed the printed row total (Mainfort's totals include sherds he does not list, so columns may fall short but never exceed): ['Hatchie'].
+Transcription self-check: rows whose typed columns exceed the printed row total (Mainfort's totals include sherds he does not list, so columns may fall short but never exceed): ['Hatchie']. Hatchie is the known case: a second reader confirmed every cell on 2026-09-22 (373, 388, 32, 6, 4, 4, 9, 0, 0, 0, 1, 1, summing to 818), so the printed 814 is the source's own total and not a transcription error.
 
 ## Mainfort's published counts against PFGData.xlsx
 

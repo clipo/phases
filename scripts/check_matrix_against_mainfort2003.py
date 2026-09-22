@@ -83,7 +83,11 @@ def main() -> int:
           + ", ".join(only_wb) + ".", "",
           "Transcription self-check: rows whose typed columns exceed the printed row total "
           "(Mainfort's totals include sherds he does not list, so columns may fall short "
-          f"but never exceed): {over if over else 'none'}.", ""]
+          f"but never exceed): {over if over else 'none'}."
+          + (" Hatchie is the known case: a second reader confirmed every cell on "
+             "2026-09-22 (373, 388, 32, 6, 4, 4, 9, 0, 0, 0, 1, 1, summing to 818), so "
+             "the printed 814 is the source's own total and not a transcription error."
+             if over == ["Hatchie"] else ""), ""]
     # Mainfort's published table against the definitive PFG counts, site by site.
     pfg = pd.read_excel(ROOT / "data" / "raw" / "PFGData.xlsx", sheet_name="SherdData")
     pfg.columns = [str(c).strip() for c in pfg.columns]
