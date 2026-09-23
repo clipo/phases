@@ -203,12 +203,17 @@ def main() -> None:
     axL.plot(grid_ad, spd_parkin / spd_parkin.max() * spd_basin.max(),
              color=OI_VERMIL, lw=1.3, label="Parkin (scaled)")
     axL.axvline(CONTACT_AD, color="0.3", ls="--", lw=1.0)
-    axL.text(CONTACT_AD + 6, axL.get_ylim()[1] * 0.85, "De Soto\nAD 1541",
-             fontsize=6.5, color="0.3")
+    # Headroom above both curves (the scaled Parkin curve peaks at the basin
+    # maximum), so the contact label sits above the data rather than on it.
+    _top = spd_basin.max()
+    axL.set_ylim(0, _top * 1.22)
+    axL.text(CONTACT_AD - 8, _top * 1.17, "De Soto AD 1541",
+             fontsize=6.5, color="0.3", ha="right", va="top")
     axL.set_xlabel("Calendar age (AD)")
     axL.set_ylabel("Summed probability")
     axL.set_yticks([])
-    axL.legend(frameon=False, fontsize=7)
+    # Upper left: the early centuries are empty above the low basin plateau.
+    axL.legend(frameon=False, fontsize=7, loc="upper left")
     if len(A) >= 3:
         axR.scatter(A["ca1"], A["median_ad"], s=A["n"] * 6 + 15, color=OI_ORANGE,
                     edgecolors="white", linewidths=0.5, zorder=3)

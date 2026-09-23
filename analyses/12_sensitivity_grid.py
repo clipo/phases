@@ -137,15 +137,20 @@ def main():
                 show = lambda v: f"{v:+.2f}" if np.isfinite(v) else "undefined"
                 L.append(f"| {latcut} | {n} | {nb} | {kshow} | {show(rn)} | {show(rf)} | "
                          f"{show(rs)} | {'YES' if conv else 'no'} |")
+    # The reading is computed from the table, not written in advance: an earlier
+    # version asserted "consistently negative" neutral trends while the table
+    # beside it showed them positive (2026-09-22).
+    n_conv = sum(1 for l in L if l.endswith("| YES |"))
+    n_cells = sum(1 for l in L if l.startswith("| ") and l.rstrip().endswith(("| YES |", "| no |")))
+    neu = [float(l.split("|")[5]) for l in L if l.startswith("| ") and l.split("|")[5].strip()[:1] in "+-"]
     L += ["",
-          f"**Across all {3*3*3} grid cells, convergence (all three continuous signatures "
-          f"rising together) appears in: {'AT LEAST ONE cell' if any_conv else 'NO cell'}.** "
-          "The neutral-departure trend is consistently negative or flat, the F_ST and spatial "
-          "trends are sign-unstable and never jointly positive with neutral, so the no-"
-          "convergence verdict does not depend on the latitude cut, the bin count, or the "
-          "cluster number. Individual signatures (especially F_ST and spatial boundary) do "
-          "flip sign across choices, which is why the manuscript reports them as flat/"
-          "underdetermined rather than as a directional result."]
+          f"**Convergence (all three continuous signatures rising, rho > {RISE:+.1f}) appears in "
+          f"{n_conv} of {n_cells} cells.** Neutral-departure trends run {min(neu):+.2f} to "
+          f"{max(neu):+.2f} across cells. These are raw, unrarefied trends: assemblage size rises "
+          "along the seriation, and the record-matched recovery experiment shows only cultural "
+          "F_ST is interpretable at this resolution, so a cell that converges here is not "
+          "evidence of closure. The grid shows how far raw trends move with the analyst's "
+          "choices of latitude cut, bin count and cluster number."]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")
     print("\n".join(L))

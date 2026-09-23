@@ -168,9 +168,13 @@ def main(fast=False):
     emp = np.array([m21.sig_rhos(m21.rarefy(real_M, m21.NRARE, rng), clusters,
                                  bins_arr, coords_c, which=["fst"])["fst"]
                     for _ in range(b_emp)])
-    t_obs = float(np.nanmean(emp))
+    # One definition of the observed trend (rule 6): the 4,000-draw estimator
+    # in analysis 21, which the manuscript quotes. The b_emp rarefactions above
+    # are kept only as a cross-check; until 2026-09-22 their mean (-0.065) was
+    # used here while the paper quoted -0.048.
+    t_obs = float(m21.empirical_fst_trend()["mean"])
     print(f"observed F_ST trajectory statistic T = {t_obs:+.4f} "
-          f"(mean over {b_emp} rarefactions)")
+          f"(analysis 21 estimator; {b_emp}-rarefaction cross-check {float(np.nanmean(emp)):+.4f})")
 
     out = {}
     for w in (1, 3):
@@ -180,6 +184,17 @@ def main(fast=False):
         o = out[w]
         print(f"w={w}: s posterior median {o['median']:.3f} "
               f"[{o['lo']:.3f}, {o['hi']:.3f}]  P(s>=0.5) = {o['p_ge_05']:.3f}")
+
+    # The seriation axis's direction is not established by the four dated
+    # assemblages (2026-09-22), and the trend statistic is signed, so the
+    # posterior is also computed with the axis reversed (T -> -T): closure
+    # growing toward the other end of the sequence.
+    rev = {}
+    for w in (1, 3):
+        pr, _, _ = posterior_over_s(out[w]["T"], -t_obs)
+        rev[w] = summarize(pr)
+        print(f"w={w}, axis reversed: s posterior median {rev[w]['median']:.3f} "
+              f"[{rev[w]['lo']:.3f}, {rev[w]['hi']:.3f}]  P(s>=0.5) = {rev[w]['p_ge_05']:.3f}")
 
     # Rule 20(c): recover a strong closure that the data do not contain.
     rngr = np.random.default_rng(4242)
@@ -208,6 +223,8 @@ def main(fast=False):
          "|---|---|---|---|---|",
          f"| none (w = 1) | **{o1['median']:.3f}** | [{o1['lo']:.3f}, {o1['hi']:.3f}] | {o1['p_ge_03']:.3f} | {o1['p_ge_05']:.3f} |",
          f"| record's (w = 3) | **{o3['median']:.3f}** | [{o3['lo']:.3f}, {o3['hi']:.3f}] | {o3['p_ge_03']:.3f} | {o3['p_ge_05']:.3f} |",
+         f"| none (w = 1), axis reversed (T = {-t_obs:+.4f}) | **{rev[1]['median']:.3f}** | [{rev[1]['lo']:.3f}, {rev[1]['hi']:.3f}] | {rev[1]['p_ge_03']:.3f} | {rev[1]['p_ge_05']:.3f} |",
+         f"| record's (w = 3), axis reversed | **{rev[3]['median']:.3f}** | [{rev[3]['lo']:.3f}, {rev[3]['hi']:.3f}] | {rev[3]['p_ge_03']:.3f} | {rev[3]['p_ge_05']:.3f} |",
          "", "## Rule 20(c): recovery of a closure the data do not contain", "",
          f"Data simulated at a true s = 0.7, well above anything the basin "
          f"shows, returns a posterior median of **{rec['median']:.3f}** with "

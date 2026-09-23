@@ -227,10 +227,10 @@ def fig4_validation() -> None:
     mimic_meanabs = {k: mean_offdiag(v) for k, v in mimic_corrs.items()}
 
     LABELS = {
-        "group_emergence": "Group emergence\n(genuine)",
+        "group_emergence": "Bounded groups",
         "aggregated_signaling": "Aggregated\nsignaling",
         "patchiness": "Spatial\npatchiness",
-        "drift_space": "Isolation by\ndistance",
+        "drift_space": "Distance-limited\ncopying",
     }
     SIG_LABELS = ["Neutral departure", "Seriability", "Cultural F_ST", "Spatial boundary"]
     # Grayscale: distinct marker and line style per signature so the four series
@@ -242,7 +242,8 @@ def fig4_validation() -> None:
 
     fig = plt.figure(figsize=(7, 6.5))
     gs_main = fig.add_gridspec(2, 2, left=0.07, right=0.65, hspace=0.50, wspace=0.45)
-    gs_inset = fig.add_gridspec(1, 1, left=0.72, right=0.98, top=0.88, bottom=0.18)
+    # Bar panel starts further right so its y label clears panel B's ticks.
+    gs_inset = fig.add_gridspec(1, 1, left=0.77, right=0.99, top=0.88, bottom=0.18)
     axes_main = [fig.add_subplot(gs_main[i, j]) for i in range(2) for j in range(2)]
 
     for ax, mech in zip(axes_main, MECH_ORDER):
@@ -257,8 +258,8 @@ def fig4_validation() -> None:
             LABELS[mech] + ("\n* CONVERGENT" if conv else ""),
             fontsize=8, pad=3, color=OI_VERMIL if conv else "black",
         )
-        ax.set_xlabel("Ordinal step", fontsize=7)
-        ax.set_ylabel("Signature value", fontsize=7)
+        ax.set_xlabel("Position in sequence", fontsize=7)
+        ax.set_ylabel("Measure value", fontsize=7)
         ax.set_xticks(range(len(x)))
         ax.tick_params(labelsize=7)
         ax.axhline(0, color="0.8", linewidth=0.5, zorder=0)
@@ -273,9 +274,12 @@ def fig4_validation() -> None:
     bpos = np.arange(len(bar_vals))
     ax_ins.bar(bpos, bar_vals, color=bar_colors, width=0.6, edgecolor="none")
     ax_ins.set_xticks(bpos)
-    short_labels = ["Genuine\nemergence", "Agg.\nsignaling", "Patchiness", "Drift\n(IBD)"]
-    ax_ins.set_xticklabels(short_labels, fontsize=6)
-    ax_ins.set_ylabel("Mean |r| among\nfour signatures", fontsize=7)
+    short_labels = ["Bounded\ngroups", "Agg.\nsignaling", "Patchiness",
+                    "Distance-\nlimited\ncopying"]
+    # Angled so the four labels do not run into one another.
+    ax_ins.set_xticklabels([l.replace("\n", " ").replace("- ", "-") for l in short_labels],
+                           fontsize=6, rotation=35, ha="right", rotation_mode="anchor")
+    ax_ins.set_ylabel("Mean |r| among four measures", fontsize=7)
     ax_ins.tick_params(labelsize=6)
     ax_ins.axhline(0, color="0.8", linewidth=0.5)
 
@@ -443,7 +447,7 @@ def fig7_idss_structure() -> None:
     ax_left.text(
         0.97, 0.97,
         f"n groups = {n_groups_total}\nmax size = {max_group_size}\n"
-        f"n bridges = {n_bridges}/{n_assemblages}\ncont = {CONT_PRIMARY}",
+        f"n bridges = {n_bridges}/{n_assemblages}\ncontinuity threshold {CONT_PRIMARY}",
         transform=ax_left.transAxes, fontsize=7, va="top", ha="right",
         color="0.35",
     )
@@ -482,11 +486,13 @@ def fig7_idss_structure() -> None:
             tick_label.set_color(OI_VERMIL)
             tick_label.set_fontweight("bold")
 
-    # Annotate Parkin's rank
+    # Annotate Parkin's membership count
     if parkin_in_top:
         pi = parkin_in_top[0]
         ax_right.annotate(
-            f"Parkin\n(rank {parkin_rank}, n={parkin_memb})",
+            # Membership only: a positional rank would be arbitrary among
+            # the assemblages tied at the same count.
+            f"Parkin\n(member of {parkin_memb} groups)",
             xy=(top_vals[pi], y_pos[pi]),
             xytext=(top_vals[pi] + 1.5, y_pos[pi] - 0.8),
             fontsize=6, color=OI_VERMIL,

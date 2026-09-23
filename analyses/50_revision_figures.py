@@ -204,6 +204,9 @@ def figS9(sets, s, base, grid):
             ax.scatter(xy[m, 0], xy[m, 1], s=24, c=grays[c % 4], marker=marks[c % 4], edgecolor="white", linewidth=0.4)
         ax.set_xticks([]); ax.set_yticks([])
         ax.set_xlabel("MDS 1", fontsize=7, labelpad=2); ax.set_ylabel("MDS 2", fontsize=7, labelpad=2)
+        # Headroom above the highest point so the caption sits clear of the data.
+        _lo, _hi = xy[:, 1].min(), xy[:, 1].max()
+        ax.set_ylim(_lo - 0.05 * (_hi - _lo), _hi + 0.30 * (_hi - _lo))
         ax.text(0.02, 0.98, f"{label}\n(n={len(data['m'])}, {len(np.unique(data['labels']))} spatial clusters, "
                 f"$F_{{ST}}$={s['observed'][name]['spatial_fst']:+.3f})", transform=ax.transAxes, fontsize=7, va="top")
         for sp in ax.spines.values():
@@ -250,7 +253,7 @@ def figS3(sets, s, base, grid, rates):
     summary = {}
     for j, (key, lab) in enumerate(keys):
         ax = fig.add_subplot(gs[0, j])
-        ax.hist(drift[key], bins=18, color=GRAY_MAIN, alpha=0.55, density=True, label="spatial drift")
+        ax.hist(drift[key], bins=18, color=GRAY_MAIN, alpha=0.55, density=True, label="neutral copying")
         ax.hist(grp[key], bins=12, color=GRAY_GROUP, alpha=0.8, density=True, label="bounded groups")
         ax.axvline(obs[key], color="black", lw=1.4)
         ax.set_xlabel(lab); ax.set_yticks([])
@@ -258,14 +261,20 @@ def figS3(sets, s, base, grid, rates):
         # ranges, which scripts/check_figure_claims.py reads as statistics
         # the text never states (its documented "finer ticks slip" limit).
         from matplotlib.ticker import MultipleLocator as _ML
-        if key in ("spatial_fst", "Q"):
+        if key == "spatial_fst":
             ax.xaxis.set_major_locator(_ML(0.01))
+        elif key == "Q":
+            # 0.01 steps crowd into each other across this narrow panel.
+            ax.xaxis.set_major_locator(_ML(0.02))
         panel_label(ax, "ABCD"[j])
         summary[key] = dict(obs=obs[key], drift=np.nanpercentile(drift[key], [2.5, 97.5]).tolist(),
                             groups=np.nanpercentile(grp[key], [2.5, 97.5]).tolist(),
                             in_drift=bool(np.nanpercentile(drift[key], 2.5) <= obs[key] <= np.nanpercentile(drift[key], 97.5)),
                             in_groups=bool(np.nanpercentile(grp[key], 2.5) <= obs[key] <= np.nanpercentile(grp[key], 97.5)))
-    fig.axes[0].legend(loc="upper left", fontsize=6, frameon=False)
+    # One legend above the top row, clear of every observed line.
+    _h, _l = fig.axes[0].get_legend_handles_labels()
+    fig.legend(_h, _l, loc="lower center", bbox_to_anchor=(0.5, 0.97), ncol=2,
+               fontsize=7, frameon=False)
     r = rate_of(rates, "basin", MAIN); totals = data["m"].sum(1)
     Md = sample_record(rev.simulate(data, 5001, MAIN, **r), data["ranks"], totals, np.random.default_rng(5001))
     Mg = sample_record(rev.simulate(data, 5001, MAIN, leak=0.03, **r), data["ranks"], totals, np.random.default_rng(5001))
@@ -282,7 +291,8 @@ def figS3(sets, s, base, grid, rates):
             ax.scatter(xy[pk, 0], xy[pk, 1], marker="*", s=120, c="white", edgecolor="black", linewidth=0.8, zorder=5)
         ax.set_xticks([]); ax.set_yticks([])
         ax.set_xlabel("MDS 1", fontsize=7, labelpad=2); ax.set_ylabel("MDS 2", fontsize=7, labelpad=2)
-        ax.text(0.02, 0.98, ttl, transform=ax.transAxes, fontsize=7, va="top")
+        # Title above the axes, not inside: an inset label sat on a point in G.
+        ax.set_title(ttl, fontsize=7, loc="left", pad=3)
         panel_label(ax, "EFG"[j])
     save(fig, "figS2_drift_vs_groups")
     return summary
@@ -303,7 +313,7 @@ def figS4(sets, s, base, co):
     axA.scatter(E[nonpk], Nm[nonpk], c=P[nonpk], cmap=CMAP, norm=norm, s=54, edgecolor="black", linewidth=0.6, zorder=10)
     axA.scatter([E[pk]], [Nm[pk]], marker="*", s=320, c="white", edgecolor="black", linewidth=0.8, zorder=12)
     cb = fig.colorbar(ScalarMappable(norm=norm, cmap=CMAP), ax=axA, orientation="horizontal", fraction=0.05, pad=0.03)
-    cb.set_label("P(shares Parkin's drift-detected group)", fontsize=8); cb.ax.tick_params(labelsize=7)
+    cb.set_label("P(shares Parkin's community)", fontsize=8); cb.ax.tick_params(labelsize=7)
     panel_label(axA, "A")
     d_pk = data["d"][pk][nonpk]
     from scipy.stats import spearmanr
@@ -315,12 +325,14 @@ def figS4(sets, s, base, co):
             a = sel(base, "basin", model, kind).community_fst
             lo, med, hi = np.nanpercentile(a, [2.5, 50, 97.5])
             axB.errorbar(x, med, yerr=[[med - lo], [hi - med]], fmt=mk, color=color, ms=5, capsize=3, lw=1,
-                         label=f"{rev.MODEL_LABEL[model]}, {kind.replace('_', ' ')}")
+                         label=f"{rev.MODEL_LABEL[model]}, "
+                               f"{'through time' if kind == 'time_transgressive' else kind}")
             x += 1
     axB.axhline(obs, ls="--", color="black", lw=1.2, label=f"observed {obs:.3f}")
     axB.set_xticks(range(4)); axB.set_xticklabels(["pooled\nspace", "pooled\nspace+time", "uniform\nspace", "uniform\nspace+time"], fontsize=6.5)
     axB.set_ylabel("between-group $F_{ST}$", fontsize=8); axB.tick_params(labelsize=7)
-    axB.legend(fontsize=5.5, frameon=False, loc="upper right")
+    # Below the tick labels: inside the axes it covered the uniform space+time bar.
+    axB.legend(fontsize=6, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.20))
     panel_label(axB, "B")
     save(fig, "figS3_emergent_phases")
     return dict(rho_distance=float(rho), P_range=[float(P[nonpk].min()), float(P[nonpk].max())], obs=obs,
@@ -357,8 +369,13 @@ def figS5(sets, s, base):
         ax.set_ylabel(r"partition $F_{ST}$ (median; 6 seeds unmatched, 50 matched)", fontsize=7)
         ax.text(0.03, 0.03, label, transform=ax.transAxes, fontsize=7.5)
         panel_label(ax, "AB"[list(axes).index(ax)])
-    axes[0].legend(fontsize=5, frameon=False, loc="upper right")
-    fig.tight_layout(); save(fig, "figS4_emergence_robustness")
+    fig.tight_layout()
+    # One legend below both panels (it covered panel A's points), with a long
+    # enough handle that the dashed "observed" line reads as dashed.
+    _h, _l = axes[0].get_legend_handles_labels()
+    fig.legend(_h, _l, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=2,
+               fontsize=6.5, frameon=False, handlelength=3.0)
+    save(fig, "figS4_emergence_robustness")
     out = {}
     for region, metric in [("basin", "spatial_fst"), ("cmv", "spatial_fst")]:
         obs = s["observed"][region][metric]

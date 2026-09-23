@@ -25,7 +25,7 @@ The s = 0 baseline is a fixed shared Zipf profile with multinomial sampling, not
 | 0.9 | -0.78 | -0.15 | +0.98 | -0.10 |
 | 1.0 | -0.74 | -0.16 | +1.00 | -0.01 |
 
-**Reading.** Only cultural F_ST tracks the injected signal monotonically (null near zero, rising to ~+1 at strong emergence). The neutral departure is non-monotonic in conformity (the known U-shape), the spatial boundary is unresponsive at k = 3 clusters, and the seriation group count does not rise in the hypothesized direction. At this record's resolution the criterion is carried by F_ST; the other three signatures are not reliable discriminators here.
+**Reading.** Only cultural F_ST tracks the injected signal monotonically (null near zero, rising to ~+1 at strong emergence). The neutral departure is non-monotonic in conformity (the known U-shape), the spatial boundary is unresponsive at k = 2 clusters, and the seriation group count does not rise in the hypothesized direction. At this record's resolution the criterion is carried by F_ST; the other three signatures are not reliable discriminators here.
 
 ## F_ST detector (calibrated; false-positive rate 0.05)
 
@@ -56,6 +56,6 @@ The s = 0 baseline is a fixed shared Zipf profile with multinomial sampling, not
 
 ## Verdict
 
-At the record's own resolution and sample sizes, and with the size confound removed by rarefaction, the discrimination is carried by cultural F_ST. The apparent raw F_ST rise (-0.80) is an artifact of the sample-size-versus-position trend (rho +0.61) and vanishes under size control, leaving a trend of -0.048 [-0.061, -0.035]. The other three signatures do not reliably discriminate at this resolution and are reported as weak corroboration only.
+At the record's own resolution and sample sizes, and with the size confound removed by rarefaction, the discrimination is carried by cultural F_ST. The apparent raw F_ST rise (-0.80) is an artifact of the sample-size-versus-position trend (rho +0.61) and vanishes under size control, leaving a trend of -0.048, with single-rarefaction percentiles -0.80 to +0.40. The other three signatures do not reliably discriminate at this resolution and are reported as weak corroboration only.
 
-**How the strength of any closure is reported.** The detection threshold, power curve and five percent false-positive rate that this section used to report are withdrawn under the project's rule 18 (no frequentist inference supports a substantive claim). The simulation grid above is a simulated likelihood, so the reportable quantity is a POSTERIOR over the injected closure strength, computed by analyses/53_closure_strength_posterior.py and written to output/findings/closure_strength_posterior.md. It is what Figure 4's right panel now draws. The power numbers this script still computes internally are retained only to build that grid and must not be quoted.
+**How the strength of any closure is reported.** The detection threshold, power curve and five percent false-positive rate that this section used to report are withdrawn under the project's rule 18 (no frequentist inference supports a substantive claim). The simulation grid above is a simulated likelihood, so the reportable quantity is a POSTERIOR over the injected closure strength, computed by analyses/53_closure_strength_posterior.py and written to output/findings/closure_strength_posterior.md. It is what Figure 5's right panel now draws. The power numbers this script still computes internally are retained only to build that grid and must not be quoted.

@@ -263,17 +263,35 @@ def main() -> int:
     rnd = np.array(rnd)
 
     geo = df[(df["w"] == 0) & (df["algorithm"] == "kmeans")]["ari_mapped"].median()
-    fig, ax = plt.subplots(figsize=(3.6, 3.0))
-    marks = {"raw": ("o", "-"), "clr": ("s", "--"), "chisq": ("^", ":")}
-    for kind, (mk, ls) in marks.items():
-        s = df[(df["transform"] == kind) & (df["algorithm"] == "kmeans") & np.isfinite(df["w"])]
-        ax.plot(s["w"], s["ari_mapped"], marker=mk, ls=ls, ms=3.5, lw=1.1,
-                color="0.15" if kind == "clr" else "0.45",
+    fig, ax = plt.subplots(figsize=(3.8, 3.0))
+    # Ordinal x axis over the weight grid, with "pottery alone" (w = inf) as a
+    # separate end point. A symlog axis drew ticks at negative weights, which
+    # cannot occur. Tick labels carry the actual grid values.
+    pos = {w: i for i, w in enumerate(WEIGHTS)}
+    x_alone = len(WEIGHTS) + 0.6
+    # Three series coincide at many weights (proportions and log-ratio
+    # especially), so each gets its own marker and line style and a small
+    # horizontal dodge; open markers let an overlaid series show through.
+    marks = {"raw": ("o", "-", -0.12, "none", "0.45"),
+             "clr": ("s", "--", 0.0, "0.15", "0.15"),
+             "chisq": ("^", ":", 0.12, "0.55", "0.55")}
+    for kind, (mk, ls, dx, fc, col) in marks.items():
+        sk = df[(df["transform"] == kind) & (df["algorithm"] == "kmeans")]
+        fin = sk[np.isfinite(sk["w"])]
+        xs = np.array([pos[w] for w in fin["w"]]) + dx
+        ax.plot(xs, fin["ari_mapped"], marker=mk, ls=ls, ms=4, lw=1.1, color=col,
+                markerfacecolor=fc, markeredgecolor=col, alpha=0.9,
                 label={"raw": "proportions", "clr": "log-ratio",
                        "chisq": "chi-square"}[kind])
+        alone = sk[~np.isfinite(sk["w"])]["ari_mapped"]
+        ax.plot([x_alone + dx] * len(alone), alone, marker=mk, ls="none", ms=4,
+                color=col, markerfacecolor=fc, markeredgecolor=col, alpha=0.9)
+    ax.axvline((len(WEIGHTS) - 1 + x_alone) / 2, color="0.8", lw=0.6, ls=":")
     ax.axhline(np.median(rnd), color="0.6", lw=1.0, ls="-.",
                label="same sizes, boundaries at random")
-    ax.set_xscale("symlog", linthresh=0.1)
+    ax.set_xticks(list(pos.values()) + [x_alone])
+    ax.set_xticklabels([f"{w:g}" for w in WEIGHTS] + ["pottery\nalone"], fontsize=6.5)
+    ax.set_xlim(-0.5, x_alone + 0.5)
     ax.set_xlabel("weight on composition relative to geography")
     ax.set_ylabel("agreement with the published phases\n(adjusted Rand index)")
     ax.set_ylim(-0.05, max(0.8, geo + 0.12))

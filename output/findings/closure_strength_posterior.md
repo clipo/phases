@@ -4,14 +4,16 @@ Produced by `analyses/53_closure_strength_posterior.py` (full: 120 seeds per gri
 
 Replaces the calibrated detector, its five percent false-positive rate, its power curve and its detection threshold with one quantity (`docs/FREQUENTIST_INVENTORY.md` item A). No test is performed.
 
-Observed statistic: the rarefied F_ST trajectory rank correlation, T = **-0.0645**.
+Observed statistic: the rarefied F_ST trajectory rank correlation, T = **-0.0476**.
 
 ## Posterior over injected closure strength s
 
 | time-averaging | median | 95% credible interval | P(s >= 0.3) | P(s >= 0.5) |
 |---|---|---|---|---|
-| none (w = 1) | **0.153** | [0.000, 0.362] | 0.181 | 0.000 |
-| record's (w = 3) | **0.218** | [0.000, 0.559] | 0.374 | 0.083 |
+| none (w = 1) | **0.155** | [0.000, 0.366] | 0.186 | 0.001 |
+| record's (w = 3) | **0.222** | [0.000, 0.565] | 0.384 | 0.088 |
+| none (w = 1), axis reversed (T = +0.0476) | **0.168** | [0.000, 0.392] | 0.223 | 0.002 |
+| record's (w = 3), axis reversed | **0.247** | [0.000, 0.595] | 0.439 | 0.123 |
 
 ## Rule 20(c): recovery of a closure the data do not contain
 
@@ -21,7 +23,7 @@ A strong closure is recovered rather than dragged toward the middle, so a low po
 
 ## Reading
 
-The old apparatus said closure of strength 0.5 or more would be detected with power above 0.8, and read the empirical value as a nominal strength near 0.35. The posterior says the same thing without a null: strengths at or above 0.5 carry posterior mass 0.000 without time-averaging and 0.083 with it, so moderate and strong closure are excluded by the data rather than by a threshold, while weak closure remains credible. That is the bounded non-detection the paper argues for, stated as a parameter.
+The old apparatus said closure of strength 0.5 or more would be detected with power above 0.8, and read the empirical value as a nominal strength near 0.35. The posterior says the same thing without a null: strengths at or above 0.5 carry posterior mass 0.001 without time-averaging and 0.088 with it, so moderate and strong closure are excluded by the data rather than by a threshold, while weak closure remains credible. That is the bounded non-detection the paper argues for, stated as a parameter.
 
 ## Declared limitation
 

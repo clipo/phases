@@ -351,7 +351,7 @@ def main():
     L += ["",
           "**Reading.** Only cultural F_ST tracks the injected signal monotonically (null near "
           "zero, rising to ~+1 at strong emergence). The neutral departure is non-monotonic in "
-          "conformity (the known U-shape), the spatial boundary is unresponsive at k = 3 clusters, "
+          f"conformity (the known U-shape), the spatial boundary is unresponsive at k = {k} clusters, "
           "and the seriation group count does not rise in the hypothesized direction. At this record's resolution the criterion "
           "is carried by F_ST; the other three signatures are not reliable discriminators here.",
           "",
@@ -385,7 +385,7 @@ def main():
           f"rarefaction, the discrimination is carried by cultural F_ST. The apparent raw F_ST rise "
           f"({raw_emp['fst']:+.2f}) is an artifact of the sample-size-versus-position trend "
           f"(rho {size_conf:+.2f}) and vanishes under size control, leaving a trend of "
-          f"{trend['mean']:+.3f} [{trend['lo']:+.3f}, {trend['hi']:+.3f}]. "
+          f"{trend['mean']:+.3f}, with single-rarefaction percentiles {trend['p_lo']:+.2f} to {trend['p_hi']:+.2f}. "
           f"The other three signatures do not reliably discriminate at this "
           f"resolution and are reported as weak corroboration only.",
           "",
@@ -394,7 +394,7 @@ def main():
           "project's rule 18 (no frequentist inference supports a substantive claim). The simulation "
           "grid above is a simulated likelihood, so the reportable quantity is a POSTERIOR over the "
           "injected closure strength, computed by analyses/53_closure_strength_posterior.py and "
-          "written to output/findings/closure_strength_posterior.md. It is what Figure 4's right "
+          "written to output/findings/closure_strength_posterior.md. It is what Figure 5's right "
           "panel now draws. The power numbers this script still computes internally are retained "
           "only to build that grid and must not be quoted."]
     OUT.write_text("\n".join(L), encoding="utf-8")

@@ -240,7 +240,9 @@ def main() -> int:
     sweep = pd.read_csv(SWEEP_CSV) if SWEEP_CSV.exists() else None
 
     fig = plt.figure(figsize=(7.2, 3.1))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1, 0.95], wspace=0.06)
+    # An empty spacer column (index 2) leaves room for panel C's y label and
+    # tick labels, which ran into panel B when the maps sat 0.06 apart.
+    gs = fig.add_gridspec(1, 4, width_ratios=[1, 1, 0.26, 0.95], wspace=0.08)
     vmax = float(np.nanpercentile(field[ok], 99))
     for col, (title, draw_b) in enumerate(((None, False), (None, True))):
         ax = fig.add_subplot(gs[0, col])
@@ -258,13 +260,20 @@ def main() -> int:
         fs.panel_label(ax, "AB"[col])
         if col == 0:
             mm._add_scale_bar(ax, ext, bar_km=25)
-            cb = fig.colorbar(im, ax=ax, fraction=0.035, pad=0.02)
-            cb.set_label("compositional turnover\n(per km)", fontsize=5.5)
-            cb.ax.tick_params(labelsize=5)
+            # Horizontal colorbar in an inset below panel A, so it takes no
+            # width from A (A and B stay the same size) and its tick labels
+            # are not clipped by panel B.
+            cax = ax.inset_axes([0.08, -0.10, 0.84, 0.035])
+            cb = fig.colorbar(im, cax=cax, orientation="horizontal")
+            # The field is the root sum of squared per-class slopes of type
+            # proportion on position (turnover_field), so its unit is
+            # proportion per km.
+            cb.set_label("compositional turnover (proportion units per km)", fontsize=5.5)
+            cb.ax.tick_params(labelsize=5.5)
             from matplotlib.ticker import MultipleLocator as _ML
-            cb.ax.yaxis.set_major_locator(_ML(0.01))   # the colorbar's ticks are read too
+            cb.ax.xaxis.set_major_locator(_ML(0.01))   # the colorbar's ticks are read too
 
-    axC = fig.add_subplot(gs[0, 2])
+    axC = fig.add_subplot(gs[0, 3])
     if sweep is not None:
         axC.fill_between(sweep.radius_km, sweep.drift_lo, sweep.drift_hi,
                          color="0.82", label="calibrated drift, 95%")

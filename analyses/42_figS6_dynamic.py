@@ -107,7 +107,8 @@ def main():
     axB.axhline(n / 10.0, color="0.3", ls="--", lw=1.0)  # uniform expectation
     axB.set_xlabel("SBC rank of true b")
     axB.set_ylabel("count")
-    axB.set_yticks([])
+    from matplotlib.ticker import MaxNLocator
+    axB.yaxis.set_major_locator(MaxNLocator(integer=True, nbins=5))
 
     # Panel C: tempo and mode as PARAMETERS, not Akaike weights over four models.
     # Rule 18 replaced the model selection with the posteriors of the two
@@ -133,13 +134,16 @@ def main():
     _alo, _ahi = np.percentile(alpha, [2.5, 97.5])
     verdict = ("$\\mu$ " + ("resolved" if (_mlo > 0 or _mhi < 0) else "unresolved")
                + "; $\\alpha$ " + ("unresolved" if _ahi / max(_alo, 1e-12) > 100 else "resolved"))
-    axC.text(0.02, 0.96,
+    # Summary sits below the panel: inside it, the full-height reference lines
+    # cut through the text.
+    axC.text(0.5, -0.22,
              f"$\\alpha$ {np.median(alpha):.2f} "
              f"[{np.percentile(alpha, 2.5):.2f}, {np.percentile(alpha, 97.5):.1f}]\n"
              f"$\\mu$ {np.median(mu):+.3f} "
              f"[{np.percentile(mu, 2.5):+.3f}, {np.percentile(mu, 97.5):+.3f}]\n"
              + verdict,
-             transform=axC.transAxes, va="top", fontsize=5.8)
+             transform=axC.transAxes, va="top", ha="center", fontsize=5.8,
+             linespacing=1.3)
 
     save(fig, "figS5_dynamic")
     print("wrote figures/figS5_dynamic.{png,pdf,svg,tif}")
