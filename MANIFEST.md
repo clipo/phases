@@ -9,7 +9,7 @@ Which script produces which artifact, and the order they run in.
     .venv/bin/python scripts/build_manifest.py --check   # in CI
 ```
 
-91 scripts produce 177 tracked artifacts.
+94 scripts produce 181 tracked artifacts.
 
 Writes are detected from the call that performs them (`write_text`, `to_csv`, `savefig`, `save_all`, `savez`, `writeLines`, `saveRDS`), with paths resolved through each script's own module-level constants. Reads are deliberately NOT counted: an earlier regex version credited `21_signal_recovery.py` with producing `output/closure_posterior.npz`, which it only consumes and `53` writes.
 
@@ -108,14 +108,17 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 81 | `analyses/74_phase_partition_test.py` | `figures/fig12_phase_partition.svg`<br>`output/findings/phase_partition_ensembles.csv`<br>`output/findings/phase_partition_test.md` |
 | 82 | `analyses/78_source_effect.py` | `output/findings/source_effect.md` |
 | 83 | `analyses/82_minimum_sample_size.py` | `output/findings/minimum_sample_size.md` |
-| 84 | `analyses/71_scale_sweep.py` | `output/findings/scale_sweep.csv`<br>`output/findings/scale_sweep.md` |
-| 85 | `analyses/73_connectivity_mixing.py` | `output/findings/connectivity_mixing.md` |
-| 86 | `analyses/75_groupness_surface.py` | `figures/fig13_groupness_surface.svg`<br>`output/findings/groupness_surface.md` |
-| 87 | `analyses/76_phase_recovery.py` | `figures/fig14_phase_recovery.svg`<br>`output/findings/phase_recovery.csv`<br>`output/findings/phase_recovery.md` |
-| 88 | `analyses/77_edge_effect.py` | `output/findings/edge_effect.md` |
-| 89 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
-| 90 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
-| 91 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
+| 84 | `analyses/84_phases_as_groups.py` | `output/findings/phases_as_groups.md`<br>`output/phases_as_groups_runs.csv` |
+| 85 | `analyses/71_scale_sweep.py` | `output/findings/scale_sweep.csv`<br>`output/findings/scale_sweep.md` |
+| 86 | `analyses/73_connectivity_mixing.py` | `output/findings/connectivity_mixing.md` |
+| 87 | `analyses/75_groupness_surface.py` | `figures/fig13_groupness_surface.svg`<br>`output/findings/groupness_surface.md` |
+| 88 | `analyses/76_phase_recovery.py` | `figures/fig14_phase_recovery.svg`<br>`output/findings/phase_recovery.csv`<br>`output/findings/phase_recovery.md` |
+| 89 | `analyses/77_edge_effect.py` | `output/findings/edge_effect.md` |
+| 90 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
+| 91 | `analyses/85_excess_robustness.py` | `output/findings/excess_robustness.md` |
+| 92 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
+| 93 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
+| 94 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
 
 ## Artifacts, by path
 
@@ -227,6 +230,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/environment_r.md` | `00_setup/02_record_environment.R` |
 | `output/findings/excess_locality.csv` | `72_excess_locality.py` |
 | `output/findings/excess_locality.md` | `72_excess_locality.py` |
+| `output/findings/excess_robustness.md` | `85_excess_robustness.py` |
 | `output/findings/fst_prior_justification.md` | `57_fst_prior_predictive.py` |
 | `output/findings/gini_simpson_bias.md` | `62_gini_simpson_bias.py` |
 | `output/findings/gp_basin_fit.md` | `02_spatial/05_basin_fit.R` |
@@ -243,12 +247,14 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/other_departures.md` | `65_other_departures.py` |
 | `output/findings/other_departures_c_highrep.md` | `66_innovation_boundary_highrep.py` |
 | `output/findings/partition_ensemble.md` | `60_partition_ensemble.py` |
+| `output/findings/partition_posterior.md` | `86_partition_posterior.py` |
 | `output/findings/partition_sensitivity.md` | `59_partition_sensitivity.py` |
 | `output/findings/perbin_bayesian_fst.md` | `50_perbin_bayesian_fst.py` |
 | `output/findings/phase_partition_ensembles.csv` | `74_phase_partition_test.py` |
 | `output/findings/phase_partition_test.md` | `74_phase_partition_test.py` |
 | `output/findings/phase_recovery.csv` | `76_phase_recovery.py` |
 | `output/findings/phase_recovery.md` | `76_phase_recovery.py` |
+| `output/findings/phases_as_groups.md` | `84_phases_as_groups.py` |
 | `output/findings/phases_under_drift.csv` | `79_phases_under_drift.py` |
 | `output/findings/phases_under_drift.md` | `79_phases_under_drift.py` |
 | `output/findings/river_network_geometry.md` | `61_river_network_geometry.py` |
@@ -273,6 +279,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/neiman_power_diagnostics.md` | `10_neiman_power_diagnostics.py` |
 | `output/other_departures.json` | `65_other_departures.py` |
 | `output/parkin_basin_restricted.md` | `09_parkin_basin_restricted.py` |
+| `output/phases_as_groups_runs.csv` | `84_phases_as_groups.py` |
 | `output/phases_drift_robustness.md` | `24_phases_drift_robustness.py` |
 | `output/phases_vs_spatial_drift.md` | `23_phases_vs_spatial_drift.py` |
 | `output/radiocarbon_dates_used.md` | `46_radiocarbon_table.py` |

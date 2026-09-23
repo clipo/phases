@@ -97,21 +97,31 @@ def main() -> int:
                  f"{int(m[s & ~merged].sum()):,} | {int(m[s & merged].sum()):,} |")
 
     L += ["", "## 2. Do the sources differ once place is held?", "",
-          "| cluster | F_ST, survey-alone rows against compilation rows | random splits of the same "
-          "sizes, median (5th-95th) | position |", "|---|---|---|---|"]
+          "Stated as a posterior probability (rule 18, 2026-09-23): each assemblage's class "
+          "proportions are drawn from Dirichlet(counts + 1/2), and for each draw the F_ST between "
+          "the two kinds of row is compared with the F_ST of a random split of the same cluster "
+          "into groups of the same sizes.", "",
+          "| cluster | F_ST, survey-alone rows against compilation rows, posterior median [95%] | "
+          "random splits, posterior median | P(source split differs more than a random split) |",
+          "|---|---|---|---|"]
     rng = np.random.default_rng(78)
+    n_draws = min(args.splits, 2000)
     for g in np.unique(labels):
         s = np.where(labels == g)[0]
         a = merged[s]
         if a.sum() < 2 or (~a).sum() < 2:
             L.append(f"| {int(g)} | fewer than two rows of one kind | | not testable |")
             continue
-        obs = float(rev.fst_by(m[s], a.astype(int)))
-        ref = np.array([rev.fst_by(m[s], rng.permutation(a).astype(int))
-                        for _ in range(args.splits)])
-        L.append(f"| {int(g)} | {obs:.4f} | {np.median(ref):.4f} "
-                 f"({np.percentile(ref, 5):.4f}-{np.percentile(ref, 95):.4f}) | "
-                 f"above {100 * np.mean(ref < obs):.0f} percent of {args.splits:,} |")
+        n_s = m[s].sum(1)
+        src_f, rnd_f = [], []
+        for _ in range(n_draws):
+            md = np.array([rng.dirichlet(r + 0.5) for r in m[s]]) * n_s[:, None]
+            src_f.append(rev.fst_by(md, a.astype(int)))
+            rnd_f.append(rev.fst_by(md, rng.permutation(a).astype(int)))
+        src_f, rnd_f = np.array(src_f), np.array(rnd_f)
+        L.append(f"| {int(g)} | {np.median(src_f):.4f} [{np.percentile(src_f, 2.5):.4f}, "
+                 f"{np.percentile(src_f, 97.5):.4f}] | {np.median(rnd_f):.4f} | "
+                 f"{float(np.mean(src_f > rnd_f)):.2f} |")
 
     # 3. The excess over drift, on each source subset separately.
     data = rev.load_sets()["basin"]

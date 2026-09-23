@@ -14,11 +14,13 @@ Basin phase set, 28 assemblages: 9 rows carrying the survey's counts alone (PFGD
 
 ## 2. Do the sources differ once place is held?
 
-| cluster | F_ST, survey-alone rows against compilation rows | random splits of the same sizes, median (5th-95th) | position |
+Stated as a posterior probability (rule 18, 2026-09-23): each assemblage's class proportions are drawn from Dirichlet(counts + 1/2), and for each draw the F_ST between the two kinds of row is compared with the F_ST of a random split of the same cluster into groups of the same sizes.
+
+| cluster | F_ST, survey-alone rows against compilation rows, posterior median [95%] | random splits, posterior median | P(source split differs more than a random split) |
 |---|---|---|---|
-| 0 | 0.0009 | 0.0040 (0.0003-0.0200) | above 17 percent of 2,000 |
-| 1 | 0.0001 | 0.0033 (0.0001-0.0118) | above 0 percent of 2,000 |
-| 2 | 0.0033 | 0.0069 (0.0021-0.0296) | above 18 percent of 2,000 |
+| 0 | 0.0008 [0.0002, 0.0022] | 0.0040 | 0.17 |
+| 1 | 0.0009 [0.0001, 0.0043] | 0.0040 | 0.12 |
+| 2 | 0.0034 [0.0011, 0.0076] | 0.0073 | 0.17 |
 | 3 | fewer than two rows of one kind | | not testable |
 | 4 | fewer than two rows of one kind | | not testable |
 
