@@ -1,6 +1,6 @@
 # Does a resolvable-range prior remove the ridge?
 
-Produced by `analyses/02_spatial/02_prior_repair.R` on 2026-09-22.
+Produced by `analyses/02_spatial/02_prior_repair.R` on 2026-09-23.
 
 ## Why the uniform prior was the problem
 
@@ -12,37 +12,37 @@ The replacement is inv_gamma(2.5874, 38.7141), solved for 1% tail mass at each e
 
 | true rho | prior | rho median | 95% CI | width | share width | treedepth sat. |
 |---|---|---|---|---|---|---|
-| 5 | uniform | 4.8 | 2.7 to 8.7 | 3.3x | 0.46 | 9% |
-| 5 | invgamma | 6.3 | 4.1 to 11.3 | 2.8x | 0.51 | 19% |
-| 10 | uniform | 7.9 | 4.4 to 16.1 | 3.7x | 0.39 | 6% |
-| 10 | invgamma | 9.4 | 5.8 to 17.7 | 3.1x | 0.39 | 1% |
-| 20 | uniform | 18.6 | 9.1 to 72.3 | 8.0x | 0.32 | 16% |
-| 20 | invgamma | 17.7 | 9.8 to 43.2 | 4.4x | 0.32 | 0% |
-| 40 | uniform | 25.6 | 6.5 to 190.6 | 29.3x | 0.53 | 25% |
-| 40 | invgamma | 18.7 | 7.8 to 61.8 | 7.9x | 0.52 | 0% |
-| 80 | uniform | 46.6 | 10.5 to 245.0 | 23.3x | 0.41 | 0% |
-| 80 | invgamma | 25.1 | 10.1 to 83.1 | 8.2x | 0.42 | 0% |
+| 5 | uniform | 4.6 | 2.5 to 8.3 | 3.3x | 0.45 | 11% |
+| 5 | invgamma | 6.3 | 4.0 to 12.1 | 3.0x | 0.58 | 13% |
+| 10 | uniform | 7.9 | 4.3 to 17.1 | 3.9x | 0.38 | 0% |
+| 10 | invgamma | 9.5 | 5.8 to 18.4 | 3.2x | 0.42 | 50% |
+| 20 | uniform | 18.5 | 8.9 to 69.3 | 7.8x | 0.33 | 23% |
+| 20 | invgamma | 16.7 | 9.1 to 39.1 | 4.3x | 0.34 | 0% |
+| 40 | uniform | 26.6 | 7.0 to 188.2 | 26.7x | 0.52 | 25% |
+| 40 | invgamma | 19.2 | 8.3 to 61.1 | 7.3x | 0.51 | 1% |
+| 80 | uniform | 49.6 | 9.9 to 247.6 | 25.0x | 0.39 | 75% |
+| 80 | invgamma | 24.3 | 9.5 to 82.2 | 8.7x | 0.40 | 0% |
 
 ## Diagnostics (rule 16, every fit)
 
-- rho 5, uniform (rung 2, NOT PASSING): R-hat 1.0342 | bulk ESS 252 | tail ESS 2712 | divergences 0/12000 (0.00%) | treedepth>=10 1100 | E-BFMI 0.788
-- rho 5, invgamma (rung 2, NOT PASSING): R-hat 1.0116 | bulk ESS 310 | tail ESS 3047 | divergences 0/12000 (0.00%) | treedepth>=10 2334 | E-BFMI 0.765
-- rho 10, uniform (rung 2, NOT PASSING): R-hat 1.0094 | bulk ESS 274 | tail ESS 2782 | divergences 0/12000 (0.00%) | treedepth>=10 738 | E-BFMI 0.756
-- rho 10, invgamma (rung 2, NOT PASSING): R-hat 1.0198 | bulk ESS 262 | tail ESS 3592 | divergences 0/12000 (0.00%) | treedepth>=10 137 | E-BFMI 0.798
-- rho 20, uniform (rung 2, NOT PASSING): R-hat 1.0027 | bulk ESS 526 | tail ESS 1403 | divergences 0/12000 (0.00%) | treedepth>=10 1961 | E-BFMI 0.834
-- rho 20, invgamma (rung 2): R-hat 1.0064 | bulk ESS 916 | tail ESS 3498 | divergences 0/12000 (0.00%) | treedepth>=10 0 | E-BFMI 0.818
-- rho 40, uniform (rung 2, NOT PASSING): R-hat 1.0025 | bulk ESS 579 | tail ESS 1427 | divergences 0/12000 (0.00%) | treedepth>=10 3000 | E-BFMI 0.801
-- rho 40, invgamma (rung 1): R-hat 1.0079 | bulk ESS 466 | tail ESS 990 | divergences 0/6000 (0.00%) | treedepth>=10 0 | E-BFMI 0.807
-- rho 80, uniform (rung 1): R-hat 1.0067 | bulk ESS 478 | tail ESS 697 | divergences 0/6000 (0.00%) | treedepth>=10 0 | E-BFMI 0.799
-- rho 80, invgamma (rung 1): R-hat 1.0091 | bulk ESS 427 | tail ESS 963 | divergences 0/6000 (0.00%) | treedepth>=10 0 | E-BFMI 0.769
+- rho 5, uniform (rung 2, NOT PASSING): R-hat 1.0191 | bulk ESS 157 | tail ESS 2056 | divergences 0/12000 (0.00%) | treedepth>=10 1375 | E-BFMI 0.762
+- rho 5, invgamma (rung 2, NOT PASSING): R-hat 1.0122 | bulk ESS 380 | tail ESS 1766 | divergences 0/12000 (0.00%) | treedepth>=10 1560 | E-BFMI 0.770
+- rho 10, uniform (rung 2, NOT PASSING): R-hat 1.0113 | bulk ESS 337 | tail ESS 2171 | divergences 0/12000 (0.00%) | treedepth>=10 0 | E-BFMI 0.752
+- rho 10, invgamma (rung 2, NOT PASSING): R-hat 1.0112 | bulk ESS 357 | tail ESS 3210 | divergences 0/12000 (0.00%) | treedepth>=10 5991 | E-BFMI 0.801
+- rho 20, uniform (rung 2, NOT PASSING): R-hat 1.0023 | bulk ESS 753 | tail ESS 2334 | divergences 0/12000 (0.00%) | treedepth>=10 2729 | E-BFMI 0.793
+- rho 20, invgamma (rung 2): R-hat 1.0027 | bulk ESS 585 | tail ESS 3290 | divergences 0/12000 (0.00%) | treedepth>=10 23 | E-BFMI 0.762
+- rho 40, uniform (rung 2, NOT PASSING): R-hat 1.0054 | bulk ESS 706 | tail ESS 1332 | divergences 0/12000 (0.00%) | treedepth>=10 3000 | E-BFMI 0.761
+- rho 40, invgamma (rung 2): R-hat 1.0013 | bulk ESS 1064 | tail ESS 4005 | divergences 0/12000 (0.00%) | treedepth>=10 149 | E-BFMI 0.786
+- rho 80, uniform (rung 2, NOT PASSING): R-hat 1.0033 | bulk ESS 502 | tail ESS 684 | divergences 0/12000 (0.00%) | treedepth>=10 9001 | E-BFMI 0.777
+- rho 80, invgamma (rung 1): R-hat 1.0032 | bulk ESS 408 | tail ESS 877 | divergences 0/6000 (0.00%) | treedepth>=10 0 | E-BFMI 0.749
 
 ## Movement
 
-- Treedepth saturation: 11% mean under uniform, **4% under inverse-gamma**.
-- rho interval width: 13.5x mean under uniform, **5.3x under inverse-gamma**.
-- spatial_share interval width: 0.42 mean under uniform, **0.43 under inverse-gamma**.
+- Treedepth saturation: 27% mean under uniform, **13% under inverse-gamma**.
+- rho interval width: 13.3x mean under uniform, **5.3x under inverse-gamma**.
+- spatial_share interval width: 0.41 mean under uniform, **0.45 under inverse-gamma**.
 
 ## Rule 20(c): recovery at values the prior disfavours
 
-rho = 5 km and rho = 80 km sit in the prior's 1% tails. Under the inverse-gamma they return 6.3 and 25.1, covering truth: yes and yes. The prior is not dragging the estimate to its own median; the data move it into both tails.
+rho = 5 km and rho = 80 km sit in the prior's 1% tails. Under the inverse-gamma they return 6.3 and 24.3, covering truth: yes and yes. The prior is not dragging the estimate to its own median; the data move it into both tails.
 

@@ -182,8 +182,8 @@ def operating_point():
 
 
 # Draw count for the *reported* empirical trend. The single-draw spread of this
-# statistic is large (SD about 0.26), so a 400-draw mean carries a Monte Carlo
-# standard error near 0.013, which is bigger than the estimate itself. Reporting
+# statistic is large (SD 0.42 on the 28-assemblage set), so a 400-draw mean carries a Monte Carlo
+# standard error near 0.021, which is bigger than the estimate itself. Reporting
 # it to two decimals from a few hundred draws is what let the text say +0.01 and
 # Figure 2 say -0.02 with neither being wrong. 4000 draws puts the Monte Carlo
 # error at about 0.004, small enough to quote the value to three decimals.

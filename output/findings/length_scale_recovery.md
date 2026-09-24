@@ -8,11 +8,11 @@ Design: the real St. Francis basin, 28 assemblages at their real coordinates and
 
 | true ell (km) | median estimate | 5-95% of estimates | fits |
 |---|---|---|---|
-| 4 | 23.8 | 16.4 to 39.7 | 40/40 |
-| 8 | 45.5 | 22.3 to 109.6 | 40/40 |
-| 16 | 52.3 | 11.7 to 500.0 | 40/40 |
-| 32 | 174.0 | 5.0 to 500.0 | 40/40 |
-| 64 | 263.9 | 4.6 to 500.0 | 40/40 |
+| 4 | 22.1 | 16.2 to 34.4 | 40/40 |
+| 8 | 44.4 | 28.1 to 77.4 | 40/40 |
+| 16 | 47.9 | 6.0 to 500.0 | 40/40 |
+| 32 | 87.5 | 5.9 to 500.0 | 40/40 |
+| 64 | 464.0 | 3.8 to 500.0 | 40/40 |
 
 ## Separability of adjacent (2x) levels
 
@@ -20,23 +20,23 @@ Overlap is the fraction of the two estimate distributions that cannot be told ap
 
 | pair | overlap (ell_hat) | overlap (Mantel r) |
 |---|---|---|
-| 4 vs 8 km | 0.119 | 0.117 |
-| 8 vs 16 km | 0.418 | 0.024 |
-| 16 vs 32 km | 0.433 | 0.072 |
-| 32 vs 64 km | 0.519 | 0.284 |
+| 4 vs 8 km | 0.051 | 0.200 |
+| 8 vs 16 km | 0.425 | 0.016 |
+| 16 vs 32 km | 0.477 | 0.126 |
+| 32 vs 64 km | 0.481 | 0.285 |
 
-Mantel r by level (mean +/- sd): 4 km: -0.733 +/- 0.053; 8 km: -0.617 +/- 0.088; 16 km: -0.313 +/- 0.114; 32 km: -0.103 +/- 0.086; 64 km: -0.040 +/- 0.072
+Mantel r by level (mean +/- sd): 4 km: -0.723 +/- 0.060; 8 km: -0.633 +/- 0.085; 16 km: -0.299 +/- 0.134; 32 km: -0.105 +/- 0.089; 64 km: -0.042 +/- 0.070
 
 
 ## Verdict
 
-Per adjacent pair, taking the better of the two observables: 4-8 km 0.117, 8-16 km 0.024, 16-32 km 0.072, 32-64 km 0.284. Separation threshold 0.15.
+Per adjacent pair, taking the better of the two observables: 4-8 km 0.051, 8-16 km 0.016, 16-32 km 0.126, 32-64 km 0.285. Separation threshold 0.15.
 
 **The design resolves the scale over 4 to 32 km**, where every adjacent doubling separates. Above 32 km it does not.
 
-**The two observables fail in different places, which is why both are here.** Mantel r is NON-MONOTONE in the interaction scale: it strengthens from -0.733 at 4 km to -0.617 at 8 km, then weakens steadily to -0.040 at 64 km. It peaks near the spacing of the sites themselves, so on its own it cannot tell a 4 km world from an 8 km one: they sit on opposite sides of the peak. ell_hat is monotone across that range and does separate them. Above 32 km the position reverses and both degrade, because a decay that long is barely expressed inside a study window 97 km across; there is no far field in which the similarity curve can flatten.
+**The two observables fail in different places, which is why both are here.** Mantel r is NON-MONOTONE in the interaction scale: it strengthens from -0.723 at 4 km to -0.633 at 8 km, then weakens steadily to -0.042 at 64 km. It peaks near the spacing of the sites themselves, so on its own it cannot tell a 4 km world from an 8 km one: they sit on opposite sides of the peak. ell_hat is monotone across that range and does separate them. Above 32 km the position reverses and both degrade, because a decay that long is barely expressed inside a study window 97 km across; there is no far field in which the similarity curve can flatten.
 
-**Multiplicity, stated rather than buried.** The band above takes, for each pair, whichever of the two statistics separates better. For a question about whether the INFORMATION is present that is the right operation, and the margins are not marginal (the selected overlaps are 0.117, 0.024, 0.072 against 40 replicates per level). It would not be legitimate for estimating an effect size, and nothing here does that.
+**Multiplicity, stated rather than buried.** The band above takes, for each pair, whichever of the two statistics separates better. For a question about whether the INFORMATION is present that is the right operation, and the margins are not marginal (the selected overlaps are 0.051, 0.016, 0.126 against 40 replicates per level). It would not be legitimate for estimating an effect size, and nothing here does that.
 
 **Consequence for this paper.** The operating point the manuscript reports, an interaction range of about 24 km, sits inside the resolved band, near its upper end. The latent-field direction is therefore supported: a length-scale posterior will be driven by the data rather than by the prior over the range that matters. The reportable claim has to carry the ceiling with it, in the form 'resolved to roughly 32 km; longer interaction scales are not distinguishable from one another at this study extent'. That ceiling is set by the extent of the basin, not by sherd counts, so no amount of additional excavation at these sites would lift it.
 

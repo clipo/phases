@@ -75,7 +75,7 @@ def tables() -> dict[str, list[str]]:
 
 
 def _calibration_tables() -> dict[str, list[str]]:
-    """Tables S2 and S3 from analysis 47's summary.json (added 2026-09-22)."""
+    """Tables S3 and S4 from analysis 47's summary.json (added 2026-09-22)."""
     import pandas as pd
     s = json.loads((OUT / "revision_2026_09" / "summary.json").read_text())
     t: dict[str, list[str]] = {}
@@ -92,7 +92,7 @@ def _calibration_tables() -> dict[str, list[str]]:
                     f"{c['n_ind']:,}, {c['innovation']:g}, {c['mixing']:g} | "
                     f"{o['hs']:.3f} / {o['rich']:.2f} / {o['ht']:.3f} | "
                     f"{a['hs']['median']:.3f} / {a['rich']['median']:.2f} / {a['ht']['median']:.3f} |")
-    t["**Table S2.**"] = rows
+    t["**Table S3.**"] = rows
     base = next(r for r in s["comparisons"] if r["region"] == "basin" and r["model"] == "pooled"
                 and r["sampling"] == "time_transgressive" and r["metric"] == "spatial_fst")
     cal = next(c for c in s["calibration"] if c["region"] == "basin" and c["model"] == "pooled")
@@ -115,7 +115,7 @@ def _calibration_tables() -> dict[str, list[str]]:
                  and x["length"] == 24.0 and x["leak"] == leak and x["metric"] == "spatial_fst")
         rows.append(f"| | boundary, multiplier {leak:g} (24 km) | {r['median']:.4f} [{r['lo']:.4f}, {r['hi']:.4f}] | "
                     f"{r['p_upper']:.3f} | | |")
-    t["**Table S3.**"] = rows
+    t["**Table S4.**"] = rows
     return t
 
 
@@ -136,7 +136,7 @@ def main() -> int:
         print("SI relaxation tables are STALE; run without --check.", file=sys.stderr)
         return 1
     SI.write_text(new, encoding="utf-8")
-    print("rewrote the four relaxation tables and Tables S2 and S3 in", SI.name)
+    print("rewrote the four relaxation tables and Tables S3 and S4 in", SI.name)
     return 0
 
 

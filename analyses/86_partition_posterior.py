@@ -112,6 +112,11 @@ def main() -> int:
         raise RuntimeError("assemblage order differs between loaders")
     res_basin = compare(counts.to_numpy(float), pidx, t74.km_xy(xy), rev, t74, args.draws, args.alt, 86000,
                         dist=data["d"])
+    # The Parkin phase against the rest of the basin (2026-09-23): the paper's
+    # second question is whether the phase treated as a polity stands apart.
+    parkin_idx = np.array([1 if l == "Parkin" else 0 for l in labs])
+    res_parkin = compare(counts.to_numpy(float), parkin_idx, t74.km_xy(xy), rev, t74, args.draws, args.alt, 86200,
+                         dist=data["d"])
 
     mc, mco, mph = read_mainfort_replication(100)
     sizes = mph.value_counts()
@@ -147,6 +152,10 @@ def main() -> int:
          f"each kind, {PER_DRAW} of each compared per draw. Replaces the ensemble percentiles of "
          f"analyses 74 and 83 as the reported quantity (rule 18).", ""]
     L += block("The phases of Figure 1, basin set", res_basin, len(names), len(plist))
+    L += block("The Parkin phase against the rest of the basin", res_parkin, len(names), 2)
+    k2 = importlib.import_module("74_phase_partition_test").ari(parkin_idx, np.asarray(data["labels"]))
+    L += [f"Agreement (adjusted Rand index) between the Parkin-versus-rest division and the two spatial "
+          f"clusters the site layout supports: {k2:.3f}.", ""]
     L += block("Mainfort's (2003) phases, his table", res_mf, len(mph), len(ml))
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

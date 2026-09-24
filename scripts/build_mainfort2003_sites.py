@@ -63,9 +63,21 @@ def main():
     sd["Name"] = sd["Name"].astype(str).str.strip()
     sd = sd.drop_duplicates("Name").set_index("Name")
 
+    # Sites whose coordinate the project has corrected (coordinate_corrections.csv,
+    # keyed by assemblage-file name) take the corrected, datum-converted value
+    # from the assemblage file rather than Mainfort's own point (2026-09-23;
+    # until then Beck, Belle Meade and Starkley carried ruled-wrong points here).
+    from mls_emergence.dataio.coords import load_corrections
+    corrected = {n.replace("_", " "): n for n in load_corrections().index}
     rows = []
     for _, r in table.iterrows():
         site = str(r["site"]).strip()
+        if site in corrected and site not in ASSEMBLAGE_FILE:
+            a = corrected[site]
+            rows.append(dict(site=site, phase_mainfort2003=r["phase"], latitude=float(xy.loc[a, "Latitude"]),
+                             longitude=float(xy.loc[a, "Longitude"]),
+                             coordinate_source=SRC_XY + "; project coordinate correction"))
+            continue
         if site in ASSEMBLAGE_FILE:
             a = ASSEMBLAGE_FILE[site]
             lat, lon, src = float(xy.loc[a, "Latitude"]), float(xy.loc[a, "Longitude"]), SRC_XY

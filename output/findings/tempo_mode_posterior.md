@@ -24,7 +24,7 @@ A real directional signal is recovered, so a near-zero mu on the diversity traje
 
 ## A confound the four-way selection was hiding
 
-The diversity trajectory rises monotonically across the six bins (0.666, 0.734, 0.590, 0.600, 0.553, 0.460). Yet mu is not resolved. That is not a failure of the fit: the OU relaxation term, `theta + (anc - theta) exp(-alpha t)`, can produce exactly that rise by starting below the optimum and relaxing up to it, so sustained directional drift and relaxation toward a higher equilibrium compete to explain the same monotone increase. With six points the data cannot separate them.
+The diversity trajectory across the six bins is (0.666, 0.734, 0.590, 0.600, 0.553, 0.460), falling over the second half. Yet mu is not resolved. That is not a failure of the fit: the OU relaxation term, `theta + (anc - theta) exp(-alpha t)`, can produce exactly that change by starting away from the optimum and relaxing toward it, so sustained directional drift and relaxation toward a higher equilibrium compete to explain the same monotone change. With six points the data cannot separate them.
 
 **Selecting a single model concealed this.** Reporting that the trajectory 'favours the unbiased random walk' names a winner among four options without saying that two of the underlying behaviours are indistinguishable on this record. The parameter posteriors say it directly: alpha spans BM to Stasis and mu spans both signs, so the defensible claim is that the diversity trajectory is consistent with a random walk and does not exclude either directional change or mean reversion.
 

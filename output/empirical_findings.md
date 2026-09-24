@@ -17,7 +17,7 @@ The seriation-frequency file (pfg-cpl-frequency.xlsx) is the IDSS solution table
 
 ## 3. Spatial clustering (k-means on coordinates)
 
-- Silhouette by k: k=4:0.499, k=5:0.455, k=6:0.426, k=7:0.422, k=8:0.393, k=9:0.379, k=10:0.393.
+- Silhouette by k: k=4:0.499, k=5:0.455, k=6:0.427, k=7:0.422, k=8:0.418, k=9:0.397, k=10:0.395.
 - Chosen k (max silhouette): **4**.
 - Cluster sizes: c0:39, c1:105, c2:31, c3:80.
 - Parkin (11-N-1) cluster: c1.
@@ -40,7 +40,7 @@ Panel (NaN where a signature is undefined for that bin):
 | 2 | 0.5945 | 0.0131 | 7.792 |
 | 3 | 0.1896 | 0.0049 | -19.767 |
 | 4 | 0.8431 | 0.0120 | 21.054 |
-| 5 | 0.8442 | 0.0133 | 20.652 |
+| 5 | 0.8442 | 0.0133 | 20.656 |
 | 6 | 0.6187 | 0.0299 | 22.655 |
 
 Convergence score (z-averaged across the three bin-trajectory signatures; computed on complete bins only):
@@ -55,7 +55,7 @@ Per-signature trend vs phase ordinal. OLS slope (positive = upward toward contac
 
 - neutral_departure: slope = +0.02263 (over 6 bins); Spearman rho = +0.314 (p = 0.544); monotone = False
 - fst: slope = +0.00420 (over 5 bins); Spearman rho = +0.700 (p = 0.188); monotone = False
-- spatial_boundary: slope = +5.31951 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
+- spatial_boundary: slope = +5.31980 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
 - convergence_score: slope = +0.41381; Spearman rho = +0.900 (p = 0.037)
 
 ## 5. Parkin focus and Signature 2 (decorated seriation)
@@ -106,7 +106,7 @@ Trend label uses BOTH the OLS slope sign and the Spearman rank correlation. A si
 
 - Neutral departure: slope +0.02263, Spearman rho +0.314 -> **upward but non-monotone**.
 - Cultural F_ST: slope +0.00420, Spearman rho +0.700 -> **upward but non-monotone**.
-- Spatial boundary excess: slope +5.31951, Spearman rho +0.771 -> **upward but non-monotone**.
+- Spatial boundary excess: slope +5.31980, Spearman rho +0.771 -> **upward but non-monotone**.
 - Convergence score: slope +0.41381, Spearman rho +0.900 -> **upward (monotone)**.
 
 - Of the 3 bin-trajectory signatures: 3 trend upward toward contact (monotone or not), 0 flat/non-trending, 0 downward. Whether they CONVERGE (co-rise together) is the joint question; the convergence-score slope is +0.41381 (Spearman rho +0.900).

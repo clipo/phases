@@ -21,7 +21,7 @@ THE CIRCULARITY THAT WOULD MANUFACTURE THIS RESULT, and the control for it.
 Nine of the 43 assemblages are not in Mainfort's phase lists; this project
 assigns them the phase of the territory they fall in, which is a geographic
 rule. Scoring geography against those labels would be scoring geography against
-geography. Every number is therefore reported twice: over all 43, and over only
+geography. Every number is therefore reported twice: over every assemblage, and over only
 the assemblages Mainfort himself assigned. The conclusion rests on the second.
 
 THREE ROBUSTNESS AXES, because a single clustering of a single representation
@@ -309,7 +309,7 @@ def main() -> int:
          "partitions, 1 for",
          "identical ones. Weight 0 is the site map alone; the last row is the "
          "pottery alone.", "",
-         "| composition transform | weight on composition | ARI, all 43 | ARI, Mainfort's "
+         f"| composition transform | weight on composition | ARI, all {len(names)} | ARI, Mainfort's "
          f"{int(mapped.sum())} | k-means seed range |",
          "|---|---|---|---|---|"]
     for kind in ("raw", "clr", "chisq"):

@@ -6,15 +6,15 @@ on a 220 x 220 grid, masked where the local weight sum falls below 2.
 
 ## Do the phase boundaries lie on ridges of turnover?
 
-Median turnover along the internal phase boundaries is **0.01045** per km,
-from 88 points sampled at 1.5 km spacing.
+Median turnover along the internal phase boundaries is **0.01052** per km,
+from 87 points sampled at 1.5 km spacing.
 
 **Against boundaries of the same construction drawn elsewhere** (200 partitions
 carrying the phases' group sizes, seeds at random, assigned by exact minimum-cost
-matching, each dissolved into territories the same way): median 0.01236 per km,
+matching, each dissolved into territories the same way): median 0.01242 per km,
 and the phase boundaries sit at the **0th percentile**. This is the number to read.
 
-**Against the whole mapped area** (median 0.01507 over 27,861 unmasked grid points): the 24th
+**Against the whole mapped area** (median 0.01509 over 27,885 unmasked grid points): the 24th
 percentile. **Do not read this one.** Turnover falls where local support rises
 (Spearman -0.40; median 0.0159 per km where the local weight sum is 2 to 4, against
 0.0108 where it is 6 to 9), because a regression fitted to few nearby assemblages
@@ -29,19 +29,19 @@ over a short distance, so it would sit high against the matched comparison.
 
 | group radius (km) | k | observed F_ST | drift 95% upper | above? | smallest group |
 |---|---|---|---|---|---|
-| 17.5 | 2 | 0.0062 | 0.0157 | no | 11 |
-| 13.7 | 3 | 0.0156 | 0.0186 | no | 9 |
-| 11.7 | 4 | 0.0186 | 0.0210 | no | 5 |
-| 10.6 | 5 | 0.0307 | 0.0214 | yes | 4 |
-| 8.9 | 6 | 0.0254 | 0.0224 | yes | 3 |
-| 8.6 | 7 | 0.0308 | 0.0232 | yes | 1 |
-| 7.7 | 8 | 0.0328 | 0.0253 | yes | 1 |
-| 7.0 | 9 | 0.0470 | 0.0265 | yes | 1 |
-| 6.0 | 10 | 0.0435 | 0.0271 | yes | 1 |
-| 5.8 | 11 | 0.0446 | 0.0284 | yes | 1 |
-| 4.9 | 12 | 0.0480 | 0.0284 | yes | 1 |
+| 17.6 | 2 | 0.0062 | 0.0124 | no | 11 |
+| 13.6 | 3 | 0.0156 | 0.0135 | yes | 9 |
+| 11.7 | 4 | 0.0186 | 0.0146 | yes | 5 |
+| 10.0 | 5 | 0.0206 | 0.0148 | yes | 1 |
+| 8.7 | 6 | 0.0327 | 0.0152 | yes | 1 |
+| 8.1 | 7 | 0.0345 | 0.0161 | yes | 1 |
+| 7.1 | 8 | 0.0346 | 0.0165 | yes | 1 |
+| 6.5 | 9 | 0.0426 | 0.0183 | yes | 1 |
+| 5.8 | 10 | 0.0441 | 0.0185 | yes | 1 |
+| 5.1 | 11 | 0.0488 | 0.0180 | yes | 1 |
+| 4.5 | 12 | 0.0529 | 0.0193 | yes | 1 |
 
-The record sits inside the drift band at a radius of 18 km and leaves it by 11 km.
+The record sits inside the drift band at a radius of 18 km and leaves it by 14 km.
 
 **The smallest-group column is the limit on this table.** Once a partition isolates a
 single assemblage, that group matches its own profile exactly and contributes to

@@ -26,9 +26,9 @@ Neutral pattern report on two datasets. TRANSMISSION level: a correspondence-ana
 
 ### 3. Spatial clustering of curated assemblages (k-means)
 
-- Silhouette by k: k=2:0.468, k=3:0.409, k=4:0.495, k=5:0.557, k=6:0.507; chosen k = 5.
-- Cluster sizes: c0:12, c1:10, c2:3, c3:3, c4:10.
-- Parkin cluster: c1.
+- Silhouette by k: k=2:0.468, k=3:0.413, k=4:0.502, k=5:0.561, k=6:0.516; chosen k = 5.
+- Cluster sizes: c0:10, c1:10, c2:12, c3:3, c4:3.
+- Parkin cluster: c0.
 
 ### 4. Four signatures along the CA axis
 
@@ -49,7 +49,7 @@ Bins (ca_bin, n assemblages, n clusters, CA range):
 | 2 | 1.0061 | 0.1019 | 60.838 | 6 |
 | 3 | 0.0949 | 0.0302 | 19.890 | 9 |
 | 4 | 0.3132 | 0.0086 | 44.516 | 11 |
-| 5 | 0.5548 | nan | -0.852 | 11 |
+| 5 | 0.5548 | nan | -3.738 | 11 |
 
 Signature 2 (IDSS n_groups) is reported per bin where the bin is tractable (3-14 assemblages); it is NOT entered into the convergence score (it is a count of co-seriable groups, not a continuous magnitude, and bins above 14 are intractable).
 
@@ -57,7 +57,7 @@ Per-signature trend along the CA axis. OLS slope per bin (positive = rising towa
 
 - neutral_departure: slope = -0.14421 (over 6 bins); Spearman rho = -0.600 (p = 0.208); monotone = False
 - fst: slope = -0.00520 (over 5 bins); Spearman rho = -0.300 (p = 0.624); monotone = False
-- spatial_boundary: slope = +0.58472 (over 6 bins); Spearman rho = +0.143 (p = 0.787); monotone = False
+- spatial_boundary: slope = +0.17241 (over 6 bins); Spearman rho = +0.143 (p = 0.787); monotone = False
 - convergence_score: slope = -0.09596; Spearman rho = -0.100 (p = 0.873) (over 5 complete bins).
 
 ### 5. Parkin link (transmission level)
@@ -65,7 +65,7 @@ Per-signature trend along the CA axis. OLS slope per bin (positive = rising towa
 - Parkin CA ordinate = +0.228, rank 32/38 along the (oriented) axis => **late**.
 - Parkin mapped to calendar (coarse): AD 1522.
 - Parkin 14C mean date: AD 1459.
-- Parkin neighborhood (spatial cluster c1): 10 assemblages.
+- Parkin neighborhood (spatial cluster c0): 10 assemblages.
 - Signature 2 in Parkin's neighborhood: 18 co-seriable groups; Parkin belongs to 5 (multi-membership / bridge = True).
 
 ## Settlement level (broad PFG/LMV set)
@@ -109,7 +109,7 @@ Trend labels use both the OLS slope sign and the Spearman rank correlation; with
 
 - Neutral departure: slope -0.14421, Spearman rho -0.600 -> **downward but non-monotone**.
 - Cultural F_ST: slope -0.00520, Spearman rho -0.300 -> **downward but non-monotone**.
-- Spatial boundary excess: slope +0.58472, Spearman rho +0.143 -> **flat / non-trending**.
+- Spatial boundary excess: slope +0.17241, Spearman rho +0.143 -> **flat / non-trending**.
 - Convergence score: slope -0.09596, Spearman rho -0.100 -> **flat / non-trending**.
 
 - Of the 3 continuous signatures: 0 trend upward toward later, 1 flat/non-trending, 2 downward. Convergence-score slope -0.09596 (rho -0.100).

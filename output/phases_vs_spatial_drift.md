@@ -6,7 +6,7 @@ what neutral drift on a spatially structured network produces with no
 groupness (Lipo et al. 2021).
 
 ## Part A. Distance-decay strength
-- Mantel r (BR similarity vs geographic distance): -0.321 (p = 0.0004).
+- Mantel r (BR similarity vs geographic distance): -0.322 (p = 0.0004).
 - Geographic distance alone explains r^2 = 0.10 of the pairwise
   ceramic similarity variance. Negative r = closer assemblages are more
   similar, the isolation-by-distance signature.
@@ -28,10 +28,10 @@ innovation 0.01), no imposed boundaries. 95% null interval over
 
 | statistic | observed | null mean | null 95% | obs inside null? |
 |---|---|---|---|---|
-| distance-decay r | -0.321 | -0.441 | [-0.599, -0.228] | yes |
-| modularity Q | +0.045 | +0.173 | [+0.090, +0.290] | NO |
-| boundary excess (BR) | +38.636 | +36.869 | [+20.220, +56.167] | yes |
-| cultural F_ST | +0.039 | +0.102 | [+0.057, +0.188] | NO |
+| distance-decay r | -0.322 | -0.440 | [-0.619, -0.213] | yes |
+| modularity Q | +0.045 | +0.172 | [+0.087, +0.279] | NO |
+| boundary excess (BR) | +38.606 | +36.508 | [+17.835, +60.353] | yes |
+| cultural F_ST | +0.039 | +0.103 | [+0.050, +0.183] | NO |
 
 Interpretation: where observed falls INSIDE the spatial-drift null,
 that aspect of the phase structure is reproduced by neutral drift on

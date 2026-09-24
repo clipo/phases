@@ -80,11 +80,16 @@ def main():
     before = raw.set_index("Assemblages").reindex(members)
     after = converted.set_index("Assemblages").reindex(members)
     xb, xa = _to_utm(before), _to_utm(after)
+    # Cluster exactly as the pipeline does: centered latitude/longitude degrees
+    # (make_figures / 47_revision_analysis). Until 2026-09-23 this used UTM km,
+    # which gives different k >= 5 divisions from the ones the paper reports.
+    cb = before[["Latitude", "Longitude"]].to_numpy(float); cb = cb - cb.mean(0)
+    cA = after[["Latitude", "Longitude"]].to_numpy(float); cA = cA - cA.mean(0)
     moved = np.hypot(*(xa - xb).T * 1000)
     rows = []
     for k in K_RANGE:
-        lb = _kmeans_labels(xb, k, seed=7)
-        la = _kmeans_labels(xa, k, seed=7)
+        lb = _kmeans_labels(cb, k, seed=7)
+        la = _kmeans_labels(cA, k, seed=7)
         # label permutation-invariant comparison
         same = len(set(zip(lb, la))) == k
         fb = cultural_fst(_group(counts.to_numpy(float), lb))

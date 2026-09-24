@@ -31,7 +31,7 @@ Primary run uses the IDSS continuity threshold cont=0.1 (see note: cont=0.30 of 
 - Number of maximal co-seriable groups (cont=0.1): **34**. Largest group sizes: [4, 4, 3, 3, 3, 3, 3, 3] (max group size = 4).
 - Group-size distribution {size: n_groups}: {1: 8, 2: 13, 3: 11, 4: 2}. The structure is highly FRAGMENTED: many small overlapping windows, no single large ordering covering the set. This matches Lipo et al. 2015, where the largest LMV solution held only four assemblages.
 - Multi-membership (bridge) assemblages: 18 of 28 belong to more than one maximal group.
-- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.629 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
+- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.628 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
 - **Parkin** belongs to 3 maximal groups (bridge = True); bridge rank 10 of 28 by membership count (cont=0.1). Top bridge assemblages: Barton_Ranch(6), Williamson(6), Rose_Mound(6), Belle_Meade(5), Cramor_Place(4), Neeleys_Ferry(4).
 
 Bin/continuity sensitivity of the IDSS structure:
@@ -77,7 +77,7 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 |---|---|---|---|---|---|
 | Neutral departure | 0.1099 | 1.3683 | +1.2584 | [+0.7889, +1.8190] | higher late (CI excludes 0) |
 | Cultural F_ST | 0.0028 | 0.0054 | +0.0026 | [-0.0091, +0.0183] | higher late |
-| Spatial boundary excess | 42.2252 | 6.6817 | -35.5435 | [-110.2472, +64.7477] | higher early |
+| Spatial boundary excess | 42.2252 | -1.5779 | -43.8032 | [-102.2037, +67.4255] | higher early |
 | IDSS n_groups (fragmentation) | 11.0000 | 8.0000 | -3.0000 | [-5.0000, +3.0000] | higher early |
 
 - JOINT structural reading: 2 of 4 structural signatures are higher in the late third; 1 of 4 have a bootstrap CI that excludes 0. Bounded-group consolidation (H1) predicts higher F_ST, higher boundary excess, higher within-group neutral departure, AND MORE IDSS groups jointly in the late third with CIs above 0.
@@ -110,7 +110,7 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 - Early- vs late-CA-third structural contrast (late - early):
   - Neutral departure: +1.2584 (CI excludes 0).
   - Cultural F_ST: +0.0026 (CI spans 0).
-  - Spatial boundary excess: -35.5435 (CI spans 0).
+  - Spatial boundary excess: -43.8032 (CI spans 0).
   - IDSS n_groups: -3.0000 (CI spans 0).
   Joint bounded-group consolidation requires all four higher late with CIs above 0: 2/4 higher late, 1/4 CI excludes 0.
 - Settlement (corrected Parkin): Parkin is a fortified (ditched + palisaded) 7-mound town; mound-area rank-size slope -1.26, primacy 16.38. The LMV ditch/area fields under-record fortification; regional ditch counts are a floor.

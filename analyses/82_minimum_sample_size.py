@@ -70,9 +70,11 @@ def main() -> int:
     for N, med, hi in rows:
         mark = "**" if N == THRESHOLD else ""
         L.append(f"| {mark}{N}{mark} | {med:.4f} | {hi:.4f} | {100 * med / obs:.0f}% |")
-    L += ["", f"At {THRESHOLD} sherds the artifact's median is about a seventh of the observed "
+    t_med, t_hi = next((med, hi) for N, med, hi in rows if N == THRESHOLD)
+    L += ["", f"At {THRESHOLD} sherds the artifact's median is {100 * t_med / obs:.0f} percent of the observed "
               "differentiation and its 95th",
-          "percentile falls below it; above that the bias shrinks slowly. Mainfort (2003) "
+          f"percentile ({t_hi:.4f}) {'falls below' if t_hi < obs else 'does not fall below'} it; "
+          "above that the bias shrinks slowly. Mainfort (2003) "
           "kept sites with 800",
           "or more sherds in all, and decorated sherds are 13 percent of his table, so his "
           "rule is about 100",

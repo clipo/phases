@@ -51,6 +51,7 @@ import pandas as pd
 
 CORRECTIONS = "coordinate_corrections.csv"
 PFG_SPATIAL = "mainfort-spatial-data.xlsx"   # sheet From_Lipo: PFG site table UTMs
+PFG_NAME_ALIASES = {"Castile": "Castile_Landing", "L._Cormorant": "Lake_Cormorant"}
 PFG_DATUM_TOL_M = 10.0   # PFG UTMs are rounded to 10 m; half a cell's diagonal is 7 m
 
 
@@ -82,6 +83,10 @@ def load_pfg_utm(path: str | Path | None = None) -> pd.DataFrame:
     for name, g in dup.groupby("assemblage"):
         if g[["easting", "northing", "zone"]].nunique().max() > 1:
             raise ValueError(f"From_Lipo sheet gives {name} more than one UTM")
+    # The From_Lipo sheet spells two basin assemblages differently from the
+    # coordinate file; an exact-name join dropped them from the datum check
+    # (found by the blind re-derivation, 2026-09-23).
+    df["assemblage"] = df["assemblage"].replace(PFG_NAME_ALIASES)
     df = df.drop_duplicates("assemblage").set_index("assemblage")
     bad = sorted(set(df["zone"].astype(int)) - {15, 16})
     if bad:

@@ -245,7 +245,10 @@ def apply_site_coordinate_corrections(lmv, path=None, verbose: bool = True):
         # These replacements are PFG's own UTMs, so they are NAD27 like the rest.
         if "_datum_corrected" not in out.columns:
             out["_datum_corrected"] = False
-        out.loc[sel, "_datum_corrected"] = True
+        # Only corrections that ARE survey (PFG) UTMs are in the 1927 datum; an
+        # author-supplied location already expressed in NAD83 (Davis, 2026-09-23)
+        # must not be shifted again.
+        out.loc[sel, "_datum_corrected"] = str(row["source"]).startswith("PFG site table UTM")
         if verbose:
             d = ((float(row["easting"]) - before[0]) ** 2
                  + (float(row["northing"]) - before[1]) ** 2) ** 0.5

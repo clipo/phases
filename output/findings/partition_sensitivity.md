@@ -8,13 +8,13 @@ Produced by `analyses/59_partition_sensitivity.py` (full). F15 measurements M1 a
 
 | k | silhouette | F_ST median | 95% CI | R-hat | min ESS | divergences |
 |---|---|---|---|---|---|---|
-| 2 **(selected)** | 0.5288 | **0.0062** | [0.0051, 0.0076] | 1.0015 | 2059 | 0/6000 |
-| 3 | 0.5016 | **0.0155** | [0.0133, 0.0180] | 1.0049 | 2085 | 0/6000 |
-| 4 | 0.4692 | **0.0185** | [0.0160, 0.0212] | 1.0030 | 2521 | 0/6000 |
-| 5 | 0.4701 | **0.0302** | [0.0267, 0.0342] | 1.0014 | 3671 | 0/6000 |
-| 6 | 0.3830 | **0.0248** | [0.0217, 0.0283] | 1.0024 | 3616 | 0/6000 |
+| 2 **(selected)** | 0.5274 | **0.0062** | [0.0051, 0.0076] | 1.0015 | 2059 | 0/6000 |
+| 3 | 0.5063 | **0.0155** | [0.0133, 0.0180] | 1.0049 | 2085 | 0/6000 |
+| 4 | 0.4664 | **0.0185** | [0.0160, 0.0212] | 1.0030 | 2521 | 0/6000 |
+| 5 | 0.4326 | **0.0202** | [0.0175, 0.0232] | 1.0020 | 3582 | 0/6000 |
+| 6 | 0.4528 | **0.0320** | [0.0283, 0.0362] | 1.0030 | 3407 | 0/6000 |
 
-Across k = 2 to 6 the posterior median spans 0.0062 to 0.0302, a spread of **0.0240**, against a reported interval width of 0.0025. **That is 9.6 times the data's own uncertainty**, so the choice of k matters more than the evidence the data carry about F_ST.
+Across k = 2 to 6 the posterior median spans 0.0062 to 0.0320, a spread of **0.0258**, against a reported interval width of 0.0025. **That is 10.3 times the data's own uncertainty**, so the choice of k matters more than the evidence the data carry about F_ST.
 
 ## M3. Sensitivity to the k-means seed at k = 2
 
@@ -31,6 +31,6 @@ k-dependence is the dominant term, so the partition-at-fixed-grain ensemble (M2)
 - k = 2: R-hat 1.0015, min ESS 2059, divergences 0/6000
 - k = 3: R-hat 1.0049, min ESS 2085, divergences 0/6000
 - k = 4: R-hat 1.0030, min ESS 2521, divergences 0/6000
-- k = 5: R-hat 1.0014, min ESS 3671, divergences 0/6000
-- k = 6: R-hat 1.0024, min ESS 3616, divergences 0/6000
+- k = 5: R-hat 1.0020, min ESS 3582, divergences 0/6000
+- k = 6: R-hat 1.0030, min ESS 3407, divergences 0/6000
 - seed sweep: worst R-hat 1.0015, total divergences 0

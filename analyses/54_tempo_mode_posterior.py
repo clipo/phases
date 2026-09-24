@@ -201,13 +201,14 @@ def main(fast=False):
           "**A real directional signal is not recovered. The near-zero mu is "
           "therefore not interpretable and this model is not reportable.**"),
          "", "## A confound the four-way selection was hiding", "",
-         "The diversity trajectory rises monotonically across the six bins ("
-         + ", ".join(f"{v:.3f}" for v in y) + "). Yet mu is not resolved. That "
+         "The diversity trajectory across the six bins is ("
+         + ", ".join(f"{v:.3f}" for v in y) + ("), falling over the second half" if y[-1] < y[len(y)//2] else ")")
+         + ". Yet mu is not resolved. That "
          "is not a failure of the fit: the OU relaxation term, "
-         "`theta + (anc - theta) exp(-alpha t)`, can produce exactly that rise "
-         "by starting below the optimum and relaxing up to it, so sustained "
+         "`theta + (anc - theta) exp(-alpha t)`, can produce exactly that change "
+         "by starting away from the optimum and relaxing toward it, so sustained "
          "directional drift and relaxation toward a higher equilibrium compete "
-         "to explain the same monotone increase. With six points the data "
+         "to explain the same monotone change. With six points the data "
          "cannot separate them.",
          "",
          "**Selecting a single model concealed this.** Reporting that the "

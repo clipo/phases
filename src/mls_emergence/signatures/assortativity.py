@@ -60,13 +60,20 @@ def _kmeans_once(coords: np.ndarray, k: int, rng: np.random.Generator):
     return labels, inertia
 
 
-def _kmeans_labels(coords: np.ndarray, k: int, seed: int = 0, n_init: int = 12) -> np.ndarray:
+def _kmeans_labels(coords: np.ndarray, k: int, seed: int = 0, n_init: int = 500) -> np.ndarray:
     """k-means (Lloyd) with multiple restarts; returns the lowest-inertia labeling.
 
     Restarts make the spatial partition stable: with a single fixed init, k-means
     on a clustered layout can land in an orthogonal local optimum and invert the
     within/between-cluster similarity gap. Taking the best of several inits
     removes that instability.
+
+    n_init was 12 until 2026-09-23. A blind re-derivation found that 12 is
+    enough on the 28 basin assemblages at k = 2 to 4 but not at k >= 5, where
+    the returned partition was a worse local optimum (inertia 0.2924 against
+    0.2768 at k = 5, changing the between-cluster F_ST from 0.0307 to 0.0206).
+    500 restarts on 28 points is cheap and returns the best-of-3,000 optimum
+    at k = 2 to 7 (tests/signatures/test_kmeans_restarts.py).
     """
     coords = np.asarray(coords, float)
     n = coords.shape[0]

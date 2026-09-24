@@ -295,31 +295,14 @@ def fig4_ca_ordination() -> None:
     M = counts.to_numpy(float)
     ca1, ca2, inertia_frac1 = correspondence_axis(M)
 
-    # Orient CA1 with 14C: larger = later
-    rc = pd.read_csv(DATA / "raw" / "14CDatesFromMainfort2001.csv")
-    rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
-    rc["cal_mid"] = rc["Calibrated Date A.D. (1 Sigma)"].map(parse_cal_midpoint)
-    prov_date = rc.groupby("Provenience")["cal_mid"].agg(["mean", "count"])
-    cur_norm = {norm_name(a): a for a in counts.index}
-    assem_date: dict[str, float] = {}
-    for prov in prov_date.index:
-        pn = norm_name(prov)
-        hit = cur_norm.get(pn)
-        if hit is None:
-            for k, v in cur_norm.items():
-                if pn and (pn in k or k in pn):
-                    hit = v
-                    break
-        if hit is not None:
-            assem_date.setdefault(hit, []).append(float(prov_date.loc[prov, "mean"]))  # type: ignore
-    assem_date = {a: float(np.mean(v)) for a, v in assem_date.items()}  # type: ignore
-    dated = [a for a in counts.index if a in assem_date]
-    ca1_d = ca1[[list(counts.index).index(a) for a in dated]]
-    yr_d = np.array([assem_date[a] for a in dated])
-    if len(dated) >= 3:
-        rho, _ = spearmanr(ca1_d, yr_d)
-        if np.isfinite(rho) and rho < 0:
-            ca1 = -ca1
+    # Orient CA1 exactly as every analysis does (rule 6: one definition).
+    # Until 2026-09-23 this figure used one-sigma midpoints, which tie at
+    # rho = 0 on the four dated assemblages and so left the axis unflipped,
+    # while analyses 21, 47, 53 and 54 use 17_basin_results.oriented_ca
+    # (pooled IntCal medians), which flips it: Figure 4 ran backwards.
+    import importlib as _il
+    _oca = _il.import_module("17_basin_results").oriented_ca(counts)[0]
+    ca1 = _oca.reindex(counts.index).to_numpy(float)
 
     ca1_s = pd.Series(ca1, index=counts.index)
     ca2_s = pd.Series(ca2, index=counts.index)

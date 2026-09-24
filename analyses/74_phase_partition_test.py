@@ -419,10 +419,10 @@ def main() -> int:
          "A partition marking interaction communities should behave differently: it",
          "should sit high against compactness-matched cuts, because the boundaries would",
          "be where the differences are, not merely where the gaps between sites are.", "",
-         "The drift comparison in panel A is a separate and stronger statement, and it is",
-         "the one the paper's argument rests on: differentiation exceeds what calibrated",
-         "spatial drift produces on this geography at every scale the test can resolve,",
-         "whatever partition is used to measure it.", "",
+         "The drift comparison in panel A is a separate statement: where the observed",
+         "differentiation lies against calibrated spatial drift at each number of",
+         "clusters. It is tabulated, with the share of runs reaching the observed value,",
+         "in scale_sweep.md (analysis 71), which this figure panel plots.", "",
          f"Figure written to {png.name} and its siblings; ensembles in {OUT_CSV.name}.", ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

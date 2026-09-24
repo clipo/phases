@@ -8,38 +8,38 @@ assemblages Mainfort himself assigned.
 Agreement is the adjusted Rand index: 0 in expectation for unrelated partitions, 1 for
 identical ones. Weight 0 is the site map alone; the last row is the pottery alone.
 
-| composition transform | weight on composition | ARI, all 43 | ARI, Mainfort's 25 | k-means seed range |
+| composition transform | weight on composition | ARI, all 28 | ARI, Mainfort's 25 | k-means seed range |
 |---|---|---|---|---|
-| raw | **map alone** | 0.889 | **1.000** | 0.607-1.000 |
-| raw | 0.1 | 0.889 | **1.000** | 0.607-1.000 |
-| raw | 0.25 | 0.695 | **0.766** | 0.671-0.766 |
+| raw | **map alone** | 0.889 | **1.000** | 1.000-1.000 |
+| raw | 0.1 | 0.889 | **1.000** | 1.000-1.000 |
+| raw | 0.25 | 0.695 | **0.766** | 0.766-0.766 |
 | raw | 0.5 | 0.527 | **0.533** | 0.533-0.533 |
 | raw | 1 | 0.527 | **0.533** | 0.533-0.533 |
-| raw | 2 | 0.064 | **0.092** | 0.092-0.423 |
-| raw | 4 | 0.064 | **0.092** | 0.082-0.092 |
-| raw | 8 | 0.064 | **0.092** | 0.082-0.092 |
+| raw | 2 | 0.064 | **0.092** | 0.092-0.092 |
+| raw | 4 | 0.064 | **0.092** | 0.092-0.092 |
+| raw | 8 | 0.064 | **0.092** | 0.092-0.092 |
 | raw | 32 | 0.056 | **0.082** | 0.082-0.082 |
 | raw | pottery alone | 0.056 | **0.082** | 0.082-0.082 |
-| clr | **map alone** | 0.889 | **1.000** | 0.607-1.000 |
-| clr | 0.1 | 0.889 | **1.000** | 0.766-1.000 |
-| clr | 0.25 | 0.695 | **0.766** | 0.671-0.766 |
-| clr | 0.5 | 0.527 | **0.533** | 0.533-0.671 |
+| clr | **map alone** | 0.889 | **1.000** | 1.000-1.000 |
+| clr | 0.1 | 0.889 | **1.000** | 1.000-1.000 |
+| clr | 0.25 | 0.695 | **0.766** | 0.766-0.766 |
+| clr | 0.5 | 0.527 | **0.533** | 0.533-0.533 |
 | clr | 1 | 0.527 | **0.533** | 0.533-0.533 |
-| clr | 2 | 0.064 | **0.092** | 0.089-0.533 |
-| clr | 4 | 0.064 | **0.092** | 0.082-0.103 |
-| clr | 8 | 0.064 | **0.092** | 0.082-0.103 |
-| clr | 32 | 0.056 | **0.082** | 0.082-0.111 |
-| clr | pottery alone | 0.056 | **0.082** | 0.082-0.111 |
-| chisq | **map alone** | 0.889 | **1.000** | 0.607-1.000 |
-| chisq | 0.1 | 0.560 | **0.607** | 0.607-1.000 |
-| chisq | 0.25 | 0.560 | **0.607** | 0.607-0.766 |
-| chisq | 0.5 | 0.560 | **0.607** | 0.607-0.766 |
-| chisq | 1 | 0.560 | **0.607** | 0.607-0.766 |
-| chisq | 2 | 0.291 | **0.292** | 0.292-0.533 |
+| clr | 2 | 0.064 | **0.092** | 0.092-0.092 |
+| clr | 4 | 0.064 | **0.092** | 0.092-0.092 |
+| clr | 8 | 0.064 | **0.092** | 0.092-0.092 |
+| clr | 32 | 0.056 | **0.082** | 0.082-0.082 |
+| clr | pottery alone | 0.056 | **0.082** | 0.082-0.082 |
+| chisq | **map alone** | 0.889 | **1.000** | 1.000-1.000 |
+| chisq | 0.1 | 0.560 | **0.607** | 0.607-0.607 |
+| chisq | 0.25 | 0.560 | **0.607** | 0.607-0.607 |
+| chisq | 0.5 | 0.560 | **0.607** | 0.607-0.607 |
+| chisq | 1 | 0.560 | **0.607** | 0.607-0.607 |
+| chisq | 2 | 0.291 | **0.292** | 0.292-0.292 |
 | chisq | 4 | 0.291 | **0.292** | 0.292-0.292 |
-| chisq | 8 | 0.222 | **0.215** | 0.143-0.292 |
-| chisq | 32 | 0.222 | **0.215** | 0.143-0.292 |
-| chisq | pottery alone | 0.222 | **0.215** | 0.143-0.292 |
+| chisq | 8 | 0.222 | **0.215** | 0.215-0.215 |
+| chisq | 32 | 0.208 | **0.204** | 0.204-0.204 |
+| chisq | pottery alone | 0.208 | **0.204** | 0.204-0.204 |
 
 ## Does the verdict depend on the algorithm?
 
@@ -51,7 +51,7 @@ identical ones. Weight 0 is the site map alone; the last row is the pottery alon
 | clr | kmeans | 1.000 | 0.082 |
 | clr | ward | 0.607 | 0.111 |
 | clr | average | 0.537 | 0.111 |
-| chisq | kmeans | 1.000 | 0.215 |
+| chisq | kmeans | 1.000 | 0.204 |
 | chisq | ward | 0.607 | 0.204 |
 | chisq | average | 0.537 | -0.002 |
 
@@ -76,7 +76,7 @@ the reading below uses.
 
 ## Reading
 
-Partitions carrying the phases' own group sizes with boundaries placed at random agree with the phases at a median ARI of 0.566 (400 draws), which is what
+Partitions carrying the phases' own group sizes with boundaries placed at random agree with the phases at a median ARI of 0.570 (400 draws), which is what
 the group sizes manufacture on their own.
 
 The site map alone recovers the published scheme well above what the group

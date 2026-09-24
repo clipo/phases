@@ -11,7 +11,9 @@ Three checks here, all at the same five clusters and calibrated cell:
     drift at all, only finite samples.
 (b) UNCERTAINTY IN THE OBSERVED COUNTS. Each assemblage's class proportions
     are drawn from their posterior, Dirichlet(counts + 1/2) (the Jeffreys
-    prior, which leans toward even profiles and so slightly toward LARGER
+    prior, which pulls each profile slightly toward even; that alone shrinks the
+    differences between clusters, the conservative direction for a claim of excess,
+    while the draws' own spread enlarges them slightly; formerly described here as leaning toward LARGER
     terms than the counts; named per rule 20), 2,000 times, and each
     cluster's term recomputed with the observed sherd weights. The ratio of
     each draw to the drift median gives a posterior for the excess.
@@ -90,7 +92,8 @@ def main() -> int:
          f"({rates['n_ind']} learners, innovation {rates['innovation']}, mixing {rates['mixing']}), "
          f"{args.reps} drift runs, {args.draws} draws for (a) and (b).", "",
          "| cluster | assemblages | sherds | observed term | (a) sampling alone, median [95%] | drift median | "
-         "(b) excess over drift, posterior median [95%] | P(excess > 1) |", "|---|---|---|---|---|---|---|---|"]
+         "(b) excess over drift median, posterior median [95%] | share of drift runs reaching the observed term |",
+         "|---|---|---|---|---|---|---|---|"]
     order = np.argsort(-(obs_terms / np.where(drift_med > 0, drift_med, np.nan)))
     for i in order:
         g = groups[i]; sel = labels == g
@@ -99,7 +102,7 @@ def main() -> int:
                  f"{int(n_a[sel].sum()):,} | {obs_terms[i]:.4f} | {np.median(samp[:, i]):.5f} "
                  f"[{np.percentile(samp[:, i], 2.5):.5f}, {np.percentile(samp[:, i], 97.5):.5f}] | "
                  f"{drift_med[i]:.4f} | {np.median(ratio):.1f} [{np.percentile(ratio, 2.5):.1f}, "
-                 f"{np.percentile(ratio, 97.5):.1f}] | {float((ratio > 1).mean()):.2f} |")
+                 f"{np.percentile(ratio, 97.5):.1f}] | {float((sim_terms[:, i] >= obs_terms[i]).mean()):.1%} |")
     L += ["", "## (c) Dropping one assemblage at a time", "",
           "| cluster | assemblage dropped | observed term | drift median | excess |", "|---|---|---|---|---|"]
     for i in order:

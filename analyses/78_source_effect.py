@@ -139,7 +139,7 @@ def main() -> int:
                               and (~merged & (labels == g)).sum() >= 1
                               and (merged & (labels == g)).sum() >= 1])
     shared &= np.isin(labels, np.unique(labels[merged]))
-    subsets = {"all 43": np.ones(len(names), bool), "rows carrying the survey's counts alone": ~merged,
+    subsets = {f"all {len(names)}": np.ones(len(names), bool), "rows carrying the survey's counts alone": ~merged,
                "rows carrying Lipo's compilation": merged,
                "rows carrying the survey's counts alone, shared clusters only": ~merged & shared,
                "rows carrying Lipo's compilation, shared clusters only": merged & shared}

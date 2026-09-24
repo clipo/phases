@@ -54,14 +54,14 @@ Panels shown for seed 42. Columns: neutral_departure, seriability, fst, spatial_
 
 ```
    neutral_departure  seriability    fst  spatial_boundary
-0              0.295        -29.0  0.239             0.747
-1              0.283        -31.0  0.234             3.294
-2              0.338        -31.0  0.253            -1.653
-3              0.287        -34.0  0.233             0.108
-4              0.313        -33.0  0.251             0.822
-5              0.321        -31.0  0.252             0.936
-6              0.314        -32.0  0.236             2.175
-7              0.284        -28.0  0.241            -1.186
+0              0.295        -29.0  0.239            -7.185
+1              0.283        -31.0  0.234            -6.278
+2              0.338        -31.0  0.253            -4.185
+3              0.287        -34.0  0.233            -8.241
+4              0.313        -33.0  0.251            -7.148
+5              0.321        -31.0  0.252            -4.556
+6              0.314        -32.0  0.236            -6.778
+7              0.284        -28.0  0.241            -6.574
 ```
 
 ## 2. Discrimination verdict
@@ -70,8 +70,8 @@ Threshold on standardized ordinal slope: 0.1.
 
 | mechanism | neutral_departure | seriability | fst | spatial_boundary | CONVERGENT |
 |---|---|---|---|---|---|
-| group_emergence | +0.300 | +0.325 | +0.343 | +0.292 | **True** |
-| aggregated_signaling | +0.289 | +0.307 | +0.000 | -0.002 | **False** |
+| group_emergence | +0.300 | +0.325 | +0.343 | +0.273 | **True** |
+| aggregated_signaling | +0.289 | +0.307 | +0.000 | -0.001 | **False** |
 | patchiness | -0.006 | +0.041 | +0.000 | -0.001 | **False** |
 | drift_space | -0.007 | -0.002 | +0.002 | -0.000 | **False** |
 
@@ -79,7 +79,7 @@ Each cell is the standardized ordinal slope of that signature. A mechanism is co
 
 ### Cross-seed robustness
 
-Across 500 seeds: genuine emergence flagged convergent in 493/500 runs (sensitivity); mimics flagged convergent in 0 runs (false positives).
+Across 500 seeds: genuine emergence flagged convergent in 492/500 runs (sensitivity); mimics flagged convergent in 0 runs (false positives).
 
 Degenerate runs: 2/500 ([187, 264]). A run is degenerate when a generator produces an ordinal slice on which a signature is undefined, which here means strong conformity fixing a single class so that cultural F_ST has no total diversity to partition. That is the mimic behaving as designed. Such a run cannot be scored as convergent and is reported here rather than folded into the rates above.
 
@@ -107,13 +107,13 @@ Mean absolute off-diagonal correlation: **0.88**.
 | mechanism | mean |r| among the four signatures |
 |---|---|
 | group_emergence (genuine) | 0.88 |
-| aggregated_signaling | 0.21 |
+| aggregated_signaling | 0.22 |
 | patchiness | 0.28 |
-| drift_space | 0.18 |
+| drift_space | 0.14 |
 
 **Interpretation.**
 
-The four signatures are strongly correlated (mean |r| = 0.88) ONLY under genuine emergence, where a single coupled process drives between-group divergence and within-group conformity together so all four co-rise. Under the mimics the same four signatures are nearly independent (mean |r| roughly 0.18-0.28). Convergence is therefore NOT a built-in artifact of correlated metrics: the signatures move together precisely when, and only when, a genuine group-forming process couples their causes. Each mimic decouples those causes (conformity without divergence; static divergence; smooth isolation-by-distance) and so fails the convergence test on at least one signature.
+The four signatures are strongly correlated (mean |r| = 0.88) ONLY under genuine emergence, where a single coupled process drives between-group divergence and within-group conformity together so all four co-rise. Under the mimics the same four signatures are nearly independent (mean |r| roughly 0.14-0.28). Convergence is therefore NOT a built-in artifact of correlated metrics: the signatures move together precisely when, and only when, a genuine group-forming process couples their causes. Each mimic decouples those causes (conformity without divergence; static divergence; smooth isolation-by-distance) and so fails the convergence test on at least one signature.
 
 ## 4. Verdict
 

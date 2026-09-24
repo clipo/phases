@@ -1,7 +1,7 @@
 # Would a culture historian have found these phases in pottery made by drift?
 
 Basin phase set, 28 assemblages, 3 phases; agreement scored on the 25 assemblages Mainfort assigned.
-300 realizations of the calibrated pooled drift model (2000 learners, innovation 0.002, mixing 0.005), which contains no groups,
+300 realizations of the calibrated pooled drift model (2000 learners, innovation 0.001, mixing 0.02), which contains no groups,
 sampled at the observed sherd totals and clustered exactly as the real record is in `76_phase_recovery.py`
 (chi-square composition, k-means, median of 10 initializations).
 
@@ -9,11 +9,11 @@ sampled at the observed sherd totals and clustered exactly as the real record is
 |---|---|---|---|
 | 0.0 | **1.000** | 1.000 (1.000 to 1.000) | 100% |
 | 0.1 | **0.607** | 1.000 (0.607 to 1.000) | 100% |
-| 0.25 | **0.607** | 0.938 (0.607 to 1.000) | 100% |
-| 0.5 | **0.607** | 0.765 (0.531 to 1.000) | 91% |
-| 1.0 | **0.607** | 0.581 (0.455 to 0.908) | 47% |
-| 2.0 | **0.292** | 0.514 (0.404 to 0.675) | 100% |
-| pottery alone | **0.237** | 0.031 (-0.043 to 0.250) | 3% |
+| 0.25 | **0.607** | 1.000 (0.607 to 1.000) | 100% |
+| 0.5 | **0.607** | 0.875 (0.607 to 1.000) | 98% |
+| 1.0 | **0.607** | 0.765 (0.461 to 1.000) | 74% |
+| 2.0 | **0.292** | 0.532 (0.383 to 0.875) | 100% |
+| pottery alone | **0.204** | 0.176 (-0.015 to 0.516) | 46% |
 
 The weight-zero row is the site map alone and is the same in both columns by construction.
 

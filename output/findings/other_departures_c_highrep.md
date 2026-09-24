@@ -4,22 +4,22 @@ Produced by `analyses/65_other_departures.py`, 1200 realizations per cell, each 
 
 The St. Francis basin is the test; the southeast-Missouri (`cmv`) set is a comparison, not a replication, because those deposits are on the whole earlier and were collected under a different sampling regime.
 
-- **basin**: observed $F_{ST}$ 0.0062; calibrated cell N 2000, innovation 0.002, mixing 0.005.
+- **basin**: observed $F_{ST}$ 0.0062; calibrated cell N 2000, innovation 0.001, mixing 0.02.
 - **cmv**: observed $F_{ST}$ 0.0337; calibrated cell N 120, innovation 0.004, mixing 0.02.
 
 A cell closes the gap only if it reaches its region's observed value AND stays inside the calibration's 10 percent diversity tolerance.
 
 | region | departure | setting | median $F_{ST}$ | 95% | shortfall | reaches obs | diversity |
 |---|---|---|---:|---|---:|---:|:---:|
-| basin | innovation boundary | boundary strength 0.0 | 0.0023 | [0.0003, 0.0136] | 2.7x | 16.4% | matched |
-| basin | innovation boundary | boundary strength 0.1 | 0.0032 | [0.0003, 0.1331] | 2.0x | 29.5% | matched |
-| basin | innovation boundary | boundary strength 0.15 | 0.0040 | [0.0004, 0.1414] | 1.6x | 37.3% | matched |
-| basin | innovation boundary | boundary strength 0.2 | 0.0059 | [0.0004, 0.1558] | 1.1x | 48.9% | matched |
-| basin | innovation boundary | boundary strength 0.25 | 0.0125 | [0.0004, 0.1618] | 0.5x | 59.1% | matched |
-| basin | innovation boundary | boundary strength 0.3 | 0.0447 | [0.0006, 0.1672] | 0.1x | 67.2% | matched |
-| basin | innovation boundary | boundary strength 0.4 | 0.0614 | [0.0009, 0.1777] | 0.1x | 79.8% | broken |
-| basin | innovation boundary | boundary strength 0.6 | 0.1194 | [0.0033, 0.1806] | 0.1x | 94.8% | broken |
-| basin | innovation boundary | boundary strength 1.0 | 0.1386 | [0.0361, 0.1896] | 0.0x | 99.4% | broken |
+| basin | innovation boundary | boundary strength 0.0 | 0.0022 | [0.0002, 0.0123] | 2.9x | 13.5% | matched |
+| basin | innovation boundary | boundary strength 0.1 | 0.0025 | [0.0003, 0.0389] | 2.5x | 24.2% | matched |
+| basin | innovation boundary | boundary strength 0.15 | 0.0032 | [0.0003, 0.0448] | 1.9x | 32.7% | matched |
+| basin | innovation boundary | boundary strength 0.2 | 0.0047 | [0.0003, 0.0502] | 1.3x | 43.5% | matched |
+| basin | innovation boundary | boundary strength 0.25 | 0.0073 | [0.0004, 0.0520] | 0.9x | 52.4% | matched |
+| basin | innovation boundary | boundary strength 0.3 | 0.0122 | [0.0004, 0.0528] | 0.5x | 61.2% | matched |
+| basin | innovation boundary | boundary strength 0.4 | 0.0200 | [0.0007, 0.0563] | 0.3x | 76.2% | broken |
+| basin | innovation boundary | boundary strength 0.6 | 0.0316 | [0.0017, 0.0662] | 0.2x | 91.5% | broken |
+| basin | innovation boundary | boundary strength 1.0 | 0.0379 | [0.0090, 0.0675] | 0.2x | 98.5% | broken |
 | cmv | innovation boundary | boundary strength 0.0 | 0.0124 | [0.0041, 0.0362] | 2.7x | 3.2% | matched |
 | cmv | innovation boundary | boundary strength 0.1 | 0.0166 | [0.0047, 0.1176] | 2.0x | 26.9% | matched |
 | cmv | innovation boundary | boundary strength 0.15 | 0.0216 | [0.0048, 0.1256] | 1.6x | 37.5% | broken |
@@ -35,10 +35,8 @@ A cell closes the gap only if it reaches its region's observed value AND stays i
 
 **basin**
 
-- **innovation boundary**: best shortfall 0.0x at boundary strength 1.0; the best cell that keeps diversity matched is boundary strength 0.3 at 0.1x.
+- **innovation boundary**: best shortfall 0.2x at boundary strength 1.0; the best cell that keeps diversity matched is boundary strength 0.3 at 0.5x.
 
 **cmv**
 
 - **innovation boundary**: best shortfall 0.4x at boundary strength 1.0; the best cell that keeps diversity matched is boundary strength 0.1 at 2.0x.
-
-Run through `analyses/66_innovation_boundary_highrep.py` (65 --only C --reps 1200 --tag c_highrep) on 2026-09-22; the JSON beside it is `output/other_departures_c_highrep.json`.

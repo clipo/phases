@@ -49,6 +49,10 @@ OUT_CSV = ROOT / "output" / "phases_as_groups_runs.csv"
 LEAKS = [1.0, 0.5, 0.1, 0.03]
 STRENGTHS = [0.0, 0.1, 0.2, 0.3]
 SUMMARIES = ["phase_fst", "spatial_fst", "be_phase", "hs", "rich", "ht"]
+# Parkin-specific scores (2026-09-23, author framing: does the Parkin phase,
+# treated as a polity, show anything in its type frequencies beyond drift?).
+# Reported per cell; not used in the ABC so the posterior is unchanged.
+PARKIN = ["parkin_fst", "be_parkin"]
 ACCEPT = 0.05          # rejection-ABC acceptance fraction of all runs
 TOL = 0.10             # the calibration's diversity tolerance
 
@@ -72,10 +76,20 @@ def group_targets_by(pooled, labels, strength, rng):
     return out
 
 
+def _pct(x: float) -> str:
+    """A share as a percentage; below 1 percent keep one decimal so 1 of 300 is not printed as 0%."""
+    return f"{x:.1%}" if 0 < x < 0.01 else f"{x:.0%}"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--reps", type=int, default=300)
+    ap.add_argument("--placebo", type=int, default=None,
+                    help="replace the phases with a same-size division around random centers drawn with this seed "
+                         "(a placebo: if it gives the same posterior, the result is a property of the map)")
     args = ap.parse_args()
+    if args.reps > 1000:
+        raise ValueError("--reps above 1000 would collide seed families between cells")
 
     rev = importlib.import_module("47_revision_analysis")
     mf = importlib.import_module("make_figures")
@@ -91,17 +105,37 @@ def main() -> int:
     labels_ph, _ = ph.assign_phases_by_territory(names, coords.to_numpy(float))
     phases = sorted(set(labels_ph))
     phase = np.array([phases.index(l) for l in labels_ph])
+    global OUT_MD, OUT_CSV
+    placebo_note = ""
+    if args.placebo is not None:
+        t74 = importlib.import_module("74_phase_partition_test")
+        pts = t74.km_xy(coords.to_numpy(float))
+        sizes = np.bincount(phase); k = len(sizes); slot = np.repeat(np.arange(k), sizes)
+        rngp = np.random.default_rng(args.placebo)
+        a = t74.assign_exact(pts, pts[rngp.choice(len(pts), size=k, replace=False)], slot)
+        placebo = a  # around random centers, not made compact: varied placebos
+        placebo_note = (f"PLACEBO {args.placebo}: the groups are NOT the phases but a division with the phases' sizes "
+                        f"around random centers (adjusted Rand with the phases {t74.ari(phase, placebo):.3f}); "
+                        f"'phase' below means this division.")
+        print(placebo_note)
+        phase = placebo
+        OUT_MD = OUT_MD.with_name(f"phases_as_groups_placebo{args.placebo}.md")
+        OUT_CSV = OUT_CSV.with_name(f"phases_as_groups_runs_placebo{args.placebo}.csv")
     m_obs = data["m"]; d = data["d"]; totals = m_obs.sum(1)
 
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == "pooled")].iloc[0]
     cell = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]), n_ind=int(row["n_ind"]))
 
+    parkin = np.array([1 if l == "Parkin" else 0 for l in labels_ph])
+
     def summarize(m):
         div = rev.diversity(m)
         return dict(phase_fst=float(rev.fst_by(m, phase)),
                     spatial_fst=float(rev.fst_by(m, data["labels"])),
                     be_phase=float(sd.boundary_excess_labeled(m, d, phase)),
+                    parkin_fst=float(rev.fst_by(m, parkin)),
+                    be_parkin=float(sd.boundary_excess_labeled(m, d, parkin)),
                     **div)
 
     obs = summarize(m_obs)
@@ -114,7 +148,9 @@ def main() -> int:
             w = copying_weights(d, 24.0, labels=phase, leak=leak)
             for r in range(args.reps):
                 seed = 84000 + 10000 * li + 1000 * si + r
-                rng = np.random.default_rng(seed)
+                # separate streams for the simulator and for innovation
+                # profiles and sampling (they shared one seed until 2026-09-23)
+                rng = np.random.default_rng(seed + 5_000_000)
                 tgt = group_targets_by(data["pooled"], phase, strength, rng)
                 rec = drift_record(w, k=m_obs.shape[1], n_ind=cell["n_ind"], seed=seed,
                                    innovation=cell["innovation"], mixing=cell["mixing"],
@@ -138,6 +174,10 @@ def main() -> int:
             be_med=g.be_phase.median(), be_lo=g.be_phase.quantile(.025), be_hi=g.be_phase.quantile(.975),
             be_reach=float((g.be_phase >= obs["be_phase"]).mean()),
             sp_med=g.spatial_fst.median(),
+            pk_med=g.parkin_fst.median(), pk_lo=g.parkin_fst.quantile(.025), pk_hi=g.parkin_fst.quantile(.975),
+            pk_reach=float((g.parkin_fst >= obs["parkin_fst"]).mean()),
+            bp_med=g.be_parkin.median(), bp_lo=g.be_parkin.quantile(.025), bp_hi=g.be_parkin.quantile(.975),
+            bp_reach=float((g.be_parkin >= obs["be_parkin"]).mean()),
             matched=matched(g)))
     cdf = pd.DataFrame(cells)
 
@@ -157,6 +197,29 @@ def main() -> int:
 
     obs_vec = np.array([obs[k] for k in SUMMARIES], float)
     post = posterior(obs_vec)
+
+    # How much does the leak factor actually cut cross-phase copying? Weights
+    # are renormalized per site, so a factor of 0.03 does not cut the share of
+    # a site's between-site copying that crosses a phase line to 3 percent.
+    cross = {}
+    for leak in LEAKS:
+        w = copying_weights(d, 24.0, labels=phase, leak=leak)
+        off = w * (1 - np.eye(len(w)))
+        share = np.array([off[i, phase != phase[i]].sum() / off[i].sum() for i in range(len(w))])
+        cross[leak] = (float(share.mean()), float(share.max()))
+
+    # Sensitivity of the posterior to the approximation's own settings.
+    def p_bound(target_vec, acc, cols):
+        Xs = df[cols].to_numpy(float); sds = np.nanstd(Xs, axis=0); sds[sds == 0] = 1.0
+        tv = np.array([obs[c] for c in cols], float)
+        dist = np.sqrt(np.nansum(((Xs - tv) / sds) ** 2, axis=1))
+        sub = df.iloc[np.argsort(dist)[:max(1, int(acc * len(df)))]]
+        return float((sub.leak < 1).mean()), float((sub.strength > 0).mean())
+    sens = []
+    for acc in (0.01, 0.02, 0.05, 0.10):
+        for label, cols in [("all six summaries", SUMMARIES), ("phase F_ST and boundary excess only", ["phase_fst", "be_phase"])]:
+            pb, pl = p_bound(obs_vec, acc, cols)
+            sens.append((acc, label, pb, pl))
     p_boundary = float(post[[l for l in LEAKS if l < 1]].sum())
     p_local = float(post.loc[(slice(None), [s for s in STRENGTHS if s > 0])].sum())
     by_leak = post.groupby(level=0).sum()
@@ -178,10 +241,11 @@ def main() -> int:
     pb0 = [float(posterior(X[i], exclude=np.array([i]))[[l for l in LEAKS if l < 1]].sum())
            for i in rng.choice(idx0, size=min(40, len(idx0)), replace=False)]
 
-    L = ["# Do the published phases behave as groups?", "",
+    L = ["# Do the published phases behave as groups?" + (f" (placebo {args.placebo})" if args.placebo is not None else ""), "",
+         *([placebo_note, ""] if args.placebo is not None else []),
          f"Produced by `analyses/84_phases_as_groups.py`, {args.reps} runs per cell, calibrated "
          f"pooled-profile cell ({cell['n_ind']} learners, innovation {cell['innovation']}, mixing "
-         f"{cell['mixing']}), interaction length 24 km along rivers. Groups are the published phases "
+         f"{cell['mixing']}), interaction length 24 km along rivers. Groups are " + ("the placebo division" if args.placebo is not None else "the published phases") + " "
          f"({', '.join(f'{p} {n}' for p, n in zip(phases, np.bincount(phase)))}).", "",
          f"Observed: between-phase cultural F_ST **{obs['phase_fst']:.4f}**; boundary excess at phase "
          f"lines **{obs['be_phase']:+.1f}**; F_ST at the {len(np.unique(data['labels']))} spatial clusters "
@@ -193,19 +257,37 @@ def main() -> int:
          "|---|---|---|---|---|---|---|"]
     for _, c in cdf.iterrows():
         L.append(f"| {c.leak:g} | {c.strength:g} | {c.fst_med:.4f} [{c.fst_lo:.4f}, {c.fst_hi:.4f}] | "
-                 f"{c.fst_reach:.0%} | {c.be_med:+.1f} [{c.be_lo:+.1f}, {c.be_hi:+.1f}] | {c.be_reach:.0%} | "
+                 f"{_pct(c.fst_reach)} | {c.be_med:+.1f} [{c.be_lo:+.1f}, {c.be_hi:+.1f}] | {_pct(c.be_reach)} | "
                  f"{'yes' if c.matched else 'no'} |")
     base = cdf[(cdf.leak == 1.0) & (cdf.strength == 0.0)].iloc[0]
+    L += ["", "## The Parkin phase against the rest of the basin", "",
+          f"Observed: Parkin-versus-rest cultural F_ST **{obs['parkin_fst']:.4f}**; boundary excess at the "
+          f"Parkin line **{obs['be_parkin']:+.1f}**. The shares are of 300 runs per cell reaching the observed value.", "",
+          "| copying factor | local innovation | Parkin F_ST median [95%] | share reaching | Parkin-line boundary excess median [95%] | share reaching |",
+          "|---|---|---|---|---|---|"]
+    for _, c in cdf.iterrows():
+        L.append(f"| {c.leak:g} | {c.strength:g} | {c.pk_med:.4f} [{c.pk_lo:.4f}, {c.pk_hi:.4f}] | {_pct(c.pk_reach)} | "
+                 f"{c.bp_med:+.1f} [{c.bp_lo:+.1f}, {c.bp_hi:+.1f}] | {_pct(c.bp_reach)} |")
     L += ["", "## 2. The phases under neutral copying alone (leak 1, regional pool)", "",
           f"Between-phase F_ST: observed {obs['phase_fst']:.4f} against a median of {base.fst_med:.4f} "
-          f"(95 percent range {base.fst_lo:.4f} to {base.fst_hi:.4f}); {base.fst_reach:.0%} of runs reach it. "
+          f"(95 percent range {base.fst_lo:.4f} to {base.fst_hi:.4f}); {_pct(base.fst_reach)} of runs reach it. "
           f"Boundary excess at phase lines: observed {obs['be_phase']:+.1f} against {base.be_med:+.1f} "
-          f"({base.be_lo:+.1f} to {base.be_hi:+.1f}); {base.be_reach:.0%} of runs reach it.", "",
+          f"({base.be_lo:+.1f} to {base.be_hi:+.1f}); {_pct(base.be_reach)} of runs reach it.", "",
           "## 3. Posterior over the grid (rejection ABC, uniform prior over cells)", "",
           f"Accepted the closest {ACCEPT:.0%} of {len(df)} runs on standardized "
           f"{', '.join(SUMMARIES)}.", "",
           f"- P(some copying boundary at phase lines, leak < 1) = **{p_boundary:.2f}** (prior 0.75).",
           f"- P(local innovation, share > 0) = **{p_local:.2f}** (prior 0.75).", "",
+          "Sensitivity to the approximation's settings (prior 0.75 for both):", "",
+          "| acceptance | summaries | P(copying boundary) | P(local innovation) |", "|---|---|---|---|"]
+    for acc, label, pb, pl in sens:
+        L.append(f"| {acc:.0%} | {label} | {pb:.2f} | {pl:.2f} |")
+    L += ["", "What the copying factor does to cross-phase copying (share of each site's between-site "
+          "copying that crosses a phase line, mean and maximum over sites):", "",
+          "| copying factor | mean share | maximum share |", "|---|---|---|"]
+    for leak, (mn, mx) in cross.items():
+        L.append(f"| {leak:g} | {mn:.3f} | {mx:.3f} |")
+    L += ["",
           "| leak | posterior | | local innovation | posterior |", "|---|---|---|---|---|"]
     for (lk, pv), (st, sv) in zip(by_leak.items(), by_strength.items()):
         L.append(f"| {lk:g} | {pv:.2f} | | {st:g} | {sv:.2f} |")

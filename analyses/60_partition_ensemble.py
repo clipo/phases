@@ -140,16 +140,16 @@ def main(fast=False):
          "", "## Reading", ""]
     if inside:
         L += [f"Our partition sits at the {_ordinal(pct)} percentile, which is "
-              f"unremarkable. At this grain the specific partition k-means found "
+              f"unremarkable. At this number of clusters the specific partition k-means found "
               f"is **one draw from a family of equally defensible partitions**, "
               f"and the F_ST defined on it is not a property the data single out.",
               "",
               f"Combined with M1, where the median moved {m1_spread:.4f} across k against "
               f"a data-driven interval width of {a59.REPORTED_WIDTH:.4f}, the picture is that the "
-              f"reported F_ST is set mostly by **how finely the field is chopped** "
-              f"and hardly at all by which particular chopping is used. That is "
-              f"the same claim this paper makes about culture-historical phases, "
-              f"turned on its own instrument."]
+              f"reported F_ST is set both by **how finely the field is divided** and by "
+              f"**where the cuts fall**: divisions with the same number of groups span "
+              f"{np.percentile(meds,5):.4f} to {np.percentile(meds,95):.4f} (5th to 95th percentile). "
+              f"A quantity this sensitive to the cutting cannot be read on its own."]
     else:
         L += [f"Our partition sits at the {_ordinal(pct)} percentile of the ensemble, "
               f"outside the 20th to 80th band set in advance. It is doing "

@@ -6,12 +6,12 @@ Per-site populations are lognormal with the calibrated cell's population as the 
 
 | region | CV | harmonic N | median $F_{ST}$ | 95% | observed | reaches obs | diversity matched |
 |---|---:|---:|---:|---|---:|---:|:---:|
-| basin | 0.0 | 2000 | 0.0026 | [0.0003, 0.0147] | 0.0062 | 17.7% | yes |
-| basin | 0.5 | 1565 | 0.0027 | [0.0004, 0.0175] | 0.0062 | 22.3% | yes |
-| basin | 1.0 | 1019 | 0.0042 | [0.0004, 0.0264] | 0.0062 | 36.3% | no |
-| basin | 1.5 | 669 | 0.0055 | [0.0006, 0.0386] | 0.0062 | 45.3% | no |
-| basin | 2.0 | 467 | 0.0075 | [0.0006, 0.0400] | 0.0062 | 56.7% | no |
-| basin | 3.0 | 266 | 0.0122 | [0.0005, 0.0695] | 0.0062 | 70.0% | no |
+| basin | 0.0 | 2000 | 0.0019 | [0.0002, 0.0124] | 0.0062 | 14.7% | yes |
+| basin | 0.5 | 1565 | 0.0025 | [0.0003, 0.0142] | 0.0062 | 15.3% | yes |
+| basin | 1.0 | 1019 | 0.0033 | [0.0004, 0.0219] | 0.0062 | 29.0% | no |
+| basin | 1.5 | 669 | 0.0046 | [0.0005, 0.0392] | 0.0062 | 41.7% | no |
+| basin | 2.0 | 467 | 0.0069 | [0.0005, 0.0445] | 0.0062 | 52.0% | no |
+| basin | 3.0 | 266 | 0.0101 | [0.0007, 0.0837] | 0.0062 | 66.7% | no |
 | cmv | 0.0 | 120 | 0.0127 | [0.0037, 0.0381] | 0.0337 | 4.0% | yes |
 | cmv | 0.5 | 101 | 0.0139 | [0.0044, 0.0455] | 0.0337 | 8.3% | yes |
 | cmv | 1.0 | 68 | 0.0164 | [0.0050, 0.0519] | 0.0337 | 12.7% | no |
@@ -34,7 +34,7 @@ Read the sweep against that bracket rather than against its own top end.
 
 Reported as the shortfall, the observed value divided by the cell's median, rather than as a pass or fail on a threshold. A binary verdict here flips on where the threshold is put: at the empirical bracket the shortfall is what matters, not whether some percentage crosses five.
 
-- **basin**: uniform populations fall short by 2.4 times (0.0026 against 0.0062). At the empirical bracket (CV 0.9 to 1.6) the shortfall is 1.5 to 1.1 times. Even at CV 3.0, far beyond anything the settlement data suggest, it is 0.5 times.
+- **basin**: uniform populations fall short by 3.4 times (0.0019 against 0.0062). At the empirical bracket (CV 0.9 to 1.6) the shortfall is 1.9 to 1.4 times. Even at CV 3.0, far beyond anything the settlement data suggest, it is 0.6 times.
 - **cmv**: uniform populations fall short by 2.7 times (0.0127 against 0.0337). At the empirical bracket (CV 0.9 to 1.6) the shortfall is 2.1 to 1.6 times. Even at CV 3.0, far beyond anything the settlement data suggest, it is 1.1 times.
 
 **The structural point.** Population inequality does raise differentiation, monotonically and by a factor of five across the sweep. It does not close the gap, because it lowers the harmonic mean population and so raises drift everywhere, which pulls within-assemblage diversity below the observed value. Of the 10 cells with unequal populations, 2 stay inside the calibration's diversity tolerance. Unequal populations therefore move ALONG the same diversity-against-differentiation trade-off the uniform model is already on, rather than off it. That is the same obstacle the calibration sweep reports, reached from a different direction.

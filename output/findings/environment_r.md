@@ -1,6 +1,6 @@
 # R and Stan environment
 
-Recorded 2026-09-22 by `analyses/00_setup/02_record_environment.R`.
+Recorded 2026-09-23 by `analyses/00_setup/02_record_environment.R`.
 
 | | |
 |---|---|
