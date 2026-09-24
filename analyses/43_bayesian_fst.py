@@ -2,7 +2,8 @@
 
 Reuses analysis 07's spatial clusters (prepare_inputs) to build the observed
 St. Francis basin between-cluster counts, fits the Balding-Nichols model
-(mirroring the hyperlocality project's src/bayes.py), and reports three
+(the estimator is shared with a sibling project, ``../mataa``; method
+provenance only, no Rapa Nui data is involved), and reports three
 model-based quantities from one fit:
 
   1. the BN cultural F_ST parameter (F ~ Uniform(0,1), estimated directly);
@@ -46,23 +47,46 @@ FAST = dict(draws=300, tune=500, chains=2)
 BF_FULL = dict(draws=2000, chains=4)
 BF_FAST = dict(draws=500, chains=2)
 
-ALT_PRIOR = ("beta", 1.0, 3.0)   # a sterner prior (more mass on low F_ST)
+# PRIMARY is Beta(1,10), not Uniform(0,1). Changed 2026-09-02 on the strength of
+# the prior predictive in analyses/57_fst_prior_predictive.py: at this design the
+# flat prior expects a median Gini-Simpson F_ST of 0.27 and puts 47 percent of
+# its mass above 0.30, against an observed 0.018. Nobody holds that belief about
+# assemblages a few tens of km apart in one drainage, so on the scale that
+# matters the flat prior is strongly and wrongly informative rather than
+# uninformative (F2, rule 20a).
+#
+# The family must be Beta(1, b): any Beta(a, b) with a > 1 has zero density at
+# F = 0 and so asserts that panmixia is impossible, which is disqualifying for a
+# comparison against panmixia.
+#
+# Measured effect of the change on this fit: the BN parameter moves 0.0738 ->
+# 0.0626, and the Gini-Simpson readout the manuscript reports moves 0.0179 ->
+# 0.0178. The reported quantity is robust to the prior; the parameter is not.
+PRIMARY_PRIOR = ("beta", 1.0, 10.0)
+ALT_PRIOR = ("uniform",)          # reported alongside, per rule 20(b)
 
 
 def basin_group_counts(inp, scope: str = "basin"):
     """Observed between-cluster counts (n_clusters, K) and sizes.
 
-    ``scope="basin"`` (default) restricts to the canonical drainage-basin
-    membership in ``data/processed/basin_members_curated.txt`` (29 assemblages)
-    and re-selects the number of spatial clusters on the BASIN's coordinates by
-    the same silhouette rule analysis 07 uses. That gives k = 3, which is the
-    "three spatial clusters" the manuscript describes.
+    ``scope="basin"`` (default) restricts to the canonical membership in
+    ``data/processed/basin_members_curated.txt`` (43 assemblages: those the
+    St. Francis phase territories contain, per
+    ``analyses/16_basin_membership.py``) and re-selects the number of spatial
+    clusters on the BASIN's coordinates by the same silhouette rule analysis 07
+    uses. That gives k = 5, which is the "five spatial clusters" the manuscript
+    describes. It gave k = 3 while the membership was the 29-assemblage
+    drainage corridor; the selection is made on the coordinates in hand, never
+    fixed, so the count moves when the set does.
 
     ``scope="region"`` reproduces the pre-2026-08-31 behavior: the whole curated
     set with coordinates (55 assemblages) grouped by ``inp.cluster_of``, whose k
-    is selected on the wider set and comes out at 5. It is retained because it
-    is a legitimate quantity at a different spatial scale, not because it was
-    the intent here.
+    is also selected on the wider set. It is retained because it is a legitimate
+    quantity at a different spatial scale, not because it was the intent here.
+    The twelve assemblages it adds sit outside the phase territories and carry
+    1,710 sherds, so the two scopes differ in membership far more than in
+    sherd count; ``tests/inference/test_basin_scope.py`` discriminates on the
+    membership for that reason.
 
     HISTORY. Until 2026-08-31 this function ignored the basin membership
     entirely and always returned the 55-assemblage grouping, while being named
@@ -139,7 +163,7 @@ def main(fast=False):
     a43_ids = fitted_basin_ids(inp)
 
     # (1) BN cultural F_ST parameter, uniform prior
-    idata = sample_fst(gc, random_seed=0, **cfg)
+    idata = sample_fst(gc, random_seed=0, f_prior=PRIMARY_PRIOR, **cfg)
     s = fst_summary(idata)
 
     # (2) Gini-Simpson readout (the manuscript estimator), conjugate reconstruction
@@ -149,8 +173,9 @@ def main(fast=False):
     idata_alt = sample_fst(gc, random_seed=0, f_prior=ALT_PRIOR, **cfg)
     s_alt = fst_summary(idata_alt)
 
-    # (3) structure vs panmixia Bayes factor
-    bf = bayes_factor_structure(gc, seed=0, **bf_cfg)
+    # (3) The structure-vs-panmixia Bayes factor is DEMOTED (F1) and no longer
+    # computed here. See the docstring of inference.bayesian_fst.
+    # bayes_factor_structure remains runnable for provenance.
 
     def _flat(diag):
         ds = diag.dataset if hasattr(diag, "dataset") else diag
@@ -183,24 +208,26 @@ def main(fast=False):
                 f"treedepth >= 10 = {n_td}; min E-BFMI = {ebfmi:.3f} "
                 f"(want > 0.3).")
 
-    diag_lines = [_diagnostics(idata, "uniform prior (primary)"),
-                  _diagnostics(idata_alt, "Beta(1,3) prior (sensitivity refit)")]
+    diag_lines = [_diagnostics(idata, "Beta(1,10) prior (primary)"),
+                  _diagnostics(idata_alt, "Uniform(0,1) prior (sensitivity refit)")]
 
     L = ["# Bayesian cultural F_ST for the basin (Balding-Nichols model)", "",
          f"Observed St. Francis basin (canonical drainage membership, "
          f"{len(a43_ids)} assemblages), {gc.shape[0]} spatial clusters, "
          f"{gc.shape[1]} decorated types. Balding-Nichols Dirichlet-multinomial "
-         f"(F ~ Uniform(0,1), per-cluster frequencies marginalized), "
+         f"(F ~ Beta(1,10), per-cluster frequencies marginalized), "
          f"{cfg['draws']} draws x {cfg['chains']} chains "
-         f"({'FAST' if fast else 'full'}). This mirrors the hyperlocality "
-         f"project's Bayesian F_ST model.", "",
+         f"({'FAST' if fast else 'full'}). The estimator is shared with a "
+         f"sibling project for consistency of method; no data is shared.", "",
          "## 1. Cultural F_ST parameter (Balding-Nichols theta)", "",
          f"- Posterior median F_ST = {s['fst_median']:.4f} "
          f"(mean {s['fst_mean']:.4f}), 95% credible interval "
          f"[{s['fst_hdi95'][0]:.4f}, {s['fst_hdi95'][1]:.4f}].",
-         "- Flat prior on F_ST itself, so the estimate is not pulled toward the "
-         "drift level by the prior.",
-         f"- Prior sensitivity (Beta(1,3) prior on F): median "
+         "- Beta(1,10) prior on F_ST, adopted on prior-predictive grounds "
+         "(analyses/57). It leans toward SMALL F_ST, which is the direction "
+         "of this paper's conclusion, so the Uniform(0,1) refit below is the "
+         "check that the prior is not doing the work.",
+         f"- Prior sensitivity (Uniform(0,1) prior on F): median "
          f"{s_alt['fst_median']:.4f}, 95% CI "
          f"[{s_alt['fst_hdi95'][0]:.4f}, {s_alt['fst_hdi95'][1]:.4f}].", "",
          "## 2. Gini-Simpson F_ST (the manuscript estimator), conjugate readout", "",
@@ -213,24 +240,25 @@ def main(fast=False):
          "This readout is a credible interval on the exact estimator the "
          "manuscript reports, reconstructed from the same fit as "
          "p_g | x_g ~ Dirichlet((1-F)/F * pi + x_g).", "",
-         "## 3. Structure vs panmixia (Bayes factor)", "",
-         f"- log marginal likelihood: structure (M1) = {bf['logml_structure']:.2f}, "
-         f"panmixia (M0) = {bf['logml_panmixia']:.2f}.",
-         f"- 2 ln BF10 = {bf['two_ln_bf']:.2f} "
-         f"(+/- {bf['two_ln_bf_chain_sd']:.2f} across chains); log10 BF10 = "
-         f"{bf['log10_bf']:.2f}.",
-         f"- Kass & Raftery (1995): {bf['evidence']}.", "",
-         "CAVEAT: this Bayes factor tests structure against EXACT panmixia (every "
-         "cluster sharing one frequency vector). With thousands of sherds, exact "
-         "panmixia is rejected trivially for any real assemblage set, so a large "
-         "value here is expected and is NOT evidence of bounded groups. It is a "
-         "much weaker null than drift: spatially structured neutral drift itself "
-         "produces F_ST > 0 and would also reject panmixia. The paper's operative "
-         "test is structure vs DRIFT, addressed by the stochastic-drift null "
-         "(analyses 21/33/35/37) and the drift-versus-groups comparison, not by "
-         "this panmixia Bayes factor. It is reported here for parity with the "
-         "hyperlocality analysis and as a model-adequacy check, not as the "
-         "structure test.", "",
+         "## 3. Structure vs panmixia: not reported", "",
+         "The Bayes factor against exact panmixia that this section used to "
+         "carry is **demoted and no longer computed** (F1). Two reasons.", "",
+         "First, its evidence band is prior-unstable exactly where it would "
+         "matter. `../mataa` computed the same comparison exactly and measured "
+         "the Kass-Raftery band moving across a boundary, 4.48 log units from "
+         "Uniform(0,1) to Beta(1,10), for a near-null case. That is the "
+         "Lindley-Bartlett effect on a nested boundary comparison and no "
+         "estimator fixes it, so the quantity is robust where it is not needed "
+         "and fragile where it would be load-bearing.", "",
+         "Second, exact panmixia is not the alternative anyone entertains. With "
+         "thousands of sherds it is rejected trivially by any real assemblage "
+         "set, and spatially structured neutral drift, which IS the alternative "
+         "this paper tests, produces F_ST > 0 and would reject it too. The "
+         "operative comparison is structure against drift, addressed by the "
+         "drift-versus-groups analysis, not by a panmixia Bayes factor.", "",
+         "What stands in its place is section 1: the posterior for F itself, "
+         "under a prior justified by prior predictive (analyses/57) and reported "
+         "under two priors leaning opposite ways.", "",
          "## MCMC diagnostics", "",
          *diag_lines, ""]
 

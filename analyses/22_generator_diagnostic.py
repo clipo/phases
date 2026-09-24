@@ -46,6 +46,7 @@ import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import make_figures as mf  # noqa: E402
 m21 = importlib.import_module("21_signal_recovery")
+from mls_emergence.signatures.sampling import rarefy  # noqa: E402
 res = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "output" / "generator_diagnostic.md"
@@ -93,7 +94,7 @@ def score(profiles, clusters, bins_arr, coords_c, N_arr, nrare, rng):
     M = np.zeros((len(N_arr), profiles.shape[1]))
     for i in range(len(N_arr)):
         M[i] = rng.multinomial(int(N_arr[i]), profiles[i])
-    return m21.sig_rhos(m21.rarefy(M, nrare, rng), clusters, bins_arr, coords_c)
+    return m21.sig_rhos(rarefy(M, nrare, rng), clusters, bins_arr, coords_c)
 
 
 def mean_rhos(gen, s, clusters, bins_arr, coords_c, N_arr, k, K, n, nrare=m21.NRARE):

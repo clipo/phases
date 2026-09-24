@@ -1,4 +1,16 @@
-"""20_tempo_mode_ews.py — tempo-and-mode model selection and early-warning signals.
+"""
+PARTLY SUPERSEDED 2026-09-02 by analyses/54_tempo_mode_posterior.py.
+
+The tempo-and-mode section here compares four time-series models by AICc and
+Akaike weights. Under rule 18 that is replaced: the four models are regions of
+one parameter space (unbiased motion as the mean-reversion rate goes to zero,
+stasis as it grows large), so 54 fits the nesting model and reports the two
+parameters instead of selecting a winner. Its output/tempo_posterior.npz now
+feeds Figure S6 panel C; output/tempo_akaike.npz is orphaned.
+
+The early-warning-signal section of this script is NOT superseded and is still
+the source for its own result.
+20_tempo_mode_ews.py — tempo-and-mode model selection and early-warning signals.
 
 Two dynamic-sufficiency probes on the basin decorated-ceramic sequence, both
 asking whether the transmission trajectory along the seriation axis carries the
@@ -180,7 +192,6 @@ def main():
     counts, coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)
     n = counts.shape[0]
-    counts.to_numpy(float)
     types = list(counts.columns)
 
     # ---- binned trajectory for tempo-and-mode ----

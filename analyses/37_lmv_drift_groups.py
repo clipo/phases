@@ -43,6 +43,7 @@ import geopandas as gpd  # noqa: E402
 import make_figures as mf  # noqa: E402  (house style + DECORATED_TYPES)
 import make_map as mm  # noqa: E402  (river basemap + river-network distance)
 m33 = importlib.import_module("33_time_aware_emergence")
+res17 = importlib.import_module("17_basin_results")
 m35 = importlib.import_module("35_basin_pullout")
 m36 = importlib.import_module("36_canonical_phase_map")
 
@@ -92,7 +93,15 @@ def main():
                          crs="EPSG:4326").to_crs("EPSG:26915")
     E, Nm = gpts.x.to_numpy(), gpts.y.to_numpy()
 
-    ca1, _, _ = mf.correspondence_axis(counts)
+    # Oriented against the pooled 14C medians rather than taken from the raw
+    # CA1, whose sign is arbitrary. On this 55-assemblage set the raw axis
+    # already happens to point the right way (Spearman(raw, oriented) = +1.000
+    # measured 2026-09-04), so this changes no number today. It is not left to
+    # luck: `ranks` sets the time axis sample_time_transgressive draws against,
+    # and the identical construction in 33, 34, 54 and 56 WAS reversed on the
+    # 29-assemblage basin set, which flipped a reported conclusion (3379a82,
+    # 9b8673d).
+    ca1 = res17.oriented_ca(counts_df)[0].to_numpy(float)
     order = np.argsort(ca1)
     ranks = np.empty(n)
     ranks[order] = np.linspace(0, 1, n)

@@ -1,4 +1,25 @@
-"""40_hierarchical_convergence.py - Bayesian convergence posterior.
+"""
+DEMOTED 2026-09-02 by author ruling. Its headline quantity,
+P(all four signatures rise), is NOT reported in the manuscript and is not to be
+reported from it.
+
+Two reasons, and the second is the substantive one. First, this model's
+likelihood takes per-cell standard errors from 800 assemblage BOOTSTRAP rebuilds
+and treats them as known (build_panel_and_ses -> np.nanstd(boot, axis=0)), which
+rule 18 removes as a basis for inference; the model is Bayesian in form with a
+resampling estimate at its core. Second, and decisively, the statistic
+aggregates four signatures of which the main text says three "are not reliable
+discriminators at this resolution, and we treat them as weak corroboration
+only". A joint probability over four things, three disavowed, reads as stronger
+evidence than its components support.
+
+What replaces it: the one signature the record can resolve, cultural F_ST, has
+its trend reported as a posterior by analyses/50_perbin_bayesian_fst.py, which
+fits Balding-Nichols per seriation bin so the uncertainty is generative rather
+than resampled. The other three are reported descriptively.
+
+Kept runnable for provenance. Do not report p_convergence.
+40_hierarchical_convergence.py - Bayesian convergence posterior.
 
 Builds the three-signature CA panel and per-cell bootstrap SEs plus the
 seriation fragmentation slope (all reusing analysis 07's prepare_inputs), fits
@@ -100,6 +121,23 @@ def main(fast=False):
     cfg = FAST if fast else FULL
     inp = a07.prepare_inputs()
     y, se, t, labels = build_panel_and_ses(inp, n_bins=6, n_boot=cfg["n_boot"], seed=0)
+    if not np.all(np.isfinite(y)):
+        # Some seriation bins hold assemblages of a single spatial cluster
+        # (on the 28-assemblage set, the first and fifth), so a between-cluster
+        # F_ST does not exist there. Fitting anyway gave a
+        # posterior whose max R-hat printed as "nan", which is a number nobody
+        # should be shown (rules 16 and 17). This model is demoted and
+        # unreported; it says why it cannot run and stops.
+        bad = [(labels[i], int(j)) for i, j in zip(*np.where(~np.isfinite(y)))]
+        msg = ("# Hierarchical convergence model: NOT FIT\n\n"
+               f"The panel has undefined cells: {bad} (signature, bin). A bin whose "
+               "assemblages all fall in one spatial cluster has no between-cluster F_ST.\n"
+               "This model is demoted and not reported; see "
+               "`output/findings/perbin_bayesian_fst.md`, which handles the same bin "
+               "explicitly.\n")
+        (ROOT / "output" / "hierarchical_convergence.md").write_text(msg, encoding="utf-8")
+        print(msg)
+        return
     b_ser_obs, se_ser = seriation_slope_and_se(inp, n_boot=cfg["n_boot"], seed=1)
 
     idata = sample_convergence(y, se, t, b_ser_obs, se_ser,

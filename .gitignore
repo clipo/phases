@@ -4,6 +4,12 @@
 # caches (.csv, .npz) and diagnostic images are regenerable and stay ignored.
 output/*
 !output/*.md
+!output/*.csv
+# output/findings/ holds the audit notes the manuscript cites; they are small
+# text files and belong in the release, but `output/*` above excludes the
+# directory itself, so both lines are needed.
+!output/findings/
+!output/findings/**
 # figures/ holds the manuscript's figures (committed); run_all.sh regenerates
 # them in place. TIFFs are large (~175 MB total) and excluded from git; they are
 # regenerated in all formats (png, pdf, svg, tif) by the figure scripts.

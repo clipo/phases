@@ -35,6 +35,29 @@ def _within_conformity_departure(slice_counts: np.ndarray) -> float:
     return float(np.mean(vals)) if vals else 0.0
 
 
+def _fst_or_nan(slice_counts) -> float:
+    """Cultural F_ST for one ordinal slice, or NaN where it is undefined.
+
+    ``variance.cultural_fst`` refuses two degenerate inputs rather than
+    returning 0.0, because 0.0 is precisely the value "no differentiation"
+    takes and a degenerate slice would otherwise enter a trajectory as evidence
+    for this paper's own conclusion. That guard is right and stays.
+
+    A generator can still produce such a slice legitimately: strong conformity
+    can fix a single class, which is the mimic behaving as designed, not a
+    fault. Measured 2026-09-04 over the 500-seed audit, this happens in 2 of 500
+    seeds and only for the aggregated-conformity mimic. Those slices are
+    recorded as NaN so the seed is visible as degenerate rather than silently
+    scored; ``discriminates`` then yields a non-convergent verdict for that
+    mechanism, and analyses/04_validation_report.py counts and reports the
+    degenerate seeds separately instead of folding them into the hit rate.
+    """
+    try:
+        return variance.cultural_fst(slice_counts)
+    except ValueError:
+        return float("nan")
+
+
 def signatures_over_axis(slices, coords) -> pd.DataFrame:
     """Compute the four cultural-transmission signatures for each ordinal slice.
 
@@ -67,7 +90,7 @@ def signatures_over_axis(slices, coords) -> pd.DataFrame:
             {
                 "neutral_departure": _within_conformity_departure(s),
                 "seriability": float(-seriation.unimodality_violation(s)),
-                "fst": variance.cultural_fst(s),
+                "fst": _fst_or_nan(s),
                 "spatial_boundary": boundary_excess(s, coords),
             }
         )

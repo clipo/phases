@@ -47,11 +47,22 @@ def test_mixed_slopes_give_intermediate_pconv():
 
 
 def test_non_centered_model_samples_without_divergences():
+    """At the library default this model must sample cleanly.
+
+    Previously asserted ndiv <= 5, which tolerated the symptom the test is named
+    for and passed until a library version bump moved the count from 5 to 7.
+    The default is now 0.99 and the assertion is zero. The other side: a nonzero
+    count here means the tau funnel has returned and the default is too loose
+    again, not that the tolerance should be raised.
+    """
+    import arviz as az
     y, se, t, bso, ses = _synthetic_panel(slope_panel=1.0, slope_ser=1.0, seed=5)
     idata = sample_convergence(y, se, t, bso, ses,
                                draws=500, tune=1000, chains=2, random_seed=5)
     ndiv = int(idata.sample_stats["diverging"].sum())
-    assert ndiv <= 5, f"too many divergences ({ndiv}); funnel not resolved"
+    assert ndiv == 0, f"{ndiv} divergences at the library default; funnel not resolved"
+    rhat = float(az.rhat(idata, var_names=["tau"])["tau"].values)
+    assert rhat < 1.01, f"tau R-hat {rhat:.4f} exceeds 1.01"
 
 
 def test_summary_keys_and_shapes():

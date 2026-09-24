@@ -126,7 +126,7 @@ def main() -> None:
     # -----------------------------------------------------------------------
     # 1. Load and join
     # -----------------------------------------------------------------------
-    counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     names = counts.attrs.get("names", {})
     # A few site numbers appear twice (16-L-1, 16-L-3, 16-N-6). Collapse
     # duplicate assemblage ids by summing counts so the index is unique and
@@ -135,7 +135,7 @@ def main() -> None:
     if not counts.index.is_unique:
         counts = counts.groupby(level=0).sum()
     n_dup_collapsed = n_before - len(counts)
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, unmatched = join_pfg_to_lmv(counts, lmv)
     matched = joined.dropna(subset=["Easting", "Northing"]).copy()
     type_cols = list(counts.columns)
@@ -181,7 +181,7 @@ def main() -> None:
     # -----------------------------------------------------------------------
     # Ordinal axis decision (HONEST DATA NOTE)
     # -----------------------------------------------------------------------
-    # The brief named data/raw/pfg-cpl-frequency.csv Seriation_Number as the
+    # The brief named data/raw/pfg-cpl-frequency.xlsx Seriation_Number as the
     # primary ordinal axis "203 assemblages". Inspection shows that file is the
     # IDSS minmax-graph solution table from Lipo, Madsen & Dunnell (2015): 102
     # numbered ordering-positions over only 12 UNIQUE decorated assemblages
@@ -193,8 +193,8 @@ def main() -> None:
     # ordinal trajectory axis for the 258 sites. This was the brief's named
     # validation axis; we promote it to the working axis because the seriation
     # file is unusable as a 258-site axis. Both choices are documented.
-    cpl = pd.read_csv(
-        DATA / "raw" / "pfg-cpl-frequency.csv"
+    cpl = pd.read_excel(
+        DATA / "raw" / "pfg-cpl-frequency.xlsx", sheet_name="Sheet1"
     ).dropna(subset=["Assemblage"])
     cpl_type_cols = [
         c for c in cpl.columns if c not in ("Seriation_Number", "Assemblage")
@@ -213,7 +213,7 @@ def main() -> None:
     emit("## 2. Ordinal axis (data note)")
     emit()
     emit(
-        "The seriation-frequency file (pfg-cpl-frequency.csv) is the IDSS "
+        "The seriation-frequency file (pfg-cpl-frequency.xlsx) is the IDSS "
         f"solution table: {len(cpl)} numbered ordering positions over only "
         f"{n_unique_cpl} unique decorated assemblages (each repeated, spanning "
         "nearly the full range, constant counts). It cannot supply a single "
@@ -604,7 +604,7 @@ def main() -> None:
 
     series_specs = [
         ("neutral_departure", OKABE["blue"], "Neutral departure"),
-        ("fst", OKABE["orange"], "Cultural $F_{ST}$"),
+        ("fst", OKABE["orange"], "Cultural F_ST"),
         ("spatial_boundary", OKABE["green"], "Spatial boundary excess"),
     ]
     for col, color, label in series_specs:
@@ -871,7 +871,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "empirical_findings.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
+    (OUTPUT / "empirical_findings.md").write_text("\n".join(lines))
 
     # Console: NEUTRAL, no coordinates.
     print("Phase 5 empirical application complete.")

@@ -46,9 +46,12 @@ import geopandas as gpd  # noqa: E402
 import make_figures as mf  # noqa: E402  (house style + DECORATED_TYPES, basin members)
 import make_map as mm  # noqa: E402  (river basemap + river-network distance)
 m33 = importlib.import_module("33_time_aware_emergence")
+res17 = importlib.import_module("17_basin_results")
 m36 = importlib.import_module("36_canonical_phase_map")
 from scipy.stats import mannwhitneyu  # noqa: E402
 from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
+from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 
 DATA = ROOT / "data"
 OUT_MD = ROOT / "output" / "basin_pullout.md"
@@ -61,13 +64,13 @@ N_CONS = 500
 def load_full():
     """All Mainfort-PFG decorated assemblages with coordinates, WITHOUT the
     drainage-basin restriction (the inverse of make_figures._load_curated)."""
-    cur = pd.read_csv(DATA / "raw" / "mainfort-pfg-cpl.csv").dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     type_cols = [c for c in mf.DECORATED_TYPES if c in cur.columns]
     counts = cur[type_cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
     counts = counts[counts.sum(axis=1) > 0]
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     coords = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(
@@ -127,7 +130,15 @@ def main():
     pk = m33.parkin_index(names)
     lon, lat = coords[:, 1], coords[:, 0]
 
-    ca1, _, _ = mf.correspondence_axis(counts)
+    # Oriented against the pooled 14C medians rather than taken from the raw
+    # CA1, whose sign is arbitrary. On this 55-assemblage set the raw axis
+    # already happens to point the right way (Spearman(raw, oriented) = +1.000
+    # measured 2026-09-04), so this changes no number today. It is not left to
+    # luck: `ranks` sets the time axis sample_time_transgressive draws against,
+    # and the identical construction in 33, 34, 54 and 56 WAS reversed on the
+    # 29-assemblage basin set, which flipped a reported conclusion (3379a82,
+    # 9b8673d).
+    ca1 = res17.oriented_ca(counts_df)[0].to_numpy(float)
     order = np.argsort(ca1)
     ranks = np.empty(n)
     ranks[order] = np.linspace(0, 1, n)

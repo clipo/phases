@@ -6,9 +6,9 @@ Neutral pattern report on two datasets. TRANSMISSION level: a correspondence-ana
 
 ### 1. Data and join
 
-- Curated decorated assemblages: 55 rows, 10 decorated types (Parkin_Punctated, Barton/Kent/MPI, Painted, Fortune_Noded, Ranch_Incised, Walls_Engraved, Wallace_Incised, Rhodes_Incised, Vernon_Paul_Applique, Hull_Engraved).
-- Assemblages used for CA: 55.
-- Curated assemblages joined to coordinates (mainfort-pfg-cplXY.txt): 55 / 55.
+- Curated decorated assemblages: 38 rows, 10 decorated types (Parkin_Punctated, Barton/Kent/MPI, Painted, Fortune_Noded, Ranch_Incised, Walls_Engraved, Wallace_Incised, Rhodes_Incised, Vernon_Paul_Applique, Hull_Engraved).
+- Assemblages used for CA: 38.
+- Curated assemblages joined to coordinates (mainfort-pfg-cplXY.txt): 38 / 38.
 - 14C samples: 110 with a provenience; 110 parsed to a 1-sigma calendar midpoint; aggregated to 14 proveniences (mean per provenience).
 - 14C proveniences matched to a curated assemblage: 5 (of 14).
   Provenience -> assemblage (mean 1-sigma calendar AD, n samples):
@@ -20,53 +20,53 @@ Neutral pattern report on two datasets. TRANSMISSION level: a correspondence-ana
 
 ### 2. CA seriation axis and 14C anchor
 
-- CA first non-trivial axis carries 0.479 of total inertia (the seriation ordinate; larger = later after orientation).
-- Orientation: Spearman(CA ordinate, 14C mean date) on the 5 dated assemblages = +0.500 (p = 0.391); axis kept (already increasing with time).
-- Coarse linear CA->calendar map (for reporting only): AD = 1516 + 53.9 * CA_ordinate (n=5 anchors).
+- CA first non-trivial axis carries 0.441 of total inertia (the seriation ordinate; larger = later after orientation).
+- Orientation: Spearman(CA ordinate, 14C mean date) on the 5 dated assemblages = +0.500 (p = 0.391); axis FLIPPED so increasing ordinate = later.
+- Coarse linear CA->calendar map (for reporting only): AD = 1514 + 36.3 * CA_ordinate (n=5 anchors).
 
 ### 3. Spatial clustering of curated assemblages (k-means)
 
-- Silhouette by k: k=2:0.545, k=3:0.502, k=4:0.540, k=5:0.577, k=6:0.546; chosen k = 5.
-- Cluster sizes: c0:13, c1:11, c2:14, c3:4, c4:13.
-- Parkin cluster: c1.
+- Silhouette by k: k=2:0.468, k=3:0.413, k=4:0.502, k=5:0.561, k=6:0.516; chosen k = 5.
+- Cluster sizes: c0:10, c1:10, c2:12, c3:3, c4:3.
+- Parkin cluster: c0.
 
 ### 4. Four signatures along the CA axis
 
 Curated assemblages with coordinates binned into 6 ordered windows along the CA ordinate (bin 0 = earliest).
 
 Bins (ca_bin, n assemblages, n clusters, CA range):
-- bin 0: n=10, clusters=4, CA [-1.785, -0.842]
-- bin 1: n=9, clusters=3, CA [-0.816, -0.560]
-- bin 2: n=9, clusters=5, CA [-0.543, -0.133]
-- bin 3: n=9, clusters=4, CA [-0.112, +0.043]
-- bin 4: n=9, clusters=4, CA [+0.088, +0.211]
-- bin 5: n=9, clusters=2, CA [+0.256, +0.404]
+- bin 0: n=7, clusters=3, CA [-1.876, -0.934]
+- bin 1: n=6, clusters=4, CA [-0.827, -0.617]
+- bin 2: n=6, clusters=3, CA [-0.511, -0.159]
+- bin 3: n=6, clusters=3, CA [-0.159, +0.047]
+- bin 4: n=6, clusters=2, CA [+0.055, +0.200]
+- bin 5: n=7, clusters=1, CA [+0.228, +0.398]
 
 | ca_bin | neutral_departure | fst | spatial_boundary | sig2_n_groups |
 |---|---|---|---|---|
-| 0 | 1.1360 | 0.0606 | -2.720 | 18 |
-| 1 | 1.0434 | 0.0235 | -4.198 | 19 |
-| 2 | 0.6268 | 0.1306 | -8.113 | 11 |
-| 3 | 0.1968 | 0.0109 | -2.786 | 26 |
-| 4 | 0.2399 | 0.0189 | 1.457 | 32 |
-| 5 | 0.3047 | 0.0140 | 7.811 | 32 |
+| 0 | 0.8831 | 0.0089 | -7.737 | 14 |
+| 1 | 1.1447 | 0.0815 | 35.519 | 7 |
+| 2 | 1.0061 | 0.1019 | 60.838 | 6 |
+| 3 | 0.0949 | 0.0302 | 19.890 | 9 |
+| 4 | 0.3132 | 0.0086 | 44.516 | 11 |
+| 5 | 0.5548 | nan | -3.738 | 11 |
 
 Signature 2 (IDSS n_groups) is reported per bin where the bin is tractable (3-14 assemblages); it is NOT entered into the convergence score (it is a count of co-seriable groups, not a continuous magnitude, and bins above 14 are intractable).
 
 Per-signature trend along the CA axis. OLS slope per bin (positive = rising toward later/contact), Spearman rank correlation with the ordered bin index, and monotonicity:
 
-- neutral_departure: slope = -0.19992 (over 6 bins); Spearman rho = -0.771 (p = 0.072); monotone = False
-- fst: slope = -0.01047 (over 6 bins); Spearman rho = -0.657 (p = 0.156); monotone = False
-- spatial_boundary: slope = +2.14117 (over 6 bins); Spearman rho = +0.600 (p = 0.208); monotone = False
-- convergence_score: slope = -0.11490; Spearman rho = -0.486 (p = 0.329) (over 6 complete bins).
+- neutral_departure: slope = -0.14421 (over 6 bins); Spearman rho = -0.600 (p = 0.208); monotone = False
+- fst: slope = -0.00520 (over 5 bins); Spearman rho = -0.300 (p = 0.624); monotone = False
+- spatial_boundary: slope = +0.17241 (over 6 bins); Spearman rho = +0.143 (p = 0.787); monotone = False
+- convergence_score: slope = -0.09596; Spearman rho = -0.100 (p = 0.873) (over 5 complete bins).
 
 ### 5. Parkin link (transmission level)
 
-- Parkin CA ordinate = +0.210, rank 45/55 along the (oriented) axis => **late**.
-- Parkin mapped to calendar (coarse): AD 1527.
+- Parkin CA ordinate = +0.228, rank 32/38 along the (oriented) axis => **late**.
+- Parkin mapped to calendar (coarse): AD 1522.
 - Parkin 14C mean date: AD 1459.
-- Parkin neighborhood (spatial cluster c1): 11 assemblages.
-- Signature 2 in Parkin's neighborhood: 20 co-seriable groups; Parkin belongs to 7 (multi-membership / bridge = True).
+- Parkin neighborhood (spatial cluster c0): 10 assemblages.
+- Signature 2 in Parkin's neighborhood: 18 co-seriable groups; Parkin belongs to 5 (multi-membership / bridge = True).
 
 ## Settlement level (broad PFG/LMV set)
 
@@ -107,14 +107,14 @@ Per-signature trend along the CA axis. OLS slope per bin (positive = rising towa
 
 Trend labels use both the OLS slope sign and the Spearman rank correlation; with only a handful of bins these are descriptive, not inferential.
 
-- Neutral departure: slope -0.19992, Spearman rho -0.771 -> **downward but non-monotone**.
-- Cultural F_ST: slope -0.01047, Spearman rho -0.657 -> **downward but non-monotone**.
-- Spatial boundary excess: slope +2.14117, Spearman rho +0.600 -> **upward but non-monotone**.
-- Convergence score: slope -0.11490, Spearman rho -0.486 -> **downward (non-monotone)**.
+- Neutral departure: slope -0.14421, Spearman rho -0.600 -> **downward but non-monotone**.
+- Cultural F_ST: slope -0.00520, Spearman rho -0.300 -> **downward but non-monotone**.
+- Spatial boundary excess: slope +0.17241, Spearman rho +0.143 -> **flat / non-trending**.
+- Convergence score: slope -0.09596, Spearman rho -0.100 -> **flat / non-trending**.
 
-- Of the 3 continuous signatures: 1 trend upward toward later, 0 flat/non-trending, 2 downward. Convergence-score slope -0.11490 (rho -0.486).
-- CA<->14C: Spearman +0.500 on 5 anchors (p 0.391); CA axis already time-ordered.
-- Parkin (transmission): CA position rank 45/55 (late); 14C AD 1459; Signature-2 bridge status as reported in section 5.
+- Of the 3 continuous signatures: 0 trend upward toward later, 1 flat/non-trending, 2 downward. Convergence-score slope -0.09596 (rho -0.100).
+- CA<->14C: Spearman +0.500 on 5 anchors (p 0.391); CA axis oriented by flipping.
+- Parkin (transmission): CA position rank 32/38 (late); 14C AD 1459; Signature-2 bridge status as reported in section 5.
 - Parkin (settlement): mound present True, ditch coded False (see data note), height 23 ft.
 - Settlement system: mound % = 90.2, ditch % = 0.0, mound-area rank-size slope = -1.04, primacy = 1.00, largest = 20-M-5.
 

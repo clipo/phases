@@ -1,44 +1,44 @@
 # Generator diagnostic: is 'only F_ST' a record property or a generator artifact?
 
-Real config: n = 29, K = 10 types, k = 3 spatial clusters, 6 bins, rarefied to 50. 60 seeds. Entries are mean Spearman rho of the signature vs ordinal position (emergence should drive the channel's signature toward +1).
+Real config: n = 28, K = 10 types, k = 2 spatial clusters, 6 bins, rarefied to 50. 60 seeds. Entries are mean Spearman rho of the signature vs ordinal position (emergence should drive the channel's signature toward +1).
 
 ## Generator A: spatial divergence+conformity (F_ST channel)
 
 | s | neutral | seriability | fst | spatial |
 |---|---|---|---|---|
-| 0.0 | +0.42 | +0.09 | -0.51 | +0.03 |
-| 0.4 | +0.33 | +0.21 | +0.11 | +0.04 |
-| 0.8 | -0.62 | +0.31 | +0.76 | +0.17 |
+| 0.0 | +0.05 | -0.06 | +0.01 | -0.02 |
+| 0.4 | +0.00 | -0.17 | +0.54 | +0.03 |
+| 0.8 | -0.69 | -0.15 | +0.96 | -0.01 |
 
-- Largest response (rho at s=0.8 minus s=0): **fst** (+1.27). Per-signature response: neutral -1.04, seriability +0.22, fst +1.27, spatial +0.14.
+- Largest response (rho at s=0.8 minus s=0): **fst** (+0.95). Per-signature response: neutral -0.74, seriability -0.09, fst +0.95, spatial +0.01.
 
 ## Generator B: single-pool conformity (neutral channel)
 
 | s | neutral | seriability | fst | spatial |
 |---|---|---|---|---|
-| 0.0 | +0.41 | +0.04 | -0.46 | +0.16 |
-| 0.4 | -0.73 | +0.19 | -0.43 | +0.12 |
-| 0.8 | -0.67 | +0.32 | -0.49 | +0.07 |
+| 0.0 | +0.12 | -0.07 | +0.16 | -0.01 |
+| 0.4 | -0.81 | -0.13 | +0.00 | +0.01 |
+| 0.8 | -0.61 | -0.15 | -0.05 | -0.06 |
 
-- Largest response (rho at s=0.8 minus s=0): **seriability** (+0.28). Per-signature response: neutral -1.08, seriability +0.28, fst -0.03, spatial -0.09.
+- Largest response (rho at s=0.8 minus s=0): **spatial** (-0.04). Per-signature response: neutral -0.73, seriability -0.08, fst -0.21, spatial -0.04.
 
 ## Generator C: social non-spatial divergence (seriation channel)
 
 | s | neutral | seriability | fst | spatial |
 |---|---|---|---|---|
-| 0.0 | +0.48 | +0.18 | -0.48 | +0.01 |
-| 0.4 | +0.39 | +0.07 | -0.28 | +0.08 |
-| 0.8 | +0.27 | +0.12 | +0.29 | -0.21 |
+| 0.0 | +0.15 | -0.14 | +0.07 | -0.06 |
+| 0.4 | +0.03 | -0.35 | +0.36 | -0.04 |
+| 0.8 | -0.14 | -0.35 | +0.77 | -0.11 |
 
-- Largest response (rho at s=0.8 minus s=0): **fst** (+0.77). Per-signature response: neutral -0.21, seriability -0.06, fst +0.77, spatial -0.23.
+- Largest response (rho at s=0.8 minus s=0): **fst** (+0.69). Per-signature response: neutral -0.29, seriability -0.21, fst +0.69, spatial -0.05.
 
 ## Rarefaction-depth sensitivity (generator A, s = 0.6)
 
 | NRARE | neutral | seriability | fst | spatial |
 |---|---|---|---|---|
-| 50 | +0.08 | +0.14 | +0.59 | +0.03 |
-| 100 | +0.19 | +0.19 | +0.70 | +0.13 |
-| 150 | +0.26 | +0.24 | +0.78 | +0.16 |
+| 50 | -0.27 | -0.23 | +0.86 | +0.03 |
+| 100 | -0.21 | -0.21 | +0.94 | -0.06 |
+| 150 | -0.23 | -0.23 | +0.96 | -0.14 |
 
 Larger NRARE keeps more rare types; if neutral/seriation climb with depth, their weakness at NRARE=50 is partly a rarefaction-floor artifact, not a record property.
 
@@ -46,9 +46,9 @@ Larger NRARE keeps more rare types; if neutral/seriation climb with depth, their
 
 | k | neutral | seriability | fst | spatial |
 |---|---|---|---|---|
-| 3 | +0.08 | +0.14 | +0.59 | +0.03 |
-| 4 | +0.29 | +0.09 | +0.69 | -0.02 |
-| 5 | +0.21 | +0.17 | +0.68 | +0.19 |
+| 3 | -0.31 | -0.12 | +0.89 | +0.05 |
+| 4 | +0.02 | -0.10 | +0.85 | +0.12 |
+| 5 | -0.28 | -0.25 | +0.87 | -0.05 |
 
 At k=3 the spatial boundary and F_ST summarize one partition; if the spatial signature climbs at k=4,5 its weakness is a low-cluster-count artifact.
 
