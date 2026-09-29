@@ -152,6 +152,28 @@ def main() -> None:
         f"convergent in {len(false_positive_seeds)} runs (false positives)."
     )
     add("")
+    # The rates as posterior quantities (rule 1: the supplement quoted these
+    # intervals with no committed procedure behind them until 2026-09-29).
+    # Each rate is a binomial proportion with a uniform Beta(1, 1) prior, so
+    # its posterior is Beta(hits + 1, misses + 1). The false-positive rate is
+    # per mimic: each mimic is run once per seed, so its denominator is n_seeds.
+    from scipy.stats import beta as _beta
+    lo, hi = _beta.ppf([0.025, 0.975], sensitivity_hits + 1, n_seeds - sensitivity_hits + 1)
+    add(
+        f"Identification rate of genuine emergence: {sensitivity_hits}/{n_seeds}, "
+        f"95 percent credible interval {lo:.2f} to {hi:.2f} (uniform prior)."
+    )
+    for mimic in MIMICS:
+        k = sum(1 for sd in AUDIT_SEEDS
+                if discriminates(run_blind(GENERATORS, seed=sd),
+                                 deriv_threshold=DERIV_THRESHOLD)[mimic]["convergent"]) \
+            if false_positive_seeds else 0
+        up = _beta.ppf(0.975, k + 1, n_seeds - k + 1)
+        add(
+            f"False-identification rate of {mimic}: {k}/{n_seeds}, upper limit of the "
+            f"95 percent credible interval {up:.3f} (uniform prior)."
+        )
+    add("")
     add(
         f"Degenerate runs: {len(degenerate_seeds)}/{n_seeds} "
         f"({sorted(degenerate_seeds) if degenerate_seeds else 'none'}). A run is "

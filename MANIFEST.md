@@ -9,7 +9,7 @@ Which script produces which artifact, and the order they run in.
     .venv/bin/python scripts/build_manifest.py --check   # in CI
 ```
 
-98 scripts produce 185 tracked artifacts.
+100 scripts produce 189 tracked artifacts.
 
 Writes are detected from the call that performs them (`write_text`, `to_csv`, `savefig`, `save_all`, `savez`, `writeLines`, `saveRDS`), with paths resolved through each script's own module-level constants. Reads are deliberately NOT counted: an earlier regex version credited `21_signal_recovery.py` with producing `output/closure_posterior.npz`, which it only consumes and `53` writes.
 
@@ -119,10 +119,12 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 92 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
 | 93 | `analyses/84_phases_as_groups.py` | `output/findings/phases_as_groups.md`<br>`output/phases_as_groups_runs.csv` |
 | 94 | `analyses/85_excess_robustness.py` | `output/findings/excess_robustness.md` |
-| 95 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
-| 96 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
-| 97 | `analyses/89_partition_power.py` | `output/findings/partition_power.md` |
-| 98 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
+| 95 | `analyses/92_relaxations_by_scale.py` | `output/findings/relaxations_by_scale.md` |
+| 96 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
+| 97 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
+| 98 | `analyses/89_partition_power.py` | `figures/figS12_partition_power.svg`<br>`output/findings/partition_power.md`<br>`output/findings/partition_power_records.csv` |
+| 99 | `analyses/91_turnover_sensitivity.py` | `output/findings/turnover_sensitivity.md` |
+| 100 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
 
 ## Artifacts, by path
 
@@ -171,6 +173,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `figures/fig8_ranksize.svg` | `make_figures.py` |
 | `figures/fig9_parkin_pullout.png` | `35_basin_pullout.py` |
 | `figures/fig9_parkin_pullout.svg` | `50_revision_figures.py` |
+| `figures/figS12_partition_power.svg` | `89_partition_power.py` |
 | `figures/figS1_neiman.svg` | `13_neiman_distance_and_fit.py` |
 | `figures/figS2_drift_vs_groups.png` | `25_drift_vs_groups_demo.py` |
 | `figures/figS2_drift_vs_groups.svg` | `50_revision_figures.py` |
@@ -255,6 +258,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/partition_ensemble.md` | `60_partition_ensemble.py` |
 | `output/findings/partition_posterior.md` | `86_partition_posterior.py` |
 | `output/findings/partition_power.md` | `89_partition_power.py` |
+| `output/findings/partition_power_records.csv` | `89_partition_power.py` |
 | `output/findings/partition_sensitivity.md` | `59_partition_sensitivity.py` |
 | `output/findings/perbin_bayesian_fst.md` | `50_perbin_bayesian_fst.py` |
 | `output/findings/phase_partition_ensembles.csv` | `74_phase_partition_test.py` |
@@ -265,6 +269,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/phases_under_drift.csv` | `79_phases_under_drift.py` |
 | `output/findings/phases_under_drift.md` | `79_phases_under_drift.py` |
 | `output/findings/placebo_divisions.md` | `90_placebo_divisions.py` |
+| `output/findings/relaxations_by_scale.md` | `92_relaxations_by_scale.py` |
 | `output/findings/river_network_geometry.md` | `61_river_network_geometry.py` |
 | `output/findings/scale_sweep.csv` | `71_scale_sweep.py` |
 | `output/findings/scale_sweep.md` | `71_scale_sweep.py` |
@@ -273,6 +278,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/spatial_prior_repair.md` | `02_spatial/02_prior_repair.R` |
 | `output/findings/spatial_recovery.md` | `02_spatial/01_recovery.R` |
 | `output/findings/tempo_mode_posterior.md` | `54_tempo_mode_posterior.py` |
+| `output/findings/turnover_sensitivity.md` | `91_turnover_sensitivity.py` |
 | `output/findings/unequal_populations.md` | `64_unequal_populations.py` |
 | `output/generator_diagnostic.md` | `22_generator_diagnostic.py` |
 | `output/hierarchical_convergence.md` | `40_hierarchical_convergence.py` |

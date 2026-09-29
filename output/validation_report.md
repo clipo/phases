@@ -81,6 +81,11 @@ Each cell is the standardized ordinal slope of that signature. A mechanism is co
 
 Across 500 seeds: genuine emergence flagged convergent in 492/500 runs (sensitivity); mimics flagged convergent in 0 runs (false positives).
 
+Identification rate of genuine emergence: 492/500, 95 percent credible interval 0.97 to 0.99 (uniform prior).
+False-identification rate of aggregated_signaling: 0/500, upper limit of the 95 percent credible interval 0.007 (uniform prior).
+False-identification rate of patchiness: 0/500, upper limit of the 95 percent credible interval 0.007 (uniform prior).
+False-identification rate of drift_space: 0/500, upper limit of the 95 percent credible interval 0.007 (uniform prior).
+
 Degenerate runs: 2/500 ([187, 264]). A run is degenerate when a generator produces an ordinal slice on which a signature is undefined, which here means strong conformity fixing a single class so that cultural F_ST has no total diversity to partition. That is the mimic behaving as designed. Such a run cannot be scored as convergent and is reported here rather than folded into the rates above.
 
 No mimic was ever flagged convergent. Specificity is the load-bearing property of the criterion and it holds at 100%.

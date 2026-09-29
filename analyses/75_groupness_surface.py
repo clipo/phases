@@ -17,7 +17,8 @@ That quantity is what an edge would show up in. A boundary between two
 interaction communities is a place where composition changes fast over a short
 distance, so it appears as a ridge in this field. A gradient with no boundaries
 appears as a smooth surface with no ridges. Panel A shows the field alone;
-panel B draws the published phase boundaries on the same field, so the question
+panel B draws the reconstructed phase boundaries (territory edges built from
+Mainfort's assignments as in Figure 1, not lines drawn by the original authors) on the same field, so the question
 "do the boundaries lie on the ridges" is answered by looking, and by the number
 reported beside it.
 
@@ -48,7 +49,7 @@ spatial scale the record leaves what drift produces, and where the phases fall
 on that axis.
 
 WHAT THE MEASUREMENT CANNOT DO, stated because the panels invite more than they
-support. The turnover field is an interpolation between 43 points, so it has no
+support. The turnover field is an interpolation between 28 points, so it has no
 information at scales finer than the spacing between them, and its ridges near
 the edge of the mapped area rest on assemblages on one side only. Points whose
 local weight sum falls below MIN_WEIGHT are masked rather than drawn faint.
@@ -111,6 +112,81 @@ def turnover_field(pts_km, props, gx, gy, bandwidth, min_weight):
     return out.reshape(gx.shape), ok.reshape(gx.shape)
 
 
+def territory_geometry(E, N, ext):
+    """Voronoi cells of the assemblages (UTM metres) and the drawing envelope.
+
+    Territories exactly as Figure 1 builds them, so the phase boundaries drawn
+    here are the same lines the phase map shows, not a second construction.
+    The same geometry builds the alternative partitions' boundaries, so the
+    comparison holds the construction fixed and varies only the labels.
+    Module level since 2026-09-24 so analysis 91 reuses this construction
+    rather than a copy of it.
+    """
+    from shapely.geometry import MultiPoint, Point, box
+    from shapely.ops import unary_union, voronoi_diagram
+    pl = [Point(e, n) for e, n in zip(E, N)]
+    cells = list(voronoi_diagram(MultiPoint(pl),
+                                 envelope=box(ext[0], ext[2], ext[1], ext[3])).geoms)
+    cell_owner = []
+    for c in cells:
+        owner = None
+        for j, q in enumerate(pl):
+            if c.intersects(q):
+                owner = j
+                break
+        cell_owner.append(owner)
+    envelope = unary_union([q.buffer(16_000) for q in pl])
+    return cells, cell_owner, envelope
+
+
+def territory_boundaries(labels, cells, cell_owner, envelope):
+    """Internal boundaries of the territories a labelling induces.
+
+    Only where two territories MEET. The outer envelope is an artefact of
+    where we stopped drawing and is not a boundary of anything.
+    """
+    from shapely.ops import unary_union
+    polys = {}
+    for lab in set(labels):
+        member = [cells[i] for i in range(len(cells))
+                  if cell_owner[i] is not None and labels[cell_owner[i]] == lab]
+        if member:
+            polys[lab] = unary_union(member).intersection(envelope)
+    keys, internal = list(polys), []
+    for a in range(len(keys)):
+        for b in range(a + 1, len(keys)):
+            shared = polys[keys[a]].boundary.intersection(polys[keys[b]].boundary)
+            if not shared.is_empty:
+                internal.append(shared)
+    return unary_union(internal) if internal else None
+
+
+def sample_line(geom, step=1500.0):
+    """Points every `step` metres along the line parts of a geometry."""
+    lines = getattr(geom, "geoms", [geom])
+    pts = []
+    for ln in lines:
+        if ln.geom_type not in ("LineString", "MultiLineString"):
+            continue
+        for sub in getattr(ln, "geoms", [ln]):
+            if sub.length == 0:
+                continue
+            for t in np.arange(0, sub.length, step):
+                q = sub.interpolate(t)
+                pts.append((q.x, q.y))
+    return np.array(pts) if pts else np.empty((0, 2))
+
+
+def read_field_at(field, gx, gy, P):
+    """Field values at points P (UTM metres), finite values only."""
+    if len(P) == 0:
+        return np.array([])
+    ix = np.clip(np.searchsorted(gx[0], P[:, 0]) - 1, 0, gx.shape[1] - 1)
+    iy = np.clip(np.searchsorted(gy[:, 0], P[:, 1]) - 1, 0, gx.shape[0] - 1)
+    v = field[iy, ix]
+    return v[np.isfinite(v)]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--grid", type=int, default=220)
@@ -119,8 +195,6 @@ def main() -> int:
     args = ap.parse_args()
 
     import matplotlib.pyplot as plt
-    from shapely.geometry import MultiPoint, Point, box
-    from shapely.ops import unary_union, voronoi_diagram
     fs = importlib.import_module("figstyle")
     t74 = importlib.import_module("74_phase_partition_test")
     mf = importlib.import_module("make_figures")
@@ -153,63 +227,16 @@ def main() -> int:
     # here are the same lines the phase map shows, not a second construction.
     # The same function builds the alternative partitions' boundaries, so the
     # comparison holds the construction fixed and varies only the labels.
-    pl = [Point(e, n) for e, n in zip(E, N)]
-    cells = list(voronoi_diagram(MultiPoint(pl),
-                                 envelope=box(ext[0], ext[2], ext[1], ext[3])).geoms)
-    cell_owner = []
-    for c in cells:
-        owner = None
-        for j, q in enumerate(pl):
-            if c.intersects(q):
-                owner = j
-                break
-        cell_owner.append(owner)
-    envelope = unary_union([q.buffer(16_000) for q in pl])
+    cells, cell_owner, envelope = territory_geometry(E, N, ext)
 
     def boundaries_of(labels):
-        """Internal boundaries of the territories a labelling induces.
-
-        Only where two territories MEET. The outer envelope is an artefact of
-        where we stopped drawing and is not a boundary of anything.
-        """
-        polys = {}
-        for lab in set(labels):
-            member = [cells[i] for i in range(len(cells))
-                      if cell_owner[i] is not None and labels[cell_owner[i]] == lab]
-            if member:
-                polys[lab] = unary_union(member).intersection(envelope)
-        keys, internal = list(polys), []
-        for a in range(len(keys)):
-            for b in range(a + 1, len(keys)):
-                shared = polys[keys[a]].boundary.intersection(polys[keys[b]].boundary)
-                if not shared.is_empty:
-                    internal.append(shared)
-        return unary_union(internal) if internal else None
-
-    bnd = boundaries_of(list(labels_ph))
-
-    # Where does turnover along those boundaries sit in the field as a whole?
-    def sample(geom, step=1500.0):
-        lines = getattr(geom, "geoms", [geom])
-        pts = []
-        for ln in lines:
-            if ln.geom_type not in ("LineString", "MultiLineString"):
-                continue
-            for sub in getattr(ln, "geoms", [ln]):
-                if sub.length == 0:
-                    continue
-                for t in np.arange(0, sub.length, step):
-                    q = sub.interpolate(t)
-                    pts.append((q.x, q.y))
-        return np.array(pts) if pts else np.empty((0, 2))
+        return territory_boundaries(labels, cells, cell_owner, envelope)
 
     def read_field(P):
-        if len(P) == 0:
-            return np.array([])
-        ix = np.clip(np.searchsorted(gx[0], P[:, 0]) - 1, 0, gx.shape[1] - 1)
-        iy = np.clip(np.searchsorted(gy[:, 0], P[:, 1]) - 1, 0, gx.shape[0] - 1)
-        v = field[iy, ix]
-        return v[np.isfinite(v)]
+        return read_field_at(field, gx, gy, P)
+
+    sample = sample_line
+    bnd = boundaries_of(list(labels_ph))
 
     on_b = read_field(sample(bnd)) if bnd is not None else np.array([])
     bg = field[ok]

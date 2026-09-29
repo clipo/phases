@@ -126,6 +126,26 @@ def main() -> int:
     res_mf = compare(mc.to_numpy(float), midx, t74.km_xy(mco.to_numpy(float)), rev, t74,
                      args.draws, args.alt, 86500)
 
+    def pfmt(p, n):
+        """A probability estimated from n comparisons, with its Monte Carlo resolution when it rounds to 0 or 1.
+
+        "0.00" printed alone reads as an exact zero. It means no (or almost no)
+        comparison among a finite number favored the line, which bounds the
+        probability below about 1/n at this resolution, not at zero (review of
+        2026-09-24).
+        """
+        k = int(round(p * n))
+        if k == 0:
+            return f"**{p:.2f}** (none of {n:,} comparisons; below {1 / n:.1g} at this resolution)"
+        if k == n:
+            return f"**{p:.2f}** (all {n:,} comparisons; above {1 - 1 / n:.5g} at this resolution)"
+        if p < 0.005 or p > 0.995:
+            return f"**{p:.5f}** ({k:,} of {n:,} comparisons)"
+        return f"**{p:.2f}**"
+
+    n_f = args.draws * PER_DRAW
+    n_b = min(args.draws, 500) * 10
+
     def block(title, r, n_sites, groups):
         return [f"## {title}", "",
                 f"{n_sites} sites in {groups} groups. Plug-in F_ST {r['plug_in']:.4f}.", "",
@@ -134,16 +154,16 @@ def main() -> int:
                 f"| median F_ST, same-size divisions around random centers | {r['alt'][0]:.4f} | {r['alt'][1]:.4f} to {r['alt'][2]:.4f} |",
                 f"| median F_ST, same-size divisions made compact | {r['opt'][0]:.4f} | {r['opt'][1]:.4f} to {r['opt'][2]:.4f} |",
                 "",
-                f"- P(phase lines separate the pottery better than a division around random centers | data) = **{r['p_alt']:.2f}**",
-                f"- P(phase lines separate the pottery better than a compact division | data) = **{r['p_opt']:.2f}**", ""] + (
+                f"- P(phase lines separate the pottery better than a division around random centers | data) = {pfmt(r['p_alt'], n_f)}",
+                f"- P(phase lines separate the pottery better than a compact division | data) = {pfmt(r['p_opt'], n_f)}", ""] + (
                 ["Boundary excess at the lines (similarity lost across a line beyond what distance "
                  "predicts, river distance), 500 posterior draws, 10 alternatives of each kind per draw:", "",
                  "| quantity | posterior median | 95% credible interval |", "|---|---|---|",
                  f"| boundary excess at the phase lines (plug-in {r['be_plug']:+.1f}) | {r['be_phase'][0]:+.1f} | {r['be_phase'][1]:+.1f} to {r['be_phase'][2]:+.1f} |",
                  f"| median, same-size divisions around random centers | {r['be_alt'][0]:+.1f} | {r['be_alt'][1]:+.1f} to {r['be_alt'][2]:+.1f} |",
                  f"| median, same-size divisions made compact | {r['be_opt'][0]:+.1f} | {r['be_opt'][1]:+.1f} to {r['be_opt'][2]:+.1f} |", "",
-                 f"- P(larger boundary excess at the phase lines than at a random-center division | data) = **{r['be_p_alt']:.2f}**",
-                 f"- P(larger boundary excess at the phase lines than at a compact division | data) = **{r['be_p_opt']:.2f}**", ""]
+                 f"- P(larger boundary excess at the phase lines than at a random-center division | data) = {pfmt(r['be_p_alt'], n_b)}",
+                 f"- P(larger boundary excess at the phase lines than at a compact division | data) = {pfmt(r['be_p_opt'], n_b)}", ""]
                 if "be_phase" in r else [])
 
     L = ["# The phase-line comparisons as posterior probabilities", "",

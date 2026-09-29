@@ -37,7 +37,7 @@ Boundary excess at the lines (similarity lost across a line beyond what distance
 | median F_ST, same-size divisions made compact | 0.0076 | 0.0053 to 0.0111 |
 
 - P(phase lines separate the pottery better than a division around random centers | data) = **0.27**
-- P(phase lines separate the pottery better than a compact division | data) = **0.00**
+- P(phase lines separate the pottery better than a compact division | data) = **0.00025** (10 of 40,000 comparisons)
 
 Boundary excess at the lines (similarity lost across a line beyond what distance predicts, river distance), 500 posterior draws, 10 alternatives of each kind per draw:
 
