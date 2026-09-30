@@ -343,14 +343,16 @@ def figS4(sets, s, base, co):
 def figS5(sets, s, base):
     """Calibration sweep: every grid cell's partition F_ST against its diversity misfit."""
     calib = _csv("calibration.csv")
-    # Two panels, not three. The 55-assemblage wider-valley set was dropped from
-    # the paper: it mixes deposits of different ages and very different sample
-    # sizes, so a partition F_ST measured across it confounds chronology with
-    # spatial process. The St. Francis basin is the test and southeast Missouri
-    # is the comparison.
-    fig, axes = plt.subplots(1, 2, figsize=(5.0, 2.9), sharey=False)
-    for ax, (region, metric, label) in zip(axes, [("basin", "spatial_fst", "St. Francis basin"),
-                                                  ("cmv", "spatial_fst", "SE Missouri")]):
+    # One panel, the St. Francis basin. The 55-assemblage wider-valley set was
+    # dropped from the paper because it mixes deposits of different ages and
+    # very different sample sizes, so a partition F_ST measured across it
+    # confounds chronology with spatial process. The southeast-Missouri series
+    # was drawn as a second panel until 2026-09-30, when the attempted
+    # extension to that set was cut from the supplement; the calibration rows
+    # for it remain in calibration.csv, and nothing in the manuscript uses them.
+    fig, ax = plt.subplots(1, 1, figsize=(3.4, 2.9))
+    axes = [ax]
+    for ax, (region, metric, label) in zip(axes, [("basin", "spatial_fst", "St. Francis basin")]):
         obs = s["observed"][region][metric]
         ax.axhline(obs, ls="--", color="black", lw=1.2, label="observed")
         for model, color, mk in [(MAIN, GRAY_MAIN, "o"), (ALT, GRAY_ALT, "s")]:
@@ -368,16 +370,15 @@ def figS5(sets, s, base):
         ax.set_xlabel("diversity misfit (root summed squared relative error)", fontsize=7)
         ax.set_ylabel(r"partition $F_{ST}$ (median; 6 seeds unmatched, 50 matched)", fontsize=7)
         ax.text(0.03, 0.03, label, transform=ax.transAxes, fontsize=7.5)
-        panel_label(ax, "AB"[list(axes).index(ax)])
     fig.tight_layout()
-    # One legend below both panels (it covered panel A's points), with a long
-    # enough handle that the dashed "observed" line reads as dashed.
+    # Legend below the panel (inside the axes it covered the points), with a
+    # long enough handle that the dashed "observed" line reads as dashed.
     _h, _l = axes[0].get_legend_handles_labels()
-    fig.legend(_h, _l, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=2,
+    fig.legend(_h, _l, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=1,
                fontsize=6.5, frameon=False, handlelength=3.0)
     save(fig, "figS4_emergence_robustness")
     out = {}
-    for region, metric in [("basin", "spatial_fst"), ("cmv", "spatial_fst")]:
+    for region, metric in [("basin", "spatial_fst")]:
         obs = s["observed"][region][metric]
         for model in (MAIN, ALT):
             f = calib[(calib.region == region) & (calib.model == model) & calib.matched]

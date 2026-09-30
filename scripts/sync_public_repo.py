@@ -48,7 +48,10 @@ MANAGED_ROOT_FILES = ["pyproject.toml", "MANIFEST.md"]
 # order from `output/rerun/order.txt`, which output/* gitignores and the
 # release therefore does not carry, so a reader who ran it would get a script
 # that cannot start. The release's own `run_all.sh` is the reproduction path.
-EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh"}
+# `REVIEW_2026-09-24.md` is a review log, which the policy above keeps private;
+# it sits under docs/manuscript/ and would otherwise be published with it.
+EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh",
+                 "REVIEW_2026-09-24.md"}
 # Left to the release repo: licensing, citation, container, CI, its own README.
 UNMANAGED = {
     "README.md", "LICENSE", "LICENSE-data", "CITATION.cff", ".zenodo.json",
