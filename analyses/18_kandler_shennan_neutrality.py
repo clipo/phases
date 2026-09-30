@@ -1,4 +1,21 @@
-"""18_kandler_shennan_neutrality.py — non-equilibrium neutral-drift test.
+"""
+SUPERSEDED 2026-09-02 by analyses/56_neutrality_ppc.py.
+
+This script sweeps FIXED effective population sizes, takes the 2.5th and 97.5th
+percentiles of the simulated trajectories as a "neutral envelope", and reads the
+result as "the test cannot reject neutral transmission". Under rule 18 that
+framing is removed: the band is a sensitivity envelope read as an acceptance
+region, not a posterior predictive check.
+
+56_neutrality_ppc.py draws the effective size and innovation rate from the
+ABC-SMC posterior instead, which makes it a genuine posterior predictive check,
+and pools across ABC seeds because the posterior median of N moves from 98 to
+263 between them. Pooled result: 6/6 bins inside the 95 percent predictive
+interval, Bayesian predictive p = 0.489.
+
+Kept for provenance and not deleted, because the manuscript cited its result
+until 2026-09-02. Do not regenerate the manuscript from it.
+18_kandler_shennan_neutrality.py — non-equilibrium neutral-drift test.
 
 A time-aware, model-based neutrality test in the spirit of Kandler & Shennan
 (2013): rather than a stationary Ewens-Watterson statistic, it asks whether the

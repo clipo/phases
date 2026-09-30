@@ -23,7 +23,7 @@ from mls_emergence.validation.harness import (
     signatures_over_axis,
 )
 from mls_emergence.validation.mechanisms import (
-    gen_aggregated_conformity,
+    gen_aggregated_signaling,
     gen_drift_space,
     gen_group_emergence,
     gen_patchiness,
@@ -31,15 +31,25 @@ from mls_emergence.validation.mechanisms import (
 
 GENERATORS = {
     "group_emergence": gen_group_emergence,
-    "aggregated_conformity": gen_aggregated_conformity,
+    "aggregated_signaling": gen_aggregated_signaling,
     "patchiness": gen_patchiness,
     "drift_space": gen_drift_space,
 }
 GENUINE = "group_emergence"
 MIMICS = [m for m in GENERATORS if m != GENUINE]
 REPORT_SEED = 42
+# The supplement reports this audit across 500 seeds. The constant had been
+# reduced to 20 at some point without the text following, so the manuscript's
+# "493 of 500" could not be reproduced from the repository. One seed costs
+# about 0.12 s, so 500 is roughly a minute: there was no cost reason for 20.
+# The signature-independence audit below still uses the first 8, which is a
+# separate and much heavier pooled-correlation computation.
 AUDIT_SEEDS = list(range(500))
 DERIV_THRESHOLD = 0.10
+
+# Module-level so scripts/build_manifest.py can see this script writes it (rule 15).
+ROOT = Path(__file__).resolve().parent.parent
+OUT_MD = ROOT / "output" / "validation_report.md"
 
 
 def _mean_offdiag_abs(corr: pd.DataFrame) -> float:
@@ -60,8 +70,15 @@ def main() -> None:
     n_seeds = len(AUDIT_SEEDS)
     sensitivity_hits = 0
     false_positive_seeds: list[int] = []
+    degenerate_seeds: list[int] = []
     for seed in AUDIT_SEEDS:
-        v = discriminates(run_blind(GENERATORS, seed=seed), deriv_threshold=DERIV_THRESHOLD)
+        panels = run_blind(GENERATORS, seed=seed)
+        # A generator may legitimately produce a slice on which a signature is
+        # undefined (strong conformity fixing a single class). Those are counted
+        # and reported rather than scored, so the audit denominator stays honest.
+        if any(p.isna().any().any() for p in panels.values()):
+            degenerate_seeds.append(seed)
+        v = discriminates(panels, deriv_threshold=DERIV_THRESHOLD)
         if v[GENUINE]["convergent"]:
             sensitivity_hits += 1
         for mimic in MIMICS:
@@ -72,7 +89,7 @@ def main() -> None:
     emergence_corr = _pooled_correlation(gen_group_emergence, AUDIT_SEEDS[:8])
     emergence_meanabs = _mean_offdiag_abs(emergence_corr)
     mimic_corrs = {
-        "aggregated_conformity": _pooled_correlation(gen_aggregated_conformity, AUDIT_SEEDS[:8]),
+        "aggregated_signaling": _pooled_correlation(gen_aggregated_signaling, AUDIT_SEEDS[:8]),
         "patchiness": _pooled_correlation(gen_patchiness, AUDIT_SEEDS[:8]),
         "drift_space": _pooled_correlation(gen_drift_space, AUDIT_SEEDS[:8]),
     }
@@ -133,6 +150,38 @@ def main() -> None:
         f"Across {n_seeds} seeds: genuine emergence flagged convergent in "
         f"{sensitivity_hits}/{n_seeds} runs (sensitivity); mimics flagged "
         f"convergent in {len(false_positive_seeds)} runs (false positives)."
+    )
+    add("")
+    # The rates as posterior quantities (rule 1: the supplement quoted these
+    # intervals with no committed procedure behind them until 2026-09-29).
+    # Each rate is a binomial proportion with a uniform Beta(1, 1) prior, so
+    # its posterior is Beta(hits + 1, misses + 1). The false-positive rate is
+    # per mimic: each mimic is run once per seed, so its denominator is n_seeds.
+    from scipy.stats import beta as _beta
+    lo, hi = _beta.ppf([0.025, 0.975], sensitivity_hits + 1, n_seeds - sensitivity_hits + 1)
+    add(
+        f"Identification rate of genuine emergence: {sensitivity_hits}/{n_seeds}, "
+        f"95 percent credible interval {lo:.2f} to {hi:.2f} (uniform prior)."
+    )
+    for mimic in MIMICS:
+        k = sum(1 for sd in AUDIT_SEEDS
+                if discriminates(run_blind(GENERATORS, seed=sd),
+                                 deriv_threshold=DERIV_THRESHOLD)[mimic]["convergent"]) \
+            if false_positive_seeds else 0
+        up = _beta.ppf(0.975, k + 1, n_seeds - k + 1)
+        add(
+            f"False-identification rate of {mimic}: {k}/{n_seeds}, upper limit of the "
+            f"95 percent credible interval {up:.3f} (uniform prior)."
+        )
+    add("")
+    add(
+        f"Degenerate runs: {len(degenerate_seeds)}/{n_seeds} "
+        f"({sorted(degenerate_seeds) if degenerate_seeds else 'none'}). A run is "
+        "degenerate when a generator produces an ordinal slice on which a "
+        "signature is undefined, which here means strong conformity fixing a "
+        "single class so that cultural F_ST has no total diversity to partition. "
+        "That is the mimic behaving as designed. Such a run cannot be scored as "
+        "convergent and is reported here rather than folded into the rates above."
     )
     add("")
     if false_positive_seeds:
@@ -228,9 +277,8 @@ def main() -> None:
         )
     add("")
 
-    out_dir = Path(__file__).resolve().parent.parent / "output"
-    out_dir.mkdir(exist_ok=True)
-    out_path = out_dir / "validation_report.md"
+    OUT_MD.parent.mkdir(exist_ok=True)
+    out_path = OUT_MD
     out_path.write_text("\n".join(lines))
     print(f"Wrote {out_path}")
     print(f"GENUINE convergent: {genuine_ok}; false-positive seeds: {sorted(set(false_positive_seeds))}")

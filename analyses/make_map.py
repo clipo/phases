@@ -81,6 +81,7 @@ from figstyle import save, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL
 warnings.filterwarnings("ignore")
 
 from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.coords import read_assemblage_xy
 from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
 
 DATA = ROOT / "data"
@@ -135,10 +136,17 @@ def _load_broad_sites() -> pd.DataFrame:
 
     Northing/Easting are already UTM Zone 15N (EPSG:26915).
     """
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    # PFGData_sherds.csv is the same table as the tracked PFGData.xlsx
+    # SherdData sheet (266x29, all 28 shared columns identical; the CSV
+    # writes "Old Town Red" where the sheet has a trailing space, which
+    # load_pfg_counts already strips). The CSV is not tracked, so the sheet
+    # is the reproducible source.
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    # Same 3,030 rows as the two LMVData.xlsx zone sheets, which carry those
+    # 18 columns and 44 more. load_lmv reads the workbook.
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
 
@@ -184,7 +192,7 @@ def _load_curated_sites() -> pd.DataFrame:
     The 'lat' column is retained on the returned DataFrame, but basin
     membership is applied by the caller via the drainage rule (_within_drainage).
     """
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     xy["lat"] = pd.to_numeric(xy["Latitude"], errors="coerce")
@@ -462,7 +470,14 @@ def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
 # ---------------------------------------------------------------------------
 # Consistent HydroRIVERS hydrography (shared by Figures 1, 9, 10)
 # ---------------------------------------------------------------------------
-HYDRORIVERS = DATA / "HydroRIVERS_v10_na.gdb.zip"
+# Hydrography source. The full HydroRIVERS North America extract is 70 MB and
+# is NOT tracked, so a clean clone would be unable to draw Figures 1, 9 and 10.
+# scripts/clip_hydrorivers.py writes a 2.6 MB clip of the study area, which is,
+# and that clip is preferred when present. The full source still works for
+# anyone who has it, and the two give the same lines within the figure extents.
+HYDRORIVERS_FULL = DATA / "HydroRIVERS_v10_na.gdb.zip"
+HYDRORIVERS_CLIP = DATA / "Shapefiles" / "hydrorivers_lmv_cmv.gpkg"
+HYDRORIVERS = HYDRORIVERS_CLIP if HYDRORIVERS_CLIP.exists() else HYDRORIVERS_FULL
 
 # Line width (points) per HydroRIVERS flow order. Lower ORD_FLOW = larger river,
 # so the Mississippi (order ~2) reads as the heaviest line and small tributaries

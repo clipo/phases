@@ -81,6 +81,21 @@ def main():
                      f"(lat {coords.loc[site, 'Latitude']:.2f}).")
     L.append("")
 
+    # The two St. Francis-type sites the main text names as excluded by the
+    # drainage rule. They are not in the curated set, so their distances come
+    # from the LMV location table (UTM 15N), measured against the same drainage
+    # union as above (rule 1: the quoted 28 and 80 km need a committed procedure).
+    mf = importlib.import_module("make_figures")
+    lmv = mf.load_lmv(ROOT / "data" / "LMVData_locations.csv")
+    named = lmv[lmv["Name"].isin(["Old Town", "Blanchard"])].dropna(subset=["Easting", "Northing"])
+    npts = gpd.GeoDataFrame(named, geometry=gpd.points_from_xy(named["Easting"], named["Northing"]),
+                            crs=f"EPSG:{UTM}")
+    L.append("St. Francis-type sites outside the curated set that the drainage rule excludes "
+             "(LMV location table, UTM 15N):")
+    for _, r in npts.iterrows():
+        L.append(f"- {r['Name']}: {r.geometry.distance(river_union) / 1000.0:.1f} km from the drainage.")
+    L.append("")
+
     # convergence verdict under the drainage definition (use the 15 km basin)
     L.append("## Convergence verdict under the drainage basin (<= 15 km)")
     L.append("")

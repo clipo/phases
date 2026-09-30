@@ -1,4 +1,4 @@
-# Are the PFG phases real, or spatial-drift artifacts? (n = 29 curated assemblages)
+# Are the PFG phases real, or spatial-drift artifacts? (n = 28 curated assemblages)
 
 Test of whether the within>between decorated-type similarity structure
 underwriting the Parkin phase requires bounded social interaction, or is
@@ -6,18 +6,18 @@ what neutral drift on a spatially structured network produces with no
 groupness (Lipo et al. 2021).
 
 ## Part A. Distance-decay strength
-- Mantel r (BR similarity vs geographic distance): -0.301 (p = 0.0012).
-- Geographic distance alone explains r^2 = 0.09 of the pairwise
+- Mantel r (BR similarity vs geographic distance): -0.322 (p = 0.0004).
+- Geographic distance alone explains r^2 = 0.10 of the pairwise
   ceramic similarity variance. Negative r = closer assemblages are more
   similar, the isolation-by-distance signature.
 
 ## Part B. Excess beyond isolation-by-distance
-- Ceramic communities (greedy modularity on BR graph): 2 communities, modularity Q = 0.057; sizes {0: 16, 1: 13}.
-- Raw within-minus-between BR similarity gap: +44.5 BR units.
-- Distance-CONTROLLED within-minus-between gap (boundary excess): +43.4 BR units.
+- Ceramic communities (greedy modularity on BR graph): 2 communities, modularity Q = 0.045; sizes {0: 16, 1: 12}.
+- Raw within-minus-between BR similarity gap: +41.6 BR units.
+- Distance-CONTROLLED within-minus-between gap (boundary excess): +38.6 BR units.
   Under pure isolation-by-distance this collapses to ~0; a genuine
   interaction boundary leaves a positive excess.
-- Partial Mantel, ceramic distance vs community membership controlling for geography: r = +0.582 (p = 0.0002).
+- Partial Mantel, ceramic distance vs community membership controlling for geography: r = +0.606 (p = 0.0002).
 - Parkin falls in community 0.
 
 ## Part C. Generative spatial-drift null (Lipo et al. 2021)
@@ -28,10 +28,10 @@ innovation 0.01), no imposed boundaries. 95% null interval over
 
 | statistic | observed | null mean | null 95% | obs inside null? |
 |---|---|---|---|---|
-| distance-decay r | -0.301 | -0.510 | [-0.673, -0.291] | yes |
-| modularity Q | +0.057 | +0.215 | [+0.105, +0.348] | NO |
-| boundary excess (BR) | +43.438 | +37.939 | [+18.025, +69.789] | yes |
-| cultural F_ST | +0.043 | +0.112 | [+0.053, +0.192] | NO |
+| distance-decay r | -0.322 | -0.440 | [-0.619, -0.213] | yes |
+| modularity Q | +0.045 | +0.172 | [+0.087, +0.279] | NO |
+| boundary excess (BR) | +38.606 | +36.508 | [+17.835, +60.353] | yes |
+| cultural F_ST | +0.039 | +0.103 | [+0.050, +0.183] | NO |
 
 Interpretation: where observed falls INSIDE the spatial-drift null,
 that aspect of the phase structure is reproduced by neutral drift on

@@ -57,3 +57,33 @@ def test_regression_adjust_shapes_and_subset():
     assert full.shape == res.thetas.shape
     sub = regression_adjust(res, s_obs, param_indices=[0])
     assert sub.shape == (res.thetas.shape[0], 1)
+
+
+def test_bounded_adjustment_stays_inside_the_prior_box():
+    """The support fix (F21). Measured on the real ABC-SMC fit, the unbounded
+    local-linear adjustment put 300/800 innovation rates and 150/800 population
+    sizes below zero. The discriminating probe is the pair: the SAME particles
+    adjusted without bounds must leave the box, or this test is not testing the
+    thing it is named for."""
+    import numpy as np
+    from mls_emergence.inference.abc_smc import SMCResult
+    from mls_emergence.inference.regression import regression_adjust
+
+    rng = np.random.default_rng(0)
+    n, lo, hi = 300, np.array([0.001, 50.0]), np.array([0.05, 1000.0])
+    thetas = rng.uniform(lo, hi, size=(n, 2))
+    # summaries strongly correlated with theta and offset far from s_obs, which
+    # is what makes the local-linear shift a long extrapolation
+    summ = np.column_stack([thetas[:, 0] * 40.0, thetas[:, 1] / 400.0]) + \
+        rng.normal(0, 0.02, (n, 2)) + 3.0
+    res = SMCResult(thetas, np.full(n, 1.0 / n), summ, rng.random(n) + 0.1,
+                    [1.0], [0.5], [n])
+    s_obs = np.array([0.0, 0.0])
+
+    unbounded = regression_adjust(res, s_obs)
+    bounded = regression_adjust(res, s_obs, bounds=(lo, hi))
+
+    n_out = int(((unbounded < lo) | (unbounded > hi)).sum())
+    assert n_out > 0, "probe failed: unbounded adjustment stayed in the box, so this test cannot detect the defect"
+    assert np.all(bounded >= lo) and np.all(bounded <= hi), \
+        f"bounded adjustment left the prior box: {bounded.min(0)}, {bounded.max(0)}"

@@ -21,6 +21,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 from scipy.stats import spearmanr
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -39,14 +41,14 @@ RISE = 0.30  # Spearman threshold for "rising"
 
 def load_curated_full():
     """Curated decorated set WITHOUT the basin latitude filter (whole-LMV, 55)."""
-    cur = pd.read_csv(DATA / "mainfort-pfg-cpl.csv").dropna(
+    cur = read_analysis_matrix().dropna(
         subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     cols = [c for c in DECORATED if c in cur.columns]
     counts = cur[cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
     counts = counts[counts.sum(axis=1) > 0]
-    xy = pd.read_csv(DATA / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     coords = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(pd.to_numeric, errors="coerce")
@@ -129,17 +131,26 @@ def main():
                 conv = all((x is not np.nan and np.isfinite(x) and x > RISE) for x in (rn, rf, rs))
                 any_conv = any_conv or conv
                 kshow = f"{kused}" if kspec == "auto" else f"{kspec}"
-                L.append(f"| {latcut} | {n} | {nb} | {kshow} | {rn:+.2f} | {rf:+.2f} | "
-                         f"{rs:+.2f} | {'YES' if conv else 'no'} |")
+                # An undefined trend is a finding about the design (too few bins
+                # with two or more clusters in them, or too few assemblages per
+                # bin), so it is written out as that and never as "nan".
+                show = lambda v: f"{v:+.2f}" if np.isfinite(v) else "undefined"
+                L.append(f"| {latcut} | {n} | {nb} | {kshow} | {show(rn)} | {show(rf)} | "
+                         f"{show(rs)} | {'YES' if conv else 'no'} |")
+    # The reading is computed from the table, not written in advance: an earlier
+    # version asserted "consistently negative" neutral trends while the table
+    # beside it showed them positive (2026-09-22).
+    n_conv = sum(1 for l in L if l.endswith("| YES |"))
+    n_cells = sum(1 for l in L if l.startswith("| ") and l.rstrip().endswith(("| YES |", "| no |")))
+    neu = [float(l.split("|")[5]) for l in L if l.startswith("| ") and l.split("|")[5].strip()[:1] in "+-"]
     L += ["",
-          f"**Across all {3*3*3} grid cells, convergence (all three continuous signatures "
-          f"rising together) appears in: {'AT LEAST ONE cell' if any_conv else 'NO cell'}.** "
-          "The neutral-departure trend is consistently negative or flat, the F_ST and spatial "
-          "trends are sign-unstable and never jointly positive with neutral, so the no-"
-          "convergence verdict does not depend on the latitude cut, the bin count, or the "
-          "cluster number. Individual signatures (especially F_ST and spatial boundary) do "
-          "flip sign across choices, which is why the manuscript reports them as flat/"
-          "underdetermined rather than as a directional result."]
+          f"**Convergence (all three continuous signatures rising, rho > {RISE:+.1f}) appears in "
+          f"{n_conv} of {n_cells} cells.** Neutral-departure trends run {min(neu):+.2f} to "
+          f"{max(neu):+.2f} across cells. These are raw, unrarefied trends: assemblage size rises "
+          "along the seriation, and the record-matched recovery experiment shows only cultural "
+          "F_ST is interpretable at this resolution, so a cell that converges here is not "
+          "evidence of closure. The grid shows how far raw trends move with the analyst's "
+          "choices of latitude cut, bin count and cluster number."]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")
     print("\n".join(L))

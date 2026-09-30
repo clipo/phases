@@ -6,7 +6,8 @@ site-to-phase assignments of Mainfort (1996: Figure 1; the same scheme appears,
 for a subset of the phases, in Azar & Steponaitis 2022:28). Each Mainfort-PFG
 assemblage is given its Mainfort phase (Parkin, Nodena, Jones Bayou, Tipton,
 Kent, Walls, Parchman); assemblages Mainfort does not place on that map are left
-'unassigned' and drawn as open symbols. The phase territories are a Voronoi
+'unassigned' and are not drawn. Jones Bayou and Tipton have no assemblage with
+coordinates in the matrix, so they appear in the legend but draw no territory. The phase territories are a Voronoi
 partition of the assigned deposits, dissolved by phase and clipped to a loose
 envelope around the sites, giving the bounded phase-territory picture the phase
 concept assumes, the foil for the drift-generated graded membership of Figure 8
@@ -93,6 +94,44 @@ def assign_phases(names, coords=None):
     return np.array([MAINFORT.get(str(nm), "unassigned") for nm in names])
 
 
+def assign_phases_by_territory(names, coords):
+    """Phase label per assemblage, filling Mainfort's gaps by territory.
+
+    Mainfort's map covers 44 of the 55 curated assemblages. The other eleven are
+    not placed outside the phases; they are simply not on his map, several of
+    them because they were collected later (Holden Lake is one of Lipo's 1996-97
+    collections and has no PFG site number). Dropping them would exclude
+    assemblages on the ground the phases claim, which is the ground the test is
+    about.
+
+    So an unmapped assemblage takes the phase of the territory it falls in,
+    where territories are built exactly as Figure 1 builds them: every point
+    belongs to its nearest assemblage, and those areas are merged by phase. The
+    reasoning is the paper's own. A phase is drawn as a bounded area, and the
+    claim under test is that the area was a community. Assemblages inside it
+    therefore belong in the test: if the phase is a community, they should
+    resemble one another, and if it is not, they should not. Leaving them out
+    because a 1996 map did not list them would decide part of the question by
+    omission.
+
+    Returns (labels, derived), where `derived` marks the labels this function
+    supplied rather than Mainfort. Quote the two separately when it matters: a
+    territory label is our construction, not his determination (rule 13).
+    """
+    labels = assign_phases(names)
+    xy = np.asarray(coords, dtype=float)
+    mapped = labels != "unassigned"
+    derived = ~mapped
+    if not mapped.any():
+        return labels, derived
+    for i in np.where(derived)[0]:
+        d = np.hypot((xy[mapped, 0] - xy[i, 0]) * 111.32,
+                     (xy[mapped, 1] - xy[i, 1]) * 111.32
+                     * np.cos(np.radians(xy[i, 0])))
+        labels[i] = labels[mapped][int(np.argmin(d))]
+    return labels, derived
+
+
 def main():
     counts_df, coords_df = m35.load_full()
     names = [str(x) for x in counts_df.index]
@@ -154,6 +193,7 @@ def main():
                 break
         cell_phase.append(ph_here)
     envelope = unary_union([p.buffer(16_000) for p in pts])
+    territory = {}
     for k, ph in enumerate(PHASES):
         member = [cells[c] for c in range(len(cells)) if cell_phase[c] == k]
         if not member:
@@ -163,6 +203,7 @@ def main():
         poly = poly.buffer(-PHASE_GAP_M)
         if poly.is_empty:
             continue
+        territory[ph] = poly
         geoms = poly.geoms if poly.geom_type == "MultiPolygon" else [poly]
         for g in geoms:
             if g.is_empty or g.geom_type != "Polygon":
@@ -180,13 +221,46 @@ def main():
             continue
         ax.scatter(E[m], Nm[m], s=26, c="black", marker=PHASE_MARKER[ph],
                    edgecolor="white", linewidth=0.4, zorder=10)
+    ax.set_xlim(ext[0], ext[1])
+    ax.set_ylim(ext[2], ext[3])
+    # Phase labels. Drawn at the phase's mean position they sat on its own
+    # markers (Parkin's on a deposit, Parchman's over both of its deposits), so
+    # each label goes to the point inside its territory, nearest that mean,
+    # whose text box clears every marker and stays inside the map.
+    fig.canvas.draw()
+    inv = ax.transData.inverted()
+    _r = fig.canvas.get_renderer()
+    # River and state labels already on the map are obstacles too.
+    obstacles = [tx.get_window_extent(_r).transformed(inv) for tx in ax.texts]
     for k, ph in enumerate(PHASES):
         m = lab_idx == k
         if m.sum() == 0:
             continue
-        ax.text(E[m].mean(), Nm[m].mean(), ph, fontsize=8, fontweight="bold",
-                ha="center", va="center", zorder=13, color="black",
-                path_effects=[pe.withStroke(linewidth=2.5, foreground="white")])
+        cx, cy = E[m].mean(), Nm[m].mean()
+        t = ax.text(cx, cy, ph, fontsize=8, fontweight="bold",
+                    ha="center", va="center", zorder=13, color="black",
+                    path_effects=[pe.withStroke(linewidth=2.5, foreground="white")])
+        bb = t.get_window_extent(fig.canvas.get_renderer()).transformed(inv)
+        hw, hh = bb.width / 2 + 1_000.0, bb.height / 2 + 1_000.0
+        poly = territory.get(ph)
+        best = None
+        for gx in np.arange(ext[0] + hw, ext[1] - hw, 1_000.0):
+            for gy in np.arange(ext[2] + hh + 0.08 * (ext[3] - ext[2]),
+                                ext[3] - hh, 1_000.0):
+                if poly is not None and not poly.contains(box(gx - hw, gy - hh, gx + hw, gy + hh)):
+                    continue
+                if np.any((np.abs(E - gx) < hw + 800.0) & (np.abs(Nm - gy) < hh + 800.0)):
+                    continue
+                if any(gx - hw < o.x1 and gx + hw > o.x0 and gy - hh < o.y1 and gy + hh > o.y0
+                       for o in obstacles):
+                    continue
+                d = np.hypot(gx - cx, gy - cy)
+                if best is None or d < best[0]:
+                    best = (d, gx, gy)
+        if best is None:
+            raise SystemExit(f"no clear label position for phase {ph}")
+        t.set_position((best[1], best[2]))
+        obstacles.append(t.get_window_extent(_r).transformed(inv))
     pk = names.index("Parkin")
     ax.scatter([E[pk]], [Nm[pk]], marker="*", s=210, c="white", edgecolor="black",
                linewidth=0.8, zorder=14)
@@ -206,13 +280,16 @@ def main():
               handletextpad=0.4, columnspacing=1.2, labelspacing=0.4,
               borderpad=0.2)
 
-    # 25 km scale bar in the lower-left corner (the lower-right is reserved for
-    # the locator inset).
+    # 25 km scale bar in the upper-left corner, north of every territory. In the
+    # lower-left it crossed the Parchman territory and the Mississippi, and the
+    # lower-right is reserved for the locator inset.
     bar = 25_000.0 / (ext[1] - ext[0])
-    x0, y0 = 0.06, 0.05
-    ax.plot([x0, x0 + bar], [y0, y0], transform=ax.transAxes, color="black", lw=2)
-    ax.text(x0 + bar / 2, y0 + 0.015, "25 km", transform=ax.transAxes,
-            ha="center", va="bottom", fontsize=7)
+    x0, y0 = 0.05, 0.955
+    ax.plot([x0, x0 + bar], [y0, y0], transform=ax.transAxes, color="black", lw=2,
+            zorder=15)
+    ax.text(x0 + bar / 2, y0 + 0.008, "25 km", transform=ax.transAxes,
+            ha="center", va="bottom", fontsize=7, zorder=15,
+            path_effects=[pe.withStroke(linewidth=2.5, foreground="white")])
 
     # North America locator inset, placed in the blank space east of the
     # Mississippi (lower-right of the data axes). Position is taken from the
@@ -227,8 +304,8 @@ def main():
     plt.close(fig)
     counts = {p: int((labels == p).sum()) for p in PHASES}
     basin_phases = {p: int(((labels == p) & is_basin).sum()) for p in PHASES}
-    print("phase counts (all 55):", counts)
-    print("basin-set (29) by phase:", {k: v for k, v in basin_phases.items() if v})
+    print(f"phase counts (all {len(names)} with coordinates):", counts)
+    print(f"basin-set ({int(is_basin.sum())}) by phase:", {k: v for k, v in basin_phases.items() if v})
     print(f"wrote {OUT_FIG}")
 
 

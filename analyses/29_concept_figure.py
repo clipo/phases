@@ -7,12 +7,17 @@ Illustrates the test graphically, from synthetic data matched to the record:
          look like (a blur, like drift).
   Row 2: why the determination cannot be made. Cultural F_ST recovered from
          synthetic assemblages as the strength of group closure rises from 0
-         (drift) to 1 (strong groups), with the detection threshold s* and the
-         observed value marked. Below s* a weak group and pure drift produce the
-         same F_ST at this record's size and time-averaging, so the observed
-         value (in the shaded region) is consistent with both.
+         (drift) to 1 (strong groups), with the observed value and the
+         posterior over injected closure strength marked. The shaded band is
+         the 95 percent credible interval for that strength: it reaches from
+         near zero to moderate closure, so weak closure and pure drift are both
+         consistent with the observation at this record's size and
+         time-averaging. An earlier version drew a hard detection threshold
+         s* = 0.5 here and shaded everything below it; that was a frequentist
+         decision rule, withdrawn under rule 18 and replaced by the posterior
+         that script 53 computes.
 
-Read-only on the manuscript. Writes figures/fig2_concept.png.
+Read-only on the manuscript. Writes figures/fig3_concept.png.
 
 Usage: .venv/bin/python analyses/29_concept_figure.py
 """
@@ -36,9 +41,10 @@ import make_figures as mf  # noqa: E402
 demo = importlib.import_module("25_drift_vs_groups_demo")
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 r21 = importlib.import_module("21_signal_recovery")
+from mls_emergence.signatures.sampling import rarefy  # noqa: E402
 res17 = importlib.import_module("17_basin_results")
 
-OUT = ROOT / "figures" / "fig2_concept.png"
+OUT = ROOT / "figures" / "fig3_concept.png"
 C0 = "#0072B2"   # spatial cluster 0
 C1 = "#D55E00"   # spatial cluster 1
 LEN = 24.0       # calibrated interaction range (km)
@@ -86,7 +92,6 @@ def main():
     cch_c = cch_c[ok]
     binsh = np.asarray(binsh_s[ok].astype(int))
     Narr = counts_df.reindex(have).to_numpy(float).sum(1)
-    real_have = counts_df.reindex(have).to_numpy(float)
     Khave = counts.shape[1]
     s_grid = r21.S_GRID
     means, los, his = [], [], []
@@ -96,22 +101,38 @@ def main():
             rg = np.random.default_rng(1000 + seed)
             grid = r21.emergence_profiles(kk, Khave, float(s), rg)
             M = r21.gen_synth_M(grid, clh, binsh, Narr, rg)
-            Mr = r21.rarefy(M, r21.NRARE, rg)
+            Mr = rarefy(M, r21.NRARE, rg)
             rho = r21.sig_rhos(Mr, clh, binsh, cch_c, which=["fst"])["fst"]
             if np.isfinite(rho):
                 vals.append(rho)
         vals = np.array(vals)
         means.append(vals.mean()); los.append(np.percentile(vals, 2.5)); his.append(np.percentile(vals, 97.5))
     means, los, his = map(np.array, (means, los, his))
-    obs_vals = []
-    for b in range(200):
-        rg = np.random.default_rng(5000 + b)
-        Mr = r21.rarefy(real_have, r21.NRARE, rg)
-        rho = r21.sig_rhos(Mr, clh, binsh, cch_c, which=["fst"])["fst"]
-        if np.isfinite(rho):
-            obs_vals.append(rho)
-    obs_fst = float(np.mean(obs_vals))
-    s_star = 0.5     # detection threshold from the calibrated recovery (Figure 4)
+    # The observed trend comes from the one shared definition in script 21
+    # rather than being recomputed here. This panel used to run its own 200
+    # rarefactions from a different seed and print -0.02 while the main text
+    # printed +0.01: the same statistic, on opposite sides of zero, because its
+    # Monte Carlo error (single-draw SD about 0.26) swamps its magnitude.
+    trend = r21.empirical_fst_trend()
+    # The RAREFACTION spread, not the Monte Carlo interval of the mean. This
+    # panel used to shade the latter, which is about thirty times narrower and
+    # made an unresolved trend look resolved; CLAUDE.md rule 6 is explicit that
+    # the spread across draws, not the precision of their average, is what
+    # belongs next to this number.
+    obs_fst, obs_lo, obs_hi = trend["mean"], trend["p_lo"], trend["p_hi"]
+
+    # The withdrawn apparatus drew a hard "detection threshold s* = 0.50" here
+    # and shaded everything below it as unresolvable. That is a frequentist
+    # decision rule and rule 18 removed it; script 53 replaced it with a
+    # posterior over the injected closure strength, which is what this panel
+    # now shows.
+    # Same staleness guard as Figure 4; see 53.load_posterior.
+    post = importlib.import_module("53_closure_strength_posterior").load_posterior()
+    s_fine, p_w1 = post["s_grid"], post["post_w1"]
+    cdf_w1 = np.cumsum(p_w1) / p_w1.sum()
+    s_med = float(np.interp(0.5, cdf_w1, s_fine))
+    s_lo = float(np.interp(0.025, cdf_w1, s_fine))
+    s_hi = float(np.interp(0.975, cdf_w1, s_fine))
 
     # ---- figure ----------------------------------------------------------- #
     plt.rcParams.update({"font.family": "sans-serif",
@@ -142,27 +163,33 @@ def main():
 
     # recovery panel spanning the bottom row
     axr = fig.add_subplot(gs[1, :])
-    ymin = float(min(los.min(), obs_fst)) - 0.05
-    ymax = float(max(his.max(), 0.0)) + 0.20          # headroom for the annotation
+    # The observed band is the rarefaction spread now, which is far wider than
+    # the Monte Carlo interval it replaced, so the limits have to admit it or
+    # the band is silently clipped.
+    ymin = float(min(los.min(), obs_lo)) - 0.05
+    ymax = float(max(his.max(), obs_hi, 0.0)) + 0.20  # headroom for the annotation
     axr.set_ylim(ymin, ymax)
     axr.set_xlim(0, 1)
-    axr.axvspan(0, s_star, color="#cccccc", alpha=0.40, zorder=0)
+    # Credible interval for the injected closure strength given the observation.
+    axr.axvspan(s_lo, s_hi, color="#cccccc", alpha=0.40, zorder=0)
     axr.fill_between(s_grid, los, his, color=C1, alpha=0.20, zorder=1)
     axr.plot(s_grid, means, color=C1, lw=1.8, zorder=2,
-             label="F_ST signal recovered from synthetic groups")
+             label="$F_{ST}$ trend recovered from synthetic groups")
     axr.axhline(obs_fst, color="black", lw=1.4, ls="--", zorder=3,
-                label=f"observed F_ST signal ({obs_fst:+.02f})")
-    axr.axvline(s_star, color="#444444", lw=1.0, ls=":", zorder=3)
-    # annotation high in the shaded (below-resolution) region, clear of the curve
-    axr.text(s_star / 2, ymax - 0.02,
-             "below resolution:\nweak group and drift\nare indistinguishable",
+                label=f"observed trend ({obs_fst:+.03f}; shaded band is the "
+                      f"2.5th-97.5th rarefaction percentiles)")
+    axr.fill_between([0, 1], obs_lo, obs_hi, color="black", alpha=0.12, zorder=2,
+                     linewidth=0)
+    axr.axvline(s_med, color="#444444", lw=1.0, ls=":", zorder=3)
+    axr.text((s_lo + s_hi) / 2, ymax - 0.02,
+             "closure strengths consistent\nwith the observation\n"
+             f"(95% credible interval {s_lo:.2f}-{s_hi:.2f})",
              ha="center", va="top", fontsize=6.5, color="#333333")
-    # threshold label just right of the s* line, near the bottom, clear of the curve
-    axr.text(s_star + 0.015, ymin + 0.03, f"detection threshold s* = {s_star:.2f}",
+    axr.text(s_med + 0.015, ymin + 0.03, f"posterior median s = {s_med:.2f}",
              ha="left", va="bottom", fontsize=6.5, color="#333333")
     axr.set_xlabel("strength of group closure injected into synthetic assemblages "
                    "(0 = drift, 1 = strong bounded groups)")
-    axr.set_ylabel("recovered F_ST trend (Spearman rho)")
+    axr.set_ylabel("recovered $F_{ST}$ trend (Spearman rho)")
     # legend below the panel so it cannot overlap the curve or the annotations
     axr.legend(fontsize=6.5, frameon=False, loc="upper center",
                bbox_to_anchor=(0.5, -0.28), ncol=2)
@@ -171,7 +198,10 @@ def main():
 
     from figstyle import save_all
     save_all(fig, OUT)
-    print(f"s* = {s_star:.2f}; observed F_ST trend = {obs_fst:+.3f}; "
+    print(f"observed F_ST trend = {obs_fst:+.4f} "
+          f"[{obs_lo:+.4f}, {obs_hi:+.4f}] over {trend['n_draws']} rarefactions "
+          f"(single-draw SD {trend['sd']:.3f}); closure-strength posterior median "
+          f"{s_med:.2f}, 95% interval [{s_lo:.2f}, {s_hi:.2f}]; "
           f"recovered at s=0.5 = {means[np.argmin(abs(s_grid - 0.5))]:+.3f}")
     print(f"wrote {OUT}")
 

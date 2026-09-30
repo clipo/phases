@@ -91,8 +91,17 @@ def fit_target(obs, sl, n_particles, n_rounds, seed):
     result = abc_smc(prior_sampler, prior_logpdf, make_simulator(K),
                      summ, distance, s_obs,
                      n_particles=n_particles, n_rounds=n_rounds, seed=seed)
-    adj = regression_adjust(result, s_obs)   # (n_particles, 4)
-    return result, adj[:, 1]                  # column 1 = b
+    # bounds= keeps the local-linear adjustment inside the prior box; without
+    # it 300/800 innovation rates and 150/800 population sizes went negative
+    # (measured 2026-09-02). See docs/CODE_REVIEW_2026-08-31.md F21.
+    adj = regression_adjust(result, s_obs, bounds=(PRIOR_LO, PRIOR_HI))
+    # Return the FULL adjusted particle set, not only the bias column. The
+    # posterior is joint over (mu, b, N, w) and the population size N is needed
+    # by analyses/55_neutrality_ppc.py to turn the Kandler-Shennan neutral
+    # envelope into a genuine posterior predictive check rather than a sweep
+    # over fixed values of N. Saving only the b marginal discarded information
+    # this function had already computed (added 2026-09-02).
+    return result, adj[:, 1], adj
 
 
 def _summarize(result, adj_b):
@@ -110,9 +119,9 @@ def main(fast=False):
     obs, counts = load_obs()
     K = obs.shape[1]
 
-    r_all, b_all = fit_target(obs, slice(None), seed=101, **cfg)
-    r_e, b_e = fit_target(obs, slice(0, 3), seed=102, **cfg)
-    r_l, b_l = fit_target(obs, slice(3, 6), seed=103, **cfg)
+    r_all, b_all, adj_all = fit_target(obs, slice(None), seed=101, **cfg)
+    r_e, b_e, _ = fit_target(obs, slice(0, 3), seed=102, **cfg)
+    r_l, b_l, _ = fit_target(obs, slice(3, 6), seed=103, **cfg)
 
     mean, lo, hi, p_pos, post_sd, draws_all = _summarize(r_all, b_all)
     _, e_lo, e_hi, _, _, draws_e = _summarize(r_e, b_e)
@@ -144,7 +153,12 @@ def main(fast=False):
          f"- Simulations per round: {r_all.n_sims}.", ""]
 
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
-    np.savez(OUT_NPZ, post_b=draws_all, early=draws_e, late=draws_l)
+    # Full joint posterior alongside the bias marginal. PARAM_NAMES documents
+    # the column order so a consumer cannot mis-index it.
+    np.savez(OUT_NPZ, post_b=draws_all, early=draws_e, late=draws_l,
+             joint_all=adj_all, weights_all=r_all.weights,
+             param_names=np.array(["mu", "b", "N", "w"]),
+             prior_lo=PRIOR_LO, prior_hi=PRIOR_HI)
     print(f"wrote {OUT_MD}")
     print("\n".join(L))
 

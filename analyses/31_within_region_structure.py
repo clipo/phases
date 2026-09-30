@@ -14,7 +14,7 @@ Bottom: observed between-cluster F_ST for each region against the 95% nulls from
 neutral spatial-drift model and a bounded-groups model run on the real
 coordinates (time-averaged, rarefied to the observed counts).
 
-Read-only on the manuscript. Writes figures/fig11_within_region.png.
+Read-only on the manuscript. Writes figures/figS8_within_region.png.
 
 Usage: .venv/bin/python analyses/31_within_region_structure.py
 """
@@ -38,7 +38,7 @@ import make_figures as mf  # noqa: E402
 demo = importlib.import_module("25_drift_vs_groups_demo")
 g26 = importlib.import_module("26_cmv_phase_groupness")
 
-OUT = ROOT / "figures" / "fig11_within_region.png"
+OUT = ROOT / "figures" / "figS8_within_region.png"
 C_DRIFT = "#0072B2"
 C_GROUP = "#D55E00"
 LEN, MB = 24.0, 0.02

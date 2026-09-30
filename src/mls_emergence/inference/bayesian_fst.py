@@ -1,7 +1,8 @@
 """Bayesian cultural F_ST for the decorated-ceramic clusters (Balding-Nichols).
 
-This mirrors the hyperlocality project's ``src/bayes.py`` so the two papers use
-the same basic model, adapted to the mls-emergence data. It replaces the earlier
+The implementation follows a sibling project's (``../mataa``, a Rapa Nui study)
+so that the two use the same estimator. **Method provenance only: no Rapa Nui
+data enters this analysis.** Adapted here to the mls-emergence data. It replaces the earlier
 non-centered Dirichlet-multinomial (which put an informative prior on the
 concentration and sampled the full per-group simplex, producing a low-F_ST
 funnel) with the standard population-genetics parameterization.
@@ -17,8 +18,18 @@ signature). For one locus with K decorated classes across G spatial clusters:
 F_ST is a model PARAMETER estimated directly, with a FLAT prior on F_ST itself
 (so the prior does not push the estimate toward the drift level the paper reports).
 The per-cluster frequencies are marginalized analytically inside the
-Dirichlet-multinomial, so the sampler sees only F and pi: this is well
-conditioned and needs no funnel-taming ``target_accept``.
+Dirichlet-multinomial, so the sampler sees only F and pi.
+
+WHAT "well conditioned" DOES AND DOES NOT COVER (F9). Marginalizing the
+simplexes removes the funnel that the earlier non-centered parameterization had,
+and that is what was checked: the fits reported in analyses 43 and 44 run with
+`target_accept = 0.9` at R-hat below 1.01 with zero divergences. It does NOT
+address the geometry at the panmixia boundary, where `a = (1 - F) / F` diverges
+as F approaches zero and the likelihood flattens; `../mataa` records that ridge
+as a known weakness of this same parameterization, and the numerical behavior of
+the Dirichlet-multinomial density out at very large concentration has not been
+measured here (F8). Neither has bitten any reported fit, because the basin
+posterior sits near F = 0.07 and nowhere near the boundary.
 
 Two readouts come out of the one fit:
 
@@ -259,17 +270,51 @@ def _kass_raftery(two_ln_bf: float) -> str:
 
 def bayes_factor_structure(group_counts, *, draws: int = 2000, chains: int = 4,
                            seed: int = 0, f_prior=("uniform",)) -> dict:
-    """Bayes factor for between-cluster structure (M1) vs panmixia (M0).
+    """DEMOTED 2026-09-02. Bayes factor for structure (M1) vs panmixia (M0).
 
-    Fits both models with SMC and returns log marginal likelihoods, log10 BF10,
-    2 ln BF10, the Kass-Raftery label, and the across-chain spread of 2 ln BF10 as
-    a stability check.
+    **Not reported by this project.** Retained runnable for provenance, because
+    `analyses/43` reported it until 2026-09-02, and because the exact-audit
+    route below is the way to revive it if anyone wants to.
+
+    Why it was demoted (F1). `../mataa` computed the same Bayes factors exactly,
+    by closed form for panmixia and grid quadrature for the structured model,
+    and measured the prior dependence directly: for a strong signal the value is
+    stable across four defensible priors and says nothing the posterior does not,
+    while for a NEAR-NULL case the evidence band moves across a Kass-Raftery
+    boundary, spanning 4.48 log units from Uniform(0,1) to Beta(1,10). This is
+    the Lindley-Bartlett effect on a nested boundary comparison and no estimator
+    fixes it. The band is therefore robust where it is not needed and fragile
+    where it would be load-bearing, which is the worst available combination.
+
+    The panmixia null is also far weaker than the question the paper asks. With
+    thousands of sherds, exact panmixia is rejected trivially by any real
+    assemblage set, and spatially structured neutral drift, which is the actual
+    alternative, produces F_ST > 0 and would reject it too.
+
+    What replaced it: the posterior for F itself, with the prior justified by
+    prior predictive (analyses/57) and reported under two priors leaning
+    opposite ways.
+
+    Mechanics, unchanged: fits both models with SMC and returns log marginal
+    likelihoods, log10 BF10, 2 ln BF10, the Kass-Raftery label, and the
+    across-chain spread as a stability check.
     """
     lml1 = _smc_logml(group_counts, structured=True, draws=draws, chains=chains,
                       seed=seed, f_prior=f_prior)
     lml0 = _smc_logml(group_counts, structured=False, draws=draws, chains=chains,
                       seed=seed)
-    m1, m0 = float(lml1.mean()), float(lml0.mean())
+    # Combine per-chain estimates in the Z scale, not the log Z scale (F3).
+    # Each chain gives an estimate of Z, so the pooled estimate of log Z is
+    # log(mean(Z)) = logsumexp(log Z_i) - log(n). Averaging the logs instead
+    # estimates E[log Z], which is smaller by Jensen's inequality and by an
+    # amount that does not cancel between the two models because they have
+    # different posterior geometry.
+    def _log_mean_exp(v):
+        v = np.asarray(v, float)
+        m = v.max()
+        return float(m + np.log(np.mean(np.exp(v - m))))
+
+    m1, m0 = _log_mean_exp(lml1), _log_mean_exp(lml0)
     ln_bf = m1 - m0
     two_ln_bf = 2.0 * ln_bf
     chain_sd = float(2.0 * np.sqrt(lml1.var() / len(lml1) + lml0.var() / len(lml0)))
