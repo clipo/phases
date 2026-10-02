@@ -43,7 +43,7 @@ def main() -> int:
     ca = importlib.import_module("17_basin_results").oriented_ca(counts)[0].reindex(counts.index).to_numpy(float)
     lat = coords["Latitude"].to_numpy(float)
     lon = coords["Longitude"].to_numpy(float)
-    labs, _ = ph.assign_phases_by_territory([str(i) for i in counts.index], coords.to_numpy(float))
+    labs, _ = ph.assign_primary_phases([str(i) for i in counts.index], coords.to_numpy(float))
     r_lat, r_lon = spearmanr(ca, lat)[0], spearmanr(ca, lon)[0]
     X = np.column_stack([np.ones_like(lat), lat, lon])
     b = np.linalg.lstsq(X, ca, rcond=None)[0]

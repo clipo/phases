@@ -6,9 +6,9 @@ Produced by `scripts/measure_datum.py`. Tolerance 10 m (PFG UTMs are rounded to 
 
 | class | all assemblages | basin members | meaning |
 |---|---|---|---|
-| converted | 20 | 16 | file coordinate is PFG's UTM read as NAD83; moved to the NAD27 reading |
+| converted | 19 | 15 | file coordinate is PFG's UTM read as NAD83; moved to the NAD27 reading |
 | near | 11 | 8 | within 100 m of that reading but not within tolerance; derivation not demonstrated; left as recorded |
-| other | 3 | 2 | more than 100 m from PFG's UTM either way; left as recorded |
+| other | 4 | 3 | more than 100 m from PFG's UTM either way; left as recorded |
 | no_pfg_utm | 21 | 2 | no PFG UTM to compare against; left as recorded |
 
 ### Basin members, row by row
@@ -20,7 +20,6 @@ Produced by `scripts/measure_datum.py`. Tolerance 10 m (PFG UTMs are rounded to 
 | Barton_Ranch | 11-O-10 | converted | 0 | 210 | - |
 | Hollywood | 13-O-10 | converted | 0 | 210 | 0 |
 | Castile_Landing | 13-N-21 | converted | 0 | 210 | 0 |
-| Cummins | 11-O-4 | converted | 0 | 210 | 0 |
 | Fortune | 11-N-15 | converted | 0 | 210 | 0 |
 | Irby | 13-P-10 | converted | 0 | 210 | 0 |
 | Neeleys_Ferry | 11-N-4 | converted | 0 | 210 | 0 |
@@ -43,6 +42,7 @@ Produced by `scripts/measure_datum.py`. Tolerance 10 m (PFG UTMs are rounded to 
 | Holden_Lake | nan | no_pfg_utm | - | - | - |
 | Beck | 13-O-7 | other | 639 | 781 | 21719 |
 | Belle_Meade | 13-O-5 | other | 5433 | 5546 | 4747 |
+| Cummins | 11-O-4 | other | 22680 | 22851 | 22680 |
 
 Of the 11 near cases, 8 coincide with Mainfort's own coordinate for the site (`mainfortXY` sheet) within tolerance; those are his points, whose datum is not recorded, and they stand as recorded under the 2026-09-19 ruling on non-PFG coordinates.
 
@@ -52,14 +52,14 @@ Of the 11 near cases, 8 coincide with Mainfort's own coordinate for the site (`m
 
 ## Effect on the basin set
 
-Assemblages moved: 16 of 28, by 209 to 209 m.
+Assemblages moved: 15 of 28, by 209 to 209 m.
 
 | k | same partition? | plug-in F_ST before | after |
 |---|---|---|---|
 | 2 | yes | 0.006240 | 0.006240 |
 | 3 | yes | 0.015590 | 0.015590 |
 | 4 | NO | 0.019438 | 0.018650 |
-| 5 | NO | 0.021422 | 0.020634 |
-| 6 | yes | 0.032704 | 0.032704 |
+| 5 | yes | 0.030720 | 0.030720 |
+| 6 | yes | 0.030959 | 0.030959 |
 
 **The partition or the F_ST changed at some k; every position-dependent result must be rerun and re-read.**

@@ -17,7 +17,7 @@ The seriation-frequency file (pfg-cpl-frequency.xlsx) is the IDSS solution table
 
 ## 3. Spatial clustering (k-means on coordinates)
 
-- Silhouette by k: k=4:0.499, k=5:0.455, k=6:0.427, k=7:0.422, k=8:0.418, k=9:0.397, k=10:0.395.
+- Silhouette by k: k=4:0.500, k=5:0.455, k=6:0.428, k=7:0.423, k=8:0.416, k=9:0.398, k=10:0.397.
 - Chosen k (max silhouette): **4**.
 - Cluster sizes: c0:39, c1:105, c2:31, c3:80.
 - Parkin (11-N-1) cluster: c1.
@@ -41,22 +41,22 @@ Panel (NaN where a signature is undefined for that bin):
 | 3 | 0.1896 | 0.0049 | -19.767 |
 | 4 | 0.8431 | 0.0120 | 21.054 |
 | 5 | 0.8442 | 0.0133 | 20.656 |
-| 6 | 0.6187 | 0.0299 | 22.655 |
+| 6 | 0.6187 | 0.0299 | 23.502 |
 
 Convergence score (z-averaged across the three bin-trajectory signatures; computed on complete bins only):
 
-- phase 2: -0.151
-- phase 3: -1.619
-- phase 4: 0.426
-- phase 5: 0.472
-- phase 6: 0.873
+- phase 2: -0.154
+- phase 3: -1.617
+- phase 4: 0.421
+- phase 5: 0.467
+- phase 6: 0.884
 
 Per-signature trend vs phase ordinal. OLS slope (positive = upward toward contact/A), Spearman rank correlation with the ordinal axis (monotone-trend test, robust to scale), and whether the bin series is monotone:
 
 - neutral_departure: slope = +0.02263 (over 6 bins); Spearman rho = +0.314 (p = 0.544); monotone = False
 - fst: slope = +0.00420 (over 5 bins); Spearman rho = +0.700 (p = 0.188); monotone = False
-- spatial_boundary: slope = +5.31980 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
-- convergence_score: slope = +0.41381; Spearman rho = +0.900 (p = 0.037)
+- spatial_boundary: slope = +5.44078 (over 6 bins); Spearman rho = +0.771 (p = 0.072); monotone = False
+- convergence_score: slope = +0.41612; Spearman rho = +0.900 (p = 0.037)
 
 ## 5. Parkin focus and Signature 2 (decorated seriation)
 
@@ -106,10 +106,10 @@ Trend label uses BOTH the OLS slope sign and the Spearman rank correlation. A si
 
 - Neutral departure: slope +0.02263, Spearman rho +0.314 -> **upward but non-monotone**.
 - Cultural F_ST: slope +0.00420, Spearman rho +0.700 -> **upward but non-monotone**.
-- Spatial boundary excess: slope +5.31980, Spearman rho +0.771 -> **upward but non-monotone**.
-- Convergence score: slope +0.41381, Spearman rho +0.900 -> **upward (monotone)**.
+- Spatial boundary excess: slope +5.44078, Spearman rho +0.771 -> **upward but non-monotone**.
+- Convergence score: slope +0.41612, Spearman rho +0.900 -> **upward (monotone)**.
 
-- Of the 3 bin-trajectory signatures: 3 trend upward toward contact (monotone or not), 0 flat/non-trending, 0 downward. Whether they CONVERGE (co-rise together) is the joint question; the convergence-score slope is +0.41381 (Spearman rho +0.900).
+- Of the 3 bin-trajectory signatures: 3 trend upward toward contact (monotone or not), 0 flat/non-trending, 0 downward. Whether they CONVERGE (co-rise together) is the joint question; the convergence-score slope is +0.41612 (Spearman rho +0.900).
 - Parkin: working-axis phase A (ordinal 6); decorated-seriation position rank 7/12; Signature 2 multi-membership in 5 co-seriable groups (bridge / two-lineage status present).
 - Settlement: rank-size slope -1.03, primacy 1.00, largest site is 20-M-5.
 

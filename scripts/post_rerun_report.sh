@@ -18,6 +18,7 @@ echo "## Checks"; echo '```'
 "$PY" scripts/refresh_si_relaxation_tables.py 2>&1 | tail -1
 "$PY" scripts/build_manifest.py 2>&1 | tail -1
 "$PY" scripts/check_figure_claims.py 2>&1 | tail -8
+"$PY" scripts/check_signs.py 2>&1 | tail -12
 "$PY" -m pytest -q -p no:cacheprovider tests 2>&1 | tail -1
 echo '```'; echo
 for f in output/revision_2026_09/report.md output/findings/scale_sweep.md output/findings/excess_locality.md \

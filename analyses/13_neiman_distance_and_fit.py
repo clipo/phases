@@ -197,10 +197,10 @@ def main():
     # 95% credible interval, from analysis 51. Placed in the empty band right
     # of the scatter, below the one high outlier.
     mA, loA, hiA = _bayes_rank_corr("diversity-distance")
-    axA.text(0.98, 0.72, f"rank correlation\nmedian {mA}\n95% CI [{loA}, {hiA}]",
+    axA.text(0.98, 0.72, f"rank correlation\nmedian {mA}\n95% CrI [{loA}, {hiA}]",
              transform=axA.transAxes, ha="right", va="top", fontsize=7.5)
     axB.plot(bd.index.to_numpy(float), bd.values, "-o", color=OI_BLUE, ms=5, lw=1.3)
-    axB.set_xlabel("CA seriation bin (early to late)")
+    axB.set_xlabel("seriation period (order on CA dimension 1)")
     axB.set_ylabel("mean within-bin distance")
     # Round ticks only: the default locator picks 0.025 steps on these ranges,
     # which scripts/check_figure_claims.py reads as statistics the text never
@@ -211,7 +211,7 @@ def main():
     # Headroom above the two peaks so the annotation sits clear of the line.
     axB.set_ylim(0, 0.30)
     mB, loB, hiB = _bayes_rank_corr("divergence trajectory")
-    axB.text(0.98, 0.98, f"rank correlation\nmedian {mB}\n95% CI [{loB}, {hiB}]",
+    axB.text(0.98, 0.98, f"rank correlation\nmedian {mB}\n95% CrI [{loB}, {hiB}]",
              transform=axB.transAxes, ha="right", va="top", fontsize=7.5)
     save(fig, "figS1_neiman")
 

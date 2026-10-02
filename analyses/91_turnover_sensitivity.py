@@ -21,8 +21,8 @@ B. RECOVERY UNDER THE SAME SAMPLING GEOMETRY. With 28 points and a smoothing
    cannot see a boundary on this geometry and should be read as description.
 
 The boundaries are this study's RECONSTRUCTION: Voronoi territories of the
-assemblages merged by Mainfort's (1996) assignments, exactly as Figure 1 draws
-them (analysis 75's territory_geometry). They are not published lines.
+assemblages merged by their Phillips (1970) phases, exactly as
+36_canonical_phase_map builds them (analysis 75's territory_geometry). They are not published lines.
 
 Output: output/findings/turnover_sensitivity.md
 Usage: .venv/bin/python analyses/91_turnover_sensitivity.py [--grid 160] [--reps 100]
@@ -78,7 +78,7 @@ def main() -> int:
     tr = Transformer.from_crs("EPSG:4326", mm.UTM15N, always_xy=True)
     E, N = (np.asarray(v, float) for v in tr.transform(xy[:, 1], xy[:, 0]))
     pts_km = np.column_stack([E, N]) / 1000.0
-    labels_ph, _ = ph.assign_phases_by_territory(names, xy)
+    labels_ph, _ = ph.assign_primary_phases(names, xy)
     pad = 18_000.0
     ext = (E.min() - pad, E.max() + pad, N.min() - pad, N.max() + pad)
     gx, gy = np.meshgrid(np.linspace(ext[0], ext[1], args.grid), np.linspace(ext[2], ext[3], args.grid))
@@ -102,7 +102,7 @@ def main() -> int:
          f"Produced by `analyses/91_turnover_sensitivity.py`. Basin set, {len(names)} assemblages; "
          f"{args.grid} x {args.grid} grid (analysis 75 uses 220); {len(alt_pts)} same-size alternative "
          "divisions around random centers, built as analysis 75 builds them (seed 75). The boundaries are "
-         "this study's reconstruction of territories from Mainfort's (1996) assignments, not published lines. "
+         "this study's reconstruction of territories from the assemblages' Phillips (1970) phases, not his drawn lines. "
          "Percentile = share of alternatives whose median turnover along their boundaries is below the phase "
          "boundaries'; a boundary between communities would sit high.", "",
          "## A. Bandwidth", "",

@@ -10,15 +10,15 @@ Not a test: no null and no p-value. This locates our partition inside an ensembl
 |---|---|
 | **the k-means partition we use** | **0.0063** [0.0051, 0.0075] |
 | ensemble median | 0.0067 |
-| ensemble 5th to 95th percentile | 0.0007 to 0.0160 |
-| ensemble full range | 0.0002 to 0.0210 |
-| **our partition's position in the ensemble** | **42nd percentile** |
+| ensemble 5th to 95th percentile | 0.0018 to 0.0163 |
+| ensemble full range | 0.0008 to 0.0211 |
+| **our partition's position in the ensemble** | **43rd percentile** |
 
 ## Reading
 
-Our partition sits at the 42nd percentile, which is unremarkable. At this number of clusters the specific partition k-means found is **one draw from a family of equally defensible partitions**, and the F_ST defined on it is not a property the data single out.
+Our partition sits at the 43rd percentile, which is unremarkable. At this number of clusters the specific partition k-means found is **one draw from a family of equally defensible partitions**, and the F_ST defined on it is not a property the data single out.
 
-Combined with M1, where the median moved 0.0258 across k against a data-driven interval width of 0.0025, the picture is that the reported F_ST is set both by **how finely the field is divided** and by **where the cuts fall**: divisions with the same number of groups span 0.0007 to 0.0160 (5th to 95th percentile). A quantity this sensitive to the cutting cannot be read on its own.
+Combined with M1, where the median moved 0.0241 across k against a data-driven interval width of 0.0025, the picture is that the reported F_ST is set both by **how finely the field is divided** and by **where the cuts fall**: divisions with the same number of groups span 0.0018 to 0.0163 (5th to 95th percentile). A quantity this sensitive to the cutting cannot be read on its own.
 
 ## What follows
 

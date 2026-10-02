@@ -136,6 +136,16 @@ def boundary_excess(
     pairs at matched distance, yielding a large positive excess.
 
     Returns the distance-bin-averaged (within - between) BR similarity gap.
+
+    LIMIT (measured 2026-10-02, scripts/probe_library_boundary_excess.py). A
+    bin counts as soon as it holds one within-cluster and one between-cluster
+    pair. On the per-period windows of four to ten assemblages this function
+    is called on, most counted bins hold one or two pairs, and requiring five
+    would change the sign of one call in four to six. The value on such a
+    window is not a resolved estimate. A minimum-pairs rule is not added here
+    because it would empty the bins and return the raw gap below, a different
+    statistic; the phase-line statistic the paper reports
+    (`23_phases_vs_spatial_drift.boundary_excess_labeled`) has the rule.
     """
     counts = np.asarray(counts, float)
     coords = np.asarray(coords, float)

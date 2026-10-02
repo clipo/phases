@@ -20,11 +20,11 @@ Replaces AICc and Akaike weights over four time-series models with the posterior
 
 `mu ~ Normal(0, 0.5)` is centred on zero, which is the paper's own conclusion, so it is sympathetic. A series simulated with a true drift of +0.040 per bin returns **+0.0377** [-0.0111, +0.0772], covering the truth.
 
-A real directional signal is recovered, so a near-zero mu on the diversity trajectory is a statement about the data.
+**The recovery fit did not converge** (R-hat 1.18, minimum ESS 16, 1079 divergences), so the interval above is not a result and the design's ability to resolve a directional series is not established. The near-zero mu on the diversity trajectory is reported as unresolved, not as evidence of no drift.
 
 ## A confound the four-way selection was hiding
 
-The diversity trajectory across the six bins is (0.666, 0.734, 0.590, 0.600, 0.553, 0.460), falling over the second half. Yet mu is not resolved. That is not a failure of the fit: the OU relaxation term, `theta + (anc - theta) exp(-alpha t)`, can produce exactly that change by starting away from the optimum and relaxing toward it, so sustained directional drift and relaxation toward a higher equilibrium compete to explain the same monotone change. With six points the data cannot separate them.
+The diversity trajectory across the six bins is (0.666, 0.734, 0.590, 0.600, 0.553, 0.460), falling over the second half. Yet mu is not resolved. That is not a failure of the fit: the OU relaxation term, `theta + (anc - theta) exp(-alpha t)`, can produce exactly that change by starting away from the optimum and relaxing toward it, so sustained directional drift and relaxation toward a lower equilibrium compete to explain the same monotone change. With six points the data cannot separate them.
 
 **Selecting a single model concealed this.** Reporting that the trajectory 'favours the unbiased random walk' names a winner among four options without saying that two of the underlying behaviours are indistinguishable on this record. The parameter posteriors say it directly: alpha spans BM to Stasis and mu spans both signs, so the defensible claim is that the diversity trajectory is consistent with a random walk and does not exclude either directional change or mean reversion.
 

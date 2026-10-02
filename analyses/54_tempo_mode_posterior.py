@@ -195,7 +195,16 @@ def main(fast=False):
          f"[{rlo:+.4f}, {rhi:+.4f}], "
          f"{'covering the truth' if covered else '**not covering the truth**'}.",
          "",
-         ("A real directional signal is recovered, so a near-zero mu on the "
+         # Coverage by a fit that did not converge is not recovery (rule 17). This
+         # sentence said "a real directional signal is recovered" beside an R-hat
+         # of 1.18 and a minimum ESS of 16 until 2026-10-02.
+         (f"**The recovery fit did not converge** (R-hat {rec['rhat']:.2f}, minimum ESS "
+          f"{rec['ess']:.0f}, {rec['n_div']} divergences), so the interval above is not a "
+          "result and the design's ability to resolve a directional series is not "
+          "established. The near-zero mu on the diversity trajectory is reported as "
+          "unresolved, not as evidence of no drift."
+          if (rec["rhat"] > 1.05 or rec["ess"] < 100) else
+          "A real directional signal is recovered, so a near-zero mu on the "
           "diversity trajectory is a statement about the data."
           if covered else
           "**A real directional signal is not recovered. The near-zero mu is "
@@ -207,7 +216,8 @@ def main(fast=False):
          "is not a failure of the fit: the OU relaxation term, "
          "`theta + (anc - theta) exp(-alpha t)`, can produce exactly that change "
          "by starting away from the optimum and relaxing toward it, so sustained "
-         "directional drift and relaxation toward a higher equilibrium compete "
+         "directional drift and relaxation toward a "
+         + ("lower" if y[-1] < y[0] else "higher") + " equilibrium compete "
          "to explain the same monotone change. With six points the data "
          "cannot separate them.",
          "",

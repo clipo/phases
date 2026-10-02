@@ -20,7 +20,13 @@ pottery at the observed sherd totals. Then treat each simulated record exactly
 as analyses/76_phase_recovery.py treats the real one: cluster the assemblages
 in the joint space of position and chi-square composition, at several weights
 on composition, and score agreement with the published phases by adjusted Rand
-index on the assemblages Mainfort himself assigned.
+index on the assemblages inside a Phillips (1970) phase area.
+
+TWO CLUSTERING METHODS (2026-10-02). The site map alone agrees with Phillips's
+phases at 0.480 by k-means and 0.740 by Ward linkage, so under k-means the
+pottery is needed to reach 0.740 and under Ward it is not. A comparison run
+under k-means alone therefore measures, in part, whether drift pottery
+happens to correct k-means. Both are run on every record, real and simulated.
 
 WHAT THE OUTCOMES WOULD MEAN.
 
@@ -64,6 +70,8 @@ OUT_CSV = ROOT / "output" / "findings" / "phases_under_drift.csv"
 FIG = "fig15_phases_under_drift"
 MODEL = "pooled"
 WEIGHTS = [0.0, 0.1, 0.25, 0.5, 1.0, 2.0, np.inf]
+METHODS = ("kmeans", "ward")
+METHOD_NAME = {"kmeans": "k-means", "ward": "Ward linkage"}
 
 
 def main() -> int:
@@ -85,7 +93,7 @@ def main() -> int:
     names = [str(i) for i in counts.index]
     m_obs = counts.to_numpy(float)
     xy = coords.to_numpy(float)
-    labels_ph, derived = ph.assign_phases_by_territory(names, xy)
+    labels_ph, derived = ph.assign_primary_phases(names, xy)
     mapped = ~np.array([bool(d) for d in derived])
     phases = sorted(set(labels_ph))
     pidx = np.array([phases.index(l) for l in labels_ph])
@@ -106,13 +114,14 @@ def main() -> int:
         tot = m.sum(1, keepdims=True)
         p = m / np.where(tot > 0, tot, 1.0)
         C = t76.unit_scale(t76.composition_features(p, "chisq"))
-        out = []
+        out = {how: [] for how in METHODS}
         for w in WEIGHTS:
             F = G if w == 0 else (C if not np.isfinite(w) else
                                   np.column_stack([G, np.sqrt(w) * C]))
             a = [t76.ari(pidx[mapped], mf._kmeans_labels(F, k, seed=s)[mapped])
                  for s in range(args.seeds)]
-            out.append(float(np.median(a)))
+            out["kmeans"].append(float(np.median(a)))
+            out["ward"].append(t76.ari(pidx[mapped], t76.cluster(F, k, "ward", 0, mf)[mapped]))
         return out
 
     obs = recover(m_obs)
@@ -124,50 +133,62 @@ def main() -> int:
         sims.append(recover(m))
         if (seed + 1) % 25 == 0:
             print(f"  {seed + 1}/{args.reps}", flush=True)
-    sims = np.array(sims)
 
     rows = []
-    for j, w in enumerate(WEIGHTS):
-        d = sims[:, j]
-        rows.append(dict(weight="pottery alone" if not np.isfinite(w) else w,
-                         observed=obs[j], drift_median=float(np.median(d)),
-                         drift_lo=float(np.percentile(d, 2.5)),
-                         drift_hi=float(np.percentile(d, 97.5)),
-                         share_of_drift_at_or_above_observed=float(np.mean(d >= obs[j]))))
+    for how in METHODS:
+        arr = np.array([r[how] for r in sims])
+        for j, w in enumerate(WEIGHTS):
+            d = arr[:, j]
+            rows.append(dict(method=how, weight="pottery alone" if not np.isfinite(w) else w,
+                             observed=obs[how][j], drift_median=float(np.median(d)),
+                             drift_lo=float(np.percentile(d, 2.5)),
+                             drift_hi=float(np.percentile(d, 97.5)),
+                             share_of_drift_at_or_above_observed=float(np.mean(d >= obs[how][j]))))
     df = pd.DataFrame(rows)
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUT_CSV, index=False)
 
-    fig, ax = plt.subplots(figsize=(3.6, 3.0))
+    fig, axes = plt.subplots(1, 2, figsize=(6.6, 3.0), sharey=True)
     x = np.arange(len(WEIGHTS))
-    ax.fill_between(x, df.drift_lo, df.drift_hi, color="0.82", label="pottery made by drift, 95%")
-    ax.plot(x, df.drift_median, color="0.45", lw=1.2, ls="--", label="drift median")
-    ax.plot(x, df.observed, color="0.1", lw=1.5, marker="o", ms=3.5, label="the real pottery")
-    ax.set_xticks(x)
-    ax.set_xticklabels(["map\nalone" if w == 0 else ("pottery\nalone" if not np.isfinite(w)
-                        else f"{w:g}") for w in WEIGHTS], fontsize=6)
-    ax.set_xlabel("weight on composition relative to geography")
-    ax.set_ylabel("agreement with the published phases\n(adjusted Rand index)")
-    ax.legend(fontsize=5.5, frameon=False, loc="upper right")
+    for ax, how, panel in zip(axes, METHODS, "AB"):
+        d = df[df["method"] == how]
+        ax.fill_between(x, d.drift_lo, d.drift_hi, color="0.82", label="pottery made by drift, 95%")
+        ax.plot(x, d.drift_median, color="0.45", lw=1.2, ls="--", label="drift median")
+        ax.plot(x, d.observed, color="0.1", lw=1.5, marker="o", ms=3.5, label="the real pottery")
+        ax.set_xticks(x)
+        ax.set_xticklabels(["map\nalone" if w == 0 else ("pottery\nalone" if not np.isfinite(w)
+                            else f"{w:g}") for w in WEIGHTS], fontsize=6)
+        ax.set_xlabel("weight on composition relative to geography")
+        ax.set_title(METHOD_NAME[how], fontsize=7)
+        ax.text(-0.02, 1.04, panel, transform=ax.transAxes, fontweight="bold", fontsize=9,
+                ha="right", va="bottom")
+    axes[0].set_ylabel("agreement with the published phases\n(adjusted Rand index)")
+    axes[0].legend(fontsize=5.5, frameon=False, loc="lower left")
     png = fs.save_all(fig, FIG, close=True)
 
     L = ["# Would a culture historian have found these phases in pottery made by drift?", "",
          f"Basin phase set, {len(names)} assemblages, {k} phases; agreement scored on the "
-         f"{int(mapped.sum())} assemblages Mainfort assigned.",
+         f"{int(mapped.sum())} assemblages inside a Phillips (1970) phase area.",
          f"{args.reps} realizations of the calibrated {MODEL} drift model "
          f"({rates['n_ind']} learners, innovation {rates['innovation']}, mixing "
          f"{rates['mixing']}), which contains no groups,",
          "sampled at the observed sherd totals and clustered exactly as the real record is in "
          "`76_phase_recovery.py`",
-         f"(chi-square composition, k-means, median of {args.seeds} initializations).", "",
-         "| weight on composition | real pottery | drift pottery, median (95 percent) | "
-         "share of drift records at or above the real one |", "|---|---|---|---|"]
-    for r in rows:
-        L.append(f"| {r['weight']} | **{r['observed']:.3f}** | {r['drift_median']:.3f} "
-                 f"({r['drift_lo']:.3f} to {r['drift_hi']:.3f}) | "
-                 f"{100 * r['share_of_drift_at_or_above_observed']:.0f}% |")
-    L += ["", "The weight-zero row is the site map alone and is the same in both columns by "
-              "construction.", "",
+         f"(chi-square composition), by two methods: k-means (median of {args.seeds} "
+         "initializations) and Ward linkage.", ""]
+    for how in METHODS:
+        L += [f"## {METHOD_NAME[how]}", "",
+              "| weight on composition | real pottery | drift pottery, median (95 percent) | "
+              "share of drift records at or above the real one |", "|---|---|---|---|"]
+        for r in rows:
+            if r["method"] != how:
+                continue
+            L.append(f"| {r['weight']} | **{r['observed']:.3f}** | {r['drift_median']:.3f} "
+                     f"({r['drift_lo']:.3f} to {r['drift_hi']:.3f}) | "
+                     f"{100 * r['share_of_drift_at_or_above_observed']:.0f}% |")
+        L.append("")
+    L += ["The weight-zero row is the site map alone and is the same in both columns by "
+          "construction.", "",
           "Read the rows where pottery enters. Where the real pottery sits inside what drift "
           "pottery gives,",
           "the published phases are as recoverable from a record with no social groups in it "

@@ -11,7 +11,7 @@ CA axis oriented by radiocarbon so increasing = later.
 | fst | -0.80 | 0.200 |
 | spatial | +0.09 | 0.872 |
 
-- Convergence score (3 continuous signatures): slope = -0.154, Spearman rho = -0.49, p = 0.329.
+- Convergence score (3 continuous signatures): slope = -0.151, Spearman rho = -0.49, p = 0.329.
 - Seriation fragmentation (per-assemblage membership vs CA): see table above.
 
 ## Empirical 4-signature correlation (across bins)

@@ -55,7 +55,7 @@ def tables() -> dict[str, list[str]]:
             "|---|---:|---|---:|:---:|"]
     t = {}
     t["**Unequal site populations**"] = (
-        ["| CV | harmonic N | median $F_{ST}$ | 95 percent | shortfall | diversity |",
+        ["| CV | harmonic mean population | median $F_{ST}$ | 95 percent | shortfall | diversity |",
          "|---:|---:|---:|---|---:|:---:|"]
         + [f"| {r['cv']:.1f} | {r['harmonic_n']:.0f} | {r['fst_median']:.4f} | "
            f"[{r['fst_lo']:.4f}, {r['fst_hi']:.4f}] | "
@@ -80,7 +80,7 @@ def _calibration_tables() -> dict[str, list[str]]:
     s = json.loads((OUT / "revision_2026_09" / "summary.json").read_text())
     t: dict[str, list[str]] = {}
     label = {"pooled": "pooled profile", "uniform": "uniform"}
-    rows = ["| Set | Innovation model | Matched cells (of 297; six-seed screen / fifty-seed re-check) | "
+    rows = ["| Set | Innovation model | Matched combinations (of 297; six-run screen / fifty-run check) | "
             "Selected N, innovation, mixing | Observed H_S / richness / H_T | Achieved H_S / richness / H_T |",
             "|---|---|---:|---|---|---|"]
     for c in s["calibration"]:
@@ -97,12 +97,12 @@ def _calibration_tables() -> dict[str, list[str]]:
                 and r["sampling"] == "time_transgressive" and r["metric"] == "spatial_fst")
     cal = next(c for c in s["calibration"] if c["region"] == "basin" and c["model"] == "pooled")
     obs = s["observed"]["basin"]
-    rows = ["| Set | Case | Median [95%] | Frac. reaching obs. | H_S | Richness |", "|---|---|---|---:|---:|---:|",
-            f"| Basin (observed {obs['spatial_fst']:.4f}; H_S {obs['hs']:.2f}, richness {obs['rich']:.1f}) | baseline | "
+    rows = ["| Set | Case | Median [95%] | Share of runs reaching observed | Within-assemblage diversity | Richness |", "|---|---|---|---:|---:|---:|",
+            f"| Basin (observed {obs['spatial_fst']:.4f}; diversity {obs['hs']:.2f}, richness {obs['rich']:.1f}) | baseline | "
             f"{base['median']:.4f} [{base['lo']:.4f}, {base['hi']:.4f}] | {base['p_upper']:.3f} | "
             f"{cal['achieved']['hs']['median']:.2f} | {cal['achieved']['rich']['median']:.1f} |"]
-    names = [("longer_burnin", "burn-in 2,400"), ("monomorphic_burnin", "monomorphic start, burn-in"),
-             ("monomorphic_no_burnin", "monomorphic start, no burn-in"), ("innovation_halved", "innovation halved"),
+    names = [("longer_burnin", "burn-in 2,400"), ("monomorphic_burnin", "single-class start, burn-in"),
+             ("monomorphic_no_burnin", "single-class start, no burn-in"), ("innovation_halved", "innovation halved"),
              ("innovation_doubled", "innovation doubled"), ("mixing_halved", "mixing halved"), ("mixing_doubled", "mixing doubled")]
     sens = {r["case"]: r for r in s["sensitivity"] if r["region"] == "basin" and r["model"] == "pooled"
             and r["metric"] == "spatial_fst"}

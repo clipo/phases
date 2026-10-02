@@ -19,7 +19,7 @@ emergent F_ST brackets the observed value rather than depending on a tuned corne
 Raw per-run results are cached to output/emergence_robustness.csv so the figure
 can be regenerated without re-simulating; delete that file to force a fresh run.
 
-Writes output/emergence_robustness.{csv,md} and figures/figS4_emergence_robustness.png.
+Writes output/emergence_robustness.{csv,md} and figures/34_emergence_robustness.png.
 
 Usage: PYTHONPATH=src python3 analyses/34_emergence_robustness.py
 """
@@ -47,7 +47,9 @@ from scipy.stats import spearmanr  # noqa: E402
 
 OUT_MD = ROOT / "output" / "emergence_robustness.md"
 OUT_CSV = ROOT / "output" / "emergence_robustness.csv"
-OUT_FIG = ROOT / "figures" / "figS4_emergence_robustness.png"
+# This script's own figure. Until 2026-10-02 it was written to figures/figS4_emergence_robustness.*,
+# which `50_revision_figures.py` also writes (Supplemental Figure S7), so run order decided the file.
+OUT_FIG = ROOT / "figures" / "34_emergence_robustness.png"
 
 # Factor grid, centered on the positive-control corner (24 km, 0.02, 0.012).
 LEN_GRID = [12.0, 18.0, 24.0, 36.0]   # interaction length (km)

@@ -259,6 +259,10 @@ def main(fast=False):
              t_obs=t_obs,
              summ_w1=np.array([o1["median"], o1["lo"], o1["hi"], o1["p_ge_05"]]),
              summ_w3=np.array([o3["median"], o3["lo"], o3["hi"], o3["p_ge_05"]]))
+    # Redraw Supplemental Figure S2 from the posterior just saved. 21 runs
+    # before this script (this script imports it), so the figure 21 drew used
+    # the posterior of the previous run.
+    m21.draw_recovery_figure()
 
     fig, ax = plt.subplots(figsize=(4.4, 3.2))
     ax.plot(S_FINE, o1["p"] / o1["p"].max(), color=OI_BLUE, label="no time-averaging")

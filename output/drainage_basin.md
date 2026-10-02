@@ -2,13 +2,13 @@
 
 Basin proximity to the St. Francis drainage (L'Anguille River, Saint Francis Floodway, Saint Francis River, Tyronza River), distance in km (UTM 15N).
 
-- Median distance of curated assemblages to the drainage: 11.0 km.
+- Median distance of curated assemblages to the drainage: 8.8 km.
 
 Membership comparison (drainage threshold vs lat >= 34.5 set of 36):
 
 | threshold (km) | n in drainage basin | added vs lat-cut | dropped vs lat-cut |
 |---|---|---|---|
-| 10 | 18 | - | Beck, Belle_Meade, Carson_Lake, Cheatham, Commerce, Cramor_Place, Cummins, Dundee, Hollywood, Irby, Lake_Cormorant, Mound_Place, Norfolk, Notgrass, Pouncey, Upper_Nodena, Walls, Woodlyn |
+| 10 | 19 | - | Beck, Belle_Meade, Carson_Lake, Cheatham, Commerce, Cramor_Place, Dundee, Hollywood, Irby, Lake_Cormorant, Mound_Place, Norfolk, Notgrass, Pouncey, Upper_Nodena, Walls, Woodlyn |
 | 15 | 22 | - | Beck, Belle_Meade, Cheatham, Commerce, Dundee, Hollywood, Irby, Lake_Cormorant, Mound_Place, Norfolk, Pouncey, Upper_Nodena, Walls, Woodlyn |
 | 20 | 28 | - | Cheatham, Irby, Lake_Cormorant, Mound_Place, Norfolk, Pouncey, Walls, Woodlyn |
 | 25 | 29 | - | Cheatham, Irby, Lake_Cormorant, Mound_Place, Norfolk, Walls, Woodlyn |

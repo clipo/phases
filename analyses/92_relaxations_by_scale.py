@@ -2,9 +2,9 @@
 
 Analyses 64 and 65 relax four simplifications of the copying model and score
 each variant at TWO clusters, where the calibrated baseline already covers the
-observation within its predictive range (13 percent of runs reach it). The
+observation within its predictive range (12 percent of runs reach it). The
 failure that motivates the relaxations is at three and four clusters and at the
-phase lines, where 0 to 6 percent of baseline runs reach the observation. The
+phase lines, where 0 to 3 percent of baseline runs reach the observation. The
 review of 2026-09-24 (item 3) points out that a relaxation judged only at two
 clusters, and only by whether its MEDIAN reaches the observation, is judged by
 a different standard from the baseline, which is credited because its RANGE
@@ -17,6 +17,16 @@ percent range, and the share of runs reaching the observed value, beside the
 diversity match. The same three readouts are given for the baseline, so every
 account is read by one standard: median discrepancy, predictive coverage, and
 joint fit to diversity.
+
+THE DOSE OF LOCAL INNOVATION. `65_other_departures.group_targets` reorders an
+area's profile only when two or more classes are drawn (each with probability
+equal to the strength) and the reordering is not the identity, so the same
+strength changes far fewer profiles than its name suggests, and a row with
+many small areas is not the same dose as a row with two large ones. The last
+section of the output MEASURES the dose of every local-innovation row: the
+share of areas whose profile differs from the regional one at all, and the
+share of the profile's frequency that sits in a different class. Read a
+local-innovation row beside its dose before reading it against another row.
 
 All settings run at the calibrated combination; none is recalibrated. A setting
 that breaks the diversity match here might fit after recalibration, so a
@@ -65,7 +75,7 @@ def main() -> int:
         raise RuntimeError("assemblage order differs between loaders")
     centred = coords.to_numpy(float) - coords.to_numpy(float).mean(0)
     parts = {f"{k} clusters": mf._kmeans_labels(centred, k, seed=7) for k in K_SCORED}
-    labels_ph, _ = ph.assign_phases_by_territory(names, coords.to_numpy(float))
+    labels_ph, _ = ph.assign_primary_phases(names, coords.to_numpy(float))
     plist = sorted(set(labels_ph))
     parts["phases"] = np.array([plist.index(l) for l in labels_ph])
     a, b = np.asarray(parts["2 clusters"]), np.asarray(data["labels"])
@@ -81,14 +91,26 @@ def main() -> int:
     straight = sd.geo_km(data["coords"])
     part_copy = data["parkin"] if data["parkin"] is not None else data["labels"]
 
-    def run_65(dist=None, length=24.0, strength=0.0, kernel="exponential"):
-        """Analysis 65's run(), with its seeds, scored at every partition."""
+    def run_65(dist=None, length=24.0, strength=0.0, kernel="exponential", areas=None):
+        """Analysis 65's run(), with its seeds, scored at every partition.
+
+        `areas` labels the areas within which new variants share one reordered
+        profile; by default the two spatial clusters, as in analysis 65."""
+        area_labels = data["labels"] if areas is None else np.asarray(areas)
         d = data["d"] if dist is None else dist
         out = {p: [] for p in parts}; divs = []
+        pooled = np.asarray(data["pooled"], float)
+        changed, moved = [], []
         for s in range(args.reps):
             rng = np.random.default_rng(70000 + s)
             w = copying_weights(d, length, labels=part_copy, leak=1.0, kernel=kernel)
-            tgt = a65.group_targets(data["pooled"], data["labels"], strength, rng)
+            tgt = a65.group_targets(data["pooled"], area_labels, strength, rng)
+            if strength > 0:
+                # one row per area: every node of an area carries the same profile
+                rows = np.array([tgt[np.flatnonzero(area_labels == g)[0]] for g in np.unique(area_labels)])
+                diff = np.abs(rows - pooled).sum(1) / (2.0 * pooled.sum())
+                changed.append(float((diff > 0).mean()))
+                moved.append(float(diff.mean()))
             rec = drift_record(w, k=m_obs.shape[1], n_ind=cell["n_ind"], seed=70000 + s,
                                innovation=cell["innovation"], mixing=cell["mixing"],
                                burnin=1200, initial="uniform", target=tgt)
@@ -96,6 +118,8 @@ def main() -> int:
             for p, lab in parts.items():
                 out[p].append(r47.fst_by(m, lab))
             divs.append(r47.diversity(m))
+        if strength > 0:
+            dose.append((len(np.unique(area_labels)), strength, float(np.mean(changed)), float(np.mean(moved))))
         return out, divs
 
     def run_64(cv):
@@ -112,6 +136,10 @@ def main() -> int:
             divs.append(r47.diversity(m))
         return out, divs
 
+    dose = []   # (areas, strength, share of areas changed, share of frequency moved), in run order
+    hood5 = mf._kmeans_labels(centred, 5, seed=7)
+    hood8 = mf._kmeans_labels(centred, 8, seed=7)
+    by_site = np.arange(len(m_obs))
     settings = [
         ("baseline", "calibrated copying model", lambda: run_65()),
         ("unequal populations", "CV 0.5", lambda: run_64(0.5)),
@@ -125,18 +153,32 @@ def main() -> int:
         ("local innovation", "strength 0.2", lambda: run_65(strength=0.2)),
         ("local innovation", "strength 0.25", lambda: run_65(strength=0.25)),
         ("local innovation", "strength 0.3", lambda: run_65(strength=0.3)),
+        # The same mechanism at finer grain (2026-10-02): new variants shared
+        # within a neighborhood of sites, or arising site by site.
+        ("local innovation, five neighborhoods", "strength 0.2", lambda: run_65(strength=0.2, areas=hood5)),
+        ("local innovation, five neighborhoods", "strength 0.25", lambda: run_65(strength=0.25, areas=hood5)),
+        ("local innovation, eight neighborhoods", "strength 0.2", lambda: run_65(strength=0.2, areas=hood8)),
+        ("local innovation, eight neighborhoods", "strength 0.25", lambda: run_65(strength=0.25, areas=hood8)),
+        ("local innovation, each site its own", "strength 0.1", lambda: run_65(strength=0.1, areas=by_site)),
+        ("local innovation, each site its own", "strength 0.2", lambda: run_65(strength=0.2, areas=by_site)),
     ]
     L = ["# The relaxations scored at every scale", "",
          f"Produced by `analyses/92_relaxations_by_scale.py`: {args.reps} runs per setting at the calibrated "
          f"combination (N {cell['n_ind']}, innovation {cell['innovation']}, mixing {cell['mixing']}), with "
-         "analysis 64's and 65's seeds; local innovation areas are the two spatial clusters, as in 65. Each "
+         "analysis 64's and 65's seeds; local innovation areas are the two spatial clusters, as in 65, unless the "
+         "row names neighborhoods (the five- and eight-cluster k-means divisions of the site map) or single sites. Each "
          "cell gives the median between-group F_ST, its 95 percent range, and the share of runs at or above "
          "the observed value. Diversity is matched when the medians of all three within-assemblage summaries "
          "lie within 10 percent of the observed values. No setting is recalibrated.", "",
          "| account | setting | " + " | ".join(f"{p} (obs {obs[p]:.4f})" for p in parts) + " | diversity |",
          "|---|---|" + "---|" * len(parts) + "---|"]
+    dose_rows = []
     for acc, label, fn in settings:
+        n_dose = len(dose)
         out, divs = fn()
+        if len(dose) > n_dose:
+            areas_n, _, ch, mv = dose[-1]
+            dose_rows.append(f"| {acc} | {label} | {areas_n} | {ch * 100:.0f}% | {mv * 100:.1f}% |")
         ach = {k: float(np.median([x[k] for x in divs])) for k in ("hs", "rich", "ht")}
         ok = all(abs(ach[k] - obs_div[k]) <= TOL * abs(obs_div[k]) for k in ("hs", "rich", "ht"))
         cells = []
@@ -152,7 +194,17 @@ def main() -> int:
           "whether its range covers a finer-scale value depends on the seeds (compare Table 1), so read the "
           "share of runs reaching it rather than the range edge. A relaxation improves on the baseline where it "
           "raises that share with diversity matched. Settings that break the diversity match here were not "
-          "recalibrated.", ""]
+          "recalibrated.", "",
+          "## The dose behind each local-innovation row", "",
+          "An area's profile is reordered only when two or more of its classes are drawn, each with "
+          "probability equal to the strength, and the reordering is not the identity. Measured over the "
+          f"same {args.reps} runs: the mean share of areas whose profile differs from the regional one at all, "
+          "and the mean share of a profile's frequency that sits in a different class (half the summed "
+          "absolute difference from the regional profile, averaged over areas, unchanged ones included). "
+          "Two rows are the same dose only when these agree; a row that reaches the finer-scale values no "
+          "more often than the baseline at a small dose has not tested the grain it names.", "",
+          "| account | setting | areas | areas whose profile differs | frequency moved, mean |",
+          "|---|---|---|---|---|", *dose_rows, ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT_MD}")

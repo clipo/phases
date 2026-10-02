@@ -20,7 +20,7 @@ The reported quantity is
 
 averaged over the posterior of the counts and over the alternatives. It
 carries the uncertainty in the observed counts, which the percentile did not.
-Two schemes: the phases of Figure 1 on the 28-assemblage basin set, and
+Two schemes: the primary analysis's phases on the 28-assemblage basin set, and
 Mainfort's (2003) phases on his table (29 sites, at least 100 decorated
 sherds).
 
@@ -105,7 +105,7 @@ def main() -> int:
     counts, coords = mf._load_curated()
     names = [str(i) for i in counts.index]
     xy = coords.to_numpy(float)
-    labs, _ = ph.assign_phases_by_territory(names, xy)
+    labs, _ = ph.assign_primary_phases(names, xy)
     plist = sorted(set(labs)); pidx = np.array([plist.index(l) for l in labs])
     data = rev.load_sets()["basin"]
     if [str(n) for n in data["names"]] != names:
@@ -171,7 +171,7 @@ def main() -> int:
          f"assemblage's class proportions (Dirichlet(counts + 1/2)), {args.alt} alternative divisions of "
          f"each kind, {PER_DRAW} of each compared per draw. Replaces the ensemble percentiles of "
          f"analyses 74 and 83 as the reported quantity (rule 18).", ""]
-    L += block("The phases of Figure 1, basin set", res_basin, len(names), len(plist))
+    L += block("The primary analysis's phases, basin set", res_basin, len(names), len(plist))
     L += block("The Parkin phase against the rest of the basin", res_parkin, len(names), 2)
     k2 = importlib.import_module("74_phase_partition_test").ari(parkin_idx, np.asarray(data["labels"]))
     L += [f"Agreement (adjusted Rand index) between the Parkin-versus-rest division and the two spatial "

@@ -1,6 +1,6 @@
 # Python environment
 
-Recorded 2026-09-23 by `analyses/00_setup/02_record_environment.py`.
+Recorded 2026-10-01 by `analyses/00_setup/02_record_environment.py`.
 
 | | |
 |---|---|
@@ -106,7 +106,7 @@ matplotlib==3.11.1
 matplotlib-inline==0.2.2
 mdurl==0.1.2
 mistune==3.3.4
--e git+https://github.com/clipo/mls-emergence@9f939f93ca452d6cbcfa6d83ac6c88faa4489581#egg=mls_emergence
+-e git+https://github.com/clipo/mls-emergence@405bf756e92ad6d6fcc6f976176b1697f7b58e5e#egg=mls_emergence
 -e git+https://github.com/rdinapoli/monument-mls@9f4935972e81a7f95c002d9a9fc2280155bdce75#egg=monument_mls
 mpmath==1.3.0
 nbclient==0.11.0

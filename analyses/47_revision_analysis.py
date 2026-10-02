@@ -115,7 +115,10 @@ def load_sets():
         centered = coords - coords.mean(0)
         labs = {k: mf._kmeans_labels(centered, k, seed=7) for k in range(2, 5)}
         k = max(labs, key=lambda k: mf.silhouette_mean(centered, labs[k]))
-        parkin = phases.assign_phases(names, coords) == "Parkin" if name == "valley" else None
+        parkin = None
+        if name == "valley":
+            _lab, _der = phases.assign_primary_phases(names, coords)
+            parkin = (_lab == "Parkin") & ~_der
         sets[name] = dict(m=m, coords=coords, names=names, d=d, ranks=ranks,
                           labels=labs[k], parkin=parkin, pooled=m.sum(0) / m.sum())
     return sets

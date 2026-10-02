@@ -21,7 +21,7 @@ Produced by `analyses/47_basin_scope_check.py`. Seed 0, 2000 draws x 4 chains, F
 
 0 assemblages: .
 
-Silhouette scores on the basin coordinates, k = 2..6: k=2: 0.5274, k=3: 0.5063, k=4: 0.4664, k=5: 0.4326, k=6: 0.4528. k=2 wins clearly, which is the "three spatial clusters" the manuscript describes. The k=5 in column A is the silhouette optimum for the wider curated set, not for the basin.
+Silhouette scores on the basin coordinates, k = 2..6: k=2: 0.5331, k=3: 0.5238, k=4: 0.4884, k=5: 0.5031, k=6: 0.4245. k=2 wins clearly, which is the "three spatial clusters" the manuscript describes. The k=5 in column A is the silhouette optimum for the wider curated set, not for the basin.
 
 ## Reading
 

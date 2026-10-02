@@ -226,6 +226,76 @@ def empirical_fst_trend(op=None, n_draws: int = TREND_DRAWS, seed: int = TREND_S
             "n_draws": int(len(vals))}
 
 
+def _dir(rho):
+    """'rise' or 'fall' for a trend along the sequence, from its sign. The
+    report said "raw F_ST rise (-0.80)" until 2026-10-02: the word was fixed
+    text and the value was not."""
+    return "rise" if rho > 0 else "fall"
+
+
+def draw_recovery_figure():
+    """Draw Supplemental Figure S2 (figures/fig5_recovery.*) from saved results.
+
+    The left panel is this script's recovery grid, read back from
+    output/revision_recovery.json; the right panel is the posterior
+    `53_closure_strength_posterior.py` saves. Nothing is simulated here, so the
+    figure can be redrawn whenever either input changes.
+
+    That is the point of the function. 53 imports this module, so the pipeline
+    runs this script first, and until 2026-10-02 the figure was drawn inside
+    main(): on a full rerun the right panel was therefore drawn from the
+    PREVIOUS run's posterior, and stayed that way. main() still draws the
+    figure (from whatever posterior is on disk), and 53 now calls this function
+    after it saves, so the last thing written always uses the current one.
+    """
+    summary = json.loads((ROOT / "output" / "revision_recovery.json").read_text())
+    strengths = np.asarray(summary["strengths"], float)
+    persig = {sg: np.asarray(v, float) for sg, v in summary["response"].items()}
+    fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))
+    cmap = {"neutral": OI_PURPLE, "seriability": OI_GREEN, "fst": OI_ORANGE, "spatial": OI_BLUE}
+    for sg in SIG:
+        axA.plot(strengths, persig[sg], "-o", ms=3, color=cmap[sg], lw=1.4, label=SIG_LABEL[sg])
+    axA.axhline(0, color="0.7", lw=0.6)
+    axA.set_xlabel("injected closure strength s")
+    axA.set_ylabel("signature trend (Spearman rho)")
+    # Lower left is the one corner no curve crosses; upper left sat on the F_ST curve.
+    axA.legend(frameon=False, fontsize=6.5, loc="lower left")
+
+    # Panel B: the POSTERIOR over injected closure strength, not a power curve.
+    # Rule 18 removed the calibrated detector, its five percent false-positive
+    # rate and its detection threshold (docs/FREQUENTIST_INVENTORY.md item A),
+    # and the caption was updated on 2026-09-02. This panel is drawn from
+    # analyses/53_closure_strength_posterior.py's saved posterior so the figure
+    # and the caption cannot drift apart again.
+    # Loaded through 53's own loader, which refuses an .npz older than the
+    # finding it was written beside. Re-running this script against a stale
+    # array silently reverted Figure 4 to superseded values once already.
+    _m53 = importlib.import_module("53_closure_strength_posterior")
+    _pd = _m53.load_posterior()
+    _sg = _pd["s_grid"]
+    axB.plot(_sg, _pd["post_w1"] / _pd["post_w1"].max(), color=OI_BLUE,
+             label="no averaging")
+    axB.plot(_sg, _pd["post_w3"] / _pd["post_w3"].max(), color=OI_VERMIL,
+             ls="--", label="time-averaged")
+    _m1, _l1, _h1, _p1 = _pd["summ_w1"]
+    _m3, _l3, _h3, _p3 = _pd["summ_w3"]
+    axB.axvline(_m1, color=OI_BLUE, ls=":", lw=1.0)
+    axB.axvline(_m3, color=OI_VERMIL, ls=":", lw=1.0)
+    axB.set_xlabel("injected closure strength s")
+    axB.set_ylabel("posterior (scaled)")
+    axB.set_ylim(0, 1.08)
+    axB.legend(frameon=False, fontsize=6.5, loc="upper right")
+    # Placed right of both curves, which are at or near zero for s > 0.6.
+    axB.text(0.99, 0.60,
+             # Medians at three decimals, as 53 prints them: 0.155 printed here
+             # as 0.16 while the text, rounding the printed 0.155, said 0.15.
+             f"median {_m1:.3f} [{_l1:.2f}, {_h1:.2f}]\n"
+             f"P(s$\\geq$0.5) = {_p1:.3f}\n"
+             f"time-avg. {_m3:.3f}, P = {_p3:.3f}",
+             transform=axB.transAxes, ha="right", va="top", fontsize=5.5, color=OI_GREEN)
+    save(fig, "fig5_recovery")
+
+
 def main():
     op = operating_point()
     counts, coords = op["counts"], op["coords"]
@@ -342,7 +412,7 @@ def main():
         f"SD {trend['sd']:.2f}: the record does not resolve the sign of this trend). "
         f"The Monte Carlo standard error of the {trend['n_draws']}-draw mean is {trend['se']:.3f}; "
         f"it describes the compute budget, not the record, and is not the interval to quote (rule 6). "
-        f"The raw rise is a sampling artifact.",
+        f"The raw {_dir(raw_emp['fst'])} is a sampling artifact.",
         "",
         "## Which signatures recover the injected emergence (rarefied, no averaging)", "",
         "| s | " + " | ".join(SIG_LABEL[s] for s in SIG) + " |", "|---|" + "---|" * len(SIG)]
@@ -382,7 +452,7 @@ def main():
           "",
           "## Verdict", "",
           f"At the record's own resolution and sample sizes, and with the size confound removed by "
-          f"rarefaction, the discrimination is carried by cultural F_ST. The apparent raw F_ST rise "
+          f"rarefaction, the discrimination is carried by cultural F_ST. The apparent raw F_ST {_dir(raw_emp['fst'])} "
           f"({raw_emp['fst']:+.2f}) is an artifact of the sample-size-versus-position trend "
           f"(rho {size_conf:+.2f}) and vanishes under size control, leaving a trend of "
           f"{trend['mean']:+.3f}, with single-rarefaction percentiles {trend['p_lo']:+.2f} to {trend['p_hi']:+.2f}. "
@@ -400,46 +470,7 @@ def main():
     OUT.write_text("\n".join(L), encoding="utf-8")
 
     # ---- figure ----
-    fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))
-    cmap = {"neutral": OI_PURPLE, "seriability": OI_GREEN, "fst": OI_ORANGE, "spatial": OI_BLUE}
-    for sg in SIG:
-        axA.plot(S_GRID, persig[sg], "-o", ms=3, color=cmap[sg], lw=1.4, label=SIG_LABEL[sg])
-    axA.axhline(0, color="0.7", lw=0.6)
-    axA.set_xlabel("injected closure strength s")
-    axA.set_ylabel("signature trend (Spearman rho)")
-    axA.legend(frameon=False, fontsize=6.5, loc="upper left")
-
-    # Panel B: the POSTERIOR over injected closure strength, not a power curve.
-    # Rule 18 removed the calibrated detector, its five percent false-positive
-    # rate and its detection threshold (docs/FREQUENTIST_INVENTORY.md item A),
-    # and the caption was updated on 2026-09-02. This panel is drawn from
-    # analyses/53_closure_strength_posterior.py's saved posterior so the figure
-    # and the caption cannot drift apart again.
-    # Loaded through 53's own loader, which refuses an .npz older than the
-    # finding it was written beside. Re-running this script against a stale
-    # array silently reverted Figure 4 to superseded values once already.
-    _m53 = importlib.import_module("53_closure_strength_posterior")
-    _pd = _m53.load_posterior()
-    _sg = _pd["s_grid"]
-    axB.plot(_sg, _pd["post_w1"] / _pd["post_w1"].max(), color=OI_BLUE,
-             label="no averaging")
-    axB.plot(_sg, _pd["post_w3"] / _pd["post_w3"].max(), color=OI_VERMIL,
-             ls="--", label="time-averaged")
-    _m1, _l1, _h1, _p1 = _pd["summ_w1"]
-    _m3, _l3, _h3, _p3 = _pd["summ_w3"]
-    axB.axvline(_m1, color=OI_BLUE, ls=":", lw=1.0)
-    axB.axvline(_m3, color=OI_VERMIL, ls=":", lw=1.0)
-    axB.set_xlabel("injected closure strength s")
-    axB.set_ylabel("posterior (scaled)")
-    axB.set_ylim(0, 1.08)
-    axB.legend(frameon=False, fontsize=6.5, loc="upper right")
-    # Placed right of both curves, which are at or near zero for s > 0.6.
-    axB.text(0.99, 0.60,
-             f"median {_m1:.2f} [{_l1:.2f}, {_h1:.2f}]\n"
-             f"P(s$\\geq$0.5) = {_p1:.2f}\n"
-             f"time-avg. {_m3:.2f}, P = {_p3:.2f}",
-             transform=axB.transAxes, ha="right", va="top", fontsize=5.5, color=OI_GREEN)
-    save(fig, "fig5_recovery")
+    draw_recovery_figure()
 
     # ---- Figure 5: size-controlled empirical four-signature trajectory ----
     rngf = np.random.default_rng(21)
@@ -460,10 +491,11 @@ def main():
         # main text disagreed in the second decimal and, in Figure 2, in sign.
         lab = (rf"$\rho$ = {trend['mean']:+.3f}" if sg == "fst"
                else rf"$\rho$ = {rar_emp_mean[sg]:+.2f}")
-        ax.text(0.95, 0.95, lab, transform=ax.transAxes,
-                ha="right", va="top", fontsize=9)
+        # Above the axes: inside, the annotation sat on the highest point of
+        # the spatial-boundary panel.
+        ax.set_title(lab, fontsize=9, loc="right", pad=3)
     for ax in axes[1, :]:
-        ax.set_xlabel("CA seriation bin (early to late)", fontsize=8)
+        ax.set_xlabel("seriation period (order on CA dimension 1)", fontsize=8)
     fig5.tight_layout()
     save(fig5, "fig6_empirical_trajectory")
 

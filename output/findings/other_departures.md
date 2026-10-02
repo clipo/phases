@@ -11,39 +11,39 @@ A cell closes the gap only if it reaches its region's observed value AND stays i
 
 | region | departure | setting | median $F_{ST}$ | 95% | shortfall | reaches obs | diversity |
 |---|---|---|---:|---|---:|---:|:---:|
-| basin | transport geography | river, exponential, 6 km | 0.0067 | [0.0006, 0.0320] | 0.9x | 52.8% | broken |
-| basin | transport geography | river, exponential, 12 km | 0.0048 | [0.0005, 0.0265] | 1.3x | 36.4% | broken |
-| basin | transport geography | river, exponential, 24 km | 0.0022 | [0.0003, 0.0136] | 2.8x | 13.6% | matched |
-| basin | transport geography | river, exponential, 48 km | 0.0007 | [0.0001, 0.0036] | 8.4x | 0.4% | matched |
-| basin | transport geography | river, exponential, 96 km | 0.0007 | [0.0001, 0.0032] | 9.2x | 0.0% | matched |
-| basin | transport geography | straight-line, exponential, 6 km | 0.0036 | [0.0004, 0.0211] | 1.7x | 34.0% | matched |
-| basin | transport geography | straight-line, exponential, 12 km | 0.0010 | [0.0001, 0.0061] | 6.2x | 2.0% | matched |
-| basin | transport geography | straight-line, exponential, 24 km | 0.0006 | [0.0001, 0.0033] | 10.6x | 0.0% | matched |
-| basin | transport geography | straight-line, exponential, 48 km | 0.0006 | [0.0001, 0.0035] | 11.0x | 0.4% | matched |
-| basin | transport geography | straight-line, exponential, 96 km | 0.0005 | [0.0001, 0.0030] | 13.7x | 0.0% | matched |
-| basin | transport geography | river, gaussian, 6 km | 0.0093 | [0.0009, 0.0492] | 0.7x | 64.8% | broken |
-| basin | transport geography | river, gaussian, 12 km | 0.0079 | [0.0006, 0.0445] | 0.8x | 57.6% | broken |
-| basin | transport geography | river, gaussian, 24 km | 0.0045 | [0.0005, 0.0320] | 1.4x | 39.6% | broken |
-| basin | transport geography | river, gaussian, 48 km | 0.0023 | [0.0002, 0.0120] | 2.7x | 17.6% | matched |
-| basin | transport geography | river, gaussian, 96 km | 0.0008 | [0.0001, 0.0043] | 8.1x | 0.0% | matched |
-| basin | transport geography | river, power, 6 km | 0.0017 | [0.0002, 0.0094] | 3.6x | 8.0% | matched |
-| basin | transport geography | river, power, 12 km | 0.0013 | [0.0002, 0.0070] | 4.8x | 3.6% | matched |
-| basin | transport geography | river, power, 24 km | 0.0009 | [0.0001, 0.0062] | 7.0x | 2.8% | matched |
-| basin | transport geography | river, power, 48 km | 0.0006 | [0.0001, 0.0036] | 9.9x | 0.4% | matched |
-| basin | transport geography | river, power, 96 km | 0.0006 | [0.0001, 0.0029] | 11.3x | 0.0% | matched |
-| basin | accumulation spans | window 8 +/- 0 | 0.0022 | [0.0003, 0.0136] | 2.8x | 13.6% | matched |
-| basin | accumulation spans | window 8 +/- 2 | 0.0023 | [0.0003, 0.0133] | 2.7x | 14.0% | matched |
-| basin | accumulation spans | window 8 +/- 4 | 0.0022 | [0.0003, 0.0121] | 2.8x | 14.8% | matched |
-| basin | accumulation spans | window 8 +/- 6 | 0.0023 | [0.0002, 0.0111] | 2.7x | 13.2% | matched |
-| basin | innovation boundary | boundary strength 0.0 | 0.0022 | [0.0003, 0.0136] | 2.8x | 13.6% | matched |
-| basin | innovation boundary | boundary strength 0.1 | 0.0027 | [0.0003, 0.0424] | 2.3x | 24.8% | matched |
-| basin | innovation boundary | boundary strength 0.15 | 0.0032 | [0.0003, 0.0443] | 1.9x | 31.6% | matched |
-| basin | innovation boundary | boundary strength 0.2 | 0.0045 | [0.0003, 0.0531] | 1.4x | 42.4% | matched |
-| basin | innovation boundary | boundary strength 0.25 | 0.0095 | [0.0004, 0.0548] | 0.7x | 54.8% | matched |
-| basin | innovation boundary | boundary strength 0.3 | 0.0115 | [0.0005, 0.0542] | 0.5x | 62.8% | matched |
-| basin | innovation boundary | boundary strength 0.4 | 0.0193 | [0.0007, 0.0601] | 0.3x | 75.6% | broken |
-| basin | innovation boundary | boundary strength 0.6 | 0.0314 | [0.0019, 0.0666] | 0.2x | 91.6% | broken |
-| basin | innovation boundary | boundary strength 1.0 | 0.0376 | [0.0089, 0.0669] | 0.2x | 98.0% | broken |
+| basin | transport geography | river, exponential, 6 km | 0.0054 | [0.0006, 0.0330] | 1.2x | 44.0% | broken |
+| basin | transport geography | river, exponential, 12 km | 0.0047 | [0.0004, 0.0244] | 1.3x | 39.6% | broken |
+| basin | transport geography | river, exponential, 24 km | 0.0018 | [0.0002, 0.0114] | 3.5x | 12.8% | matched |
+| basin | transport geography | river, exponential, 48 km | 0.0008 | [0.0001, 0.0051] | 7.7x | 0.4% | matched |
+| basin | transport geography | river, exponential, 96 km | 0.0007 | [0.0001, 0.0040] | 9.5x | 0.8% | matched |
+| basin | transport geography | straight-line, exponential, 6 km | 0.0037 | [0.0004, 0.0195] | 1.7x | 26.8% | matched |
+| basin | transport geography | straight-line, exponential, 12 km | 0.0010 | [0.0001, 0.0054] | 5.9x | 2.0% | matched |
+| basin | transport geography | straight-line, exponential, 24 km | 0.0006 | [0.0001, 0.0034] | 10.5x | 0.0% | matched |
+| basin | transport geography | straight-line, exponential, 48 km | 0.0005 | [0.0001, 0.0035] | 11.5x | 0.0% | matched |
+| basin | transport geography | straight-line, exponential, 96 km | 0.0005 | [0.0001, 0.0033] | 11.5x | 0.0% | matched |
+| basin | transport geography | river, gaussian, 6 km | 0.0099 | [0.0011, 0.0547] | 0.6x | 71.2% | broken |
+| basin | transport geography | river, gaussian, 12 km | 0.0063 | [0.0004, 0.0371] | 1.0x | 50.0% | broken |
+| basin | transport geography | river, gaussian, 24 km | 0.0044 | [0.0005, 0.0323] | 1.4x | 36.8% | broken |
+| basin | transport geography | river, gaussian, 48 km | 0.0024 | [0.0002, 0.0128] | 2.6x | 17.6% | matched |
+| basin | transport geography | river, gaussian, 96 km | 0.0007 | [0.0001, 0.0036] | 9.6x | 0.4% | matched |
+| basin | transport geography | river, power, 6 km | 0.0020 | [0.0002, 0.0097] | 3.2x | 8.0% | matched |
+| basin | transport geography | river, power, 12 km | 0.0010 | [0.0001, 0.0055] | 6.0x | 0.8% | matched |
+| basin | transport geography | river, power, 24 km | 0.0008 | [0.0001, 0.0035] | 8.1x | 0.4% | matched |
+| basin | transport geography | river, power, 48 km | 0.0006 | [0.0001, 0.0040] | 9.9x | 0.4% | matched |
+| basin | transport geography | river, power, 96 km | 0.0005 | [0.0001, 0.0030] | 12.6x | 0.0% | matched |
+| basin | accumulation spans | window 8 +/- 0 | 0.0018 | [0.0002, 0.0114] | 3.5x | 12.8% | matched |
+| basin | accumulation spans | window 8 +/- 2 | 0.0019 | [0.0002, 0.0114] | 3.3x | 13.6% | matched |
+| basin | accumulation spans | window 8 +/- 4 | 0.0018 | [0.0002, 0.0119] | 3.5x | 12.8% | matched |
+| basin | accumulation spans | window 8 +/- 6 | 0.0018 | [0.0002, 0.0113] | 3.4x | 13.2% | matched |
+| basin | innovation boundary | boundary strength 0.0 | 0.0018 | [0.0002, 0.0114] | 3.5x | 12.8% | matched |
+| basin | innovation boundary | boundary strength 0.1 | 0.0028 | [0.0003, 0.0424] | 2.2x | 29.2% | matched |
+| basin | innovation boundary | boundary strength 0.15 | 0.0034 | [0.0003, 0.0475] | 1.8x | 34.0% | matched |
+| basin | innovation boundary | boundary strength 0.2 | 0.0053 | [0.0003, 0.0562] | 1.2x | 47.2% | matched |
+| basin | innovation boundary | boundary strength 0.25 | 0.0097 | [0.0004, 0.0609] | 0.6x | 57.6% | matched |
+| basin | innovation boundary | boundary strength 0.3 | 0.0154 | [0.0006, 0.0621] | 0.4x | 64.8% | matched |
+| basin | innovation boundary | boundary strength 0.4 | 0.0219 | [0.0008, 0.0648] | 0.3x | 79.6% | broken |
+| basin | innovation boundary | boundary strength 0.6 | 0.0366 | [0.0021, 0.0730] | 0.2x | 92.8% | broken |
+| basin | innovation boundary | boundary strength 1.0 | 0.0414 | [0.0110, 0.0721] | 0.2x | 100.0% | broken |
 | cmv | transport geography | river, exponential, 6 km | 0.0260 | [0.0079, 0.0726] | 1.3x | 34.4% | broken |
 | cmv | transport geography | river, exponential, 12 km | 0.0209 | [0.0057, 0.0742] | 1.6x | 18.0% | broken |
 | cmv | transport geography | river, exponential, 24 km | 0.0128 | [0.0045, 0.0324] | 2.6x | 2.4% | matched |
@@ -83,9 +83,9 @@ A cell closes the gap only if it reaches its region's observed value AND stays i
 
 **basin**
 
-- **transport geography**: best shortfall 0.7x at river, gaussian, 6 km; the best cell that keeps diversity matched is straight-line, exponential, 6 km at 1.7x.
-- **accumulation spans**: best shortfall 2.7x at window 8 +/- 6; the best cell that keeps diversity matched is window 8 +/- 6 at 2.7x.
-- **innovation boundary**: best shortfall 0.2x at boundary strength 1.0; the best cell that keeps diversity matched is boundary strength 0.3 at 0.5x.
+- **transport geography**: best shortfall 0.6x at river, gaussian, 6 km; the best cell that keeps diversity matched is straight-line, exponential, 6 km at 1.7x.
+- **accumulation spans**: best shortfall 3.3x at window 8 +/- 2; the best cell that keeps diversity matched is window 8 +/- 2 at 3.3x.
+- **innovation boundary**: best shortfall 0.2x at boundary strength 1.0; the best cell that keeps diversity matched is boundary strength 0.3 at 0.4x.
 
 **cmv**
 

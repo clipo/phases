@@ -9,4 +9,4 @@ Forward neutral drift on the river-network geography of all 38 Mainfort-PFG deco
 
 Interpretation: drift structured by geography already produces a few spatially coherent, phase-like groups, fewer than the seven named phases the regional scheme draws, at about the observed level of differentiation. The named phases subdivide the valley more finely than the drift structure supports.
 
-Figure: figures/fig8_lmv_drift_groups.png
+Figure: figures/37_lmv_drift_groups.png

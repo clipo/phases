@@ -91,9 +91,9 @@ def main():
     # Panel A: ABC-SMC posterior of b
     axA.hist(post["post_b"], bins=25, density=True, color=OI_BLUE, alpha=0.6, label="whole")
     axA.hist(post["early"], bins=25, density=True, histtype="step",
-             color=OI_ORANGE, lw=1.3, label="early half")
+             color=OI_ORANGE, lw=1.3, label="first half")
     axA.hist(post["late"], bins=25, density=True, histtype="step",
-             color=OI_VERMIL, lw=1.3, label="late half")
+             color=OI_VERMIL, lw=1.3, label="second half")
     axA.axvline(0, color="0.3", ls="--", lw=1.0)
     axA.set_xlabel("transmission bias b (0 = neutral)")
     axA.set_ylabel("posterior density")
@@ -119,14 +119,21 @@ def main():
     # posteriors so the two cannot drift apart.
     alpha, mu = tempo["alpha"], tempo["mu"]
     axC2 = axC.twiny()
-    axC.hist(np.log10(alpha), bins=40, color=OI_BLUE, alpha=0.65, density=True)
+    # Each histogram is scaled to its own peak. As densities on one axis the
+    # mean-reversion posterior, which spans four orders of magnitude, was a
+    # band a few pixels high under the drift histogram.
+    _ha, _ea = np.histogram(np.log10(alpha), bins=40)
+    axC.bar(_ea[:-1], _ha / _ha.max(), width=np.diff(_ea), align="edge",
+            color=OI_BLUE, alpha=0.65)
     axC.axvline(np.log10(np.median(alpha)), color=OI_BLUE, ls=":", lw=1.0)
     axC.set_xlabel("log$_{10}$ mean-reversion rate $\\alpha$", fontsize=7, color=OI_BLUE)
-    axC.set_ylabel("posterior density")
+    axC.set_ylabel("posterior (each scaled to its peak)", fontsize=7)
     axC.set_yticks([])
-    axC2.hist(mu, bins=40, color=OI_ORANGE, alpha=0.55, density=True)
+    _hm, _em = np.histogram(mu, bins=40)
+    axC2.bar(_em[:-1], _hm / _hm.max(), width=np.diff(_em), align="edge",
+             color=OI_ORANGE, alpha=0.55)
     axC2.axvline(0.0, color="0.4", lw=0.8)
-    axC2.set_xlabel("directional drift $\\mu$ per bin", fontsize=7, color=OI_ORANGE)
+    axC2.set_xlabel("directional drift $\\mu$ per period", fontsize=7, color=OI_ORANGE)
     # The verdict is computed, not typed: mu is resolved when its 95 percent
     # interval excludes zero; alpha is unresolved when its interval spans more
     # than two orders of magnitude (the unbiased-walk and stasis limits).

@@ -102,7 +102,7 @@ def main() -> int:
     names = [str(i) for i in counts.index]
     if names != [str(n) for n in data["names"]]:
         raise RuntimeError("assemblage order differs between loaders")
-    labels_ph, _ = ph.assign_phases_by_territory(names, coords.to_numpy(float))
+    labels_ph, _ = ph.assign_primary_phases(names, coords.to_numpy(float))
     phases = sorted(set(labels_ph))
     phase = np.array([phases.index(l) for l in labels_ph])
     global OUT_MD, OUT_CSV

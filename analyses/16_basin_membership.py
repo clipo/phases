@@ -75,7 +75,7 @@ DRAINAGE = {"Saint Francis River", "Tyronza River", "L'Anguille River", "Saint F
 DRAINAGE_KM = 20.0
 
 # The five phases the Data section names for the basin. Tipton and Jones Bayou,
-# the other two in Figure 1, sit north and east of this scheme and are not part
+# the other two named phases of 36_canonical_phase_map, sit north and east of this scheme and are not part
 # of the unit under test.
 # Author rulings, 2026-09-21. Parchman is out on geography: its three
 # assemblages lie across the Mississippi in Coahoma County (Parchman itself is
@@ -130,9 +130,11 @@ def main():
         crs="EPSG:4326").to_crs(epsg=UTM)
     cd = cp.geometry.distance(sf) / 1000.0
 
-    # Membership is Mainfort's phase label, not distance to water.
+    # Membership is the phase label, not distance to water. Since 2026-10-01
+    # the label is Phillips's (1970) phase area (36.assign_primary_phases);
+    # the docstring above describes the Mainfort (1996) labels used before.
     ph = importlib.import_module("36_canonical_phase_map")
-    labels, derived = ph.assign_phases_by_territory(
+    labels, derived = ph.assign_primary_phases(
         [str(i) for i in coords.index], coords[["Latitude", "Longitude"]].to_numpy(float))
     labels = np.asarray(labels)
     in_phase = np.isin(labels, ST_FRANCIS_PHASES)
@@ -148,8 +150,8 @@ def main():
                   f"fewer than {MIN_PHASE_MEMBERS}, so it is not carried as a phase")
             in_phase &= ~(labels == phase)
     n_derived = int((in_phase & derived).sum())
-    print(f"  phase labels: {int(in_phase.sum()) - n_derived} from Mainfort's map, "
-          f"{n_derived} by territory containment "
+    print(f"  phase labels: {int(in_phase.sum()) - n_derived} inside a Phillips (1970) phase area, "
+          f"{n_derived} by the nearest area "
           f"({', '.join(sorted(coords.index[in_phase & derived]))})")
     cur_members = sorted(coords.index[in_phase])
     (PROC / "basin_members_curated.txt").write_text("\n".join(cur_members) + "\n")

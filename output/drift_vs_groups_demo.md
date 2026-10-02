@@ -6,10 +6,10 @@ the observed statistic if the observed value falls in its 95% envelope.
 
 | statistic | observed | spatial-drift 95% | bounded-groups 95% | consistent with |
 |---|---|---|---|---|
-| distance-decay r | -0.322 | [-0.450, -0.046] | [-0.737, -0.632] | drift |
-| modularity Q | +0.045 | [+0.034, +0.102] | [+0.289, +0.451] | drift |
-| boundary excess (BR) | +38.606 | [+10.672, +41.533] | [+62.299, +112.176] | drift |
-| cultural $F_{ST}$ | +0.039 | [+0.022, +0.121] | [+0.087, +0.186] | drift |
+| distance-decay r | -0.340 | [-0.495, -0.093] | [-0.778, -0.654] | drift |
+| modularity Q | +0.045 | [+0.038, +0.109] | [+0.259, +0.457] | drift |
+| boundary excess (BR) | +34.500 | [+15.243, +36.454] | [+56.929, +108.088] | drift |
+| cultural $F_{ST}$ | +0.039 | [+0.028, +0.104] | [+0.095, +0.200] | drift |
 
 Reading: where the observed value sits inside the spatial-drift envelope
 but outside the bounded-groups envelope, neutral drift on geography is

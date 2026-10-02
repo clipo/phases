@@ -1,17 +1,17 @@
 # Turnover along the reconstructed phase boundaries: bandwidth and recovery
 
-Produced by `analyses/91_turnover_sensitivity.py`. Basin set, 28 assemblages; 160 x 160 grid (analysis 75 uses 220); 200 same-size alternative divisions around random centers, built as analysis 75 builds them (seed 75). The boundaries are this study's reconstruction of territories from Mainfort's (1996) assignments, not published lines. Percentile = share of alternatives whose median turnover along their boundaries is below the phase boundaries'; a boundary between communities would sit high.
+Produced by `analyses/91_turnover_sensitivity.py`. Basin set, 28 assemblages; 160 x 160 grid (analysis 75 uses 220); 200 same-size alternative divisions around random centers, built as analysis 75 builds them (seed 75). The boundaries are this study's reconstruction of territories from the assemblages' Phillips (1970) phases, not his drawn lines. Percentile = share of alternatives whose median turnover along their boundaries is below the phase boundaries'; a boundary between communities would sit high.
 
 ## A. Bandwidth
 
 | bandwidth (km) | phase boundaries, median turnover per km | alternatives, median | percentile of the phase boundaries |
 |---:|---:|---:|---:|
-| 10 | 0.01624 | 0.02130 | 3.0 |
-| 12.5 | 0.01232 | 0.01641 | 0.0 |
-| 15 | 0.01051 | 0.01240 | 0.0 |
-| 20 | 0.00936 | 0.00986 | 23.5 |
-| 25 | 0.00910 | 0.00922 | 35.5 |
-| 30 | 0.00896 | 0.00901 | 43.0 |
+| 10 | 0.01588 | 0.01900 | 6.0 |
+| 12.5 | 0.01188 | 0.01492 | 0.0 |
+| 15 | 0.01038 | 0.01168 | 7.5 |
+| 20 | 0.00949 | 0.00977 | 40.0 |
+| 25 | 0.00918 | 0.00926 | 41.0 |
+| 30 | 0.00909 | 0.00911 | 46.0 |
 
 ## B. Recovery of a copying boundary at the phase lines
 
@@ -19,12 +19,12 @@ Produced by `analyses/91_turnover_sensitivity.py`. Basin set, 28 assemblages; 16
 
 | copying factor | local innovation | percentile, 5% / 25% / 50% / 75% / 95% over records | records at or below the observed percentile |
 |---|---|---|---:|
-| 1 | 0 | 1 / 8 / 20 / 48 / 88 | 0.05 |
-| 0.1 | 0 | 3 / 12 / 33 / 59 / 85 | 0.02 |
-| 0.03 | 0 | 3 / 26 / 54 / 77 / 94 | 0.02 |
-| 0.03 | 0.2 | 10 / 54 / 73 / 85 / 94 | 0.01 |
+| 1 | 0 | 4 / 12 / 21 / 41 / 76 | 0.12 |
+| 0.1 | 0 | 6 / 22 / 41 / 61 / 86 | 0.07 |
+| 0.03 | 0 | 12 / 26 / 48 / 69 / 84 | 0.03 |
+| 0.03 | 0.2 | 14 / 45 / 76 / 84 / 88 | 0.02 |
 
-Observed at this grid and bandwidth: median 0.01051 per km, percentile 0.0.
+Observed at this grid and bandwidth: median 0.01038 per km, percentile 7.5.
 
 ## Reading
 

@@ -140,11 +140,52 @@ def main() -> None:
              f"{mass_after(spd_basin, 1600):.2f}.")
     L.append(f"- Parkin SPD mass after AD {CONTACT_AD}: {mass_after(spd_parkin, CONTACT_AD):.2f}; "
              f"after AD 1600: {mass_after(spd_parkin, 1600):.2f}.")
+    # Where the summed probability actually falls. The share after a date says
+    # little by itself, since it depends on how long the distribution runs; the
+    # comparison that bears on "a decline across contact" is the mass in the
+    # century before AD 1541 against the century after it.
+    def mass_between(d, lo, hi):
+        return float(d[(grid_ad >= lo) & (grid_ad < hi)].sum())
+    cents = [(CONTACT_AD - 300, CONTACT_AD - 200), (CONTACT_AD - 200, CONTACT_AD - 100),
+             (CONTACT_AD - 100, CONTACT_AD), (CONTACT_AD, CONTACT_AD + 100),
+             (CONTACT_AD + 100, CONTACT_AD + 200)]
+    for nm, d in (("Basin", spd_basin), ("Parkin", spd_parkin)):
+        L.append(f"- {nm} SPD mass by century around contact: "
+                 + "; ".join(f"AD {lo} to {hi}, {mass_between(d, lo, hi):.2f}" for lo, hi in cents)
+                 + ".")
+    L.append(f"- Basin SPD mass before AD {cents[0][0]}: {mass_between(spd_basin, 0, cents[0][0]):.2f}; "
+             f"AD {cents[0][0]} to {cents[3][1]}: {mass_between(spd_basin, cents[0][0], cents[3][1]):.2f}.")
+    # The grid ends at AD 1749, and each date is normalized within it. That is an
+    # assumption (no deposit postdates 1750), not a neutral choice: late dates
+    # calibrate partly into the modern plateau, and the grid folds that share
+    # back. The same quantities without the bound, so the dependence is on record.
+    wide_ad = np.arange(800, 1950)
+    wide = spd(basin, 1950 - wide_ad)
+    def wmass(lo, hi):
+        return float(wide[(wide_ad >= lo) & (wide_ad < hi)].sum())
+    L.append(f"- The grid is AD {grid_ad.min()} to {grid_ad.max()}, which assumes no deposit postdates "
+             f"{grid_ad.max() + 1}. On AD {wide_ad.min()} to {wide_ad.max()} the basin SPD holds "
+             f"{wmass(CONTACT_AD - 100, CONTACT_AD):.2f} in the century before AD {CONTACT_AD}, "
+             f"{wmass(CONTACT_AD, CONTACT_AD + 100):.2f} in the century after, "
+             f"{wmass(CONTACT_AD + 100, CONTACT_AD + 200):.2f} in the next and "
+             f"{wmass(CONTACT_AD + 200, 3000):.2f} after AD {CONTACT_AD + 200}; "
+             f"{wmass(CONTACT_AD, 3000):.2f} postdates AD {CONTACT_AD} and {wmass(1600, 3000):.2f} "
+             f"postdates AD 1600; the median is AD {median_ad(basin, wide_ad):.0f}.")
+    b_before = mass_between(spd_basin, CONTACT_AD - 100, CONTACT_AD)
+    b_after = mass_between(spd_basin, CONTACT_AD, CONTACT_AD + 100)
     L.append("")
-    L.append("Reading: the basin occupation SPD is concentrated in the 14th-16th "
-             "centuries and the probability mass falls sharply across the contact "
-             "interval, consistent with the truncation the manuscript invokes (the "
-             "sequence ends at/after contact rather than continuing).")
+    L.append("Reading: "
+             + (f"It does not fall at contact: the century after AD {CONTACT_AD} holds "
+                f"{b_after:.2f} of the probability against {b_before:.2f} in the century before, "
+                f"and the century after that holds "
+                f"{mass_between(spd_basin, CONTACT_AD + 100, CONTACT_AD + 200):.2f}. "
+                if b_after >= 0.75 * b_before else
+                f"It falls across contact: the century after AD {CONTACT_AD} holds {b_after:.2f} "
+                f"of the probability against {b_before:.2f} in the century before. ")
+             + "The calibration curve is flat across much of this interval, which spreads each "
+               "determination over it, so neither a fall nor its absence at contact is resolved "
+               "to the decade. A hard-coded sentence here said the mass \"falls sharply across the "
+               "contact interval\" until 2026-10-02; the figure never showed that.")
     L.append("")
 
     # --- Seriation axis vs calendar age, corpus-based ---

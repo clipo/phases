@@ -27,8 +27,10 @@ as low as the observed one. Every simulated record's four shares are therefore
 written out (RECORDS_CSV), and the report gives, for each cell, the quantiles of
 each share and the fraction of simulated records scoring at or below the
 observed value. The whole grid is also rerun at two further diversity-matched
-combinations from analysis 88 (COMBOS), because a power statement made at one
-calibrated combination is a statement about that combination.
+combinations (COMBOS), because a power statement made at one calibrated
+combination is a statement about that combination. The two are fixed here and
+checked against the calibration at run time: the script raises if either no
+longer passes the fifty-run diversity confirmation.
 
 Output: output/findings/partition_power.md, output/findings/partition_power_records.csv,
 figures/figS12_partition_power.*
@@ -49,9 +51,11 @@ sys.path.insert(0, str(ROOT / "src"))
 OUT_MD = ROOT / "output" / "findings" / "partition_power.md"
 RECORDS_CSV = ROOT / "output" / "findings" / "partition_power_records.csv"
 FIG = "figS12_partition_power"
-# Further diversity-matched combinations (learners, innovation, mixing), from
-# analysis 88's confirmed set: the second-ranked, and the one with the largest
-# simulated spread. The calibrated combination is read from calibrated_rates.csv.
+# Further diversity-matched combinations (learners, innovation, mixing). They were
+# picked from the confirmed set of the 2026-09-23 calibration; in the calibration of
+# 2026-10-01 both still pass the fifty-run confirmation (fourth and eighth by
+# fifty-run median), which main() verifies. The calibrated combination is read
+# from calibrated_rates.csv.
 COMBOS = [(10000, 0.0005, 0.002), (2000, 0.002, 0.005)]
 STATS = ("f_alt", "f_opt", "b_alt", "b_opt")
 CELLS = [(1.0, 0.0), (0.1, 0.0), (0.03, 0.0), (1.0, 0.2), (0.03, 0.2)]  # (copying factor, local innovation)
@@ -170,7 +174,7 @@ def main() -> int:
     names = [str(i) for i in counts.index]
     if names != [str(n) for n in data["names"]]:
         raise RuntimeError("assemblage order differs between loaders")
-    labels_ph, _ = ph.assign_phases_by_territory(names, coords.to_numpy(float))
+    labels_ph, _ = ph.assign_primary_phases(names, coords.to_numpy(float))
     plist = sorted(set(labels_ph)); phase = np.array([plist.index(l) for l in labels_ph])
     parkin = np.array([1 if l == "Parkin" else 0 for l in labels_ph])
     pts = t74.km_xy(coords.to_numpy(float))
@@ -193,6 +197,13 @@ def main() -> int:
          "|---|---|---|---|---|---|---|"]
     fmt = lambda v: f"{np.median(v):.2f} ({np.mean(np.array(v) >= 0.9) * 100:.0f}%)"
     combos = [(cell["n_ind"], cell["innovation"], cell["mixing"])] + [c for c in COMBOS]
+    _cal = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibration.csv")
+    _cal = _cal[(_cal["region"] == "basin") & (_cal["model"] == "pooled")]
+    for n_, inn_, mix_ in COMBOS:
+        hit = _cal[(_cal["n_ind"] == n_) & np.isclose(_cal["innovation"], inn_) & np.isclose(_cal["mixing"], mix_)]
+        if hit.empty or not bool(hit["stage2_matched"].iloc[0]):
+            raise SystemExit(f"combination {(n_, inn_, mix_)} no longer passes the fifty-run "
+                             "diversity confirmation; choose another before reporting power at it")
     rows = []
     for ci, (n_ind, innov, mix) in enumerate(combos):
         for leak, strength in CELLS:

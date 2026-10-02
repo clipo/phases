@@ -232,7 +232,7 @@ def fig4_validation() -> None:
         "patchiness": "Spatial\npatchiness",
         "drift_space": "Distance-limited\ncopying",
     }
-    SIG_LABELS = ["Neutral departure", "Seriability", "Cultural F_ST", "Spatial boundary"]
+    SIG_LABELS = ["Neutral departure", "Seriability", "Cultural $F_{ST}$", "Spatial boundary"]
     # Grayscale: distinct marker and line style per signature so the four series
     # read apart without color.
     SIG_COLORS = ["0.0", "0.45", "0.0", "0.45"]
@@ -325,12 +325,16 @@ def fig4_ca_ordination() -> None:
     pk_y = float(ca2_s[PARKIN_CUR])
     ax.scatter([pk_x], [pk_y], s=170, marker="*",
                facecolor="white", edgecolors="black", linewidths=0.9,
-               label="Parkin", zorder=6)
-    ax.annotate("Parkin", (pk_x, pk_y), fontsize=7,
-                xytext=(5, 5), textcoords="offset points", color=OI_VERMIL)
+               zorder=6)
+    # Below and left of the star: above and right it sat on a neighboring marker.
+    ax.annotate("Parkin", (pk_x, pk_y), fontsize=7, ha="right", va="top",
+                xytext=(-7, -7), textcoords="offset points", color=OI_VERMIL)
 
     cbar = fig.colorbar(sc, ax=ax, fraction=0.03, pad=0.02)
-    cbar.set_label("CA1 rank (0=early, 1=late)", fontsize=7)
+    # The axis is ordered, not dated: its direction is the one four radiocarbon
+    # medians weakly favor, and the order runs largely south to north, so the
+    # label does not say "early" and "late".
+    cbar.set_label("rank on CA dimension 1", fontsize=7)
     cbar.ax.tick_params(labelsize=7)
 
     ax.set_xlabel(f"CA dimension 1 ({inertia_frac1:.2f} inertia)", fontsize=9)
@@ -346,7 +350,7 @@ def fig4_ca_ordination() -> None:
     inerti2 = sig2**2
     frac2_val = float(inerti2[1] / inerti2.sum()) if inerti2.sum() > 0 else 0.0
     ax.set_ylabel(f"CA dimension 2 ({frac2_val:.2f} inertia)", fontsize=9)
-    ax.legend(frameon=False, fontsize=8)
+    # Parkin is labeled beside its marker; a legend repeated it.
     ax.axhline(0, color="0.85", linewidth=0.5, zorder=0)
     ax.axvline(0, color="0.85", linewidth=0.5, zorder=0)
 
@@ -665,7 +669,7 @@ def fig6_empirical_trajectory() -> None:
     SIGS = ["neutral_departure", "seriation", "fst", "spatial_boundary"]
     SIG_LABELS = {"neutral_departure": "Neutral departure (θF/θE)",
                   "seriation": "Seriation fragmentation",
-                  "fst": "Cultural F_ST",
+                  "fst": "Cultural $F_{ST}$",
                   "spatial_boundary": "Spatial boundary excess"}
     SIG_COLORS = {"neutral_departure": OI_BLUE, "seriation": OI_PURPLE,
                   "fst": OI_ORANGE, "spatial_boundary": OI_GREEN}
@@ -736,7 +740,7 @@ def fig6_empirical_trajectory() -> None:
             ax.text(0.95, 0.95, rf"$\rho$ = {rho:+.2f}", transform=ax.transAxes,
                     ha="right", va="top", fontsize=9)
     for ax in axes[1, :]:
-        ax.set_xlabel("CA seriation bin (early to late)", fontsize=8)
+        ax.set_xlabel("seriation period (order on CA dimension 1)", fontsize=8)
     fig.tight_layout()
     save(fig, "fig6_empirical_trajectory")
     print("fig6_empirical_trajectory.png written")

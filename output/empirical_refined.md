@@ -31,7 +31,7 @@ Primary run uses the IDSS continuity threshold cont=0.1 (see note: cont=0.30 of 
 - Number of maximal co-seriable groups (cont=0.1): **34**. Largest group sizes: [4, 4, 3, 3, 3, 3, 3, 3] (max group size = 4).
 - Group-size distribution {size: n_groups}: {1: 8, 2: 13, 3: 11, 4: 2}. The structure is highly FRAGMENTED: many small overlapping windows, no single large ordering covering the set. This matches Lipo et al. 2015, where the largest LMV solution held only four assemblages.
 - Multi-membership (bridge) assemblages: 18 of 28 belong to more than one maximal group.
-- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.628 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
+- Spatial coherence of IDSS groups: mean within-group geographic distance / mean between-group distance = 0.624 (< 1 means co-seriable assemblages are geographically CLOSER than non-co-seriable pairs, i.e. groups are spatially clustered).
 - **Parkin** belongs to 3 maximal groups (bridge = True); bridge rank 10 of 28 by membership count (cont=0.1). Top bridge assemblages: Barton_Ranch(6), Williamson(6), Rose_Mound(6), Belle_Meade(5), Cramor_Place(4), Neeleys_Ferry(4).
 
 Bin/continuity sensitivity of the IDSS structure:
@@ -63,7 +63,7 @@ Spearman rho of each signature with the ordered bin index:
 |---|---|---|---|---|
 | Neutral departure | +0.30512 | [+0.08993, +0.48183] | +0.429 | yes |
 | Cultural F_ST | +0.00076 | [-0.05221, +0.07078] | +0.400 | no |
-| Spatial boundary excess | +0.51494 | [-8.38513, +12.37512] | +0.200 | no |
+| Spatial boundary excess | +0.36000 | [-8.62839, +12.34540] | +0.200 | no |
 
 - Of 3 signatures: 2 trend up (rho>+0.3), 0 trend down (rho<-0.3); 1 have a bootstrap slope CI that excludes 0. For convergence (H1) all three should rise together with CIs above 0.
 
@@ -77,10 +77,10 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 |---|---|---|---|---|---|
 | Neutral departure | 0.1099 | 1.3683 | +1.2584 | [+0.7889, +1.8190] | higher late (CI excludes 0) |
 | Cultural F_ST | 0.0028 | 0.0054 | +0.0026 | [-0.0091, +0.0183] | higher late |
-| Spatial boundary excess | 42.2252 | -1.5779 | -43.8032 | [-102.2037, +67.4255] | higher early |
+| Spatial boundary excess | -6.1640 | -1.5779 | +4.5860 | [-64.4664, +56.5713] | higher late |
 | IDSS n_groups (fragmentation) | 11.0000 | 8.0000 | -3.0000 | [-5.0000, +3.0000] | higher early |
 
-- JOINT structural reading: 2 of 4 structural signatures are higher in the late third; 1 of 4 have a bootstrap CI that excludes 0. Bounded-group consolidation (H1) predicts higher F_ST, higher boundary excess, higher within-group neutral departure, AND MORE IDSS groups jointly in the late third with CIs above 0.
+- JOINT structural reading: 3 of 4 structural signatures are higher in the late third; 1 of 4 have a bootstrap CI that excludes 0. Bounded-group consolidation (H1) predicts higher F_ST, higher boundary excess, higher within-group neutral departure, AND MORE IDSS groups jointly in the late third with CIs above 0.
 
 ## 6. Corrected Parkin record (settlement-level cross-check)
 
@@ -100,19 +100,19 @@ The 'late-early' column is the observed point-estimate difference; the bootstrap
 ## 8. Pattern summary (NEUTRAL, no verdict)
 
 - 14C anchoring: 4 curated assemblages have a 14C date (of 14 dated proveniences); CA<->14C Spearman +0.000 (p 1.000). The anchor stays weak; the axis is essentially relative.
-- IDSS Signature 2: 34 maximal co-seriable groups at cont=0.1, max group size 4, 18/28 bridge assemblages. Highly fragmented (many small overlapping windows). Parkin is a high-degree bridge (rank 10/28). Groups are spatially clustered (within/between distance ratio 0.63).
+- IDSS Signature 2: 34 maximal co-seriable groups at cont=0.1, max group size 4, 18/28 bridge assemblages. Highly fragmented (many small overlapping windows). Parkin is a high-degree bridge (rank 10/28). Groups are spatially clustered (within/between distance ratio 0.62).
 - Signature-2 fragmentation vs CA position: rho -0.540, slope -1.4342, bootstrap CI [-2.2618, -0.7014] (excludes 0).
 - Four continuous signatures along the CA axis (6 bins):
   - Neutral departure: slope +0.30512, rho +0.429, CI [+0.08993, +0.48183] (excludes 0); bin-count sign stable.
   - Cultural F_ST: slope +0.00076, rho +0.400, CI [-0.05221, +0.07078] (spans 0); bin-count sign UNSTABLE.
-  - Spatial boundary excess: slope +0.51494, rho +0.200, CI [-8.38513, +12.37512] (spans 0); bin-count sign UNSTABLE.
+  - Spatial boundary excess: slope +0.36000, rho +0.200, CI [-8.62839, +12.34540] (spans 0); bin-count sign UNSTABLE.
   Convergence requires all three rising together with CIs above 0: 2 rise, 1 have a CI excluding 0.
 - Early- vs late-CA-third structural contrast (late - early):
   - Neutral departure: +1.2584 (CI excludes 0).
   - Cultural F_ST: +0.0026 (CI spans 0).
-  - Spatial boundary excess: -43.8032 (CI spans 0).
+  - Spatial boundary excess: +4.5860 (CI spans 0).
   - IDSS n_groups: -3.0000 (CI spans 0).
-  Joint bounded-group consolidation requires all four higher late with CIs above 0: 2/4 higher late, 1/4 CI excludes 0.
+  Joint bounded-group consolidation requires all four higher late with CIs above 0: 3/4 higher late, 1/4 CI excludes 0.
 - Settlement (corrected Parkin): Parkin is a fortified (ditched + palisaded) 7-mound town; mound-area rank-size slope -1.26, primacy 16.38. The LMV ditch/area fields under-record fortification; regional ditch counts are a floor.
 
 Plain statement on whether the refinement changes the prior no-convergence picture: see section 10.
@@ -128,7 +128,7 @@ Plain statement on whether the refinement changes the prior no-convergence pictu
 
 ## 10. For team interpretation (H1 vs H2; no verdict)
 
-Status of the no-convergence picture after refinement (NEUTRAL): of the three continuous transmission signatures, 2 rise and 0 fall along the CA axis, and 1 of three have a bootstrap slope CI that excludes zero. In the chronology-light early-vs-late contrast, 2 of four structural signatures are higher in the late third and 1 of four have a CI excluding zero. The improved 14C match did not strengthen the time anchor (4 dated curated assemblages). These are the observed quantities; whether they amount to convergence is the team's call.
+Status of the no-convergence picture after refinement (NEUTRAL): of the three continuous transmission signatures, 2 rise and 0 fall along the CA axis, and 1 of three have a bootstrap slope CI that excludes zero. In the chronology-light early-vs-late contrast, 3 of four structural signatures are higher in the late third and 1 of four have a CI excluding zero. The improved 14C match did not strengthen the time anchor (4 dated curated assemblages). These are the observed quantities; whether they amount to convergence is the team's call.
 
 - Consistent with H1 (nascent emergence / consolidation) IF the three continuous signatures rise JOINTLY with CIs above zero, the IDSS fragmentation trend and early-vs-late contrast point the same way, and Parkin sits as a late high-degree bridge in a system tightening toward contact.
 - Consistent with H2 (stable non-consolidation; Rees 2001) IF the signatures do NOT rise jointly, the slope CIs span zero, and the early-vs-late contrast shows no coherent bounded-group strengthening, i.e. a persistently fragmented, overlapping-lineage system.

@@ -18,11 +18,13 @@ in expectation for unrelated partitions and one for identical ones. If the
 phases are ceramic units, agreement should RISE as the pottery enters.
 
 THE CIRCULARITY THAT WOULD MANUFACTURE THIS RESULT, and the control for it.
-Nine of the 43 assemblages are not in Mainfort's phase lists; this project
-assigns them the phase of the territory they fall in, which is a geographic
-rule. Scoring geography against those labels would be scoring geography against
-geography. Every number is therefore reported twice: over every assemblage, and over only
-the assemblages Mainfort himself assigned. The conclusion rests on the second.
+Some assemblages lie inside no phase area; this project assigns them the
+nearest one (36_canonical_phase_map.assign_primary_phases), which is a
+geographic rule. Scoring geography against those labels would be scoring
+geography against geography. Every number is therefore reported twice: over
+every assemblage, and over only the assemblages inside a phase area. The
+reading rests on the second. (Until 2026-10-01 the labels were Mainfort's 1996
+assignments and the directly assigned set was the assemblages on his map.)
 
 THREE ROBUSTNESS AXES, because a single clustering of a single representation
 is not a result.
@@ -188,7 +190,7 @@ def main() -> int:
     xy = coords.to_numpy(float)
     pts = t74.km_xy(xy)
 
-    labels_ph, derived = ph.assign_phases_by_territory(names, xy)
+    labels_ph, derived = ph.assign_primary_phases(names, xy)
     derived = np.asarray([bool(d) for d in derived]) if not isinstance(derived, dict) \
         else np.array([bool(derived.get(n, False)) for n in names])
     phases = sorted(set(labels_ph))
@@ -298,19 +300,42 @@ def main() -> int:
     ax.legend(fontsize=5.5, frameon=False, loc="lower left")
     png = fs.save_all(fig, FIG, close=True)
 
+    _chi = df[(df["transform"] == "chisq") & (df["algorithm"] == "kmeans")]
+    _a0 = float(_chi[_chi["w"] == 0]["ari_mapped"].iloc[0])
+    _ainf = float(_chi[~np.isfinite(_chi["w"])]["ari_mapped"].iloc[0])
+    _brow = _chi.loc[_chi["ari_mapped"].idxmax()]
+    _best = float(_brow["ari_mapped"])
+    _wbest = "pottery alone" if not np.isfinite(_brow["w"]) else (
+        "zero (the map alone)" if _brow["w"] == 0 else f"{_brow['w']:g}")
+    _C = unit_scale(composition_features(p, "chisq"))
+    _misplaced_rows = []
+    for _tag, _F in (("site map alone", G),
+                     ("map plus composition, weight 0.5", np.column_stack([G, np.sqrt(0.5) * _C])),
+                     ("composition alone", _C)):
+        for how in ("kmeans", "ward", "average"):
+            lab = cluster(_F, k, how, 0, mf)
+            major = {c: pd.Series(np.asarray(labels_ph)[lab == c]).value_counts().idxmax()
+                     for c in np.unique(lab)}
+            wrong = [f"{names[i]} ({labels_ph[i]}, with {major[lab[i]]})"
+                     for i in range(len(names)) if labels_ph[i] != major[lab[i]] and mapped[i]]
+            unscored = [f"{names[i]} ({labels_ph[i]}, with {major[lab[i]]})"
+                        for i in range(len(names)) if labels_ph[i] != major[lab[i]] and not mapped[i]]
+            _misplaced_rows.append(f"| {_tag} | {how} | {ari(pidx[mapped], lab[mapped]):.3f} | "
+                                   f"{len(wrong)}: {'; '.join(wrong) if wrong else 'none'} | "
+                                   f"{'; '.join(unscored) if unscored else 'none'} |")
     L = ["# What recovers the phase scheme: the pottery, or the map?", "",
          f"Basin phase set, {len(names)} assemblages, {k} phases, 10 decorated classes.",
-         f"{int(derived.sum())} assemblages carry a phase this project derived by "
-         f"territory, a geographic",
+         f"{int(derived.sum())} assemblages lie inside no Phillips (1970) phase area and take the "
+         f"nearest, a geographic",
          f"rule; they are EXCLUDED from the column the conclusion rests on, leaving "
          f"{int(mapped.sum())}",
-         "assemblages Mainfort himself assigned.", "",
+         "assemblages inside a phase area.", "",
          "Agreement is the adjusted Rand index: 0 in expectation for unrelated "
          "partitions, 1 for",
          "identical ones. Weight 0 is the site map alone; the last row is the "
          "pottery alone.", "",
-         f"| composition transform | weight on composition | ARI, all {len(names)} | ARI, Mainfort's "
-         f"{int(mapped.sum())} | k-means seed range |",
+         f"| composition transform | weight on composition | ARI, all {len(names)} | ARI, the "
+         f"{int(mapped.sum())} inside an area | k-means seed range |",
          "|---|---|---|---|---|"]
     for kind in ("raw", "clr", "chisq"):
         for _, r in df[(df["transform"] == kind) & (df["algorithm"] == "kmeans")].iterrows():
@@ -333,7 +358,7 @@ def main() -> int:
           "are zero, so the log-ratio transform",
           "cannot be computed without deciding what a zero is worth. Map plus log-ratio "
           "composition",
-          "at half weight, on Mainfort's assemblages, under five conventions:", "",
+          "at half weight, on the assemblages inside a phase area, under five conventions:", "",
           "| zero convention | ARI |", "|---|---|"]
     for label, a in zero_rows:
         L.append(f"| {label} | {a:.3f} |")
@@ -342,30 +367,32 @@ def main() -> int:
           "perfect one. That is a property of the convention, not of the pottery, and it",
           "is why the chi-square transform -- which needs no such choice -- is the one",
           "the reading below uses.", "",
+          "## Which assemblages each clustering misplaces", "",
+          "Each cluster is given the phase most of its members carry; an assemblage is misplaced",
+          "when its own phase is another. All assemblages are clustered and vote; the count is over the",
+          f"{int(mapped.sum())} inside a phase area, the ones the index is scored on, and an assemblage placed by the",
+          "nearest area is listed in the last column and not counted. Chi-square composition; k-means",
+          "is the run from seed 0 (the seed range in the first table shows whether the start matters).", "",
+          "| clustered on | method | adjusted Rand index (inside an area) | misplaced, of those scored | misplaced, placed by nearest area (not scored) |",
+          "|---|---|---|---|---|",
+          *_misplaced_rows,
+          "",
           "## Reading", "",
           f"Partitions carrying the phases' own group sizes with boundaries placed at "
           f"random agree with the phases at a median ARI of {np.median(rnd):.3f} "
           f"({args.random} draws), which is what",
           "the group sizes manufacture on their own.", "",
-          "The site map alone recovers the published scheme well above what the group",
-          "sizes manufacture. Composition adds to it, and the addition is real but",
-          "secondary: under the chi-square transform, which carries no free parameter,",
-          "agreement rises from the map-alone value to its best at a composition weight",
-          "of 0.1 to 0.25, that is with the pottery counting for a quarter or less of",
-          "what the coordinates count for. Weighting the pottery equally with the map is",
-          "already worse than the map alone, and the pottery by itself is worst of all.",
-          "",
-          "So the scheme is neither purely geographic nor a reading of the pots. It is",
-          "the pots seen through where the sites are, with geography carrying most of",
-          "the weight. That is consistent with the rest of this paper: on a compositional",
-          "gradient with no edges, similarity is a monotone function of proximity, so",
-          "sorting assemblages by how alike their pots look largely recovers where they",
-          "are, and the residual ceramic signal refines that rather than overriding it.",
-          "",
-          "**What this does not show.** It does not show the assemblages are",
-          "compositionally identical; they are not, and composition varies strongly with",
-          "distance. It shows that the particular five-way division the phase scheme",
-          "draws is predicted by the coordinates and not by the pots.", "",
+          f"Under the chi-square transform, which carries no free parameter, k-means, on the "
+          f"{int(mapped.sum())} assemblages",
+          f"assigned directly: the site map alone, {_a0:.3f}; the best agreement, {_best:.3f}, at a "
+          f"composition weight of {_wbest}; the pottery alone, {_ainf:.3f}.", "",
+          "How to read the three values. A scheme that divides the map would be recovered by",
+          "the map alone, well above what the group sizes manufacture, and adding the pottery",
+          "would not help. A scheme that reads the pottery would be recovered better as the",
+          "pottery enters. This file states the values and draws no conclusion from them.", "",
+          "**What this does not show.** Agreement with a published scheme says how the scheme",
+          "was drawn, not how its units behaved: workers who sorted these same collections by",
+          "resemblance and by proximity are matched best by a clustering that uses both.", "",
           f"Figure written to {png.name} and its siblings; full grid in {OUT_CSV.name}.", ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(df[df["algorithm"] == "kmeans"][["transform", "w", "ari_all", "ari_mapped"]]

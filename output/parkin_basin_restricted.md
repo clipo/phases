@@ -4,16 +4,16 @@ Does the whole-LMV no-convergence result hold within the St. Francis basin (the 
 
 ## 0. Basin definition and subset sizes
 
-- Whole-LMV curated decorated set: 38 assemblages (all with coordinates), lat [34.353, 35.619], lon [-90.724, -89.978].
-- Whole-LMV broad settlement set (matched to coordinates): 255 sites, lat [33.034, 35.619], lon [-91.379, -89.978]. Coordinates computed from UTM (EPSG:26915 -> EPSG:4326).
+- Whole-LMV curated decorated set: 38 assemblages (all with coordinates), lat [34.353, 35.601], lon [-90.724, -89.978].
+- Whole-LMV broad settlement set (matched to coordinates): 255 sites, lat [33.034, 35.601], lon [-91.379, -89.978]. Coordinates computed from UTM (EPSG:26915 -> EPSG:4326).
 - Largest inter-site latitude gap in the curated set: 34.521 -> 34.756 (gap 0.235). The primary cut lat >= 34.5 sits in this gap.
 
 Subset n by latitude cut:
 | lat cut | curated n | broad n | curated lat range | broad lat range |
 |---|---|---|---|---|
-| >= 34.0 | 38 | 174 | [34.353, 35.619] | [34.007, 35.619] |
-| >= 34.5 | 36 | 110 | [34.521, 35.619] | [34.504, 35.619] |
-| >= 35.0 | 17 | 55 | [35.006, 35.619] | [35.006, 35.619] |
+| >= 34.0 | 38 | 174 | [34.353, 35.601] | [34.007, 35.601] |
+| >= 34.5 | 36 | 110 | [34.521, 35.601] | [34.504, 35.601] |
+| >= 35.0 | 17 | 55 | [35.006, 35.601] | [35.006, 35.601] |
 
 - Curated assemblages EXCLUDED at lat < 34.5 (2): Salomon (34.35), Parchman (34.36) (the southern St-Francis-type outliers; Winterville is not in the curated decorated set at all).
 - Broad St-Francis-flagged sites below the cut (1): 17-M-2 (33.95). All other St-Francis-flagged sites are at lat >= 34.77.
@@ -27,33 +27,33 @@ Basin curated decorated set (lat >= 34.5): **n = 36** assemblages, 10 decorated 
 - 14C anchors within the basin: 5; CA<->14C Spearman = +0.500 (p = 0.391); axis flipped so increasing = later.
 - The basin time anchor is WEAK (5 anchors): the CA axis is essentially a relative seriation ordinate; per-bin slopes are not rates.
 
-- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.484, k=3:0.526, k=4:0.525, k=5:0.487, k=6:0.491; chosen k = 3.
-  cluster sizes: c0:11, c1:3, c2:22.
+- Within-basin spatial clustering (k-means): silhouette by k: k=2:0.488, k=3:0.528, k=4:0.538, k=5:0.503, k=6:0.507; chosen k = 4.
+  cluster sizes: c0:10, c1:12, c2:11, c3:3.
 
 ### Four signatures along the CA axis (4 bins)
 
 Bins (ca_bin, n assemblages, n within-basin clusters represented):
-- bin 0: n=9, clusters=3
-- bin 1: n=9, clusters=3
-- bin 2: n=9, clusters=2
+- bin 0: n=9, clusters=4
+- bin 1: n=9, clusters=4
+- bin 2: n=9, clusters=3
 - bin 3: n=9, clusters=2
 
 | ca_bin | neutral_departure | fst | spatial_boundary |
 |---|---|---|---|
-| 0 | 1.2367 | 0.0035 | 19.326 |
-| 1 | 0.5329 | 0.0611 | 36.196 |
-| 2 | 0.3797 | 0.0108 | 29.566 |
-| 3 | 0.2776 | 0.0069 | -1.726 |
+| 0 | 1.3879 | 0.0048 | 19.326 |
+| 1 | 0.7806 | 0.1076 | 36.196 |
+| 2 | 0.2712 | 0.0122 | 29.566 |
+| 3 | 0.2776 | 0.0069 | 4.684 |
 
 Per-signature trend along the CA axis (OLS slope, bootstrap 95% CI over assemblages, Spearman rho):
 
 | signature | OLS slope | bootstrap 95% CI | Spearman rho | CI excludes 0 |
 |---|---|---|---|---|
-| Neutral departure | -0.30306 | [-0.71108, -0.12982] | -1.000 | yes |
-| Cultural F_ST | -0.00403 | [-0.01412, +0.04878] | +0.200 | no |
-| Spatial boundary excess | -6.97867 | [-20.84907, +29.07639] | -0.400 | no |
+| Neutral departure | -0.38405 | [-0.72535, -0.21166] | -0.800 | yes |
+| Cultural F_ST | -0.00892 | [-0.01858, +0.04042] | +0.200 | no |
+| Spatial boundary excess | -5.05563 | [-18.35276, +20.91473] | -0.400 | no |
 
-- convergence_score: slope = -0.48867; Spearman rho = -0.800 (p = 0.200) over 4 complete bins.
+- convergence_score: slope = -0.48989; Spearman rho = -0.800 (p = 0.200) over 4 complete bins.
 - Of 3 signatures within the basin: 0 trend up (rho>+0.3), 2 trend down (rho<-0.3); 1 have a bootstrap slope CI excluding 0. Convergence (H1) requires all three rising together with CIs above 0.
 
 ### Bin-count sensitivity (basin)
@@ -61,9 +61,9 @@ Per-signature trend along the CA axis (OLS slope, bootstrap 95% CI over assembla
 Spearman rho of each signature with the ordered bin index:
 | signature | 3 bins | 4 bins |
 |---|---|---|
-| Neutral departure | -0.500 | -1.000 |
+| Neutral departure | -0.500 | -0.800 |
 | Cultural F_ST | -0.500 | +0.200 |
-| Spatial boundary excess | -0.500 | -0.400 |
+| Spatial boundary excess | +0.500 | -0.400 |
 
 ## 2. IDSS group structure + Parkin bridge (basin curated set)
 
@@ -100,7 +100,7 @@ Parkin's LMV Max Mound Area is coded 0; substituting the documented site area (~
 
 ## 4. Comparison to whole-LMV (NEUTRAL)
 
-Transmission level. Whole-LMV (scripts 06/07): the four signatures did not co-rise toward contact; the convergence-score slope was slightly negative; the IDSS structure was a fragmented, overlapping-lineage system with Parkin a high-degree bridge. Within the basin (lat >= 34.5, n = 36): 0/3 continuous signatures trend up, 2/3 trend down, 1/3 have a bootstrap slope CI excluding zero; convergence-score slope -0.4887 (rho -0.800). The IDSS structure remains fragmented and Parkin remains a high-degree bridge (rank 9/36 at cont=0.1).
+Transmission level. Whole-LMV (scripts 06/07): the four signatures did not co-rise toward contact; the convergence-score slope was slightly negative; the IDSS structure was a fragmented, overlapping-lineage system with Parkin a high-degree bridge. Within the basin (lat >= 34.5, n = 36): 0/3 continuous signatures trend up, 2/3 trend down, 1/3 have a bootstrap slope CI excluding zero; convergence-score slope -0.4899 (rho -0.800). The IDSS structure remains fragmented and Parkin remains a high-degree bridge (rank 9/36 at cont=0.1).
 
 Settlement level (the picture most likely to change). Whole-LMV LMV-coded mound-area rank-size: slope -1.04, primacy 1.00, largest = 20-M-5 (no primacy). Within the basin: slope -0.88, primacy 1.89, largest = 13-M-1. With the corrected Parkin site area, whole-LMV: slope -1.26, primacy 16.38, Parkin rank 1/56; within-basin: slope -1.58, primacy 41.14, Parkin rank 1/20.
 

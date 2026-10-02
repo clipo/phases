@@ -101,8 +101,12 @@ def python_outputs(path: Path) -> tuple[set[str], set[str]]:
     """(artifacts written, sibling script modules imported)."""
     try:
         tree = ast.parse(path.read_text(errors="replace"))
-    except SyntaxError:
-        return set(), set()
+    except SyntaxError as exc:
+        # A script that does not parse cannot be run, and returning nothing for
+        # it dropped it from the manifest without a word (analysis 80, for a few
+        # hours on 2026-10-02). Fail instead.
+        raise SystemExit(f"{path}: does not parse ({exc.msg}, line {exc.lineno}); "
+                         "fix it before building the manifest") from exc
 
     # Seed the repo-root names. They are assigned from __file__ expressions
     # that no static pass can evaluate, and leaving them unresolved silently
@@ -238,6 +242,20 @@ def render(rows: dict[str, dict]) -> str:
         for o in v["outs"]:
             producer[o].append(k)
     contested = {o: p for o, p in producer.items() if len(p) > 1}
+    # A figure is written as four siblings sharing one stem (png, tif, pdf,
+    # svg), and a script may be detected under any one extension. Comparing
+    # full paths therefore missed two scripts writing the same figure: one
+    # showed as the producer of the .png and the other of the .svg, and each
+    # overwrote all four. Figures are compared by stem.
+    by_stem = {}
+    for o, ps in producer.items():
+        if o.startswith("figures/"):
+            by_stem.setdefault(o.rsplit(".", 1)[0], set()).update(ps)
+    for stem, ps in by_stem.items():
+        if len(ps) > 1:
+            for o in [o for o in contested if o.rsplit(".", 1)[0] == stem]:
+                del contested[o]
+            contested[stem + ".*"] = sorted(ps)
     n_art = len(producer)
 
     L = [

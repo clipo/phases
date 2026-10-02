@@ -238,7 +238,7 @@ def main() -> int:
     xy = coords.to_numpy(float)
     names = [str(i) for i in counts.index]
 
-    labels_ph, derived = ph.assign_phases_by_territory(names, xy)
+    labels_ph, derived = ph.assign_primary_phases(names, xy)
     phases = sorted(set(labels_ph))
     phase_idx = np.array([phases.index(l) for l in labels_ph])
     k = len(phases)
@@ -301,7 +301,7 @@ def main() -> int:
     axA = fig.add_subplot(gs[0, 0])
     if sweep is not None:
         axA.fill_between(sweep.k, sweep.drift_lo, sweep.drift_hi, color="0.82",
-                         label="calibrated drift, 95%")
+                         label="drift, 95% range")
         axA.plot(sweep.k, sweep.drift_median, color="0.45", lw=1.2, ls="--",
                  label="drift median")
         axA.plot(sweep.k, sweep.observed, color="0.1", lw=1.6, marker="o",
@@ -311,6 +311,8 @@ def main() -> int:
         axA.set_xticks(list(sweep.k))
         from matplotlib.ticker import MultipleLocator as _ML
         axA.yaxis.set_major_locator(_ML(0.01))
+        # Headroom for the legend: at the top left it sat on the observed line.
+        axA.set_ylim(top=float(sweep.observed.max()) * 1.30)
         axA.legend(fontsize=6, frameon=False, loc="upper left")
     else:
         axA.text(.5, .5, "run 71_scale_sweep.py", ha="center", transform=axA.transAxes)
@@ -330,7 +332,8 @@ def main() -> int:
                       label="compactness matched"),
                Line2D([], [], marker="*", ms=7, ls="none", color="0.05",
                       label="the phases")]
-    axB.set_xlabel("within-group inertia (km$^2$ per assemblage)")
+    # Two lines: on one it ran into panel C's label.
+    axB.set_xlabel("within-group inertia\n(km$^2$ per assemblage)")
     axB.set_ylabel("cultural $F_{ST}$")
     # Round ticks only. Panel B's default locator put ticks at 0.015, 0.025 and
     # 0.035, which scripts/check_figure_claims.py reads as statistics the
@@ -339,15 +342,19 @@ def main() -> int:
     # the comparison.
     from matplotlib.ticker import MultipleLocator
     axB.yaxis.set_major_locator(MultipleLocator(0.01))
-    axB.legend(handles=handles, fontsize=5.5, frameon=True, framealpha=0.92,
-               edgecolor="0.8", loc="lower right", handletextpad=0.5,
-               borderpad=0.4)
+    # Headroom above the cloud for the legend; at the lower right it covered points.
+    axB.set_ylim(top=float(max(np.max(alt), np.max(opt))) * 1.36)
+    axB.legend(handles=handles, fontsize=5.5, frameon=False, loc="upper right",
+               handletextpad=0.5, borderpad=0.2)
     fs.panel_label(axB, "B")
 
     axC = fig.add_subplot(gs[0, 2])
     axC.hist(opt, bins=26, color="0.78", edgecolor="0.55", lw=.4)
     axC.axvline(fst_phase, color="0.1", lw=1.8)
     axC.xaxis.set_major_locator(MultipleLocator(0.01))
+    # Wide enough for two round ticks; the data range alone showed one.
+    _xl = axC.get_xlim()
+    axC.set_xlim(min(_xl[0], 0.0049), max(_xl[1], 0.0205))
     axC.annotate(f"the phases\n{fst_phase:.4f}\n{ordinal(pct_opt)} percentile\n"
                  f"of this ensemble",
                  xy=(fst_phase, axC.get_ylim()[1] * .78), xytext=(6, 0),
@@ -384,9 +391,9 @@ def main() -> int:
          f"-{np.percentile(alt_in, 95):.0f}); the compactness-matched ensemble's is "
          f"{np.median(opt_in):.0f} ({np.percentile(opt_in, 5):.0f}"
          f"-{np.percentile(opt_in, 95):.0f}).",
-         f"The match is one-sided: the comparison partitions are looser than the phases,",
-         "not tighter, because the phases sit essentially at the compactness optimum for",
-         "these group sizes.", "",
+         f"{100 * np.mean(np.asarray(opt_in) < in_phase):.0f} percent of the compactness-matched "
+         f"partitions and {100 * np.mean(np.asarray(alt_in) < in_phase):.0f} percent of the",
+         "random-boundary ones are tighter than the phases.", "",
          f"Across the random-boundary draws, inertia and F_ST correlate at Spearman "
          f"{rho:+.2f}, and",
          f"across the compactness-matched draws at {rho_opt:+.2f}. So differentiation here "
@@ -407,18 +414,16 @@ def main() -> int:
          f"{k}-way division",
          "of these assemblages at these group sizes.", "",
          "## Reading", "",
-         "The phases are not arbitrary lines; they are where generations of workers",
-         "thought they saw structure. What the comparison shows is what that perception",
-         "was tracking. Beating shuffled labels says only that nearby assemblages",
-         "resemble one another, which isolation by distance produces on its own. Sitting",
-         "inside the size- and compactness-matched distribution says the particular",
-         "placement of these boundaries carries little information about where ceramic",
-         "differences lie beyond the fact that they enclose compact groups. And a search",
-         "that minimises inertia and never sees a potsherd rediscovers the phase",
-         "partition itself, from random starts, at the rate reported above.", "",
-         "A partition marking interaction communities should behave differently: it",
-         "should sit high against compactness-matched cuts, because the boundaries would",
-         "be where the differences are, not merely where the gaps between sites are.", "",
+         "Beating shuffled labels says only that nearby assemblages resemble one another,",
+         "which isolation by distance produces on its own. The comparison that bears on",
+         "the phase lines is their position among the size-matched ensembles. A partition",
+         "marking interaction communities should sit high against them, because its",
+         "boundaries would be where the differences are and not merely where the gaps",
+         "between sites are; a partition that sits near the middle separates the pottery",
+         "about as well as any division of the map into groups of these sizes. The",
+         "compactness search says how far the phase division is from the tightest division",
+         "of these sizes, and how often a search that never sees a potsherd returns it.",
+         "This file states those positions and draws no conclusion from them.", "",
          "The drift comparison in panel A is a separate statement: where the observed",
          "differentiation lies against calibrated spatial drift at each number of",
          "clusters. It is tabulated, with the share of runs reaching the observed value,",

@@ -2,8 +2,8 @@
 
 Produced by `analyses/87_axis_geography.py`. First correspondence-analysis axis of the 28 basin assemblages, oriented as every analysis and Figure 4 use it (17_basin_results.oriented_ca: pooled calibrated medians, weakly).
 
-- Rank correlation with latitude: **+0.77**; with longitude: +0.07.
-- Share of the axis's variance explained by a linear fit on latitude and longitude: **0.62**.
+- Rank correlation with latitude: **+0.77**; with longitude: +0.16.
+- Share of the axis's variance explained by a linear fit on latitude and longitude: **0.63**.
 
 ## Dated assemblages on the axis
 
@@ -19,9 +19,9 @@ Produced by `analyses/87_axis_geography.py`. First correspondence-analysis axis 
 
 | phase | assemblages | mean | min | max |
 |---|---|---|---|---|
-| Kent | 8 | -0.78 | -1.67 | -0.05 |
-| Parkin | 11 | +0.08 | -1.26 | +0.35 |
-| Walls | 9 | -0.26 | -0.99 | +0.19 |
+| Kent | 11 | -0.65 | -1.67 | +0.19 |
+| Parkin | 12 | +0.05 | -1.26 | +0.35 |
+| Walls | 5 | -0.24 | -0.65 | +0.03 |
 
 ## Reading
 

@@ -80,7 +80,7 @@ def main() -> int:
     counts, coords = mf._load_curated()
     names = [str(i) for i in counts.index]
     xy = coords.to_numpy(float)
-    labels_ph, _ = ph.assign_phases_by_territory(names, xy)
+    labels_ph, _ = ph.assign_primary_phases(names, xy)
     phases = sorted(set(labels_ph))
     pidx = np.array([phases.index(l) for l in labels_ph])
     sizes = np.bincount(pidx)
@@ -131,7 +131,12 @@ def main() -> int:
 
     def boundary_points(labels):
         polys = {}
-        for lab in set(labels):
+        # sorted(): a set of phase names iterates in an order that changes from
+        # one Python process to the next (string hashing is salted), which changes
+        # the direction the shared lines are assembled in and so where the 1.5 km
+        # sample points fall. Analysis 75 has the same construction and showed it:
+        # the same command gave the 8th or the 9th percentile.
+        for lab in sorted(set(labels)):
             mem = [cells[i] for i in range(len(cells))
                    if owner[i] is not None and labels[owner[i]] == lab]
             if mem:
@@ -184,6 +189,10 @@ def main() -> int:
     ax = fig.add_subplot(gs[0, 0])
     mm.basin_basemap(ax, ext, geology=False, grayscale=True, show_counties=False,
                      show_states=True, draw_rivers=True)
+    # River names moved off the assemblage circles and the boundary points.
+    ph.move_label(ax, "Tyronza R.", de=9_000.0)
+    ph.move_label(ax, "Mississippi R.", remove=True)   # no clear place for it here
+    ph.move_label(ax, "St. Francis R.", remove=True)
     im = ax.pcolormesh(gx, gy, surf, cmap="Greys", vmin=0,
                        vmax=float(np.percentile(surf, 99)), alpha=0.75, shading="auto",
                        zorder=1.2)
@@ -203,7 +212,9 @@ def main() -> int:
     axB.axvline(main_row["phase_boundaries"], color="0.05", lw=1.8, label="the phase boundaries")
     axB.set_xlabel("median settlement density along the boundaries\n(sites per 100 km$^2$)")
     axB.set_ylabel("partitions")
-    axB.legend(fontsize=5.5, frameon=False)
+    # Headroom for the legend, which sat on the tallest bars.
+    axB.set_ylim(top=axB.get_ylim()[1] * 1.32)
+    axB.legend(fontsize=5.5, frameon=False, loc="upper right")
     fs.panel_label(axB, "B")
     png = fs.save_all(fig, FIG, close=True)
 

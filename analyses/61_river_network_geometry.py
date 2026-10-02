@@ -150,7 +150,7 @@ def main() -> None:
     # phases, and about the phases taken as units.
     import itertools
     ph = importlib.import_module("36_canonical_phase_map")
-    lab = np.array(ph.assign_phases_by_territory([str(i) for i in counts.index], coords)[0])
+    lab = np.array(ph.assign_primary_phases([str(i) for i in counts.index], coords)[0])
     same = (lab[:, None] == lab[None, :])[iu][ok]
     L += ["", "### Within phases and between them", "",
           "| pairs | n | straight-line | river | river, straight-line held fixed | "

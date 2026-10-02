@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """The phase tests, replicated on Mainfort's (2003) table under his own phases.
 
-The primary analysis tests three phases on the matrix built from the survey's
-counts and Lipo's compilation. Mainfort (2003, Table 1) assembled a different
-tally of the same region, 39 sites of 800 or more sherds, and assigned them to
-phases under a DIFFERENT CONFIGURATION: Smith's (1990) Horseshoe Lake phase
-split out of Walls, Hollywood and Commerce moved from Walls to Kent, Castile
-Landing to Parkin, Carson Lake to Walls, Jeter to Walls. Nine of the 36 sites
-in both schemes carry different assignments. Two workers, the same sites,
-different lines.
+The primary analysis tests three phases, as Phillips (1970) drew them, on the
+matrix built from the survey's counts and Lipo's compilation. Mainfort (2003,
+Table 1) assembled a different tally of the same region, 39 sites of 800 or
+more sherds, and assigned them to phases under a DIFFERENT CONFIGURATION. He
+follows Phillips's assignments for the Kent, Parkin, Walls and Nodena sites
+(2003:176-177) with two kinds of change: Smith's (1990) Horseshoe Lake phase,
+which takes Beck and Belle Meade out of Phillips's Kent and Mound Place and
+Young out of his Walls, and the western Tennessee phases (Tipton, Jones
+Bayou), which Phillips's scheme does not reach. His table also lists Carson
+Lake under Walls, where Phillips's area has it in Nodena. Two workers, largely
+the same sites, different lines.
 
 That makes his table worth two things. First, a replication of the three
 tests that carry the paper's account, on a second tally and a second scheme.
@@ -25,7 +28,7 @@ with Tipton's one surviving site not carried as a phase of one:
      several weights, composition alone (as analyses/76_phase_recovery.py).
   2. His partition against size-matched partitions with boundaries placed at
      random and drawn to be compact (as analyses/74_phase_partition_test.py).
-  3. The contested sites. For each of the nine, the chi-square distance from
+  3. The contested sites (`contested_sites`). For each, the chi-square distance from
      the site's profile to the pooled profile of each candidate phase (the
      site itself left out of both), and the same for the site's straight-line
      distance to each phase's centroid. A site whose pottery is closer to the
@@ -59,10 +62,25 @@ OUT_MD = ROOT / "output" / "findings" / "mainfort_replication.md"
 FIG = "fig17_mainfort_replication"
 WEIGHTS = [0.0, 0.1, 0.25, 0.5, 1.0, 2.0, np.inf]
 MIN_PHASE_MEMBERS = 2
-# The nine sites the two schemes assign differently, with the Figure 1 phase.
-CONTESTED = {"Beck": "Walls", "Belle Meade": "Walls", "Mound Place": "Walls", "Young": "Walls",
-             "Hollywood": "Walls", "Commerce": "Walls", "Castile Lg.": "Kent",
-             "Carson Lake": "Nodena", "Jeter": "Tipton"}
+def contested_sites():
+    """{site: Phillips phase} for the sites of Mainfort's table that lie inside
+    a Phillips (1970) phase area and that Mainfort assigns to a different phase.
+
+    Computed from the assignment rather than listed, so it cannot fall out of
+    step with it. Sites inside no area (western Tennessee, which Phillips's
+    scheme does not reach) are not contested: nearness to an outline is not an
+    assignment by Phillips. Until 2026-10-01 this was a list of nine sites
+    against the Mainfort (1996) labels the pipeline then used; four of those
+    (Hollywood, Commerce, Castile Landing, Jeter) are not differences from
+    Phillips.
+    """
+    from mls_emergence.dataio.matrix import MAINFORT_SITES
+    ph = importlib.import_module("36_canonical_phase_map")
+    sites = pd.read_csv(MAINFORT_SITES, comment="#").set_index("site")
+    lab, der = ph.assign_phases_phillips(list(sites.index),
+                                         sites[["latitude", "longitude"]].to_numpy(float))
+    return {s: str(l) for s, l, d, his in zip(sites.index, lab, der, sites["phase_mainfort2003"])
+            if not d and l != his}
 
 
 def main() -> int:
@@ -129,6 +147,7 @@ def main() -> int:
     cm = p.mean(0)
     w = np.sqrt(np.where(cm > 0, cm, 1.0))
     contested = []
+    CONTESTED = contested_sites()
     for site, fig1 in CONTESTED.items():
         if site not in names:
             contested.append((site, "under the minimum, not tested", "", "", "", "", ""))
@@ -153,25 +172,28 @@ def main() -> int:
     ax = fig.add_subplot(gs[0, 0])
     x = np.arange(len(WEIGHTS))
     ax.plot(x, [r[1] for r in rec], color="0.1", marker="o", ms=3.5, lw=1.4, label="Mainfort's scheme")
-    ax.fill_between(x, [r[2] for r in rec], [r[3] for r in rec], color="0.85", label="range over initializations")
+    ax.fill_between(x, [r[2] for r in rec], [r[3] for r in rec], color="0.85", label="range over seeds")
     ax.axhline(np.median(rnd_ari), color="0.55", ls="-.", lw=1, label="same sizes, boundaries at random")
     ax.set_xticks(x)
     ax.set_xticklabels(["map\nalone" if w == 0 else ("pottery\nalone" if not np.isfinite(w) else f"{w:g}")
                         for w in WEIGHTS], fontsize=6)
     ax.set_xlabel("weight on composition relative to geography")
     ax.set_ylabel("agreement with Mainfort's phases\n(adjusted Rand index)")
+    # Room under the random-division line for the legend: at the lower left it
+    # sat on that line, and at the upper right on the curve's peak.
+    ax.set_ylim(bottom=min(ax.get_ylim()[0], float(np.median(rnd_ari)) - 0.19))
     ax.legend(fontsize=5.5, frameon=False, loc="lower left")
     fs.panel_label(ax, "A")
     axB = fig.add_subplot(gs[0, 1])
     tested = [c for c in contested if c[1] != "under the minimum, not tested" and c[3] != "no other member" and c[5] != "no other member"]
     ys = np.arange(len(tested))
     axB.barh(ys - 0.18, [float(c[3]) for c in tested], height=0.36, color="0.25", label="to Mainfort's phase")
-    axB.barh(ys + 0.18, [float(c[5]) for c in tested], height=0.36, color="0.7", label="to the Figure 1 phase")
+    axB.barh(ys + 0.18, [float(c[5]) for c in tested], height=0.36, color="0.7", label="to the primary-analysis phase")
     axB.set_yticks(ys)
     axB.set_yticklabels([f"{c[0]}\n({c[1]} / {c[2]})" for c in tested], fontsize=5.5)
     axB.invert_yaxis()
     axB.set_xlabel("ceramic distance to the phase's pooled profile\n(site left out)")
-    axB.legend(fontsize=5.5, frameon=False, loc="lower right")
+    axB.legend(fontsize=5.5, frameon=False, loc="upper right")
     fs.panel_label(axB, "B")
     png = fs.save_all(fig, FIG, close=True)
 
@@ -192,10 +214,10 @@ def main() -> int:
           f"**{t74.ordinal(pct_alt)} percentile**; drawn to be compact, median {np.median(opt):.4f}, "
           f"the **{t74.ordinal(pct_opt)} percentile**. The compactness search reproduced his partition "
           f"exactly {exact} times in {args.alt}.", "",
-          "## 3. The nine sites the two schemes assign differently", "",
+          f"## 3. The {len(CONTESTED)} sites the two schemes assign differently", "",
           "Chi-square distance from the site's profile to each candidate phase's pooled profile with the "
           "site left out, and straight-line km to that phase's centroid.", "",
-          "| site | Mainfort 2003 | Figure 1 | ceramic, to his | km, to his | ceramic, to Figure 1's | km, to Figure 1's |",
+          "| site | Mainfort 2003 | primary analysis | ceramic, to his | km, to his | ceramic, to the primary's | km, to the primary's |",
           "|---|---|---|---|---|---|---|"]
     for c in contested:
         L.append("| " + " | ".join(str(x) for x in c) + " |")

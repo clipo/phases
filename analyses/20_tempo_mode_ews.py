@@ -188,6 +188,18 @@ def ews_surrogate_p(resid, w, obs_tv, obs_ta, nsurr=3000):
     return cv / nsurr, ca / nsurr
 
 
+def _trend(tau, rng):
+    """Words for a Kendall tau and its range over the sensitivity sweep. The
+    direction is read from the sign across the whole sweep, never assumed: a
+    hard-coded "rises" stood beside a tau of -0.75 here until 2026-10-02."""
+    lo, hi = rng
+    if lo > 0:
+        return "rises"
+    if hi < 0:
+        return "falls"
+    return "shows no consistent trend, its sign changing across the sensitivity sweep"
+
+
 def main():
     counts, coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)
@@ -299,15 +311,18 @@ def main():
           "",
           f"**Reading.** The indicators are {verdict_ews}. Critical slowing down toward a "
           "bifurcation inflates the variance and the lag-1 autocorrelation together, and a "
-          "reliable signal requires both. Here the rolling variance shows no rising trend "
-          f"(tau {tv:+.2f}, p {pv:.2f}) and is unstable in sign across the sensitivity sweep, "
-          f"while the autocorrelation rises (tau {ta:+.2f}, p {pa:.2f}). The lone "
-          "autocorrelation trend is the less diagnostic of the two and is partly expected from "
-          "the CA ordering itself, which places compositionally similar assemblages adjacent "
-          "and so structures short-range autocorrelation. With the two indicators not rising "
-          "together, and with only 29 ordinal points, there is no robust early-warning signal "
-          "of an approaching transition. The result is concordant with the static criterion "
-          "and the tempo test.", "",
+          f"reliable signal requires both. Here the rolling variance {_trend(tv, tv_rng)} "
+          f"(tau {tv:+.2f}, p {pv:.2f}; {tv_rng[0]:+.2f} to {tv_rng[1]:+.2f} across the sweep), "
+          f"and the lag-1 autocorrelation {_trend(ta, ta_rng)} (tau {ta:+.2f}, p {pa:.2f}; "
+          f"{ta_rng[0]:+.2f} to {ta_rng[1]:+.2f}). A positive tau is a rise along the sequence "
+          "and a negative one a fall. The autocorrelation is the less diagnostic of the two "
+          "here in any case, because the CA ordering places compositionally similar "
+          "assemblages adjacent and so structures short-range autocorrelation by itself. "
+          + ("Both indicators rise. " if (tv_rng[0] > 0 and ta_rng[0] > 0) else
+             "The two indicators do not rise together. ")
+          + f"With {n} ordered assemblages and a rolling window of {w}, the test has little to "
+          "work with, and it shows no robust early-warning signal of an approaching transition. "
+          "The result is concordant with the static criterion and the tempo test.", "",
           "## Verdict", "",
           "Neither dynamic probe recovers a transition the static criterion missed. The "
           "aggregate diversity trajectory is best described by neutral drift (BM) rather than "

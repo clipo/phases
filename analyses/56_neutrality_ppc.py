@@ -206,7 +206,7 @@ def main(fast=False):
     ax.plot(t, pooled_env["sims"].mean(0), color=OI_BLUE, lw=1.2,
             label="predictive mean")
     ax.plot(t, obs_div, "o-", color=OI_VERMIL, ms=4, label="observed")
-    ax.set_xlabel("CA seriation bin (early to late)")
+    ax.set_xlabel("seriation period (order on CA dimension 1)")
     ax.set_ylabel("Gini-Simpson diversity")
     ax.legend(frameon=False, fontsize=6.5)
     fig.tight_layout()

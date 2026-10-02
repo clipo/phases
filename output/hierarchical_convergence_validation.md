@@ -12,18 +12,18 @@ Config: full — real-panel fit 2000 draws x 4 chains (800 bootstrap reps for pa
 
 ## Real-panel fit (baseline)
 
-- P(all four slopes > 0) = 0.715.
-- MCMC health: max R-hat = nan, min ESS = 1984, divergences = 1.
+- P(all four slopes > 0) = 0.719.
+- MCMC health: max R-hat = nan, min ESS = 2190, divergences = 0.
 
 ## 2. Prior sensitivity (real panel)
 
 | mu_sd | tau_sd | sigma_sd | P(all four > 0) |
 |---|---|---|---|
-| 0.5 | 0.5 | 0.25 | 0.770 |
-| 1.0 | 1.0 | 0.5 | 0.726 |
-| 2.0 | 2.0 | 1.0 | 0.655 |
+| 0.5 | 0.5 | 0.25 | 0.762 |
+| 1.0 | 1.0 | 0.5 | 0.733 |
+| 2.0 | 2.0 | 1.0 | 0.679 |
 
-- Verdict STABLE across priors (range 0.655-0.770).
+- Verdict STABLE across priors (range 0.679-0.762).
 
 ## 3. Posterior-predictive check (real panel)
 
@@ -34,8 +34,8 @@ Config: full — real-panel fit 2000 draws x 4 chains (800 bootstrap reps for pa
 | signature | 07 recomputed OLS slope | model posterior mean slope | same sign |
 |---|---|---|---|
 | neutral_departure | +0.30512 | +0.576 | True |
-| fst | +0.00076 | +0.272 | True |
-| spatial_boundary | +0.51494 | +0.326 | True |
-| seriation | +0.49578 | +0.489 | True |
+| fst | +0.00076 | +0.262 | True |
+| spatial_boundary | +0.36000 | +0.332 | True |
+| seriation | +0.49578 | +0.491 | True |
 
 - All panel-signature signs match between the recomputed 07 slopes and the model posterior: True.

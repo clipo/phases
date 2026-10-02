@@ -18,7 +18,7 @@ drift-and-hydrology effect rather than a social boundary.
 Per-run results cache to output/basin_pullout_runs.csv and the per-assemblage
 probabilities to output/basin_pullout_prob.csv; delete those to force a rerun.
 
-Writes output/basin_pullout.md and figures/fig9_parkin_pullout.png.
+Writes output/basin_pullout.md and figures/35_basin_pullout.png.
 
 Usage: PYTHONPATH=src python3 analyses/35_basin_pullout.py
 """
@@ -57,7 +57,9 @@ DATA = ROOT / "data"
 OUT_MD = ROOT / "output" / "basin_pullout.md"
 OUT_RUNS = ROOT / "output" / "basin_pullout_runs.csv"
 OUT_PROB = ROOT / "output" / "basin_pullout_prob.csv"
-OUT_FIG = ROOT / "figures" / "fig9_parkin_pullout.png"
+# This script's own figure. Until 2026-10-02 it was written to figures/fig9_parkin_pullout.*,
+# which `50_revision_figures.py` also writes (the revision figure of the same name), so run order decided the file.
+OUT_FIG = ROOT / "figures" / "35_basin_pullout.png"
 N_CONS = 500
 
 
@@ -126,7 +128,10 @@ def main():
     coords = coords_df[["Latitude", "Longitude"]].to_numpy(float)
     n = counts.shape[0]
     totals = counts.sum(1).astype(int)
-    is_parkin = m36.assign_phases(names, coords) == "Parkin"  # Mainfort Parkin phase
+    # Phillips's Parkin phase: the assemblages inside his Parkin area, not
+    # those the nearest-outline rule adds.
+    _lab, _der = m36.assign_primary_phases(names, coords)
+    is_parkin = (_lab == "Parkin") & ~_der
     pk = m33.parkin_index(names)
     lon, lat = coords[:, 1], coords[:, 0]
 
@@ -296,7 +301,7 @@ def main():
         f"# Does the Parkin phase pull out of the wider LMV set under drift? (n = {n})",
         "",
         f"All {n} Mainfort-PFG decorated LMV assemblages ({int(is_parkin.sum())} "
-        f"Parkin-phase, {int((~is_parkin).sum())} in other phases, after Mainfort 1996); "
+        f"inside Phillips's (1970) Parkin area, {int((~is_parkin).sum())} outside it); "
         f"neutral time-transgressive drift on the river network, no boundary imposed, "
         f"{N_CONS} realizations. Focal node: Parkin.",
         "",

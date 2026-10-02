@@ -1,4 +1,5 @@
-"""make_map.py — geographic study-area map (Figure 1).
+"""make_map.py — geographic study-area map (an early Figure 1; the manuscript's
+Figure 1 is now drawn by 93_phillips1970_phase_map.py, on this module's helpers).
 
 Produces figures/fig1_studyarea.png: site locations on local LMV GIS layers
 showing real river geometry (St. Francis, Tyronza, Mississippi) and

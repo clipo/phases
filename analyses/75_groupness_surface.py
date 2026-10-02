@@ -18,7 +18,7 @@ interaction communities is a place where composition changes fast over a short
 distance, so it appears as a ridge in this field. A gradient with no boundaries
 appears as a smooth surface with no ridges. Panel A shows the field alone;
 panel B draws the reconstructed phase boundaries (territory edges built from
-Mainfort's assignments as in Figure 1, not lines drawn by the original authors) on the same field, so the question
+the assemblages' Phillips (1970) phases by 36_canonical_phase_map, not the lines he drew) on the same field, so the question
 "do the boundaries lie on the ridges" is answered by looking, and by the number
 reported beside it.
 
@@ -115,7 +115,7 @@ def turnover_field(pts_km, props, gx, gy, bandwidth, min_weight):
 def territory_geometry(E, N, ext):
     """Voronoi cells of the assemblages (UTM metres) and the drawing envelope.
 
-    Territories exactly as Figure 1 builds them, so the phase boundaries drawn
+    Territories exactly as 36_canonical_phase_map builds them, so the phase boundaries drawn
     here are the same lines the phase map shows, not a second construction.
     The same geometry builds the alternative partitions' boundaries, so the
     comparison holds the construction fixed and varies only the labels.
@@ -147,7 +147,12 @@ def territory_boundaries(labels, cells, cell_owner, envelope):
     """
     from shapely.ops import unary_union
     polys = {}
-    for lab in set(labels):
+    # sorted(): a set of phase names iterates in an order that changes from one
+    # Python process to the next (string hashing is salted), which changed the
+    # direction the shared lines were assembled in, hence where the 1.5 km
+    # sample points fell, hence the median along them. Until 2026-10-02 the same
+    # command gave 0.01034 to 0.01038 per km and the 8th or 9th percentile.
+    for lab in sorted(set(labels)):
         member = [cells[i] for i in range(len(cells))
                   if cell_owner[i] is not None and labels[cell_owner[i]] == lab]
         if member:
@@ -213,7 +218,7 @@ def main() -> int:
     E, N = np.asarray(E, float), np.asarray(N, float)
     pts_km = np.column_stack([E, N]) / 1000.0
 
-    labels_ph, _ = ph.assign_phases_by_territory(names, xy)
+    labels_ph, _ = ph.assign_primary_phases(names, xy)
 
     pad = 18_000.0
     ext = (E.min() - pad, E.max() + pad, N.min() - pad, N.max() + pad)
@@ -223,7 +228,7 @@ def main() -> int:
                                args.bandwidth, MIN_WEIGHT)
     masked = np.ma.masked_where(~ok, field)
 
-    # Territories exactly as Figure 1 builds them, so the phase boundaries drawn
+    # Territories exactly as 36_canonical_phase_map builds them, so the phase boundaries drawn
     # here are the same lines the phase map shows, not a second construction.
     # The same function builds the alternative partitions' boundaries, so the
     # comparison holds the construction fixed and varies only the labels.
@@ -275,6 +280,14 @@ def main() -> int:
         ax = fig.add_subplot(gs[0, col])
         mm.basin_basemap(ax, ext, geology=False, grayscale=True,
                          show_counties=False, show_states=True, draw_rivers=True)
+        # River names: moved off the assemblage circles in A, and left out of B,
+        # where they sat on the boundary lines the panel is there to show.
+        if col == 0:
+            ph.move_label(ax, "Tyronza R.", de=9_000.0)
+            ph.move_label(ax, "Mississippi R.", dn=11_000.0)
+        else:
+            for _nm in ("Tyronza R.", "Mississippi R.", "St. Francis R."):
+                ph.move_label(ax, _nm, remove=True)
         im = ax.pcolormesh(gx, gy, masked, cmap="Greys", vmin=0, vmax=vmax,
                            alpha=0.78, shading="auto", zorder=1.2)
         ax.plot(E, N, "o", ms=2.4, mfc="white", mec="0.1", mew=0.5, zorder=4)
@@ -286,7 +299,9 @@ def main() -> int:
         ax.set_xticks([]); ax.set_yticks([])
         fs.panel_label(ax, "AB"[col])
         if col == 0:
-            mm._add_scale_bar(ax, ext, bar_km=25)
+            # The shared bar with a haloed label; the older helper's label was
+            # unreadable over the surface.
+            ph.add_scale_bar(ax, ext, x0=0.05, y0=0.045)
             # Horizontal colorbar in an inset below panel A, so it takes no
             # width from A (A and B stay the same size) and its tick labels
             # are not clipped by panel B.

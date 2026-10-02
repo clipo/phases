@@ -11,8 +11,12 @@ Calibration of the Mainfort (2001) determinations against IntCal20 (Reimer et al
 - Basin SPD median: AD 1428; Parkin SPD median: AD 1483.
 - Basin SPD probability mass after contact (AD 1541): 0.29; after AD 1600: 0.18.
 - Parkin SPD mass after AD 1541: 0.37; after AD 1600: 0.23.
+- Basin SPD mass by century around contact: AD 1241 to 1341, 0.18; AD 1341 to 1441, 0.19; AD 1441 to 1541, 0.19; AD 1541 to 1641, 0.19; AD 1641 to 1741, 0.10.
+- Parkin SPD mass by century around contact: AD 1241 to 1341, 0.15; AD 1341 to 1441, 0.16; AD 1441 to 1541, 0.21; AD 1541 to 1641, 0.23; AD 1641 to 1741, 0.12.
+- Basin SPD mass before AD 1241: 0.16; AD 1241 to 1641: 0.74.
+- The grid is AD 1000 to 1749, which assumes no deposit postdates 1750. On AD 800 to 1949 the basin SPD holds 0.17 in the century before AD 1541, 0.17 in the century after, 0.06 in the next and 0.08 after AD 1741; 0.31 postdates AD 1541 and 0.21 postdates AD 1600; the median is AD 1429.
 
-Reading: the basin occupation SPD is concentrated in the 14th-16th centuries and the probability mass falls sharply across the contact interval, consistent with the truncation the manuscript invokes (the sequence ends at/after contact rather than continuing).
+Reading: It does not fall at contact: the century after AD 1541 holds 0.19 of the probability against 0.19 in the century before, and the century after that holds 0.10. The calibration curve is flat across much of this interval, which spreads each determination over it, so neither a fall nor its absence at contact is resolved to the decade. A hard-coded sentence here said the mass "falls sharply across the contact interval" until 2026-10-02; the figure never showed that.
 
 ## Seriation axis vs calendar age (corpus-based re-test)
 

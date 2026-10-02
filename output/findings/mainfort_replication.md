@@ -19,21 +19,17 @@
 
 Cultural F_ST under his phases: **0.0470**. Against 1000 partitions with his group sizes: seeds at random, median 0.0302, his sits at the **94th percentile**; drawn to be compact, median 0.0324, the **89th percentile**. The compactness search reproduced his partition exactly 0 times in 1000.
 
-## 3. The nine sites the two schemes assign differently
+## 3. The 5 sites the two schemes assign differently
 
 Chi-square distance from the site's profile to each candidate phase's pooled profile with the site left out, and straight-line km to that phase's centroid.
 
-| site | Mainfort 2003 | Figure 1 | ceramic, to his | km, to his | ceramic, to Figure 1's | km, to Figure 1's |
+| site | Mainfort 2003 | primary analysis | ceramic, to his | km, to his | ceramic, to the primary's | km, to the primary's |
 |---|---|---|---|---|---|---|
-| Beck | Horseshoe Lake | Walls | 0.333 | 15 | 0.713 | 28 |
-| Belle Meade | Horseshoe Lake | Walls | 0.256 | 13 | 0.677 | 27 |
+| Beck | Horseshoe Lake | Kent | 0.333 | 15 | 0.242 | 14 |
+| Carson Lake | Walls | Nodena | 1.039 | 71 | no other member |  |
 | Mound Place | Horseshoe Lake | Walls | 0.651 | 17 | 0.778 | 7 |
 | Young | Horseshoe Lake | Walls | 0.467 | 13 | 0.443 | 15 |
-| Hollywood | Kent | Walls | 0.328 | 20 | 0.913 | 38 |
-| Commerce | Kent | Walls | 0.609 | 17 | 1.100 | 35 |
-| Castile Lg. | Parkin | Kent | 0.557 | 41 | 0.571 | 19 |
-| Carson Lake | Walls | Nodena | 1.039 | 71 | no other member |  |
-| Jeter | under the minimum, not tested |  |  |  |  |  |
+| Belle Meade | Horseshoe Lake | Kent | 0.256 | 13 | 0.521 | 15 |
 
 A site whose pottery is closer to the phase it is NOT assigned to under one of the schemes is a line that
 scheme drew where the pottery does not go. Read the ceramic columns against each other, and against the km

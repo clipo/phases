@@ -23,7 +23,10 @@ Reports whether the synthetic assemblages (a) seriate, (b) form spatially
 coherent, elevated-F_ST communities (phase-like structure), and (c) match the
 observed level of structure better than the contemporaneous case.
 
-Writes output/time_aware_emergence.md and figures/figS3_emergent_phases.png.
+Writes output/time_aware_emergence.md and figures/33_time_aware_emergence.png.
+The figure is this script's own, not a manuscript figure: Supplemental Figure
+S6 (figures/figS3_emergent_phases.*) is drawn by `50_revision_figures.py`, and
+until 2026-10-02 both scripts wrote that file name.
 
 Usage: PYTHONPATH=src python3 analyses/33_time_aware_emergence.py
 """
@@ -57,7 +60,7 @@ from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
 from scipy.stats import spearmanr  # noqa: E402
 
 OUT_MD = ROOT / "output" / "time_aware_emergence.md"
-OUT_FIG = ROOT / "figures" / "figS3_emergent_phases.png"
+OUT_FIG = ROOT / "figures" / "33_time_aware_emergence.png"
 OUT_RUNS = ROOT / "output" / "time_aware_runs.csv"
 OUT_PARKIN = ROOT / "output" / "time_aware_parkin_prob.csv"
 N_CONS = 500       # consensus realizations for the Parkin co-membership map
@@ -297,7 +300,7 @@ def main():
 
     margin = 12_000.0
     ext = (E.min() - margin, E.max() + margin, Nm.min() - margin, Nm.max() + margin)
-    # Grayscale base to match Figure 1: uniform land tone plus the no-geology,
+    # Grayscale base to match the phase maps (Figures 1 and 10): uniform land tone plus the no-geology,
     # gray-hydrology basemap (American Antiquity prints without color).
     axA.add_patch(Rectangle((ext[0], ext[2]), ext[1] - ext[0], ext[3] - ext[2],
                             facecolor="0.93", edgecolor="none", zorder=-5))

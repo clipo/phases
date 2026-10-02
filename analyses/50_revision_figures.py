@@ -279,8 +279,8 @@ def figS3(sets, s, base, grid, rates):
     Md = sample_record(rev.simulate(data, 5001, MAIN, **r), data["ranks"], totals, np.random.default_rng(5001))
     Mg = sample_record(rev.simulate(data, 5001, MAIN, leak=0.03, **r), data["ranks"], totals, np.random.default_rng(5001))
     marks = ["o", "s", "^", "D"]; grays = ["0.15", "0.55", "0.8", "0.35"]
-    for j, (ttl, M) in enumerate([("observed", data["m"].astype(float)), ("one spatial-drift realization", Md),
-                                  ("one bounded-groups realization", Mg)]):
+    for j, (ttl, M) in enumerate([("observed", data["m"].astype(float)), ("one neutral-copying run", Md),
+                                  ("one bounded-groups run", Mg)]):
         ax = fig.add_subplot(gs[1, j])
         xy = demo.mds2(M)
         for c in np.unique(data["labels"]):
@@ -310,7 +310,11 @@ def figS4(sets, s, base, co):
     mm.basin_basemap(axA, ext, geology=False, grayscale=True, show_counties=False, show_states=False, draw_rivers=False)
     mm.draw_hydrorivers(axA, ext, max_ord=6, main_ord=3, grayscale=False, zorder=4.4)
     norm = Normalize(0.0, 1.0); nonpk = np.arange(len(names)) != pk
-    axA.scatter(E[nonpk], Nm[nonpk], c=P[nonpk], cmap=CMAP, norm=norm, s=54, edgecolor="black", linewidth=0.6, zorder=10)
+    axA.scatter(E[nonpk], Nm[nonpk], c=P[nonpk], cmap=CMAP, norm=norm, s=30, edgecolor="black", linewidth=0.6, zorder=10)
+    # No river names in this panel: the automatic placement puts two of the
+    # three on assemblage markers, and the panel is about the markers.
+    for _t in list(axA.texts):
+        _t.remove()
     axA.scatter([E[pk]], [Nm[pk]], marker="*", s=320, c="white", edgecolor="black", linewidth=0.8, zorder=12)
     cb = fig.colorbar(ScalarMappable(norm=norm, cmap=CMAP), ax=axA, orientation="horizontal", fraction=0.05, pad=0.03)
     cb.set_label("P(shares Parkin's community)", fontsize=8); cb.ax.tick_params(labelsize=7)

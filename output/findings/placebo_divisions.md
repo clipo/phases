@@ -4,9 +4,9 @@ Produced by `analyses/90_placebo_divisions.py`, which runs `analyses/84_phases_a
 
 | groups | adjusted Rand with the phases | P(copying boundary at the lines) | P(local innovation) |
 |---|---|---|---|
-| the published phases | 1.000 | 0.79 | 0.65 |
-| placebo, seed 11 | 0.411 | 0.87 | 0.75 |
-| placebo, seed 12 | 0.399 | 0.78 | 0.68 |
-| placebo, seed 13 | 0.399 | 0.92 | 0.70 |
+| the published phases | 1.000 | 0.75 | 0.68 |
+| placebo, seed 11 | 0.264 | 0.75 | 0.70 |
+| placebo, seed 12 | 0.171 | 0.70 | 0.66 |
+| placebo, seed 13 | 0.346 | 0.85 | 0.80 |
 
 If the placebo rows match or exceed the phases, the lean toward a copying boundary is what any division of this map produces, not evidence about the phase lines.
