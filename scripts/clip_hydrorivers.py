@@ -44,6 +44,14 @@ OUT = ROOT / "data" / "Shapefiles" / "hydrorivers_lmv_cmv.gpkg"
 BBOX = (-92.5, 31.5, -87.5, 38.5)
 MAX_ORD = 6  # the highest flow order any figure draws
 
+# A second, small extract for analysis 81: EVERY reach, smallest streams
+# included, around the St. Francis basin, with discharge and catchment so the
+# orders can be read as stream sizes. The figure clip above stops at order 6
+# because the maps do not draw finer reaches; the question of whether sites
+# sit by water needs them.
+OUT_ALL = ROOT / "data" / "Shapefiles" / "hydrorivers_basin_all_orders.gpkg"
+BBOX_BASIN = (-91.3, 34.2, -89.5, 36.0)
+
 
 def main() -> int:
     if not SRC.exists():
@@ -67,6 +75,13 @@ def main() -> int:
     print(f"{before} reaches in bbox -> {len(riv)} at flow order <= {MAX_ORD}")
     print(f"wrote {OUT.relative_to(ROOT)} ({size_mb:.1f} MB), CRS {riv.crs}")
     print(f"columns: {list(riv.columns)}")
+
+    fine = gpd.read_file(SRC, bbox=BBOX_BASIN)
+    keep = [c for c in ("ORD_FLOW", "ORD_STRA", "DIS_AV_CMS", "UPLAND_SKM", "geometry")
+            if c in fine.columns]
+    fine[keep].to_file(OUT_ALL, driver="GPKG")
+    print(f"wrote {OUT_ALL.relative_to(ROOT)} ({OUT_ALL.stat().st_size / 1e6:.1f} MB): "
+          f"{len(fine)} reaches, flow orders {sorted(fine['ORD_FLOW'].unique())}")
     return 0
 
 

@@ -9,7 +9,7 @@ Which script produces which artifact, and the order they run in.
     .venv/bin/python scripts/build_manifest.py --check   # in CI
 ```
 
-104 scripts produce 194 tracked artifacts.
+106 scripts produce 198 tracked artifacts.
 
 Writes are detected from the call that performs them (`write_text`, `to_csv`, `savefig`, `save_all`, `savez`, `writeLines`, `saveRDS`), with paths resolved through each script's own module-level constants. Reads are deliberately NOT counted: an earlier regex version credited `21_signal_recovery.py` with producing `output/closure_posterior.npz`, which it only consumes and `53` writes.
 
@@ -103,32 +103,34 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 76 | `analyses/61_river_network_geometry.py` | `output/findings/river_network_geometry.md` |
 | 77 | `analyses/87_axis_geography.py` | `output/findings/axis_geography.md` |
 | 78 | `analyses/93_phillips1970_phase_map.py` | `figures/fig1_phillips1970_phases.png`<br>`output/findings/phillips1970_outline_membership.md` |
-| 79 | `analyses/50_revision_figures.py` | `figures/fig8_lmv_drift_groups.svg`<br>`figures/fig9_parkin_pullout.svg`<br>`figures/figS2_drift_vs_groups.svg`<br>`figures/figS3_emergent_phases.svg`<br>`figures/figS4_emergence_robustness.svg`<br>`figures/figS8_within_region.svg` |
-| 80 | `analyses/64_unequal_populations.py` | `output/findings/unequal_populations.md`<br>`output/unequal_populations.json` |
-| 81 | `analyses/65_other_departures.py` | `output/findings/other_departures.md`<br>`output/other_departures.json` |
-| 82 | `analyses/66_cmv_class_composition.py` | `output/findings/cmv_class_composition.md` |
-| 83 | `analyses/72_excess_locality.py` | `output/findings/excess_locality.csv`<br>`output/findings/excess_locality.md` |
-| 84 | `analyses/74_phase_partition_test.py` | `figures/fig12_phase_partition.svg`<br>`output/findings/phase_partition_ensembles.csv`<br>`output/findings/phase_partition_test.md` |
-| 85 | `analyses/78_source_effect.py` | `output/findings/source_effect.md` |
-| 86 | `analyses/82_minimum_sample_size.py` | `output/findings/minimum_sample_size.md` |
-| 87 | `analyses/88_cell_sensitivity.py` | `output/findings/cell_sensitivity.md` |
-| 88 | `analyses/71_scale_sweep.py` | `output/findings/scale_sweep.csv`<br>`output/findings/scale_sweep.md` |
-| 89 | `analyses/73_connectivity_mixing.py` | `output/findings/connectivity_mixing.md` |
-| 90 | `analyses/75_groupness_surface.py` | `figures/fig13_groupness_surface.svg`<br>`output/findings/groupness_surface.md` |
-| 91 | `analyses/76_phase_recovery.py` | `figures/fig14_phase_recovery.svg`<br>`output/findings/phase_recovery.csv`<br>`output/findings/phase_recovery.md` |
-| 92 | `analyses/77_edge_effect.py` | `output/findings/edge_effect.md` |
-| 93 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
-| 94 | `analyses/84_phases_as_groups.py` | `output/findings/phases_as_groups.md`<br>`output/phases_as_groups_runs.csv` |
-| 95 | `analyses/85_excess_robustness.py` | `output/findings/excess_robustness.md` |
-| 96 | `analyses/92_relaxations_by_scale.py` | `output/findings/relaxations_by_scale.md` |
-| 97 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
-| 98 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
-| 99 | `analyses/89_partition_power.py` | `figures/figS12_partition_power.svg`<br>`output/findings/partition_power.md`<br>`output/findings/partition_power_records.csv` |
-| 100 | `analyses/91_turnover_sensitivity.py` | `output/findings/turnover_sensitivity.md` |
-| 101 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
-| 102 | `analyses/94_mainfort2003_phase_map.py` | `figures/fig18_mainfort2003_phases.png` |
-| 103 | `analyses/95_phillips_assignment_impact.py` | `output/findings/phillips_assignment_impact.md` |
-| 104 | `analyses/96_assemblage_phase_fit.py` | `output/findings/assemblage_phase_fit.md` |
+| 79 | `analyses/98_small_collections.py` | `output/findings/small_collections.csv`<br>`output/findings/small_collections.md` |
+| 80 | `analyses/50_revision_figures.py` | `figures/fig8_lmv_drift_groups.svg`<br>`figures/fig9_parkin_pullout.svg`<br>`figures/figS2_drift_vs_groups.svg`<br>`figures/figS3_emergent_phases.svg`<br>`figures/figS4_emergence_robustness.svg`<br>`figures/figS8_within_region.svg` |
+| 81 | `analyses/64_unequal_populations.py` | `output/findings/unequal_populations.md`<br>`output/unequal_populations.json` |
+| 82 | `analyses/65_other_departures.py` | `output/findings/other_departures.md`<br>`output/other_departures.json` |
+| 83 | `analyses/66_cmv_class_composition.py` | `output/findings/cmv_class_composition.md` |
+| 84 | `analyses/72_excess_locality.py` | `output/findings/excess_locality.csv`<br>`output/findings/excess_locality.md` |
+| 85 | `analyses/74_phase_partition_test.py` | `figures/fig12_phase_partition.svg`<br>`output/findings/phase_partition_ensembles.csv`<br>`output/findings/phase_partition_test.md` |
+| 86 | `analyses/78_source_effect.py` | `output/findings/source_effect.md` |
+| 87 | `analyses/82_minimum_sample_size.py` | `output/findings/minimum_sample_size.md` |
+| 88 | `analyses/88_cell_sensitivity.py` | `output/findings/cell_sensitivity.md` |
+| 89 | `analyses/71_scale_sweep.py` | `output/findings/scale_sweep.csv`<br>`output/findings/scale_sweep.md` |
+| 90 | `analyses/73_connectivity_mixing.py` | `output/findings/connectivity_mixing.md` |
+| 91 | `analyses/75_groupness_surface.py` | `figures/fig13_groupness_surface.svg`<br>`output/findings/groupness_surface.md` |
+| 92 | `analyses/76_phase_recovery.py` | `figures/fig14_phase_recovery.svg`<br>`output/findings/phase_recovery.csv`<br>`output/findings/phase_recovery.md` |
+| 93 | `analyses/77_edge_effect.py` | `output/findings/edge_effect.md` |
+| 94 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
+| 95 | `analyses/84_phases_as_groups.py` | `output/findings/phases_as_groups.md`<br>`output/phases_as_groups_runs.csv` |
+| 96 | `analyses/85_excess_robustness.py` | `output/findings/excess_robustness.md` |
+| 97 | `analyses/92_relaxations_by_scale.py` | `output/findings/relaxations_by_scale.md` |
+| 98 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
+| 99 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
+| 100 | `analyses/89_partition_power.py` | `figures/figS12_partition_power.svg`<br>`output/findings/partition_power.md`<br>`output/findings/partition_power_records.csv` |
+| 101 | `analyses/91_turnover_sensitivity.py` | `output/findings/turnover_sensitivity.md` |
+| 102 | `analyses/97_design_to_separate.py` | `output/design_to_separate_runs.csv`<br>`output/findings/design_to_separate.md` |
+| 103 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
+| 104 | `analyses/94_mainfort2003_phase_map.py` | `figures/fig18_mainfort2003_phases.png` |
+| 105 | `analyses/95_phillips_assignment_impact.py` | `output/findings/phillips_assignment_impact.md` |
+| 106 | `analyses/96_assemblage_phase_fit.py` | `output/findings/assemblage_phase_fit.md` |
 
 ## Artifacts, by path
 
@@ -223,6 +225,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/cmv_phase_groupness.md` | `26_cmv_phase_groupness.py` |
 | `output/continuum_test.md` | `15_continuum_test.py` |
 | `output/coupling_robustness.md` | `08_coupling_robustness.py` |
+| `output/design_to_separate_runs.csv` | `97_design_to_separate.py` |
 | `output/drainage_basin.md` | `14_drainage_basin.py` |
 | `output/drift_vs_groups_demo.md` | `25_drift_vs_groups_demo.py` |
 | `output/emergence_robustness.csv` | `34_emergence_robustness.py` |
@@ -240,6 +243,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/closure_strength_posterior.md` | `53_closure_strength_posterior.py` |
 | `output/findings/cmv_class_composition.md` | `66_cmv_class_composition.py` |
 | `output/findings/connectivity_mixing.md` | `73_connectivity_mixing.py` |
+| `output/findings/design_to_separate.md` | `97_design_to_separate.py` |
 | `output/findings/dm_numerical_floor.md` | `58_dm_numerical_floor.py` |
 | `output/findings/edge_effect.md` | `77_edge_effect.py` |
 | `output/findings/environment_python.md` | `00_setup/02_record_environment.py` |
@@ -283,6 +287,8 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/scale_sweep.csv` | `71_scale_sweep.py` |
 | `output/findings/scale_sweep.md` | `71_scale_sweep.py` |
 | `output/findings/settlement_and_rivers.md` | `81_settlement_and_rivers.py` |
+| `output/findings/small_collections.csv` | `98_small_collections.py` |
+| `output/findings/small_collections.md` | `98_small_collections.py` |
 | `output/findings/source_effect.md` | `78_source_effect.py` |
 | `output/findings/spatial_prior_repair.md` | `02_spatial/02_prior_repair.R` |
 | `output/findings/spatial_recovery.md` | `02_spatial/01_recovery.R` |

@@ -142,6 +142,54 @@ def main() -> int:
           "The hydrography is modern. Channels have moved since these sites were "
           "occupied, so distances to",
           "channels are distances to where the water is now.", ""]
+
+    # ---- 3. The same two questions with the small streams in.
+    # Parts 1 and 2 use a national 1:2,000,000 layer ("every mapped channel" is
+    # 816 lines for the whole valley) and the major rivers. In land the
+    # Mississippi flooded, any waterway mattered, so the comparison is repeated
+    # on HydroRIVERS with every reach, down to the smallest order it holds.
+    import geopandas as gpd
+    fine_path = ROOT / "data" / "Shapefiles" / "hydrorivers_basin_all_orders.gpkg"
+    if not fine_path.exists():
+        raise FileNotFoundError(f"{fine_path} is missing; build it with scripts/clip_hydrorivers.py")
+    fine = gpd.read_file(fine_path).to_crs(mm.UTM15N)
+    from shapely.geometry import box as _box
+    fine = fine[fine.intersects(_box(ext[0], ext[2], ext[1], ext[3]))]
+    orders = sorted(int(o) for o in fine["ORD_FLOW"].unique())
+    L += ["## 3. With the small streams in", "",
+          "Parts 1 and 2 rest on a 1:2,000,000 national layer and the major rivers. Here the same two "
+          "measures use HydroRIVERS (Lehner and Grill 2013) with reaches added from the largest flow order "
+          "to the smallest it holds. A lower order is a larger river; the discharge column is the smallest "
+          "long-term mean discharge among the reaches included.", "",
+          "| reaches included | channel length (km) | smallest mean discharge (m3/s) | sites, median km "
+          "(quartiles) | random points, median km (quartiles) | sites within 1 km | random points within 1 km "
+          f"| Clark-Evans of random points at the sites\' distances, median of {args.sims} (2.5th-97.5th) |",
+          "|---|---|---|---|---|---|---|---|"]
+    for o in orders:
+        sub = fine[fine["ORD_FLOW"] <= o]
+        geoms = [g for g in sub.geometry if g is not None and not g.is_empty]
+        tree = STRtree(geoms)
+        dist = lambda x, y: np.array([Point(a_, b_).distance(geoms[tree.nearest(Point(a_, b_))])
+                                      / 1000.0 for a_, b_ in zip(x, y)])
+        ds, dr = dist(sx, sy), dist(rx, ry)
+        sims = []
+        for _ in range(args.sims):
+            idx = [rng.choice(np.where(np.abs(dr - d) <= TOL_KM)[0])
+                   if (np.abs(dr - d) <= TOL_KM).any() else int(np.argmin(np.abs(dr - d)))
+                   for d in ds]
+            sims.append(clark_evans(rx[idx], ry[idx]))
+        L.append(f"| flow order {orders[0]} to {o} | {sub.length.sum() / 1000.0:,.0f} | "
+                 f"{float(sub['DIS_AV_CMS'].min()):.2f} | **{np.median(ds):.2f}** "
+                 f"({np.percentile(ds, 25):.2f}-{np.percentile(ds, 75):.2f}) | {np.median(dr):.2f} "
+                 f"({np.percentile(dr, 25):.2f}-{np.percentile(dr, 75):.2f}) | {(ds <= 1).mean():.0%} | "
+                 f"{(dr <= 1).mean():.0%} | {np.median(sims):.2f} "
+                 f"({np.percentile(sims, 2.5):.2f}-{np.percentile(sims, 97.5):.2f}) |")
+    L += ["",
+          "HydroRIVERS is derived from a 15 arc-second elevation grid (about 500 m), so on flat alluvial "
+          "ground its small reaches are routed flow paths rather than surveyed channels, and it holds no "
+          "oxbow lakes, bayous or sloughs as such. It is also modern. The table says how the comparison "
+          "changes as smaller streams are counted; it does not recover the water as it lay when the "
+          "sites were occupied.", ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[4:]))
     return 0

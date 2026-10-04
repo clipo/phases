@@ -1,7 +1,6 @@
 # Signed manuscript values that scripts/check_signs.py flags and that were confirmed against their source by opening it.
 # Columns (tab-separated): manuscript file, token, a phrase from the same line, source and field, date verified.
 MAIN_TEXT.md	-0.20	distance along the rivers -0.20	output/revision_2026_09/summary.json observed.basin.dd_r = -0.2045	2026-10-02
-MAIN_TEXT.md	-0.48	range of -0.48 to +0.04	output/revision_2026_09/figure_values.json figS3.dd_r.drift = [-0.4804, +0.0416]	2026-10-02
 SUPPLEMENTAL_TEXT.md	-0.20	observed -0.20; simulated median -0.18	output/revision_2026_09/figure_values.json figS3.dd_r.obs = -0.2045	2026-10-02
 SUPPLEMENTAL_TEXT.md	-0.18	observed -0.20; simulated median -0.18	output/revision_2026_09/baseline.csv basin pooled time_transgressive dd_r median = -0.175	2026-10-02
 SUPPLEMENTAL_TEXT.md	+7.3	inside the model's range (-4.5 to +7.3)	output/revision_2026_09/figure_values.json figS3.be_spatial.drift = [-4.54, +7.31]	2026-10-02
