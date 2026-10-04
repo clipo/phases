@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from mls_emergence.inference import (
     fst_from_frequencies, sample_fst, fst_summary,
@@ -53,12 +54,20 @@ def test_fst_summary_keys():
 
 
 def test_gini_simpson_readout_matches_plugin_and_brackets_it():
-    from mls_emergence.signatures.variance import cultural_fst
     gc = np.array([[80, 10, 10], [10, 10, 80]])
     idata = sample_fst(gc, draws=500, tune=600, chains=2, random_seed=4)
     g = gini_simpson_summary(idata, gc)
-    # the derived readout reports the SAME frequentist estimator as the plug-in
-    assert abs(g["plugin_fst"] - cultural_fst(gc.astype(float))) < 1e-12
+    # Hand-computed, NOT read back through the implementation. gini_simpson_summary
+    # sets plugin_fst by calling cultural_fst, so asserting the two agree compared
+    # a function with itself and could not fail however wrong cultural_fst was
+    # (rule 3: expected values may never be computed through the path under test).
+    #   group 1: p = (0.8, 0.1, 0.1), sum p^2 = 0.66, GS = 0.34
+    #   group 2: p = (0.1, 0.1, 0.8), sum p^2 = 0.66, GS = 0.34
+    #   H_S = 0.34 (equal group sizes, 100 each)
+    #   pooled (90, 20, 90): p = (0.45, 0.10, 0.45), sum p^2 = 0.415, H_T = 0.585
+    #   F_ST = (0.585 - 0.34) / 0.585 = 0.245 / 0.585
+    assert g["plugin_fst"] == pytest.approx(0.245 / 0.585, abs=1e-12)
+    assert g["plugin_fst"] == pytest.approx(0.4188034188034190, abs=1e-12)
     # the plug-in should fall inside the 95% credible interval of the readout
     assert g["gst_hdi95"][0] <= g["plugin_fst"] <= g["gst_hdi95"][1]
     # readout is bounded in [0, 1]

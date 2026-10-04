@@ -1,4 +1,9 @@
-"""41_hierarchical_convergence_validation.py - validation battery for the
+"""
+DEMOTED 2026-09-02 alongside analyses/40_hierarchical_convergence.py, whose
+convergence probability is no longer reported. This validation battery remains
+valid as software validation of that model and is retained for provenance, but
+it validates a quantity the project has stopped reporting.
+41_hierarchical_convergence_validation.py - validation battery for the
 hierarchical Bayesian convergence model (analysis 40 / mls_emergence.inference
 .convergence_model).
 

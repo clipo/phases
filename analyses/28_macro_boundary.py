@@ -19,11 +19,7 @@ here cannot separate a synchronic spatial boundary from early-CMV/late-LMV
 succession. Reported as spatial PATTERN, not as a demonstrated synchronic boundary.
 
 Read-only on the manuscript. Writes output/macro_boundary.md and
-output/diag_macro_transect.png. This between-region (CMV/LMV) boundary diagnostic
-is retained for provenance but is NOT a manuscript figure. The paper reports the
-within-region drift result for each phase scheme (Figure 11), not a between-region
-boundary, because the CMV/LMV step is confounded with time and analytical history
-(see the caveat above).
+figures/figX_macro_transect.png.
 
 Usage: .venv/bin/python analyses/28_macro_boundary.py
 """
@@ -48,13 +44,12 @@ rep = importlib.import_module("27_cmv_lmv_repertoire")
 demo = importlib.import_module("25_drift_vs_groups_demo")
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 from mls_emergence.signatures.assortativity import similarity_matrix, mantel  # noqa: E402
-from figstyle import save_all  # noqa: E402
 
 OUT_MD = ROOT / "output" / "macro_boundary.md"
-OUT_FIG = ROOT / "output" / "diag_macro_transect.png"
+OUT_FIG = ROOT / "figures" / "figX_macro_transect.png"
 MIN_DEC = 10
 C_CMV = "#0072B2"
-C_LMV = "#E69F00"
+C_LMV = "#D55E00"
 
 
 def _norm_grid(s):
@@ -203,7 +198,7 @@ def main():
     for sp in ("top", "right"):
         axd.spines[sp].set_visible(False)
     fig.tight_layout()
-    save_all(fig, OUT_FIG, dpi=200)
+    fig.savefig(OUT_FIG, dpi=200, bbox_inches="tight")
 
     print("\n".join(L))
     print(f"\nwrote {OUT_MD}\nwrote {OUT_FIG}")

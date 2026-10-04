@@ -15,7 +15,7 @@ A North America locator inset is reused from make_map.
 Powers-phase is shown only as Powers Fort (a point); no Powers-phase polygon is
 held by the project, so no area is drawn.
 
-Read-only on the manuscript. Writes figures/fig10_regional.png.
+Read-only on the manuscript. Writes figures/figS7_regional.png.
 
 Usage: .venv/bin/python analyses/30_regional_map.py
 """
@@ -45,7 +45,7 @@ from figstyle import save_all  # noqa: E402
 mm = importlib.import_module("make_map")
 
 UTM = "EPSG:26915"
-OUT = ROOT / "figures" / "fig10_regional.png"
+OUT = ROOT / "figures" / "figS7_regional.png"
 C_LMV = "#D55E00"
 C_CMV = "#0072B2"
 RIVER = "#2E6DA4"
@@ -104,9 +104,9 @@ def main():
         ne_states.plot(ax=ax, color="#8a8a8a", linewidth=1.0, zorder=3)
 
     ax.scatter(cmv_e, cmv_n, s=22, c=C_CMV, edgecolor="white", linewidth=0.35,
-               zorder=6, label="CMV assemblages (Williams 1954)")
+               zorder=6, label="southeast Missouri (Williams 1954)")
     ax.scatter(lmv_e, lmv_n, s=22, c=C_LMV, edgecolor="white", linewidth=0.35,
-               zorder=6, label="LMV St. Francis basin (Parkin phase)")
+               zorder=6, label="St. Francis basin")
     ax.scatter([par_e], [par_n], marker="*", s=180, c="black", edgecolor="white",
                linewidth=0.6, zorder=7)
 
@@ -116,7 +116,12 @@ def main():
                 weight=weight, ha="center", va="center", zorder=9,
                 path_effects=[pe.withStroke(linewidth=2.4, foreground="white")])
 
-    lab(-90.45, 35.30, "Parkin", color="black", style="normal", weight="bold", fs=8)
+    # Parkin labeled to the west with a leader line: placed beside the star it
+    # sat on the neighboring basin markers. West of the basin is empty.
+    ax.annotate("Parkin", (par_e, par_n), xytext=(-38, 6), textcoords="offset points",
+                fontsize=8, weight="bold", color="black", ha="right", va="center", zorder=9,
+                arrowprops=dict(arrowstyle="-", color="black", lw=0.6, shrinkB=5),
+                path_effects=[pe.withStroke(linewidth=2.4, foreground="white")])
     lab(-89.30, 36.92, "Cairo Lowland", color=C_CMV)
     lab(-89.62, 36.55, "Sikeston Ridge", color=C_CMV)
     lab(-90.18, 36.40, "Malden Plain", color=C_CMV)

@@ -46,7 +46,7 @@ import make_figures as mf  # noqa: E402
 from mls_emergence.dataio.pfg import load_pfg_counts  # noqa: E402
 
 TSV = ROOT / "data" / "raw" / "williams1954_cmv_counts.tsv"
-PFG = ROOT / "data" / "raw" / "PFGData_sherds.csv"
+PFG = ROOT / "data" / "raw" / "PFGData.xlsx"
 OUT_MD = ROOT / "output" / "cmv_lmv_repertoire.md"
 OUT_FIG = ROOT / "figures" / "figX_cmv_lmv_repertoire.png"
 
@@ -167,8 +167,6 @@ def main():
     cmin = cmv[(cmv > 0).sum(1) >= 2]
     lmin = lmv[(lmv > 0).sum(1) >= 2]
     Pc, Pl = (cmin.to_numpy() > 0).astype(int), (lmin.to_numpy() > 0).astype(int)
-    np.vstack([Pc, Pl])
-    np.array([0] * len(Pc) + [1] * len(Pl))
     j_cc, j_ll = jaccard_block(Pc), jaccard_block(Pl)
     # between
     bs = []

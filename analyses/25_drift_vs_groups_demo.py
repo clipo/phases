@@ -26,7 +26,14 @@ the residual, partition-dependent similarity that remains once the phases are
 not treated as real.
 
 Read-only on the manuscript. Writes output/drift_vs_groups_demo.md and
-figures/figS3_drift_vs_groups.png.
+figures/25_drift_vs_groups_demo.png.
+
+The figure is this demonstration's own and is not a manuscript figure. Until
+2026-10-02 it was written to figures/figS2_drift_vs_groups.*, the file
+`50_revision_figures.py` writes for Supplemental Figure S5, so whichever of
+the two ran last decided what the supplement showed; a partial rerun that
+day ran this script second and put the demonstration under the calibrated
+figure's caption.
 
 Usage: .venv/bin/python analyses/25_drift_vs_groups_demo.py
 """
@@ -50,12 +57,12 @@ sd = importlib.import_module("23_phases_vs_spatial_drift")
 from mls_emergence.signatures.assortativity import similarity_matrix  # noqa: E402
 
 OUT_MD = ROOT / "output" / "drift_vs_groups_demo.md"
-OUT_FIG = ROOT / "figures" / "figS3_drift_vs_groups.png"
+OUT_FIG = ROOT / "figures" / "25_drift_vs_groups_demo.png"
 
-# Color (online-only supplement): drift blue, groups orange, observed black
-C_DRIFT = "#0072B2"
-C_GROUP = "#E69F00"
-C_OBS = "#000000"
+# Grayscale (drift medium, group dark, observed black)
+C_DRIFT = "0.62"
+C_GROUP = "0.28"
+C_OBS = "0.00"
 
 
 def drift_weights(coords, length_km=12.0):
@@ -197,7 +204,7 @@ def main():
 
     # ---- write results md ------------------------------------------------- #
     keys = [("dd_r", "distance-decay r"), ("Q", "modularity Q"),
-            ("be", "boundary excess (BR)"), ("fst", "cultural F_ST")]
+            ("be", "boundary excess (BR)"), ("fst", "cultural $F_{ST}$")]
     L = ["# Spatial drift vs bounded groups: which best explains the basin?",
          "",
          f"Observed (n = {counts.shape[0]} curated assemblages), two generative",
@@ -240,7 +247,7 @@ def main():
         ax.hist(d, bins=bins, color=C_DRIFT, alpha=0.55, density=True, label="spatial drift")
         ax.hist(g, bins=bins, color=C_GROUP, alpha=0.55, density=True, label="bounded groups")
         ax.axvline(obs[key], color=C_OBS, lw=1.4)
-        ax.set_xlabel(lab.replace("F_ST", "$F_{ST}$"))
+        ax.set_xlabel(lab)
         ax.set_yticks([])
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)

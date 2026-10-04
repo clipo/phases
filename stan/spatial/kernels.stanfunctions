@@ -1,0 +1,78 @@
+// Matern covariance kernels shared by every spatial model in this project.
+//
+// TAKEN VERBATIM from ../mataa (branch stan-rebuild, stan/spatial/
+// kernels.stanfunctions) on 2026-08-31, including its constants and their
+// justification. Not re-derived. Under Verification Regime rule 19 the
+// constants are re-pinned against an independent computation in
+// tests/testthat/test-kernels.R rather than trusted because they arrived from
+// a sibling project; that test recomputes the roots of k(s) = 0.05 and
+// k(s) = 0.5 from the kernel definitions with a solver that shares no code
+// with either project.
+// Included from the `functions` block; rstan searches the model file's own
+// directory for includes. Smoothness is selected by the integer `kernel`:
+//   1 = Matern 1/2, the exponential:  sigma^2 exp(-d/rho)
+//   2 = Matern 3/2:                   sigma^2 (1 + s) exp(-s),           s = sqrt(3) d / rho
+//   3 = Matern 5/2:                   sigma^2 (1 + s + s^2 / 3) exp(-s), s = sqrt(5) d / rho
+// rho is the kernel's own length parameter; the reported PRACTICAL RANGE is the
+// distance at which correlation falls to 0.05, range_const(kernel) * rho, with
+// constants 3 (exp(-3) = 0.0498), 4.743865 (root of (1 + x) e^-x = 0.05) and
+// 5.918649 (root of (1 + x + x^2/3) e^-x = 0.05). Each constant is pinned by
+// test against R/simulate_gp.R::range_const(), which must agree to 1e-6.
+// Why smoothness is a data switch rather than a fixed choice:
+// docs/superpowers/specs/2026-08-28-kernel-choice-by-process-simulation.md.
+matrix k_exp(matrix D, real sigma, real rho, int N, real jitter) {
+  matrix[N, N] K = square(sigma) * exp(-D / rho);
+  for (i in 1:N) K[i, i] += jitter;
+  return K;
+}
+matrix k_matern32(matrix D, real sigma, real rho, int N, real jitter) {
+  matrix[N, N] S = sqrt(3) * D / rho;
+  matrix[N, N] K = square(sigma) * (1 + S) .* exp(-S);
+  for (i in 1:N) K[i, i] += jitter;
+  return K;
+}
+matrix k_matern52(matrix D, real sigma, real rho, int N, real jitter) {
+  matrix[N, N] S = sqrt(5) * D / rho;
+  matrix[N, N] K = square(sigma) * (1 + S + square(S) / 3) .* exp(-S);
+  for (i in 1:N) K[i, i] += jitter;
+  return K;
+}
+matrix k_matern(matrix D, real sigma, real rho, int N, real jitter, int kernel) {
+  if (kernel == 1) return k_exp(D, sigma, rho, N, jitter);
+  if (kernel == 2) return k_matern32(D, sigma, rho, N, jitter);
+  return k_matern52(D, sigma, rho, N, jitter);
+}
+// CORRECTED 2026-08-31. The inherited values 4.743865 and 5.918649 are the
+// roots in the kernel's ARGUMENT x = sqrt(3) d / rho (or sqrt(5) d / rho), not
+// in d / rho, so using them as multipliers on rho omits the sqrt factor.
+// Measured: at d = 4.743865 rho the Matern 3/2 correlation is 0.00249, not
+// 0.05; at d = 5.918649 rho the Matern 5/2 correlation is 0.00013. Correct
+// values are those roots divided by sqrt(3) and sqrt(5):
+//   Matern 3/2: 4.743865 / sqrt(3) = 2.738871  -> correlation 0.049996
+//   Matern 5/2: 5.918649 / sqrt(5) = 2.646900  -> correlation 0.050001
+// Kernel 1 is unaffected because its argument IS d / rho; exp(-3) = 0.0498
+// remains a deliberate rounding of the exact root 2.995732.
+// Re-derived in tests/testthat/test-kernels.R. See
+// output/findings/kernel_constants.md, and note this affects ../mataa.
+real range_const(int kernel) {
+  if (kernel == 1) return 3;
+  if (kernel == 2) return 2.738871;
+  return 2.646900;
+}
+// HALF-CORRELATION DISTANCE constant: d50 = half_const(kernel) * rho is the
+// distance at which correlation falls to 0.5. Roots of k(s) = 0.5: ln 2 for
+// the exponential, 1.678347 for Matern 3/2, 2.3302562 for Matern 5/2. This is
+// the PRIMARY reported scale (findings/smoothness_screen.md): the 0.05 tail
+// is where the Matern family and the hypothesis's process disagree most, and
+// every kernel inflates it, while d50 is recovered by the right kernel.
+// CORRECTED 2026-08-31, same error as range_const above. Measured: at
+// d = 1.678347 rho the Matern 3/2 correlation is 0.2135, not 0.5; at
+// d = 2.3302562 rho the Matern 5/2 correlation is 0.0833. Correct values:
+//   Matern 3/2: 1.678347 / sqrt(3) = 0.968994
+//   Matern 5/2: 2.330256 / sqrt(5) = 1.042122
+// Kernel 1 unaffected: ln 2 is the root in d / rho directly.
+real half_const(int kernel) {
+  if (kernel == 1) return 0.6931472;
+  if (kernel == 2) return 0.968994;
+  return 1.042122;
+}

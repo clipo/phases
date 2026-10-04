@@ -47,23 +47,54 @@ def test_basin_fit_uses_exactly_the_canonical_membership(inp, a43):
     assert fitted == expected, (
         f"fitted set differs from the membership file: "
         f"{sorted(fitted ^ expected)}")
-    # The membership file is 29 assemblages; all of them carry coordinates.
-    assert len(fitted) == 29
+    # The membership file is 43 assemblages; all of them carry coordinates.
+    # It went 29 -> 30 on 2026-09-19 (Beck's coordinate corrected) and 30 -> 43
+    # on 2026-09-20, when membership became phase membership rather than a
+    # drainage corridor. The count is pinned deliberately: an accidental change
+    # of scope should fail here rather than quietly alter every basin number.
+    # 29 -> 30 (Beck's coordinate, 2026-09-19) -> 43 (phase membership,
+    # 2026-09-20) -> 38 (2026-09-21, matrix rebuilt from PFGData and Lipo's
+    # compilation; five basin assemblages known only from Mainfort's table
+    # left) -> 28 (2026-09-21, author rulings: Parchman out on geography, a
+    # 75-decorated-sherd minimum, and Nodena's one survivor not carried as a
+    # phase of one).
+    assert len(fitted) == 28
 
 
 @pytest.mark.data
-def test_region_scope_is_genuinely_different(inp, a43):
-    """The probe. If basin and region agreed, F18 would have been harmless."""
+def test_region_scope_is_the_matrix_and_basin_scope_applies_the_rules(inp, a43):
+    """Two probes. The matrix must not contain the assemblages known only
+    from Mainfort's table (a loader falling back to the raw workbook would put
+    them back), and the basin scope must exclude, by name, the ten assemblages
+    the membership rules remove while the region scope keeps them. The sherd
+    totals are read off the processed matrix, not off either scope.
+    """
+    gone = {"40LA007", "40TP026", "Bishop", "Fullen", "Graves_Lake", "Hatchie",
+            "Jeter", "Jones_Bayou", "Porter", "Rast", "Richardsons_Landing",
+            "Wilder", "Chuccalissa", "Soudan", "Wall", "West_Mounds", "Young"}
+    present = {str(a) for a in inp.counts.index}
+    assert not (gone & present), (
+        f"assemblages known only from Mainfort's table are back in the matrix: "
+        f"{sorted(gone & present)}; is a reader using the raw workbook?")
+    # Excluded by the membership rules: Parchman's three on geography, six
+    # under 75 decorated sherds, and Nodena's lone survivor. They stay in the
+    # matrix file and must be absent from the INPUTS, since 07 now applies the
+    # membership before fitting the correspondence axis (2026-09-22).
+    excluded = {"Dundee", "Parchman", "Salomon", "Cheatham", "Connor", "Norfolk",
+                "Notgrass", "Pouncey", "Upper_Nodena", "Carson_Lake"}
+    import pandas as pd
+    mat = pd.read_csv(ROOT / "data" / "processed" / "analysis_matrix.csv")
+    assert excluded <= set(mat["Assemblages"].astype(str)), "excluded rows should stay in the matrix file"
+    assert not (excluded & present), sorted(excluded & present)
+    fitted = set(a43.fitted_basin_ids(inp))
+    assert not (excluded & fitted), sorted(excluded & fitted)
     gc_b, _ = a43.basin_group_counts(inp, scope="basin")
     gc_r, _ = a43.basin_group_counts(inp, scope="region")
-
-    # Cluster counts differ: k is re-selected on the basin's own coordinates.
-    assert gc_b.shape[0] == 3, "basin should give three spatial clusters"
-    assert gc_r.shape[0] == 5, "region should give five"
-    # And the region pools strictly more sherds, because it pools more sites.
-    assert gc_r.sum() > gc_b.sum()
-    # Same type vocabulary either way; only the grouping and scope change.
-    assert gc_b.shape[1] == gc_r.shape[1]
+    # With the membership applied at load, the two scopes coincide, and the
+    # total is pinned against the matrix file restricted by the members list.
+    members = set((ROOT / "data" / "processed" / "basin_members_curated.txt").read_text().split())
+    pinned = int(mat[mat["Assemblages"].isin(members)].iloc[:, 1:].to_numpy().sum())
+    assert int(gc_b.sum()) == int(gc_r.sum()) == pinned == 14101
 
 
 @pytest.mark.data

@@ -153,6 +153,18 @@ def save(fig: "plt.Figure", name: str) -> Path:
     return save_all(fig, name, dpi=300, close=True)
 
 
+def panel_label(ax: "mpl.axes.Axes", text: str) -> None:
+    """Draw a bold panel letter above an axes' top-left corner.
+
+    Lives here rather than in one figure script because captions refer to
+    panels by letter and a figure that omits them leaves the reader unable to
+    tell which panel is which. figS2 and figS6 both shipped that way: their
+    captions said (A), (B), (C) and the figures drew nothing.
+    """
+    ax.text(-0.02, 1.04, text, transform=ax.transAxes, fontsize=9,
+            fontweight="bold", va="bottom", ha="right")
+
+
 def despine(ax: "mpl.axes.Axes") -> None:
     """Remove top and right spines (applied globally via rcParams, but
     useful for axes added after the fact)."""

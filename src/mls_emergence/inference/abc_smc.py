@@ -41,6 +41,27 @@ def _weighted_cov(thetas: np.ndarray, weights: np.ndarray) -> np.ndarray:
     return cov
 
 
+def _logsumexp(x: np.ndarray) -> float:
+    m = np.max(x)
+    if not np.isfinite(m):
+        return float(m)
+    return float(m + np.log(np.sum(np.exp(x - m))))
+
+
+def _mvn_logpdf_rows(diff: np.ndarray, cov: np.ndarray) -> np.ndarray:
+    """log N(0, cov) for each row of ``diff`` (shape (m, d)).
+
+    Used instead of the density itself so the weight recursion can be done in
+    log space; see the note in ``abc_smc`` (F7).
+    """
+    L = np.linalg.cholesky(cov)
+    y = solve_triangular(L, diff.T, lower=True)
+    quad = np.sum(y ** 2, axis=0)
+    logdet = 2.0 * np.sum(np.log(np.diag(L)))
+    d = cov.shape[0]
+    return -0.5 * (d * np.log(2.0 * np.pi) + logdet + quad)
+
+
 def _mvn_pdf_rows(diff: np.ndarray, cov: np.ndarray) -> np.ndarray:
     """N(0, cov) density for each row of ``diff`` (shape (m, d))."""
     L = np.linalg.cholesky(cov)
@@ -104,16 +125,29 @@ def abc_smc(prior_sampler, prior_logpdf, simulator, summary, distance, s_obs,
         if t == 0:
             weights = np.full(n_particles, 1.0 / n_particles)
         else:
+            # Computed in LOG space. The previous linear-scale form,
+            # exp(logp[k]) / sum(prev_weights * kern), underflows to zero when
+            # the prior log-density is strongly negative, and the guard that
+            # followed it replaced an all-zero weight vector with UNIFORM
+            # weights. Uniform weights are a plausible-looking result that has
+            # silently discarded the importance-sampling correction, which is
+            # the whole point of the sampler (F7). Underflow now raises.
             logp = np.array([prior_logpdf(th) for th in thetas])
-            weights = np.empty(n_particles)
+            log_w = np.empty(n_particles)
             for k in range(n_particles):
-                kern = _mvn_pdf_rows(thetas[k] - prev_thetas, kernel_cov)
-                weights[k] = np.exp(logp[k]) / np.sum(prev_weights * kern)
-            wsum = weights.sum()
-            if wsum > 0:
-                weights /= wsum
-            else:
-                weights = np.full(n_particles, 1.0 / n_particles)
+                log_kern = _mvn_logpdf_rows(thetas[k] - prev_thetas, kernel_cov)
+                log_denom = _logsumexp(np.log(prev_weights + 1e-300) + log_kern)
+                log_w[k] = logp[k] - log_denom
+            if not np.all(np.isfinite(log_w)):
+                raise FloatingPointError(
+                    "ABC-SMC importance weights are not finite. Every particle "
+                    "has zero kernel density under the previous population, "
+                    "which means the perturbation kernel has collapsed relative "
+                    "to the particle spread. Widen the kernel or increase "
+                    "n_particles; do not fall back to uniform weights.")
+            log_w -= log_w.max()
+            weights = np.exp(log_w)
+            weights /= weights.sum()
 
         eps_schedule.append(float(eps) if np.isfinite(eps) else float(dist.max()))
         accept_rates.append(n_particles / sim_calls)

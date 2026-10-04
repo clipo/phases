@@ -29,6 +29,15 @@ def test_build_panel_and_ses_shapes_and_finiteness(a40):
     assert y.shape == se.shape == (3, 6)
     assert t.shape == (6,)
     assert labels == ["neutral_departure", "fst", "spatial_boundary"]
-    assert np.all(np.isfinite(y)) and np.all(se >= 0)
+    # The undefined cells are pinned by name and reason, so that another cell
+    # going undefined, or one of these quietly becoming defined, both fail.
+    # On the 28-assemblage three-phase set (2026-09-22) the silhouette selects
+    # two spatial clusters, and the first and fifth seriation bins hold
+    # assemblages of one cluster only; a between-cluster F_ST needs two. (On
+    # the 38-assemblage set it was the last bin, holding the Parkin sites.)
+    # Every other cell must be finite.
+    undefined = {(labels[i], int(j)) for i, j in zip(*np.where(~np.isfinite(y)))}
+    assert undefined == {("fst", 0), ("fst", 4)}, undefined
+    assert np.all(se[np.isfinite(se)] >= 0)
     b_ser, se_ser = a40.seriation_slope_and_se(inp, n_boot=40, seed=1)
     assert np.isfinite(b_ser) and se_ser >= 0

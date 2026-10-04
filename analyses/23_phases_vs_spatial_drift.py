@@ -100,16 +100,39 @@ def ceramic_communities(counts: np.ndarray, seed: int = 0):
     return labels, float(Q), len(comms)
 
 
+# A distance bin enters the boundary excess only when it holds at least this
+# many within-group pairs AND this many between-group pairs. See the docstring.
+BOUNDARY_EXCESS_MIN_PAIRS = 5
+
+
 def boundary_excess_labeled(counts: np.ndarray, coords_km_dist: np.ndarray,
-                            labels: np.ndarray, n_bins: int = 4) -> float:
+                            labels: np.ndarray, n_bins: int = 4,
+                            min_pairs: int = BOUNDARY_EXCESS_MIN_PAIRS) -> float:
     """Distance-controlled within-minus-between BR similarity for SUPPLIED labels.
 
-    Mirrors signatures.assortativity.boundary_excess but takes an external
-    partition (here, the ceramic communities) instead of clustering coordinates.
-    Within each geographic-distance bin, compares mean BR similarity of
-    within-community pairs to between-community pairs at the SAME distance.
-    Under pure isolation-by-distance the bin-matched gap is ~0.
+    Takes an external partition (the phases, an alternative division, the
+    ceramic communities) instead of clustering coordinates. Within each of
+    `n_bins` equal-width distance bins, it compares the mean BR similarity of
+    within-group pairs to between-group pairs at the SAME distance, and
+    averages the gaps of the bins that hold at least `min_pairs` pairs of each
+    kind. Under pure isolation-by-distance the bin-matched gap is ~0.
+
+    WHY THE MINIMUM (2026-10-02). Until then every bin with one pair of each
+    kind counted, with equal weight. On the basin's river-distance matrix the
+    farthest bin holds a single within-phase pair, so one pair of assemblages
+    carried a quarter of the statistic: moving Cummins to its corrected
+    position changed which pair that was and took the value under the same
+    labels from +15.9 to -12.3. With the minimum the same comparison reads
+    +8.8 and +7.7 (and four equal-count bins give +4.0 and +4.1). Five is a
+    choice, not a derived threshold; `min_pairs=1` reproduces the old
+    definition. `signatures.assortativity.boundary_excess`, which clusters the
+    coordinates itself and is applied to small per-bin subsets, keeps the
+    one-pair rule and is NOT the statistic reported for the phase lines.
+
+    If no bin qualifies, the unbinned gap is returned, as before.
     """
+    if min_pairs < 1:
+        raise ValueError("min_pairs must be at least 1")
     S = similarity_matrix(counts)
     n = S.shape[0]
     iu = np.triu_indices(n, k=1)
@@ -127,7 +150,7 @@ def boundary_excess_labeled(counts: np.ndarray, coords_km_dist: np.ndarray,
         in_bin = (d >= edges[b]) & (d < edges[b + 1])
         w = in_bin & same
         btw = in_bin & ~same
-        if w.sum() == 0 or btw.sum() == 0:
+        if w.sum() < min_pairs or btw.sum() < min_pairs:
             continue
         gaps.append(float(s[w].mean() - s[btw].mean()))
     return float(np.mean(gaps)) if gaps else raw_gap

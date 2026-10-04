@@ -54,9 +54,6 @@ ZIPF_EXP = 2.0
 
 
 def _zipf_shape(n_types: int) -> np.ndarray:
-    """Normalized Zipf rank-abundance profile over n_types classes (exponent
-    ZIPF_EXP): the baseline abundance shape the generators place onto type
-    orderings."""
     s = 1.0 / np.arange(1, n_types + 1) ** ZIPF_EXP
     return s / s.sum()
 
@@ -227,8 +224,6 @@ def group_profiles(
 
 
 def sample_counts(profiles: np.ndarray, n_per_group: int, rng: np.random.Generator) -> np.ndarray:
-    """Draw a multinomial assemblage of n_per_group sherds for each group profile;
-    returns an integer group-by-type count matrix."""
     counts = np.zeros(profiles.shape, dtype=int)
     for g in range(profiles.shape[0]):
         counts[g] = rng.multinomial(n_per_group, profiles[g])
@@ -278,8 +273,6 @@ def _line_coords(n_groups: int) -> np.ndarray:
 
 
 def _random_coords(n_groups: int, rng: np.random.Generator) -> np.ndarray:
-    """Random 2-D coordinates (uniform in [0,10]^2), one per group, for layouts
-    with no spatial structure."""
     return rng.uniform(0, 10, size=(n_groups, 2))
 
 
@@ -324,8 +317,8 @@ def gen_group_emergence(seed: int):
     return slices, coords
 
 
-def gen_aggregated_conformity(seed: int):
-    """Aggregated conformity mimic.
+def gen_aggregated_signaling(seed: int):
+    """Aggregated signaling mimic.
 
     One shared pool (no between-group divergence) but rising conformity. Produces
     a within-group neutrality departure with NO spatial structure and NO F_ST
