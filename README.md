@@ -396,6 +396,14 @@ These use PyMC and arviz (in `requirements.txt`). They restate the transmission-
 | `28_macro_boundary.py` | Between-region transect diagnostic (retained for provenance, not a manuscript figure) |
 | `31_within_region_structure.py` | Within-region structure for each phase scheme, lower valley vs central valley (Fig 11) |
 
+**The phase tests as a tool (`phasecheck`)**
+
+| Script | Purpose |
+|---|---|
+| `src/phasecheck/` | The package behind the `phasecheck` command: the paper's phase tests, with and without the copying model, on any table of assemblages (guide: `docs/PHASECHECK.md`) |
+| `scripts/export_phasecheck_example.py` | Write the paper's basin record in the tool's input format (`examples/phasecheck/`) |
+| `tests/phasecheck/` | Check that the tool reproduces the paper's numbers on that record, tells a boundary from a gradient, and refuses input it cannot use |
+
 **Maps and figure pipelines**
 
 | Script | Purpose |
