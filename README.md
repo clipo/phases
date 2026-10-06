@@ -50,6 +50,27 @@ heavy results, so re-runs are fast. To regenerate just one figure, run its
 script directly (see the [Figures](#figures) table). The manuscript itself is in
 `docs/manuscript/` and rebuilds with pandoc (see [Manuscript](#manuscript)).
 
+## Use the tests on your own data
+
+`phasecheck` applies this paper's phase tests to any table of assemblages. It
+needs one row per assemblage: a name, latitude and longitude, a phase, and one
+column of sherd counts per class.
+
+```bash
+pip install -e .
+phasecheck my_assemblages.xlsx --out my_report            # the phase lines against other lines
+phasecheck my_assemblages.xlsx --model --jobs 8 --out my_report   # and the copying model with no groups
+```
+
+It answers a series of questions in order and writes a report: does location
+alone recover the phases; do the phase boundaries separate the assemblages
+better than other lines; does each assemblage fit its own phase; and, with
+`--model`, does the record differ between phases by more than copying across
+distance produces, and could the comparison detect a boundary on a record like
+yours. The paper's own record is the worked example in `examples/phasecheck/`.
+The guide, including how to read the results and what the tool assumes, is
+[docs/PHASECHECK.md](docs/PHASECHECK.md).
+
 ## Installation
 
 The pipeline runs on Windows, macOS (Intel and Apple Silicon), and Linux, all
@@ -298,6 +319,8 @@ and can be deleted and rebuilt at any time.
 ```
 analyses/         numbered analysis and figure scripts (each has a header docstring)
 src/              the mls_emergence package (transmission models, signatures, I/O)
+                  and phasecheck, the phase tests as a tool for other data (docs/PHASECHECK.md)
+examples/         the worked example for phasecheck (the basin record as one table)
 data/             source ceramic tables, radiocarbon, and geospatial layers (provenance in data/README.md)
 docs/manuscript/  the manuscript (MAIN_TEXT.md, SUPPLEMENTAL_TEXT.md, references.bib, american-antiquity.csl, built docx/PDF)
 figures/          manuscript figures (committed); run_all.sh regenerates them
