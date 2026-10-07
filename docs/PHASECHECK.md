@@ -29,7 +29,7 @@ One row per assemblage, in `.xlsx`, `.xls`, `.csv` or `.tsv`:
   refuses the ones it can recognize and the report lists the classes it used;
   check that list.
 - Every phase needs at least two assemblages, and the table at least six
-  assemblages and two phases.
+  assemblages, two phases and two classes with sherds.
 - The study area must be under 1,000 km across.
 
 If your columns have other names, say so: `--name-col Site --lat-col Lat
@@ -57,8 +57,14 @@ Options:
   trails. It is used for the boundary excess, the one measure that matches
   pairs by distance. The alternative divisions of the map are always built
   from the coordinates. Without it, straight-line distance is used throughout.
-- `--draws`, `--alternatives`, `--seed` set the posterior draws of the counts,
-  the number of alternative divisions of each kind, and the random seed.
+- `--draws`, `--alternatives`, `--seed` set the posterior draws of the counts
+  (default 2000), the number of alternative divisions of each kind (default
+  300), and the random seed (default 0). The seed moves questions 2 and 3
+  only. Question 4 uses a fixed seed of its own, and the copying model uses
+  fixed seed families of its own, so `--seed` does not change them.
+- `--sheet` names the worksheet of a spreadsheet with several.
+- `--totals-of-100-are-counts` accepts a table whose rows all sum to about
+  100 as counts, when they really are counts.
 
 The paper's own record is the worked example:
 
@@ -93,13 +99,19 @@ phasecheck my_assemblages.xlsx --model --jobs 8 --out my_report
   which is used, or when the model makes assemblages more different than they
   are and so does not fit. With `--rates` only the supplied setting is shown.
 - **`--length-km`** is the distance over which copying falls off. The default is
-  a fifth of the largest distance between assemblages. It is an assumption,
+  a fifth of the largest distance between assemblages (along the supplied
+  distances, when `--distance` is given). It is an assumption,
   not an estimate; rerun at half and double to see what depends on it.
 - **`--order-col`** names a column that places assemblages along a sequence (a
-  date or a seriation score; larger is later). Without it they are treated as
-  contemporaneous.
+  date or a seriation score; larger is later). Only the order is used, not the
+  spacing. The column is never read as a class, so name it even in a run
+  without the model when the table holds one (the worked example does).
+  Without it the model treats the assemblages as contemporaneous.
 - **`--rates "2000,0.001,0.02"`** skips calibration and runs the model at
-  settings you supply.
+  settings you supply (learners, innovation, mixing). It implies `--model`.
+- **`--model-runs`** (default 300, 50 to 5,000) sets the runs of the model in
+  questions 7 and 8 and the simulated records per setting in question 9.
+- **`--jobs`** sets the processor cores used for the calibration.
 
 The paper's settings on the worked example:
 
@@ -118,8 +130,8 @@ calibration finds the paper's 51 matched and 48 confirmed combinations). The
 command line uses its own seeds, kept apart from the calibration's. The paper
 chose among the confirmed combinations by the difference between two spatial
 clusters; the tool chooses by the difference between the phases, so a fresh
-calibration of this record selects another of the paper's confirmed
-combinations (10,000 learners, 0.0005, 0.002).
+calibration of this record at `--length-km 24` selects another of the paper's
+confirmed combinations (10,000 learners, 0.0005, 0.002).
 
 ## What the report answers
 

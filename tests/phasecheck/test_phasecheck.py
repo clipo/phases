@@ -10,7 +10,6 @@ import phasecheck as pc
 from phasecheck import divisions as dv
 from phasecheck import geo
 from phasecheck import measures as ms
-from phasecheck import questions as qs
 from phasecheck.cli import main as cli_main
 
 ROOT = Path(__file__).resolve().parents[2]

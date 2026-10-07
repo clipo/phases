@@ -7,14 +7,13 @@ import pytest
 
 import phasecheck as pc
 from phasecheck import copying as cp
-from phasecheck import geo
 from phasecheck import model as md
 from phasecheck.cli import main as cli_main
 
 ROOT = Path(__file__).resolve().parents[2]
 EXAMPLE = ROOT / "examples" / "phasecheck" / "st_francis_basin.csv"
 RIVER = ROOT / "examples" / "phasecheck" / "st_francis_river_km.csv"
-PAPER_RATES = dict(n_ind=2000, innovation=0.001, mixing=0.02, length=24.0)
+PAPER_RATES = {"n_ind": 2000, "innovation": 0.001, "mixing": 0.02, "length": 24.0}
 
 
 def test_the_model_is_the_papers_model():
@@ -84,7 +83,7 @@ def _table(counts, lat, lon, phase, tmp_path, name):
     return pc.read_table(p)
 
 
-RATES = dict(n_ind=500, innovation=0.004, mixing=0.02, length=12.0)
+RATES = {"n_ind": 500, "innovation": 0.004, "mixing": 0.02, "length": 12.0}
 
 
 def _made_by_the_model(tmp_path, leak, seed=3):
@@ -117,8 +116,8 @@ def test_power_rises_with_the_restriction(tmp_path):
 
 def test_calibration_finds_the_settings_that_made_the_record_and_refuses_when_none_fit(tmp_path):
     data = _made_by_the_model(tmp_path, 1.0)
-    grid = dict(n_ind=(500,), innovations=(0.0005, 0.004, 0.05), mixings=(0.02, 0.4), reps=3, confirm_reps=12,
-                length=12.0)
+    grid = {"n_ind": (500,), "innovations": (0.0005, 0.004, 0.05), "mixings": (0.02, 0.4), "reps": 3,
+            "confirm_reps": 12, "length": 12.0}
     c = cp.calibrate(data, **grid)
     assert c["n_confirmed"] >= 1 and c["rates"]["length"] == 12.0
     sel = c["table"][c["table"].selected].iloc[0]
@@ -148,7 +147,7 @@ def test_order_column_places_assemblages_and_is_not_a_class(tmp_path):
 
 
 def test_command_line_with_supplied_rates_answers_the_model_questions(tmp_path):
-    data = _made_by_the_model(tmp_path, 1.0)
+    _made_by_the_model(tmp_path, 1.0)                    # writes made_1.0.csv, the table the command reads
     out = tmp_path / "rep"
     code = cli_main([str(tmp_path / "made_1.0.csv"), "--out", str(out), "--draws", "120", "--alternatives", "30",
                      "--rates", "500,0.004,0.02", "--length-km", "12", "--model-runs", "60"])
@@ -180,36 +179,37 @@ def test_calibration_reproduces_the_papers_on_its_record():
     matched, 48 confirmed, and 2,000 learners, innovation 0.001, mixing 0.02 selected by the difference
     between two spatial clusters. The clusters are rebuilt here as the paper built them."""
     import os
+
     from mls_emergence.signatures.assortativity import _kmeans_labels
     data = pc.read_table(EXAMPLE, distance=RIVER, order_col="seriation_order")
     xy = np.column_stack([data.lat, data.lon])
     two = _kmeans_labels(xy - xy.mean(0), 2, seed=7)
     c = cp.calibrate(data, length=24.0, select_labels=two, jobs=min(12, os.cpu_count() or 1))
     assert (c["n_matched"], c["n_confirmed"], c["n_cells"]) == (51, 48, 297)
-    assert c["rates"] == dict(n_ind=2000, innovation=0.001, mixing=0.02, length=24.0)
+    assert c["rates"] == {"n_ind": 2000, "innovation": 0.001, "mixing": 0.02, "length": 24.0}
 
 
 def test_runs_that_lose_all_diversity_are_counted_not_dropped(tmp_path):
     """With no innovation a small population fixes on one class. Such runs show no difference between
     phases; leaving them out would keep only the runs that differ and overstate the model."""
     data = _made_by_the_model(tmp_path, 1.0)
-    r = cp.compare_with_model(data, dict(n_ind=200, innovation=0.0, mixing=0.4, length=12.0), reps=60, seed=10)
+    r = cp.compare_with_model(data, {"n_ind": 200, "innovation": 0.0, "mixing": 0.4, "length": 12.0}, reps=60, seed=10)
     f = r["rows"][0]
     assert r["flat"] > 0 and f["runs"] == 60          # every run stays in the count
     assert f["reaching"] <= 60 - r["flat"]            # a flat run cannot reach a positive difference
     with pytest.raises(ValueError, match="lost all diversity"):      # nearly every run flat: refused
-        cp.compare_with_model(data, dict(n_ind=40, innovation=0.0, mixing=0.4, length=12.0), reps=60, seed=10)
+        cp.compare_with_model(data, {"n_ind": 40, "innovation": 0.0, "mixing": 0.4, "length": 12.0}, reps=60, seed=10)
 
 
 def _row(observed, lo, hi, reaching=10, runs=100):
-    return dict(observed=observed, lo=lo, hi=hi, median=(lo + hi) / 2, reaching=reaching, runs=runs)
+    return {"observed": observed, "lo": lo, "hi": hi, "median": (lo + hi) / 2, "reaching": reaching, "runs": runs}
 
 
 def test_question_7_is_read_from_both_sides():
     """Each reading must be true of the numbers that trigger it. The first version said the model
     'accounts for' a record that was LESS differentiated than every run."""
     from phasecheck.report import _reading_7
-    r = dict(n_ind=1, innovation=0, mixing=0, length=1)
+    r = {"n_ind": 1, "innovation": 0, "mixing": 0, "length": 1}
     above = _reading_7([("a", r, _row(0.05, 0.001, 0.02, 0))], True)
     below = _reading_7([("a", r, _row(0.0005, 0.004, 0.02, 100))], True)
     inside = _reading_7([("a", r, _row(0.01, 0.001, 0.02, 30))], True)
@@ -228,11 +228,12 @@ def test_question_7_is_read_from_both_sides():
 
 
 def _pw(free_med, tight_med, free_low, tight_low, distinct_compact=20):
-    row = lambda leak, med, low: dict(leak=leak, records=100, around=[0, 0, med, 1, 1], compact=[0, 0, med, 1, 1],
-                                      around_at_or_below=low, compact_at_or_below=low, reach_fst=0.1)
-    return dict(rows=[row(1.0, free_med, free_low), row(0.03, tight_med, tight_low)], n_alt=50,
-                observed_around=0.5, observed_compact=0.5, distinct_around=40, distinct_compact=distinct_compact,
-                same_as_phases_around=0, same_as_phases_compact=0)
+    row = lambda leak, med, low: {"leak": leak, "records": 100, "around": [0, 0, med, 1, 1],
+                                  "compact": [0, 0, med, 1, 1], "around_at_or_below": low,
+                                  "compact_at_or_below": low, "reach_fst": 0.1}
+    return {"rows": [row(1.0, free_med, free_low), row(0.03, tight_med, tight_low)], "n_alt": 50,
+            "observed_around": 0.5, "observed_compact": 0.5, "distinct_around": 40,
+            "distinct_compact": distinct_compact, "same_as_phases_around": 0, "same_as_phases_compact": 0}
 
 
 def test_question_9_is_read_from_the_numbers():
