@@ -76,12 +76,11 @@ def tables() -> dict[str, list[str]]:
 
 def _calibration_tables() -> dict[str, list[str]]:
     """Tables S3 and S4 from analysis 47's summary.json (added 2026-09-22)."""
-    import pandas as pd
     s = json.loads((OUT / "revision_2026_09" / "summary.json").read_text())
     t: dict[str, list[str]] = {}
     label = {"pooled": "pooled profile", "uniform": "uniform"}
-    rows = ["| Set | Innovation model | Matched combinations (of 297; six-run screen / fifty-run check) | "
-            "Selected N, innovation, mixing | Observed H_S / richness / H_T | Achieved H_S / richness / H_T |",
+    rows = [("| Set | Innovation model | Matched combinations (of 297; six-run screen / fifty-run check) | "
+            "Selected N, innovation, mixing | Observed H_S / richness / H_T | Achieved H_S / richness / H_T |"),
             "|---|---|---:|---|---|---|"]
     for c in s["calibration"]:
         if c["region"] != "basin":
@@ -98,9 +97,9 @@ def _calibration_tables() -> dict[str, list[str]]:
     cal = next(c for c in s["calibration"] if c["region"] == "basin" and c["model"] == "pooled")
     obs = s["observed"]["basin"]
     rows = ["| Set | Case | Median [95%] | Share of runs reaching observed | Within-assemblage diversity | Richness |", "|---|---|---|---:|---:|---:|",
-            f"| Basin (observed {obs['spatial_fst']:.4f}; diversity {obs['hs']:.2f}, richness {obs['rich']:.1f}) | baseline | "
+            (f"| Basin (observed {obs['spatial_fst']:.4f}; diversity {obs['hs']:.2f}, richness {obs['rich']:.1f}) | baseline | "
             f"{base['median']:.4f} [{base['lo']:.4f}, {base['hi']:.4f}] | {base['p_upper']:.3f} | "
-            f"{cal['achieved']['hs']['median']:.2f} | {cal['achieved']['rich']['median']:.1f} |"]
+            f"{cal['achieved']['hs']['median']:.2f} | {cal['achieved']['rich']['median']:.1f} |")]
     names = [("longer_burnin", "burn-in 2,400"), ("monomorphic_burnin", "single-class start, burn-in"),
              ("monomorphic_no_burnin", "single-class start, no burn-in"), ("innovation_halved", "innovation halved"),
              ("innovation_doubled", "innovation doubled"), ("mixing_halved", "mixing halved"), ("mixing_doubled", "mixing doubled")]
@@ -128,7 +127,7 @@ def main() -> int:
         pat = re.compile(r"(" + re.escape(heading) + r"[^\n]*\n\n)((?:\|[^\n]*\n)+)")
         found = pat.findall(new)
         assert len(found) == 1, f"expected one table under {heading}, found {len(found)}"
-        new = pat.sub(lambda m: m.group(1) + "\n".join(lines) + "\n", new, count=1)
+        new = pat.sub(lambda m, lines=lines: m.group(1) + "\n".join(lines) + "\n", new, count=1)
     if new == s:
         print("SI relaxation tables are current.")
         return 0

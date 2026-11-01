@@ -92,9 +92,9 @@ def main() -> int:
             pi = rng.dirichlet(m[i] + 0.5)
             d = {q: chisq(pi, rng.dirichlet(pools[q] + 0.5), w) for q in phases}
             wins += min(d, key=d.get) == own
-        rows.append(dict(name=name, own=own, derived=bool(derived[i]), n=int(m[i].sum()),
-                         dist=dist, near=near, best=best, p_own=wins / DRAWS,
-                         nearest_phase=min(near, key=near.get)))
+        rows.append({"name": name, "own": own, "derived": bool(derived[i]), "n": int(m[i].sum()),
+                         "dist": dist, "near": near, "best": best, "p_own": wins / DRAWS,
+                         "nearest_phase": min(near, key=near.get)})
 
     other = [r for r in rows if r["best"] != r["own"]]
     even = [r for r in rows if EVEN_BAND[0] <= r["p_own"] <= EVEN_BAND[1]]
@@ -143,9 +143,9 @@ def main() -> int:
     G = t76.unit_scale(pts)
     C = t76.unit_scale(t76.composition_features(p, "chisq"))
     L += ["## If Big Eddy and Castile Landing are counted as Kent", "",
-          "Recovery is the adjusted Rand index over all 28 assemblages (chi-square composition); the "
+          ("Recovery is the adjusted Rand index over all 28 assemblages (chi-square composition); the "
           "phase-line comparison is analysis 86's, with its seeds (2,000 posterior draws, 300 "
-          "alternative divisions of each kind).", "",
+          "alternative divisions of each kind)."), "",
           "| | Phillips's areas | the two counted as Kent |", "|---|---|---|"]
     cols = []
     for lab in (labels, moved):

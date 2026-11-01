@@ -1,7 +1,8 @@
 import numpy as np
 
 from mls_emergence.inference import (
-    sample_convergence, convergence_summary,
+    convergence_summary,
+    sample_convergence,
 )
 
 

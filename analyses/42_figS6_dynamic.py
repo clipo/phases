@@ -30,13 +30,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import os  # noqa: E402
+import os
+
 os.environ.setdefault("MLS_FIG_COLOR", "1")  # supplement figure is online-only; render in color
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_ORANGE, OI_VERMIL, panel_label, save  # noqa: E402
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_ORANGE, OI_VERMIL, panel_label, save
 
 OUT = ROOT / "output"
 

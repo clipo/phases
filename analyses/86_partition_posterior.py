@@ -65,9 +65,9 @@ def compare(m, pidx, pts, rev, t74, n_draws, n_alt, seed, dist=None):
         f_alt_med.append(np.median(fa)); f_opt_med.append(np.median(fo))
     f_ph = np.array(f_ph)
     q = lambda a: (float(np.median(a)), float(np.percentile(a, 2.5)), float(np.percentile(a, 97.5)))
-    out = dict(phase=q(f_ph), alt=q(f_alt_med), opt=q(f_opt_med),
-               p_alt=float(np.mean(win_alt)), p_opt=float(np.mean(win_opt)),
-               plug_in=float(rev.fst_by(m, pidx)))
+    out = {"phase": q(f_ph), "alt": q(f_alt_med), "opt": q(f_opt_med),
+               "p_alt": float(np.mean(win_alt)), "p_opt": float(np.mean(win_opt)),
+               "plug_in": float(rev.fst_by(m, pidx))}
     # Boundary excess at the lines (2026-09-23): is the step in similarity at
     # the phase lines, beyond distance, a property of these lines or of any
     # division of the map? Same posterior draws, fewer of them (the statistic
@@ -156,8 +156,8 @@ def main() -> int:
                 "",
                 f"- P(phase lines separate the pottery better than a division around random centers | data) = {pfmt(r['p_alt'], n_f)}",
                 f"- P(phase lines separate the pottery better than a compact division | data) = {pfmt(r['p_opt'], n_f)}", ""] + (
-                ["Boundary excess at the lines (similarity lost across a line beyond what distance "
-                 "predicts, river distance), 500 posterior draws, 10 alternatives of each kind per draw:", "",
+                [("Boundary excess at the lines (similarity lost across a line beyond what distance "
+                 "predicts, river distance), 500 posterior draws, 10 alternatives of each kind per draw:"), "",
                  "| quantity | posterior median | 95% credible interval |", "|---|---|---|",
                  f"| boundary excess at the phase lines (plug-in {r['be_plug']:+.1f}) | {r['be_phase'][0]:+.1f} | {r['be_phase'][1]:+.1f} to {r['be_phase'][2]:+.1f} |",
                  f"| median, same-size divisions around random centers | {r['be_alt'][0]:+.1f} | {r['be_alt'][1]:+.1f} to {r['be_alt'][2]:+.1f} |",
@@ -167,15 +167,15 @@ def main() -> int:
                 if "be_phase" in r else [])
 
     L = ["# The phase-line comparisons as posterior probabilities", "",
-         f"Produced by `analyses/86_partition_posterior.py`: {args.draws} posterior draws of every "
+         (f"Produced by `analyses/86_partition_posterior.py`: {args.draws} posterior draws of every "
          f"assemblage's class proportions (Dirichlet(counts + 1/2)), {args.alt} alternative divisions of "
          f"each kind, {PER_DRAW} of each compared per draw. Replaces the ensemble percentiles of "
-         f"analyses 74 and 83 as the reported quantity (rule 18).", ""]
+         f"analyses 74 and 83 as the reported quantity (rule 18)."), ""]
     L += block("The primary analysis's phases, basin set", res_basin, len(names), len(plist))
     L += block("The Parkin phase against the rest of the basin", res_parkin, len(names), 2)
     k2 = importlib.import_module("74_phase_partition_test").ari(parkin_idx, np.asarray(data["labels"]))
-    L += [f"Agreement (adjusted Rand index) between the Parkin-versus-rest division and the two spatial "
-          f"clusters the site layout supports: {k2:.3f}.", ""]
+    L += [(f"Agreement (adjusted Rand index) between the Parkin-versus-rest division and the two spatial "
+          f"clusters the site layout supports: {k2:.3f}."), ""]
     L += block("Mainfort's (2003) phases, his table", res_mf, len(mph), len(ml))
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

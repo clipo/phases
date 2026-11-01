@@ -122,24 +122,24 @@ def main() -> int:
 
     rows = []
     for i, g in enumerate(np.unique(labels)):
-        rows.append(dict(
-            cluster=int(g), n=int((labels == g).sum()),
-            conn=float(conn[labels == g].mean()),
-            mixing_scaled=float(per_node[labels == g].mean()),
-            observed=float(obs_terms[i]),
-            excess_uniform=float(obs_terms[i] / np.median(terms_u[:, i]))
+        rows.append({
+            "cluster": int(g), "n": int((labels == g).sum()),
+            "conn": float(conn[labels == g].mean()),
+            "mixing_scaled": float(per_node[labels == g].mean()),
+            "observed": float(obs_terms[i]),
+            "excess_uniform": float(obs_terms[i] / np.median(terms_u[:, i]))
             if np.median(terms_u[:, i]) > 0 else np.nan,
-            excess_scaled=float(obs_terms[i] / np.median(terms_c[:, i]))
-            if np.median(terms_c[:, i]) > 0 else np.nan))
+            "excess_scaled": float(obs_terms[i] / np.median(terms_c[:, i]))
+            if np.median(terms_c[:, i]) > 0 else np.nan})
     df = pd.DataFrame(rows).sort_values("excess_uniform", ascending=False)
 
     sf_u = obs_fst / float(np.median(fst_u))
     sf_c = obs_fst / float(np.median(fst_c))
     keys = [k for k in obs_div if isinstance(obs_div[k], (int, float))]
     L = ["# Does connectivity-scaled participation close the shortfall?", "",
-         f"Basin phase set, {counts.shape[0]} assemblages, k = {args.k}, "
+         (f"Basin phase set, {counts.shape[0]} assemblages, k = {args.k}, "
          f"{args.reps} realizations each, calibrated {MODEL} model "
-         f"(innovation {innovation}, mixing {mixing}, {n_ind} learners).",
+         f"(innovation {innovation}, mixing {mixing}, {n_ind} learners)."),
          "Per-node mixing is proportional to pre-normalisation connectivity, rescaled",
          f"so the mean stays at {mixing}. Range {per_node.min():.4f} to {per_node.max():.4f}.",
          "",

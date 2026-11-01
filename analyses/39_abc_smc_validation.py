@@ -29,25 +29,28 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, save  # noqa: E402
+import matplotlib
 
-from mls_emergence.inference import (  # noqa: E402
-    abc_smc, regression_adjust, weighted_quantile,
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_VERMIL, save
+
+from mls_emergence.inference import (
+    abc_smc,
+    regression_adjust,
+    weighted_quantile,
 )
 
 W = importlib.import_module("38_abc_smc_transmission")
 
 OUT_MD = ROOT / "output" / "abc_smc_validation.md"
 
-FULL = dict(n_sbc=200, sbc_particles=300, sbc_rounds=5,
-            grid=np.linspace(-0.4, 0.4, 9), reps=20,
-            cov_particles=300, cov_rounds=5)
-FAST = dict(n_sbc=15, sbc_particles=50, sbc_rounds=2,
-            grid=np.linspace(-0.4, 0.4, 3), reps=3,
-            cov_particles=50, cov_rounds=2)
+FULL = {"n_sbc": 200, "sbc_particles": 300, "sbc_rounds": 5,
+            "grid": np.linspace(-0.4, 0.4, 9), "reps": 20,
+            "cov_particles": 300, "cov_rounds": 5}
+FAST = {"n_sbc": 15, "sbc_particles": 50, "sbc_rounds": 2,
+            "grid": np.linspace(-0.4, 0.4, 3), "reps": 3,
+            "cov_particles": 50, "cov_rounds": 2}
 
 
 def posterior_rank(value, samples, weights):
@@ -203,13 +206,13 @@ def main(fast=False, n_workers=None):
         plt.close(fig)
 
     L = ["# ABC-SMC validation battery", "",
-         f"Config: {'SMOKE' if fast else 'full'}, {n_workers} worker process(es). "
+         (f"Config: {'SMOKE' if fast else 'full'}, {n_workers} worker process(es). "
          f"SBC n={cfg['n_sbc']} (particles {cfg['sbc_particles']}, rounds "
          f"{cfg['sbc_rounds']}); coverage grid {list(np.round(cfg['grid'],2))} "
-         f"x {cfg['reps']} reps.", "",
+         f"x {cfg['reps']} reps."), "",
          "## 1. Simulation-based calibration", "",
-         f"- b rank KS vs uniform: D = {ks_b.statistic:.3f}, p = {ks_b.pvalue:.3f} "
-         "(p > 0.05 is consistent with calibration).",
+         (f"- b rank KS vs uniform: D = {ks_b.statistic:.3f}, p = {ks_b.pvalue:.3f} "
+         "(p > 0.05 is consistent with calibration)."),
          "- Rank histograms: figures/abc_smc_sbc (should be flat).", "",
          "## 2. Coverage / power on b", ""]
     for g, c, wd in zip(cov["grid"], cov["coverage"], cov["mean_width"]):
@@ -219,12 +222,12 @@ def main(fast=False, n_workers=None):
         L.append("- SKIPPED: run analyses/19 and analyses/38 first to produce "
                  "both posterior files.")
     else:
-        L += [f"- ABC-SMC b = {cc['smc_mean']:+.3f} "
-              f"[{cc['smc_ci'][0]:+.3f}, {cc['smc_ci'][1]:+.3f}].",
-              f"- Rejection ABC b = {cc['rej_mean']:+.3f} "
-              f"[{cc['rej_ci'][0]:+.3f}, {cc['rej_ci'][1]:+.3f}].",
-              f"- Posterior-mean gap = {cc['mean_gap']:.3f} "
-              "(should be within Monte-Carlo error).",
+        L += [(f"- ABC-SMC b = {cc['smc_mean']:+.3f} "
+              f"[{cc['smc_ci'][0]:+.3f}, {cc['smc_ci'][1]:+.3f}]."),
+              (f"- Rejection ABC b = {cc['rej_mean']:+.3f} "
+              f"[{cc['rej_ci'][0]:+.3f}, {cc['rej_ci'][1]:+.3f}]."),
+              (f"- Posterior-mean gap = {cc['mean_gap']:.3f} "
+              "(should be within Monte-Carlo error)."),
               "- Overlay: figures/abc_smc_crosscheck."]
 
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

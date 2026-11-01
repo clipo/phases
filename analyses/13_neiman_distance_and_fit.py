@@ -32,11 +32,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
-from figstyle import save, OI_BLUE, OI_ORANGE, panel_label  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_ORANGE, panel_label, save
 
 OUT = ROOT / "output" / "neiman_distance_and_fit.md"
 N_BINS = 6
@@ -50,7 +51,7 @@ def _r2(txt: str) -> str:
     """Signed two-decimal string, rounding half away from zero from the file's
     three-decimal text (float formatting would take -0.435 to -0.43, while the
     text rounds it to -0.44)."""
-    from decimal import Decimal, ROUND_HALF_UP
+    from decimal import ROUND_HALF_UP, Decimal
     return f"{Decimal(txt).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):+}"
 
 
@@ -88,14 +89,14 @@ def main():
     rho_d, p_d = spearmanr(tE[fin], mean_d[fin])
 
     L += ["## B. Neiman interassemblage-distance neutral model", "",
-          f"Squared Euclidean distance d_ij^2 = sum_k (p_ik - p_jk)^2 over {M.shape[1]} "
-          f"decorated types, {M.shape[0]} basin assemblages.", "",
-          f"- **Diversity-distance relationship** (Neiman's convergence-of-two-measures "
+          (f"Squared Euclidean distance d_ij^2 = sum_k (p_ik - p_jk)^2 over {M.shape[1]} "
+          f"decorated types, {M.shape[0]} basin assemblages."), "",
+          (f"- **Diversity-distance relationship** (Neiman's convergence-of-two-measures "
           f"precedent): within-assemblage diversity (t_E) vs mean interassemblage distance, "
           f"Spearman rho = {rho_d:+.2f} (p = {p_d:.3f}). Neiman (1995, Fig. 7) found "
           f"rho = -0.62 under drift+innovation in one interacting population; a negative "
           f"relationship here is consistent with a single drifting field rather than "
-          f"assorted, bounded groups."]
+          f"assorted, bounded groups.")]
 
     # trajectory: mean within-bin pairwise distance along CA
     bins = pd.qcut(pd.Series(rank), N_BINS, labels=False, duplicates="drop").to_numpy()
@@ -132,11 +133,11 @@ def main():
     within = Dh[iu][same].mean()
     between = Dh[iu][~same].mean()
     L += ["",
-          f"- **Between- vs within-cluster distance** (k = {k} spatial clusters): "
+          (f"- **Between- vs within-cluster distance** (k = {k} spatial clusters): "
           f"within-cluster mean d^2 = {within:.3f}, between-cluster = {between:.3f}, "
           f"ratio = {between/within:.2f}. A ratio near 1 means spatial clusters are no more "
           f"internally similar than the basin at large (no bounded ceramic groups); a large "
-          f"ratio would mark bounded groups.", ""]
+          f"ratio would mark bounded groups."), ""]
 
     # --- D. Frequency Increment Test ---
     # type frequencies per CA bin
@@ -146,9 +147,9 @@ def main():
         tot = M[idx].sum()
         freq[b] = M[idx].sum(0) / tot if tot > 0 else np.nan
     L += ["## D. Frequency Increment Test (Feder, Kryazhimskiy & Plotkin 2014)", "",
-          "Per decorated type: rescaled increments Y_i = (v_i - v_{i-1}) / "
+          ("Per decorated type: rescaled increments Y_i = (v_i - v_{i-1}) / "
           "sqrt(2 v_{i-1}(1-v_{i-1}) dt) along the ordered bins (dt = 1); a one-sample "
-          "t-test of mean(Y) = 0 tests neutral drift. Increments at v in {0,1} are dropped.", "",
+          "t-test of mean(Y) = 0 tests neutral drift. Increments at v in {0,1} are dropped."), "",
           "| type | n increments | mean Y | t p-value | departs neutral? |",
           "|---|---|---|---|---|"]
     ndepart = 0
@@ -161,7 +162,7 @@ def main():
             if 0 < vp < 1 and np.isfinite(v[i]):
                 Y.append((v[i] - vp) / np.sqrt(2 * vp * (1 - vp) * 1.0))
         if len(Y) >= 3:
-            t, p = ttest_1samp(Y, 0.0)
+            _t, p = ttest_1samp(Y, 0.0)
             dep = p < 0.05
             ndepart += int(dep)
             ntested += 1
@@ -169,11 +170,11 @@ def main():
         else:
             L.append(f"| {typ} | {len(Y)} | - | - | (too few) |")
     L += ["",
-          f"**{ndepart} of {ntested} testable types depart from neutral drift at p < 0.05.** "
+          (f"**{ndepart} of {ntested} testable types depart from neutral drift at p < 0.05.** "
           "A predominantly neutral result corroborates the static neutrality signature: the "
           "decorated types behave as drifting neutral variants along the sequence, not as "
           "markers under conformist or anti-conformist bias. (With six bins per type the "
-          "per-type test has low power; read the count, not individual p-values.)"]
+          "per-type test has low power; read the count, not individual p-values.)")]
 
     # --- Figure S3: the Neiman interassemblage-distance result ---
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))

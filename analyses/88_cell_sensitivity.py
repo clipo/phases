@@ -80,11 +80,11 @@ def main() -> int:
     obs = {k: rev.fst_by(m_obs, v) for k, v in labels.items()}
     totals = data["m"].sum(1)
     L = ["# Does the drift shortfall depend on which matched cell is used?", "",
-         f"Produced by `analyses/88_cell_sensitivity.py`, {args.reps} realizations per cell, "
+         (f"Produced by `analyses/88_cell_sensitivity.py`, {args.reps} realizations per cell, "
          "pooled-profile model, basin, 28 assemblages. The cells are the six that lead analysis 47's "
          "fifty-run ranking among those passing its diversity confirmation, the selection first. "
          "Entries: drift median [2.5th, 97.5th percentile]; share of runs "
-         "at or above the observed value.", "",
+         "at or above the observed value."), "",
          "| cell (learners, innovation, mixing) | " + " | ".join(f"{k} (obs {obs[k]:.4f})" for k in labels) + " |",
          "|---|" + "---|" * len(labels)]
     for cell in leading_cells():

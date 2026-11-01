@@ -5,11 +5,18 @@ provably reading the same counts (program plan item 0 task 7).
 
 Two kinds of file:
 
-  basin_composition.json    the real St. Francis basin: 29 assemblages, 10
+  basin_composition.json    the real St. Francis basin: 28 assemblages, 10
                             decorated classes, real counts, real pairwise
-                            distances in km.
-  sim_rho{R}.json           data simulated FROM the model at a known rho, for
-                            the recovery run that gates the whole direction.
+                            distances in km, with the data fingerprint
+                            (hashes and geometry) under "_provenance".
+  a0_recovery_share{S}_rho{R}.json
+                            data simulated FROM the model for the rule-20(c)
+                            recovery fits of the latent-group probe (spec 4.1):
+                            spatial share 0.2 and 0.9 crossed with rho 5 and
+                            60 km, one record each, truth under "_truth".
+                            (Until 2026-10-16 this script wrote sim_rho{R}.json
+                            for the superseded 01_recovery.R; nothing runnable
+                            reads those.)
 
 The simulator here is written in plain numpy from the model definition in
 stan/spatial/composition_gp.stan and calls no Stan (Verification Regime rule 3:
@@ -22,7 +29,6 @@ Usage: .venv/bin/python analyses/49_write_stan_data.py
 """
 from __future__ import annotations
 
-import importlib
 import json
 import sys
 from pathlib import Path
@@ -33,22 +39,27 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
+from mls_emergence.dataio.basin import data_fingerprint, geo_km, load_curated
+
 OUT = ROOT / "data" / "stan"
 
 # Prior configuration shared by every dataset written here, so a recovery fit
 # and a real fit differ only in their counts.
-PRIOR = dict(prior_rho_type=2,      # uniform on log rho: no scale preferred
-             prior_rho_a=0.0, prior_rho_b=0.0,
-             rho_lo=0.5, rho_hi=300.0,
-             kernel=1,              # exponential (Matern 1/2)
-             use_tau=1,
-             prior_scale_sd=2.0,
-             likelihood=1)
+PRIOR = {"prior_rho_type": 2,      # uniform on log rho: no scale preferred
+             "prior_rho_a": 0.0, "prior_rho_b": 0.0,
+             "rho_lo": 0.5, "rho_hi": 300.0,
+             "kernel": 1,              # exponential (Matern 1/2)
+             "use_tau": 1,
+             "prior_scale_sd": 2.0,
+             "prior_alpha_sd": 10.0,    # intercept prior SD (D25, 2026-10-18: was a hard-coded 2, too narrow for rare-class log-odds of -4 to -6); mean written per payload
+             "likelihood": 1}
 
-TRUE_RHO = (5.0, 10.0, 20.0, 40.0, 80.0)   # 80 probes above screen 48's ceiling
-TRUE_SIGMA = 1.0
-TRUE_TAU = 0.5
-SEED = 20260831
+# Rule-20(c) recovery grid for A0 (probe spec 4.1): the low share is the value
+# that would embarrass the paper's headline claim. Total latent variance is
+# fixed at 1 logit^2, so sigma = sqrt(share) and tau = sqrt(1 - share).
+RECOVERY_SHARES = (0.2, 0.9)
+RECOVERY_RHOS = (5.0, 60.0)
+SEED = 20261016
 
 
 def matern(D, sigma, rho, kernel):
@@ -84,48 +95,55 @@ def simulate_from_model(D, totals, K, rho, sigma, tau, alpha, kernel, rng):
 
 
 def _payload(y, D, **over):
-    d = dict(N=int(y.shape[0]), K=int(y.shape[1]),
-             y=[[int(v) for v in row] for row in y],
-             D=[[float(v) for v in row] for row in D])
+    d = {"N": int(y.shape[0]), "K": int(y.shape[1]),
+             "y": [[int(v) for v in row] for row in y],
+             "D": [[float(v) for v in row] for row in D]}
     d.update(PRIOR)
+    d["prior_alpha_mean"] = [0.0] * (int(y.shape[1]) - 1)   # default centre; D25 variants override it
     d.update(over)
     return d
 
 
 def main():
-    a23 = importlib.import_module("23_phases_vs_spatial_drift")
-    import make_figures as mf
-
-    counts_df, coords_df = mf._load_curated()
+    counts_df, coords_df = load_curated()
     ids = [str(i) for i in counts_df.index]
     y = counts_df.to_numpy(int)
-    D = a23.geo_km(np.asarray(coords_df, dtype=float))
+    D = geo_km(np.asarray(coords_df, dtype=float))
     N, K = y.shape
     OUT.mkdir(parents=True, exist_ok=True)
+    fp = data_fingerprint(counts_df, coords_df)
 
     print(f"basin: {N} assemblages x {K} classes, {y.sum()} sherds, "
-          f"max distance {D.max():.1f} km")
+          f"max distance {fp['max_pairwise_km']:.1f} km, counts sha256 {fp['sha256_counts'][:12]}")
 
     real = _payload(y, D)
     real["_ids"] = ids           # provenance; Stan ignores leading-underscore keys
+    real["_provenance"] = fp
+    real["_classes"] = list(counts_df.columns)
     (OUT / "basin_composition.json").write_text(json.dumps(real))
 
     rng = np.random.default_rng(SEED)
     alpha = rng.normal(0.0, 1.0, K - 1)
     totals = y.sum(axis=1)
     truth = {}
-    for rho in TRUE_RHO:
-        ys = simulate_from_model(D, totals, K, rho, TRUE_SIGMA, TRUE_TAU,
-                                 alpha, PRIOR["kernel"], np.random.default_rng(int(rho) + SEED))
-        (OUT / f"sim_rho{int(rho)}.json").write_text(json.dumps(_payload(ys, D)))
-        truth[str(rho)] = dict(rho=rho, sigma=TRUE_SIGMA, tau=TRUE_TAU,
-                               spatial_share=TRUE_SIGMA ** 2 / (TRUE_SIGMA ** 2 + TRUE_TAU ** 2),
-                               kernel=PRIOR["kernel"], sherds=int(ys.sum()))
-        print(f"  sim rho={rho:5.1f} km -> {ys.sum()} sherds")
+    for share in RECOVERY_SHARES:
+        for rho in RECOVERY_RHOS:
+            sigma, tau = float(np.sqrt(share)), float(np.sqrt(1.0 - share))
+            tag = f"share{share:g}_rho{rho:g}"
+            ys = simulate_from_model(D, totals, K, rho, sigma, tau, alpha, PRIOR["kernel"],
+                                     np.random.default_rng(SEED + int(1000 * share) + int(rho)))
+            t = {"spatial_share": share, "rho": rho, "sigma": sigma, "tau": tau,
+                 "alpha": [float(a) for a in alpha], "kernel": PRIOR["kernel"],
+                 "sherds": int(ys.sum()), "seed": SEED, "generator": "analyses/49_write_stan_data.simulate_from_model"}
+            payload = _payload(ys, D)
+            payload["_truth"] = t
+            payload["_provenance"] = {"derived_from": fp, "note": "simulated counts at the real geometry and totals"}
+            (OUT / f"a0_recovery_{tag}.json").write_text(json.dumps(payload))
+            truth[tag] = t
+            print(f"  recovery {tag}: sigma {sigma:.3f} tau {tau:.3f} -> {ys.sum()} sherds")
 
-    (OUT / "sim_truth.json").write_text(json.dumps(
-        dict(truth=truth, alpha=[float(a) for a in alpha], seed=SEED), indent=2))
-    print(f"wrote {OUT}/basin_composition.json and {len(TRUE_RHO)} simulated sets")
+    (OUT / "a0_recovery_truth.json").write_text(json.dumps({"truth": truth, "seed": SEED}, indent=2))
+    print(f"wrote {OUT}/basin_composition.json and {len(truth)} recovery sets")
 
 
 if __name__ == "__main__":

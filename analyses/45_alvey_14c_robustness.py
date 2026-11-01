@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
 a11 = importlib.import_module("11_chronology_14c")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
 
 DATA = ROOT / "data"
 ALVEY = DATA / "Alvey LMV 14C Database_220714.xlsx"
@@ -155,10 +155,10 @@ def main() -> None:
     A_after, rho_a, p_a = seriation_corr(merged_full, grid_ad)
 
     L = ["# Alvey 14C robustness check for the St. Francis basin chronology", "",
-         "Does adding the Alvey LMV net-new determinations move analysis 11's "
+         ("Does adding the Alvey LMV net-new determinations move analysis 11's "
          "basin chronology? BEFORE = Mainfort (2001) only; AFTER = Mainfort + "
          "Alvey determinations at our basin sites that are not already in Mainfort "
-         f"and fall in the Mississippian window (normalized age <= {MISSISSIPPIAN_MAX_BP:.0f} BP).", "",
+         f"and fall in the Mississippian window (normalized age <= {MISSISSIPPIAN_MAX_BP:.0f} BP)."), "",
          "## Net-new Alvey dates added (by basin site)", "",
          "| site | Alvey trinomial | new Mississippian dates | ages (BP) |",
          "|---|---|---|---|"]
@@ -168,8 +168,8 @@ def main() -> None:
         L.append(f"| {prov} | {tri} | {len(sub)} | {ages} |")
     L.append(f"| **total** | | **{len(new)}** | |")
     L += ["",
-          "Neeley's Ferry (3CS24) is absent from Alvey; Callahan-Thompson (23MI71) "
-          "and Parkin/Kent contribute no net-new Mississippian dates.", "",
+          ("Neeley's Ferry (3CS24) is absent from Alvey; Callahan-Thompson (23MI71) "
+          "and Parkin/Kent contribute no net-new Mississippian dates."), "",
           "## Basin SPD: before vs after", "",
           "| quantity | Mainfort only | + Alvey net-new |",
           "|---|---|---|",
@@ -180,8 +180,8 @@ def main() -> None:
           "## Seriation axis vs calendar age: before vs after", ""]
 
     def anchor_block(A, rho, p, label):
-        out = [f"**{label}** (n = {len(A)} anchors, {int(A['n'].sum())} dates pooled): "
-               f"Spearman rho = {rho:+.2f}, p = {p:.3f}", "",
+        out = [(f"**{label}** (n = {len(A)} anchors, {int(A['n'].sum())} dates pooled): "
+               f"Spearman rho = {rho:+.2f}, p = {p:.3f}"), "",
                "| assemblage | n dates | median cal AD | CA1 |", "|---|---|---|---|"]
         for _, r in A.sort_values("median_ad").iterrows():
             out.append(f"| {r['assem']} | {int(r['n'])} | {r['median_ad']:.0f} | {r['ca1']:+.3f} |")

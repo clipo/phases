@@ -2,9 +2,9 @@ import numpy as np
 
 from mls_emergence.inference import (
     abc_smc,
+    resample,
     weighted_mean,
     weighted_quantile,
-    resample,
 )
 
 
@@ -133,11 +133,10 @@ def test_weights_raise_rather_than_silently_going_uniform():
     would pass on a sampler that had stopped weighting at all."""
     import numpy as np
     import pytest
+
     # NOTE: mls_emergence.inference re-exports the abc_smc FUNCTION, so the
     # module has to be imported by its full path.
     from mls_emergence.inference.abc_smc import abc_smc as run_smc
-
-    rng = np.random.default_rng(0)
 
     def prior_sampler(r):
         return r.uniform(-1.0, 1.0, size=2)

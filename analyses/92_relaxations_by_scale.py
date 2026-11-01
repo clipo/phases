@@ -87,7 +87,7 @@ def main() -> int:
     totals = m_obs.sum(1)
     rates = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates[(rates.region == "basin") & (rates.model == "pooled")].iloc[0]
-    cell = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]), n_ind=int(row["n_ind"]))
+    cell = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]), "n_ind": int(row["n_ind"])}
     straight = sd.geo_km(data["coords"])
     part_copy = data["parkin"] if data["parkin"] is not None else data["labels"]
 
@@ -163,13 +163,13 @@ def main() -> int:
         ("local innovation, each site its own", "strength 0.2", lambda: run_65(strength=0.2, areas=by_site)),
     ]
     L = ["# The relaxations scored at every scale", "",
-         f"Produced by `analyses/92_relaxations_by_scale.py`: {args.reps} runs per setting at the calibrated "
+         (f"Produced by `analyses/92_relaxations_by_scale.py`: {args.reps} runs per setting at the calibrated "
          f"combination (N {cell['n_ind']}, innovation {cell['innovation']}, mixing {cell['mixing']}), with "
          "analysis 64's and 65's seeds; local innovation areas are the two spatial clusters, as in 65, unless the "
          "row names neighborhoods (the five- and eight-cluster k-means divisions of the site map) or single sites. Each "
          "cell gives the median between-group F_ST, its 95 percent range, and the share of runs at or above "
          "the observed value. Diversity is matched when the medians of all three within-assemblage summaries "
-         "lie within 10 percent of the observed values. No setting is recalibrated.", "",
+         "lie within 10 percent of the observed values. No setting is recalibrated."), "",
          "| account | setting | " + " | ".join(f"{p} (obs {obs[p]:.4f})" for p in parts) + " | diversity |",
          "|---|---|" + "---|" * len(parts) + "---|"]
     dose_rows = []
@@ -189,20 +189,20 @@ def main() -> int:
         L.append(f"| {acc} | {label} | " + " | ".join(cells) + f" | {'matched' if ok else 'broken'} |")
         print(L[-1], flush=True)
     L += ["", "## Reading", "",
-          "Read each row on three things at once: whether the median reaches the observation, whether the "
+          ("Read each row on three things at once: whether the median reaches the observation, whether the "
           "95 percent range covers it, and whether diversity stays matched. The baseline row is the reference; "
           "whether its range covers a finer-scale value depends on the seeds (compare Table 1), so read the "
           "share of runs reaching it rather than the range edge. A relaxation improves on the baseline where it "
           "raises that share with diversity matched. Settings that break the diversity match here were not "
-          "recalibrated.", "",
+          "recalibrated."), "",
           "## The dose behind each local-innovation row", "",
-          "An area's profile is reordered only when two or more of its classes are drawn, each with "
+          ("An area's profile is reordered only when two or more of its classes are drawn, each with "
           "probability equal to the strength, and the reordering is not the identity. Measured over the "
           f"same {args.reps} runs: the mean share of areas whose profile differs from the regional one at all, "
           "and the mean share of a profile's frequency that sits in a different class (half the summed "
           "absolute difference from the regional profile, averaged over areas, unchanged ones included). "
           "Two rows are the same dose only when these agree; a row that reaches the finer-scale values no "
-          "more often than the baseline at a small dose has not tested the grain it names.", "",
+          "more often than the baseline at a small dose has not tested the grain it names."), "",
           "| account | setting | areas | areas whose profile differs | frequency moved, mean |",
           "|---|---|---|---|---|", *dose_rows, ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)

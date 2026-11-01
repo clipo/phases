@@ -34,7 +34,7 @@ def test_run_blind_one_panel_per_mechanism():
     }
     panels = run_blind(generators, seed=7)
     assert set(panels) == set(generators)
-    for name, panel in panels.items():
+    for panel in panels.values():
         assert isinstance(panel, pd.DataFrame)
         assert list(panel.columns) == SIGNATURE_COLUMNS
         assert len(panel) == T_DEFAULT

@@ -77,8 +77,8 @@ def main() -> int:
 
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == MODEL)].iloc[0]
-    rates = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]),
-                 n_ind=int(row["n_ind"]))
+    rates = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]),
+                 "n_ind": int(row["n_ind"])}
 
     totals = data["m"].sum(1)
     sims = {k: [] for k in K_RANGE}
@@ -96,13 +96,13 @@ def main() -> int:
         d = np.array(sims[k], dtype=float)
         d = d[np.isfinite(d)]
         lo, med, hi = np.percentile(d, [2.5, 50, 97.5])
-        rows.append(dict(k=k, radius_km=float(np.sqrt(t74.inertia(pts_km, labels[k]))),
-                         min_group=int(np.bincount(labels[k]).min()),
-                         silhouette=sil[k], observed=observed[k],
-                         drift_median=med, drift_lo=lo, drift_hi=hi,
-                         above_interval=bool(observed[k] > hi),
-                         shortfall=observed[k] / med if med > 0 else float("nan"),
-                         reach_rate=float(np.mean(d >= observed[k])), n=len(d)))
+        rows.append({"k": k, "radius_km": float(np.sqrt(t74.inertia(pts_km, labels[k]))),
+                         "min_group": int(np.bincount(labels[k]).min()),
+                         "silhouette": sil[k], "observed": observed[k],
+                         "drift_median": med, "drift_lo": lo, "drift_hi": hi,
+                         "above_interval": bool(observed[k] > hi),
+                         "shortfall": observed[k] / med if med > 0 else float("nan"),
+                         "reach_rate": float(np.mean(d >= observed[k])), "n": len(d)})
     df = pd.DataFrame(rows)
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUT_CSV, index=False)
@@ -112,8 +112,8 @@ def main() -> int:
                "the comparison does NOT hold at every scale; see the table")
     L = ["# Is the drift verdict scale-invariant?", "",
          f"Basin phase set, {counts.shape[0]} assemblages, {args.reps} drift realizations,",
-         f"calibrated {MODEL} model (innovation {rates['innovation']}, mixing "
-         f"{rates['mixing']}, {rates['n_ind']} learners). Each realization is scored at",
+         (f"calibrated {MODEL} model (innovation {rates['innovation']}, mixing "
+         f"{rates['mixing']}, {rates['n_ind']} learners). Each realization is scored at"),
          "every k, so differences across scales are the partition and not a different draw.",
          "",
          "| k | silhouette | observed F_ST | drift median | drift 95% | observed above? | shortfall | share of runs reaching observed |",

@@ -36,27 +36,27 @@ import re
 import warnings
 from pathlib import Path
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import spearmanr
 
-from mls_emergence.dataio.pfg import load_pfg_counts
 from mls_emergence.dataio.coords import read_assemblage_xy
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
-from mls_emergence.signatures.neutral import theta_f, theta_e
-from mls_emergence.signatures.variance import cultural_fst
+from mls_emergence.dataio.matrix import read_analysis_matrix
+from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 from mls_emergence.signatures.assortativity import (
-    boundary_excess,
     _kmeans_labels,
+    boundary_excess,
     geo_distance,
 )
-from mls_emergence.signatures.seriation import seriation_groups
 from mls_emergence.signatures.convergence import convergence_score, time_derivative
-from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
+from mls_emergence.signatures.neutral import theta_e, theta_f
+from mls_emergence.signatures.seriation import seriation_groups
+from mls_emergence.signatures.variance import cultural_fst
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -136,7 +136,7 @@ def correspondence_axis(M: np.ndarray):
     Dr_inv = np.diag(1.0 / np.sqrt(r))
     Dc_inv = np.diag(1.0 / np.sqrt(c))
     S = Dr_inv @ (P - np.outer(r, c)) @ Dc_inv
-    U, sig, Vt = np.linalg.svd(S, full_matrices=False)
+    U, sig, _Vt = np.linalg.svd(S, full_matrices=False)
     row_scores = Dr_inv @ U @ np.diag(sig)
     ordinate = row_scores[:, 0]
     inertia = sig ** 2
@@ -573,7 +573,7 @@ def main() -> None:
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
     lmv = load_lmv(DATA / "LMVData.xlsx")
-    joined, unmatched = join_pfg_to_lmv(broad_counts, lmv)
+    joined, _unmatched = join_pfg_to_lmv(broad_counts, lmv)
     bmatched = joined.dropna(subset=["Easting", "Northing"]).copy()
 
     # Clean binary features from LMVData-22March2006.xls, joined by Number.
@@ -1035,7 +1035,7 @@ def main() -> None:
     print(f"  convergence_score: slope {conv_slope:+.5f}, rho {crho2:+.3f}")
     if parkin_ca_rank is not None:
         print(f"[Parkin] CA rank {parkin_ca_rank}/{n_ca} ({pos_label}); "
-              f"14C={'AD %.0f'%parkin_14c if parkin_14c else 'none'}.")
+              f"14C={f'AD {parkin_14c:.0f}' if parkin_14c else 'none'}.")
     print(f"[Settlement] mound%={100*mound.mean():.1f}, ditch%={100*ditch.mean():.1f}, "
           f"rank-size slope={slope_rs:.2f}, primacy={primacy:.2f}.")
     print(f"[Settlement] Parkin ditch coded={bool(ditch.get(PARKIN_BROAD,False))} "

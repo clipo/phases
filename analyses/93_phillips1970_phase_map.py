@@ -41,12 +41,14 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.lines import Line2D  # noqa: E402
-from matplotlib.patches import Patch  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+
 m35 = importlib.import_module("35_basin_pullout")
 m36 = importlib.import_module("36_canonical_phase_map")
 
@@ -163,7 +165,7 @@ def main():
         "`data/raw/phillips1970_phase_outlines.csv` (Lipo 2001: Figure 2.6, after Phillips 1970).",
         "The analysis assigns each assemblage the area it lies in, or the nearest when it lies in",
         "none (`36_canonical_phase_map.assign_primary_phases`). Containment is point-in-polygon in",
-        f"UTM 15N; the areas carry the source's drafting error (see the CSV header), so an assemblage",
+        "UTM 15N; the areas carry the source's drafting error (see the CSV header), so an assemblage",
         f"within {NEAR_LINE_KM:g} km of a line is not securely on either side of it. The last two columns",
         "record the Mainfort (1996: Figure 1) labels the pipeline used until 2026-10-01.",
         "",

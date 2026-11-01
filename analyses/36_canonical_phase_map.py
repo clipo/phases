@@ -37,16 +37,18 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import matplotlib.patheffects as pe  # noqa: E402
-from matplotlib.lines import Line2D  # noqa: E402
-import geopandas as gpd  # noqa: E402
-from shapely.geometry import Point, MultiPoint, box  # noqa: E402
-from shapely.ops import unary_union, voronoi_diagram  # noqa: E402
-import make_figures as mf  # noqa: E402
-import make_map as mm  # noqa: E402
+import geopandas as gpd
+import make_figures as mf
+import make_map as mm
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from shapely.geometry import MultiPoint, Point, box
+from shapely.ops import unary_union, voronoi_diagram
+
 m35 = importlib.import_module("35_basin_pullout")
 
 OUT_FIG = ROOT / "figures" / "fig1_phases.png"
@@ -339,7 +341,7 @@ def place_phase_labels(fig, ax, ext, E, Nm, anchors, inside, spill=()):
         bb = t.get_window_extent(fig.canvas.get_renderer()).transformed(inv)
         hw, hh = bb.width / 2 + 1_000.0, bb.height / 2 + 1_000.0
 
-        def search(poly):
+        def search(poly, hw=hw, hh=hh, cx=cx, cy=cy):
             best = None
             for gx in np.arange(ext[0] + hw, ext[1] - hw, 1_000.0):
                 for gy in np.arange(ext[2] + hh + 0.08 * (ext[3] - ext[2]),

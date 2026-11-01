@@ -43,28 +43,28 @@ import re
 import warnings
 from pathlib import Path
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pyproj
 from scipy.stats import spearmanr
 
-from mls_emergence.dataio.pfg import load_pfg_counts
 from mls_emergence.dataio.coords import read_assemblage_xy
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
-from mls_emergence.signatures.neutral import theta_f, theta_e
-from mls_emergence.signatures.variance import cultural_fst
+from mls_emergence.dataio.matrix import read_analysis_matrix
+from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 from mls_emergence.signatures.assortativity import (
-    boundary_excess,
     _kmeans_labels,
+    boundary_excess,
     geo_distance,
 )
-from mls_emergence.signatures.seriation import seriation_groups
 from mls_emergence.signatures.convergence import convergence_score, time_derivative
-from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
+from mls_emergence.signatures.neutral import theta_e, theta_f
+from mls_emergence.signatures.seriation import seriation_groups
+from mls_emergence.signatures.variance import cultural_fst
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -146,7 +146,7 @@ def correspondence_axis(M: np.ndarray):
     Dr_inv = np.diag(1.0 / np.sqrt(r))
     Dc_inv = np.diag(1.0 / np.sqrt(c))
     S = Dr_inv @ (P - np.outer(r, c)) @ Dc_inv
-    U, sig, Vt = np.linalg.svd(S, full_matrices=False)
+    U, sig, _Vt = np.linalg.svd(S, full_matrices=False)
     row_scores = Dr_inv @ U @ np.diag(sig)
     ordinate = row_scores[:, 0]
     inertia = sig ** 2
@@ -612,7 +612,7 @@ def main() -> None:
             cco_s = cc_c[[have_ids.index(i) for i in samp]]
             try:
                 bb = pd.qcut(ca_s, q=n_bins, labels=False, duplicates="drop")
-            except Exception:
+            except Exception:  # noqa: BLE001, S112  a failed resample is dropped; narrowing would change which draws survive
                 continue
             bvals = []
             for bb_id in sorted(pd.Series(bb).dropna().unique()):
@@ -855,10 +855,10 @@ def main() -> None:
     # =======================================================================
     # whole-LMV rank-size for direct comparison
     wl_area = broad_all["mound_area"].dropna()
-    wl_slope, wl_primacy, wl_largest, wl_sorted = rank_size(wl_area)
+    wl_slope, wl_primacy, wl_largest, _wl_sorted = rank_size(wl_area)
     wl_area_corr = broad_all["mound_area"].copy()
     wl_area_corr.loc[PARKIN_BROAD] = PARKIN_AREA_CORR
-    wl_slope_c, wl_primacy_c, wl_largest_c, wl_sorted_c = rank_size(wl_area_corr.dropna())
+    wl_slope_c, wl_primacy_c, _wl_largest_c, wl_sorted_c = rank_size(wl_area_corr.dropna())
     wl_parkin_rank_c = int((wl_sorted_c.index == PARKIN_BROAD).argmax() + 1)
 
     emit("## 4. Comparison to whole-LMV (NEUTRAL)")

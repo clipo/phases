@@ -53,21 +53,22 @@ from __future__ import annotations
 
 import importlib
 import sys
-
-import numpy as np
 from pathlib import Path
 
 import geopandas as gpd
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-from mls_emergence.dataio.pfg import load_pfg_counts  # noqa: E402
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv  # noqa: E402
-grid = importlib.import_module("12_sensitivity_grid")  # noqa: E402
+from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv
+
+grid = importlib.import_module("12_sensitivity_grid")
 
 PROC = ROOT / "data" / "processed"
 SHP = ROOT / "data" / "Shapefiles"

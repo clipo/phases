@@ -49,12 +49,14 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+
 sd = importlib.import_module("23_phases_vs_spatial_drift")
-from mls_emergence.signatures.assortativity import similarity_matrix  # noqa: E402
+from mls_emergence.signatures.assortativity import similarity_matrix
 
 OUT_MD = ROOT / "output" / "drift_vs_groups_demo.md"
 OUT_FIG = ROOT / "figures" / "25_drift_vs_groups_demo.png"

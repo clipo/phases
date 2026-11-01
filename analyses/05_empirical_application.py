@@ -21,24 +21,24 @@ from __future__ import annotations
 import warnings
 from pathlib import Path
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from mls_emergence.dataio.pfg import load_pfg_counts
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
-from mls_emergence.signatures.neutral import theta_f, theta_e
-from mls_emergence.signatures.variance import cultural_fst
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 from mls_emergence.signatures.assortativity import (
-    boundary_excess,
     _kmeans_labels,
+    boundary_excess,
     geo_distance,
 )
-from mls_emergence.signatures.seriation import seriation_groups, seriation_solutions
 from mls_emergence.signatures.convergence import convergence_score, time_derivative
+from mls_emergence.signatures.neutral import theta_e, theta_f
+from mls_emergence.signatures.seriation import seriation_groups, seriation_solutions
+from mls_emergence.signatures.variance import cultural_fst
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 

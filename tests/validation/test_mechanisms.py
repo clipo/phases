@@ -72,7 +72,7 @@ def test_simulate_slice_panmictic_low_fst():
 
 
 def test_group_emergence_contract():
-    slices, coords = gen_group_emergence(seed=42)
+    slices, _coords = gen_group_emergence(seed=42)
     fst0 = variance.cultural_fst(slices[0])
     fstT = variance.cultural_fst(slices[-1])
     assert fstT > fst0 + 0.1
@@ -80,7 +80,7 @@ def test_group_emergence_contract():
 
 
 def test_aggregated_signaling_contract():
-    slices, coords = gen_aggregated_signaling(seed=42)
+    slices, _coords = gen_aggregated_signaling(seed=42)
     max_fst = max(variance.cultural_fst(s) for s in slices)
     assert max_fst < 0.05
     assert _within_conformity_departure(slices[-1]) > 0.1

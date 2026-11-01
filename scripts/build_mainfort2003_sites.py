@@ -28,7 +28,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-from mls_emergence.dataio.coords import read_assemblage_xy  # noqa: E402
+from mls_emergence.dataio.coords import read_assemblage_xy
 
 TABLE = ROOT / "data" / "raw" / "mainfort2003_table1.csv"
 WORKBOOK = ROOT / "data" / "raw" / "mainfort-pfg-cpl.xlsx"
@@ -74,9 +74,9 @@ def main():
         site = str(r["site"]).strip()
         if site in corrected and site not in ASSEMBLAGE_FILE:
             a = corrected[site]
-            rows.append(dict(site=site, phase_mainfort2003=r["phase"], latitude=float(xy.loc[a, "Latitude"]),
-                             longitude=float(xy.loc[a, "Longitude"]),
-                             coordinate_source=SRC_XY + "; project coordinate correction"))
+            rows.append({"site": site, "phase_mainfort2003": r["phase"], "latitude": float(xy.loc[a, "Latitude"]),
+                             "longitude": float(xy.loc[a, "Longitude"]),
+                             "coordinate_source": SRC_XY + "; project coordinate correction"})
             continue
         if site in ASSEMBLAGE_FILE:
             a = ASSEMBLAGE_FILE[site]
@@ -88,8 +88,8 @@ def main():
             if key not in mxy.index:
                 raise KeyError(f"{site!r}: no coordinate in any source (MainfortXY key {key!r})")
             lat, lon, src = float(mxy.loc[key, "Latitude"]), float(mxy.loc[key, "Longitude"]), SRC_MXY
-        rows.append(dict(site=site, phase_mainfort2003=r["phase"], latitude=lat, longitude=lon,
-                         coordinate_source=src))
+        rows.append({"site": site, "phase_mainfort2003": r["phase"], "latitude": lat, "longitude": lon,
+                         "coordinate_source": src})
     out = pd.DataFrame(rows)
     header = ("# Coordinates for the 39 sites of Mainfort (2003) Table 1, written by scripts/build_mainfort2003_sites.py.\n"
               "# Each row names where its coordinate came from. The MainfortXY sheet is Mainfort's own; the other two sources are this project's.\n"

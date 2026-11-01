@@ -58,16 +58,19 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, save  # noqa: E402
+import itertools
+
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "findings" / "length_scale_recovery.md"
 
 TRUE_ELL = (4.0, 8.0, 16.0, 32.0, 64.0)   # km, spanning sub-site to whole-basin
-FULL = dict(n_seed=40, K=10, mu=0.01, m_between=0.05, steps=1500)
-FAST = dict(n_seed=6, K=10, mu=0.01, m_between=0.05, steps=400)
+FULL = {"n_seed": 40, "K": 10, "mu": 0.01, "m_between": 0.05, "steps": 1500}
+FAST = {"n_seed": 6, "K": 10, "mu": 0.01, "m_between": 0.05, "steps": 400}
 ELL_BOUNDS = (0.5, 500.0)
 
 
@@ -94,7 +97,7 @@ def estimate_ell(counts, D):
         popt, _ = curve_fit(
             _decay, d, s, p0=p0, maxfev=20000,
             bounds=([-np.inf, 0.0, ELL_BOUNDS[0]], [np.inf, np.inf, ELL_BOUNDS[1]]))
-    except Exception:
+    except Exception:  # noqa: BLE001  a failed fit is scored as undefined (NaN)
         return np.nan
     return float(popt[2])
 
@@ -137,13 +140,13 @@ def main(fast=False):
 
     # Separability: can the estimate tell adjacent (2x apart) worlds apart?
     L = ["# Can this design resolve an interaction length scale?", "",
-         f"Produced by `analyses/48_length_scale_recovery.py` "
+         (f"Produced by `analyses/48_length_scale_recovery.py` "
          f"({'FAST' if fast else 'full'}: {cfg['n_seed']} seeds per level, "
-         f"{cfg['steps']} generations).", "",
-         f"Design: the real St. Francis basin, {n} assemblages at their real "
+         f"{cfg['steps']} generations)."), "",
+         (f"Design: the real St. Francis basin, {n} assemblages at their real "
          f"coordinates and real per-assemblage sherd totals "
          f"({int(totals.sum())} sherds), {cfg['K']} decorated classes, maximum "
-         f"pairwise distance {D.max():.1f} km.", "",
+         f"pairwise distance {D.max():.1f} km."), "",
          "## Recovery", "",
          "| true ell (km) | median estimate | 5-95% of estimates | fits |",
          "|---|---|---|---|"]
@@ -160,15 +163,15 @@ def main(fast=False):
 
     # Overlap between adjacent levels, the number that decides the question.
     L += ["", "## Separability of adjacent (2x) levels", "",
-          "Overlap is the fraction of the two estimate distributions that "
+          ("Overlap is the fraction of the two estimate distributions that "
           "cannot be told apart, computed as the proportion of pairs "
           "(x from the lower level, y from the upper) with x >= y. 0.5 means "
           "the design carries no information distinguishing them; 0.0 means "
-          "they never cross.", "",
+          "they never cross."), "",
           "| pair | overlap (ell_hat) | overlap (Mantel r) |",
           "|---|---|---|"]
     overlaps, m_overlaps = [], []
-    for lo_e, hi_e in zip(TRUE_ELL[:-1], TRUE_ELL[1:]):
+    for lo_e, hi_e in itertools.pairwise(TRUE_ELL):
         a = rows[lo_e][np.isfinite(rows[lo_e])]
         b = rows[hi_e][np.isfinite(rows[hi_e])]
         ov = float(np.mean(a[:, None] >= b[None, :])) if a.size and b.size else float("nan")
@@ -209,17 +212,17 @@ def main(fast=False):
                       for a, b, v in zip(TRUE_ELL[:-1], TRUE_ELL[1:], best_pair))
           + f". Separation threshold {THRESH}.", ""]
     if resolved is None:
-        L += ["**The design does NOT resolve the scale anywhere on this grid.** "
+        L += [("**The design does NOT resolve the scale anywhere on this grid.** "
               "Worlds differing by a factor of two produce indistinguishable "
               "assemblages at every level tested. Fitting a length-scale "
               "posterior would return the prior wearing a likelihood's clothes. "
               "This is the outcome ../mataa measured for pukao, and the honest "
-              "report is 'not resolved at this design'.", ""]
+              "report is 'not resolved at this design'."), ""]
     else:
         lo_k, hi_k = resolved
-        L += [f"**The design resolves the scale over {lo_k:.0f} to {hi_k:.0f} "
+        L += [(f"**The design resolves the scale over {lo_k:.0f} to {hi_k:.0f} "
               f"km**, where every adjacent doubling separates. Above "
-              f"{hi_k:.0f} km it does not.", "",
+              f"{hi_k:.0f} km it does not."), "",
               "**The two observables fail in different places, which is why "
               "both are here.** Mantel r is NON-MONOTONE in the interaction "
               "scale: it strengthens from "
@@ -242,7 +245,7 @@ def main(fast=False):
               + ", ".join(f"{v:.3f}" for v in best_pair[:lo_i + hi_i - lo_i])
               + " against 40 replicates per level). It would not be legitimate "
               "for estimating an effect size, and nothing here does that.", "",
-              f"**Consequence for this paper.** The operating point the "
+              (f"**Consequence for this paper.** The operating point the "
               f"manuscript reports, an interaction range of about 24 km, sits "
               f"inside the resolved band, near its upper end. The latent-field "
               f"direction is therefore supported: a length-scale posterior will "
@@ -252,14 +255,14 @@ def main(fast=False):
               f"interaction scales are not distinguishable from one another at "
               f"this study extent'. That ceiling is set by the extent of the "
               f"basin, not by sherd counts, so no amount of additional "
-              f"excavation at these sites would lift it.", "",
-              "**Caveat that must travel with this.** ell_hat is biased upward "
+              f"excavation at these sites would lift it."), "",
+              ("**Caveat that must travel with this.** ell_hat is biased upward "
               "throughout (median 20.9 km when the truth is 4 km) and unstable "
               "at 64 km. It is a screening statistic, not a proposed "
               "estimator, and its bias is a property of fitting three "
               "parameters to non-independent pairs over a bounded window. What "
               "this screen licenses is the separability result, not any point "
-              "estimate.", ""]
+              "estimate."), ""]
 
     import json
     (OUT_MD.parent / "length_scale_recovery.json").write_text(json.dumps(

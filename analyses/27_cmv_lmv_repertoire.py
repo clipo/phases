@@ -39,11 +39,13 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
-from mls_emergence.dataio.pfg import load_pfg_counts  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+
+from mls_emergence.dataio.pfg import load_pfg_counts
 
 TSV = ROOT / "data" / "raw" / "williams1954_cmv_counts.tsv"
 PFG = ROOT / "data" / "raw" / "PFGData.xlsx"
@@ -144,14 +146,14 @@ def main():
         return inc, ab
     ci, ca = stats(cmv)
     li, la = stats(lmv)
-    L += [f"CMV decorated sherds: {int(cmv.sum().sum())} in {len(cmv)} assemblages. "
-          f"LMV decorated sherds: {int(lmv.sum().sum())} in {len(lmv)} assemblages.", "",
+    L += [(f"CMV decorated sherds: {int(cmv.sum().sum())} in {len(cmv)} assemblages. "
+          f"LMV decorated sherds: {int(lmv.sum().sum())} in {len(lmv)} assemblages."), "",
           "## 1. Type incidence (fraction of assemblages present) and sherd share",
           "| type | affinity | CMV inc | LMV inc | CMV share | LMV share |",
           "|---|---|---|---|---|---|"]
     for t in CANON:
-        L += [f"| {t} | {AFFINITY[t]} | {ci[t]:.2f} | {li[t]:.2f} | "
-              f"{ca[t]:.3f} | {la[t]:.3f} |"]
+        L += [(f"| {t} | {AFFINITY[t]} | {ci[t]:.2f} | {li[t]:.2f} | "
+              f"{ca[t]:.3f} | {la[t]:.3f} |")]
 
     # 2. shared vs distinctive sherd shares
     def share_by_aff(ab):
@@ -178,8 +180,8 @@ def main():
     j_cl = float(np.nanmean(bs))
     L += ["## 3a. Repertoire separation (presence/absence Jaccard, assemblages with >=2 decorated types)",
           f"- assemblages used: CMV {len(Pc)}, LMV {len(Pl)}.",
-          f"- mean Jaccard within-CMV = {j_cc:.3f}, within-LMV = {j_ll:.3f}, "
-          f"between = {j_cl:.3f}.",
+          (f"- mean Jaccard within-CMV = {j_cc:.3f}, within-LMV = {j_ll:.3f}, "
+          f"between = {j_cl:.3f}."),
           "  Between << within on both sides = distinct repertoires.", ""]
 
     # 3b. proportional F_ST CMV vs LMV, EQUAL-WEIGHTED pools (each region = one
@@ -200,8 +202,8 @@ def main():
     L += ["## 3b. Decorated-proportion F_ST, CMV vs LMV (equal-weighted pools)",
           f"- ALL decorated types: F_ST = {fst_all:+.3f}.",
           f"- SHARED types only (typology-vintage control): F_ST = {fst_shared:+.3f}.",
-          f"- (size-weighted, for reference, dominated by the 21x-larger LMV pool: "
-          f"{fst_all_raw:+.3f}).",
+          (f"- (size-weighted, for reference, dominated by the 21x-larger LMV pool: "
+          f"{fst_all_raw:+.3f})."),
           "  If the boundary persists among shared types, it is not just a typology",
           "  artifact; if it collapses, the apparent boundary is largely distinctive-",
           "  type bookkeeping. Compare the within-region drift level F_ST ~ 0.04.", ""]

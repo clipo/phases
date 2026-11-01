@@ -35,13 +35,20 @@ rule.
 
 Usage: PYTHONPATH=src .venv/bin/python scripts/probe_library_boundary_excess.py 17_basin_results.py
 """
-import importlib, sys, runpy, io, contextlib
+import contextlib
+import importlib
+import io
+import runpy
+import sys
 from pathlib import Path
+
 import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 for p in (ROOT, ROOT / "analyses", ROOT / "src"):
     sys.path.insert(0, str(p))
 import mls_emergence.signatures.assortativity as A
+
 orig = A.boundary_excess
 log = []
 def variant(counts, coords, n_clusters=None, n_bins=4, seed=0, min_pairs=5):
@@ -72,7 +79,6 @@ def wrapped(counts, coords, *a, **k):
     log.append((np.asarray(counts).shape[0], v0, v5, pairs))
     return v0
 A.boundary_excess = wrapped
-import mls_emergence.signatures as SG
 for mod in list(sys.modules.values()):
     if mod and getattr(mod, "boundary_excess", None) is orig:
         mod.boundary_excess = wrapped

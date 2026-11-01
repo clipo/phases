@@ -53,7 +53,7 @@ from shapely.geometry import Point, Polygon
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
-from mls_emergence.dataio.coords import read_assemblage_xy  # noqa: E402
+from mls_emergence.dataio.coords import read_assemblage_xy
 
 OUT = ROOT / "data" / "raw" / "phillips1970_phase_outlines.csv"
 XY = ROOT / "data" / "raw" / "mainfort-pfg-cplXY.txt"
@@ -217,8 +217,8 @@ def main() -> int:
         f"# frame, LMS columns N-Q by rows 10-14: longitude {LON_WEST} to {LON_EAST}, latitude {LAT_SOUTH} to {LAT_NORTH}.",
         "# Column lines at x_pt = " + ", ".join(f"{v:.2f}" for v in x_knots)
         + f"; frame bottom and top at y_pt = {y0:.2f}, {y1:.2f}.",
-        f"# Georeference check, nothing fitted: of {len(resid)} project assemblages inside the frame, "
-        f"{len(plotted)} have a plotted site dot within {NOT_PLOTTED_KM:g} km;",
+        (f"# Georeference check, nothing fitted: of {len(resid)} project assemblages inside the frame, "
+        f"{len(plotted)} have a plotted site dot within {NOT_PLOTTED_KM:g} km;"),
         f"# for those the nearest dot is a median {np.median(r):.2f} km away (maximum {r.max():.2f} km). "
         f"No dot within {NOT_PLOTTED_KM:g} km: " + (", ".join(absent) if absent else "none") + ".",
         "# The Parkin outline is open on its west side in the source, where it runs into the frame;",

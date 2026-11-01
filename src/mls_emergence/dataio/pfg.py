@@ -1,5 +1,15 @@
+"""Readers for the Phillips, Ford and Griffin (PFG) ceramic tables.
+
+Provides ``load_pfg_counts`` (assemblage x type sherd counts from the
+``SherdData`` sheet of ``data/raw/PFGData.xlsx``, or a CSV export of it) and
+``load_pfg_attributes`` (the type attribute table on ``Sheet2``). Used by the
+empirical analyses (05, 06, 07, 09, 16, 17, 27, 67), ``make_figures.py`` and
+``make_map.py``.
+"""
 from __future__ import annotations
+
 from pathlib import Path
+
 import pandas as pd
 
 NON_TYPE_COLS = ["Site Name", "Site Number", "Sherd Total"]

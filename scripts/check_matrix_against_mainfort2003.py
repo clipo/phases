@@ -72,13 +72,13 @@ def main() -> int:
     over = list(pub.site[typed > pub.Total])
 
     L = ["# The workbook's Mainfort sheet against Mainfort (2003), Table 1", "",
-         f"{len(b)} sites appear in both; {len(only_wb)} only in the workbook sheet; "
-         f"{len(only_pub)} only in the published table.", "",
+         (f"{len(b)} sites appear in both; {len(only_wb)} only in the workbook sheet; "
+         f"{len(only_pub)} only in the published table."), "",
          "| class | sites identical to the published table |", "|---|---|"]
     for w, p in SAME:
         L.append(f"| {p} | {int((b[w] == b[p]).sum())} of {len(b)} |")
-    L += [f"| **Parkin Punctated** | **{agree} of {len(b)}**; exactly twice the published "
-          f"count in {exact2}, ratio {ratio.min():.2f} to {ratio.max():.2f} in all |", "",
+    L += [(f"| **Parkin Punctated** | **{agree} of {len(b)}**; exactly twice the published "
+          f"count in {exact2}, ratio {ratio.min():.2f} to {ratio.max():.2f} in all |"), "",
           "Workbook-only sites, whose source is not yet recorded: "
           + ", ".join(only_wb) + ".", "",
           "Transcription self-check: rows whose typed columns exceed the printed row total "
@@ -104,14 +104,14 @@ def main() -> int:
     plain = int(pub.Mississippi_Plain.sum() + pub.Bell_Plain.sum())
     decorated = int(pub[dec].sum().sum())
     L += ["## Mainfort's published counts against PFGData.xlsx", "",
-          f"{len(j)} of his sites match a PFGData site by exact name. Parkin Punctated is "
-          f"identical at {same}, larger in his table at {len(more)}, and smaller at {fewer}.",
+          (f"{len(j)} of his sites match a PFGData site by exact name. Parkin Punctated is "
+          f"identical at {same}, larger in his table at {len(more)}, and smaller at {fewer}."),
           "Sites where his count exceeds the survey's: "
           + ", ".join(f"{r.site} ({int(r.Parkin_Punctated)} against {int(r.pp)})"
                       for r in more.itertuples()) + ".", "",
-          f"Plainware in his table: {plain:,} Mississippi Plain and Bell Plain sherds against "
+          (f"Plainware in his table: {plain:,} Mississippi Plain and Bell Plain sherds against "
           f"{decorated:,} decorated, that is {100 * plain / (plain + decorated):.0f} percent "
-          "plain.", ""]
+          "plain."), ""]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L))
     if exact2 or agree < len(b):

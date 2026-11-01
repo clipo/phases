@@ -101,6 +101,7 @@ def empirical_cv():
     ratio is taken.
     """
     import re
+
     import pandas as pd
     mf = importlib.import_module("make_figures")
     b, _ = mf._load_curated()
@@ -118,8 +119,7 @@ def empirical_cv():
     # carrying two values in one repository (rule 7). Matching is by site name
     # through the compilation's own Number column, because the corrections file
     # is keyed by site number and this frame is keyed by assemblage name.
-    from mls_emergence.dataio.settlement import (load_height_corrections,
-                                                 normalize_grid)
+    from mls_emergence.dataio.settlement import load_height_corrections, normalize_grid
     corr = load_height_corrections(ROOT / "data" / "raw" / CORRECTIONS_CSV)
     num_by_key = {norm(r["Name"]): normalize_grid(str(r["Number"]))
                   for _, r in d.reset_index().iterrows()}
@@ -140,7 +140,7 @@ def empirical_cv():
         v = h ** power
         out[label] = float(v.std(ddof=1) / v.mean())
     out["_n"] = int(h.size)
-    out["_n_total"] = int(len(b.index))
+    out["_n_total"] = len(b.index)
     return out
 
 
@@ -151,13 +151,13 @@ def diversity_matched(ach, obs):
 
 def write_report(rows) -> None:
     L = ["# Can unequal site populations close the drift gap?", "",
-         f"Produced by `analyses/64_unequal_populations.py`"
-         f"{' (--fast)' if FAST else ''}, {N_REAL} realizations per cell.", "",
-         "Per-site populations are lognormal with the calibrated cell's population as the "
+         (f"Produced by `analyses/64_unequal_populations.py`"
+         f"{' (--fast)' if FAST else ''}, {N_REAL} realizations per cell."), "",
+         ("Per-site populations are lognormal with the calibrated cell's population as the "
          "arithmetic mean. CV = 0 is the uniform model the paper reports. A cell closes the gap "
          "only if it reaches the observed $F_{ST}$ AND stays inside the calibration's own "
          "10 percent diversity tolerance; raising inequality lowers the harmonic mean and so "
-         "raises $F_{ST}$ for a trivial reason, which the diversity column is there to catch.", "",
+         "raises $F_{ST}$ for a trivial reason, which the diversity column is there to catch."), "",
          "| region | CV | harmonic N | median $F_{ST}$ | 95% | observed | reaches obs | diversity matched |",
          "|---|---:|---:|---:|---|---:|---:|:---:|"]
     for r in rows:
@@ -166,20 +166,20 @@ def write_report(rows) -> None:
                  f"{100*r['reach']:.1f}% | {'yes' if r['diversity_matched'] else 'no'} |")
     emp = empirical_cv()
     L += ["", "## How much inequality was there?", "",
-          f"Maximum mound height in `data/LMVData-22March2006.xls` covers "
+          (f"Maximum mound height in `data/LMVData-22March2006.xls` covers "
           f"{emp['_n']} of the {emp['_n_total']} basin assemblages and is the only size "
           "field in that "
           "table with usable coverage (`Area` is a region label, `Max Mound Area` is "
           "empty). Height is not population, so the implied inequality is given as a "
-          "bracket over three scalings:", ""]
+          "bracket over three scalings:"), ""]
     for k in ("height", "height squared", "height cubed"):
         L.append(f"- population proportional to {k}: CV **{emp[k]:.2f}**")
     L += ["", "Read the sweep against that bracket rather than against its own top end.", ""]
     L += ["", "## Reading", "",
-          "Reported as the shortfall, the observed value divided by the cell's median, rather "
+          ("Reported as the shortfall, the observed value divided by the cell's median, rather "
           "than as a pass or fail on a threshold. A binary verdict here flips on where the "
           "threshold is put: at the empirical bracket the shortfall is what matters, not whether "
-          "some percentage crosses five.", ""]
+          "some percentage crosses five."), ""]
     for region in REGIONS:
         rs = {r["cv"]: r for r in rows if r["region"] == region}
         if not rs:
@@ -195,7 +195,7 @@ def write_report(rows) -> None:
                  f"{base['observed'] / top['fst_median']:.1f} times.")
     matched_above_zero = [r for r in rows if r["diversity_matched"] and r["cv"] > 0]
     L += ["",
-          "**The structural point.** Population inequality does raise differentiation, "
+          ("**The structural point.** Population inequality does raise differentiation, "
           "monotonically and by a factor of five across the sweep. It does not close the gap, "
           "because it lowers the harmonic mean population and so raises drift everywhere, which "
           "pulls within-assemblage diversity below the observed value. Of the "
@@ -204,7 +204,7 @@ def write_report(rows) -> None:
           "inside the calibration's diversity tolerance. "
           "Unequal populations therefore move ALONG the same diversity-against-differentiation "
           "trade-off the uniform model is already on, rather than off it. That is the same "
-          "obstacle the calibration sweep reports, reached from a different direction.", ""]
+          "obstacle the calibration sweep reports, reached from a different direction."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"\nwrote {OUT_MD}")
@@ -263,14 +263,14 @@ def main() -> int:
             matched = diversity_matched(ach, obs_div)
             reach = float(np.mean(fsts >= obs_fst))
             n_eg = populations(len(data["m"]), mean_n, cv, np.random.default_rng(90000))
-            rows.append(dict(region=region, cv=cv, mean_n=mean_n,
-                             harmonic_n=float(len(n_eg) / np.sum(1.0 / n_eg)),
-                             fst_median=float(np.median(fsts)),
-                             fst_lo=float(np.percentile(fsts, 2.5)),
-                             fst_hi=float(np.percentile(fsts, 97.5)),
-                             observed=float(obs_fst), reach=reach,
-                             diversity_matched=bool(matched), achieved=ach,
-                             observed_diversity=obs_div))
+            rows.append({"region": region, "cv": cv, "mean_n": mean_n,
+                             "harmonic_n": float(len(n_eg) / np.sum(1.0 / n_eg)),
+                             "fst_median": float(np.median(fsts)),
+                             "fst_lo": float(np.percentile(fsts, 2.5)),
+                             "fst_hi": float(np.percentile(fsts, 97.5)),
+                             "observed": float(obs_fst), "reach": reach,
+                             "diversity_matched": bool(matched), "achieved": ach,
+                             "observed_diversity": obs_div})
             print(f"  CV {cv:>4}: F_ST {np.median(fsts):.4f} "
                   f"[{np.percentile(fsts,2.5):.4f}, {np.percentile(fsts,97.5):.4f}]  "
                   f"reaches obs in {100*reach:>5.1f}%  diversity matched: {matched}")

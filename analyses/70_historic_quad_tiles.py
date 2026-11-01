@@ -93,7 +93,7 @@ def crop(sheet: Path, bbox_3857, size_px: int, out_png: Path) -> bool:
          "-te", str(x0), str(y0), str(x1), str(y1),
          "-ts", str(size_px), str(size_px), "-r", "cubic",
          str(sheet), str(tif)],
-        capture_output=True, text=True)
+        capture_output=True, text=True, check=False)
     if r.returncode != 0 or not tif.exists():
         print(f"    gdalwarp failed: {r.stderr.strip()[:120]}", file=sys.stderr)
         return False

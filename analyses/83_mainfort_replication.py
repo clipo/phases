@@ -91,6 +91,7 @@ def main() -> int:
     args = ap.parse_args()
 
     import matplotlib.pyplot as plt
+
     from mls_emergence.dataio.matrix import read_mainfort_replication
     fs = importlib.import_module("figstyle")
     mf = importlib.import_module("make_figures")
@@ -209,27 +210,27 @@ def main() -> int:
                  f"**{med:.3f}** | {lo:.3f}-{hi:.3f} |")
     L += [f"| same sizes, boundaries at random (400 draws) | {np.median(rnd_ari):.3f} | |", "",
           "## 2. His partition against size-matched alternatives", "",
-          f"Cultural F_ST under his phases: **{fst_phase:.4f}**. Against {args.alt} partitions with his "
+          (f"Cultural F_ST under his phases: **{fst_phase:.4f}**. Against {args.alt} partitions with his "
           f"group sizes: seeds at random, median {np.median(alt):.4f}, his sits at the "
           f"**{t74.ordinal(pct_alt)} percentile**; drawn to be compact, median {np.median(opt):.4f}, "
           f"the **{t74.ordinal(pct_opt)} percentile**. The compactness search reproduced his partition "
-          f"exactly {exact} times in {args.alt}.", "",
+          f"exactly {exact} times in {args.alt}."), "",
           f"## 3. The {len(CONTESTED)} sites the two schemes assign differently", "",
-          "Chi-square distance from the site's profile to each candidate phase's pooled profile with the "
-          "site left out, and straight-line km to that phase's centroid.", "",
+          ("Chi-square distance from the site's profile to each candidate phase's pooled profile with the "
+          "site left out, and straight-line km to that phase's centroid."), "",
           "| site | Mainfort 2003 | primary analysis | ceramic, to his | km, to his | ceramic, to the primary's | km, to the primary's |",
           "|---|---|---|---|---|---|---|"]
     for c in contested:
         L.append("| " + " | ".join(str(x) for x in c) + " |")
-    L += ["", "A site whose pottery is closer to the phase it is NOT assigned to under one of the schemes "
-              "is a line that",
-          "scheme drew where the pottery does not go. Read the ceramic columns against each other, and "
-          "against the km",
+    L += ["", ("A site whose pottery is closer to the phase it is NOT assigned to under one of the schemes "
+              "is a line that"),
+          ("scheme drew where the pottery does not go. Read the ceramic columns against each other, and "
+          "against the km"),
           "columns, which say what proximity alone would predict.", "",
-          "Not repeated here: the drift comparison, which is calibrated to the primary matrix. His counts "
-          "are not",
-          "independent of the survey's for the 21 shared sites, so this is a second sampling of the same "
-          "collections",
+          ("Not repeated here: the drift comparison, which is calibrated to the primary matrix. His counts "
+          "are not"),
+          ("independent of the survey's for the 21 shared sites, so this is a second sampling of the same "
+          "collections"),
           "plus new Tennessee material, not an independent record.", "",
           f"Figure written to {png.name} and its siblings.", ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

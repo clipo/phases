@@ -1,5 +1,14 @@
+"""Signature 3, the within- versus between-group partition of diversity.
+
+Provides the plug-in Gini-Simpson diversity ``gini_simpson`` and the cultural
+F_ST built from it, ``cultural_fst`` = (H_T - H_S) / H_T. Used by
+``inference.bayesian_fst``, ``validation.harness``, ``make_figures.py``,
+``scripts/measure_datum.py`` and analyses 05, 06, 07, 09, 33, 35, 44, 47, 57 and 62.
+"""
 from __future__ import annotations
+
 import numpy as np
+
 
 def gini_simpson(counts: np.ndarray) -> float:
     """Gini-Simpson diversity, 1 - sum(p^2).
@@ -76,3 +85,27 @@ def cultural_fst(group_counts: np.ndarray) -> float:
     H_within = np.array([gini_simpson(row) for row in g])
     H_S = float(np.average(H_within, weights=sizes))
     return float((H_T - H_S) / H_T)
+
+
+def moment_f(y: np.ndarray) -> np.ndarray:
+    """Method-of-moments F per class across sites, each site weighted equally (not by its count), with the binomial sampling variance removed (per-type table, D27).
+
+    Shares P = y / n per site; F_c = (var_i(P_ic, ddof 1) - mean_i(P_ic (1 - P_ic) / (n_i - 1))) / (pbar_c (1 - pbar_c)),
+    pbar the unweighted mean share. The subtracted term is the unbiased
+    estimate of the binomial sampling variance of a site share
+    (E[P(1 - P)/(n - 1)] = p(1 - p)/n), so on identical site shares the
+    estimate is near zero rather than near 1/n. NaN where a class is absent
+    from every site or fixed at every site. Negative estimates are kept.
+    Moved here from analyses/per_type/per_class_table.py on 2026-10-19 so
+    the rim readings use the same definition.
+    """
+    y = np.asarray(y, float)
+    if y.ndim != 2 or (y < 0).any() or not np.isfinite(y).all():
+        raise ValueError("moment_f takes a non-negative site-by-class count table")
+    n = y.sum(1)
+    if (n <= 1).any():
+        raise ValueError("every site needs at least two observations")
+    P = y / n[:, None]; pb = P.mean(0)
+    v = P.var(0, ddof=1); samp = np.mean(P * (1 - P) / (n - 1)[:, None], axis=0)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        return (v - samp) / (pb * (1 - pb))

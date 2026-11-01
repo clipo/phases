@@ -70,6 +70,7 @@ def main() -> int:
     from pyproj import Transformer
     from shapely.geometry import MultiPoint, Point, box
     from shapely.ops import unary_union, voronoi_diagram
+
     from mls_emergence.dataio.settlement import load_lmv
     fs = importlib.import_module("figstyle")
     mf = importlib.import_module("make_figures")
@@ -101,7 +102,7 @@ def main() -> int:
     keep = np.isfinite(sx) & np.isfinite(sy)
     keep &= (sx >= ext[0]) & (sx <= ext[1]) & (sy >= ext[2]) & (sy <= ext[3])
     sx, sy = sx[keep], sy[keep]
-    n_in_extent = int(len(sx))
+    n_in_extent = len(sx)
     near = (np.hypot(sx[:, None] - E[None, :], sy[:, None] - N[None, :]).min(1)
             <= EXCLUDE_KM * 1000.0)
     sx, sy = sx[~near], sy[~near]
@@ -171,7 +172,7 @@ def main() -> int:
     for bw in BANDWIDTHS_KM:
         obs = float(np.median(density(bp[:, 0], bp[:, 1], bw)))
         at_sites = float(np.median(density(E, N, bw)))
-        rec = dict(bandwidth_km=bw, phase_boundaries=obs, at_assemblages=at_sites)
+        rec = {"bandwidth_km": bw, "phase_boundaries": obs, "at_assemblages": at_sites}
         for kind, plist in alt_pts.items():
             d = np.array([np.median(density(p[:, 0], p[:, 1], bw)) for p in plist if len(p)])
             rec[f"{kind}: median"] = float(np.median(d))
@@ -219,15 +220,15 @@ def main() -> int:
     png = fs.save_all(fig, FIG, close=True)
 
     L = ["# Do the phase boundaries run through the gaps in late-period settlement?", "",
-         f"{n_in_extent} compiled sites with a period A or B component fall in the mapped "
+         (f"{n_in_extent} compiled sites with a period A or B component fall in the mapped "
          f"area; {int(near.sum())} lie within {EXCLUDE_KM:g} km of an analysed assemblage and "
-         f"are dropped, leaving {len(sx)} independent late-period sites.",
-         f"Phase boundaries: {len(bp)} points at {STEP_M / 1000:g} km spacing. "
+         f"are dropped, leaving {len(sx)} independent late-period sites."),
+         (f"Phase boundaries: {len(bp)} points at {STEP_M / 1000:g} km spacing. "
          f"{args.alt} alternative partitions of each kind, all carrying the phases' group "
-         f"sizes ({', '.join(str(int(s)) for s in sizes)}).", "",
-         "| kernel bandwidth | at the assemblages | along the phase boundaries | "
+         f"sizes ({', '.join(str(int(s)) for s in sizes)})."), "",
+         ("| kernel bandwidth | at the assemblages | along the phase boundaries | "
          "random-seed boundaries, median | share denser than the phases' | "
-         "compact-partition boundaries, median | share denser than the phases' |",
+         "compact-partition boundaries, median | share denser than the phases' |"),
          "|---|---|---|---|---|---|---|"]
     for r in rows:
         L.append(f"| {r['bandwidth_km']:g} km | {r['at_assemblages']:.2f} | "
@@ -235,14 +236,14 @@ def main() -> int:
                  f"{100 * r['random seeds: share of partitions with DENSER boundaries']:.0f}% | "
                  f"{r['spatially compact: median']:.2f} | "
                  f"{100 * r['spatially compact: share of partitions with DENSER boundaries']:.0f}% |")
-    L += ["", "Densities are other late-period sites per 100 km^2. \"Share denser\" is the "
-              "share of alternative",
-          "partitions whose boundaries run through MORE settlement than the phase "
-          "boundaries do. A high share",
-          "means the phase boundaries sit in unusually empty country even for boundaries of "
-          "their own kind;",
-          "a share near half means they are ordinary in that respect. The placement is "
-          "descriptive (rule 18).", "",
+    L += ["", ("Densities are other late-period sites per 100 km^2. \"Share denser\" is the "
+              "share of alternative"),
+          ("partitions whose boundaries run through MORE settlement than the phase "
+          "boundaries do. A high share"),
+          ("means the phase boundaries sit in unusually empty country even for boundaries of "
+          "their own kind;"),
+          ("a share near half means they are ordinary in that respect. The placement is "
+          "descriptive (rule 18)."), "",
           f"Figure written to {png.name} and its siblings.", ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[:12]))

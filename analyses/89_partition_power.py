@@ -76,7 +76,7 @@ def shares(m, labels, alt, opt, rev, sd, d):
     fa = np.array([rev.fst_by(m, a) for a in alt]); fo = np.array([rev.fst_by(m, a) for a in opt])
     ba = np.array([sd.boundary_excess_labeled(m, d, a) for a in alt])
     bo = np.array([sd.boundary_excess_labeled(m, d, a) for a in opt])
-    return dict(f_alt=np.mean(f > fa), f_opt=np.mean(f > fo), b_alt=np.mean(b > ba), b_opt=np.mean(b > bo))
+    return {"f_alt": np.mean(f > fa), "f_opt": np.mean(f > fo), "b_alt": np.mean(b > ba), "b_opt": np.mean(b > bo)}
 
 
 LABEL = {"f_alt": "F_ST vs random-center", "f_opt": "F_ST vs compact",
@@ -94,10 +94,10 @@ def distribution_section(df, obs, combos):
     not as a test.
     """
     L = ["## The distributions behind the medians", "",
-         "For each cell, the 5th, 25th, 50th, 75th and 95th percentiles of the share of alternatives the "
+         ("For each cell, the 5th, 25th, 50th, 75th and 95th percentiles of the share of alternatives the "
          "tested line beats, over simulated records, and the fraction of simulated records whose share is "
          "at or below the observed record's. A fraction of 0 means none of the simulated records scored "
-         "that low, which bounds the frequency below about 1/reps, not at zero.", ""]
+         "that low, which bounds the frequency below about 1/reps, not at zero."), ""]
     for ci, (n_ind, innov, mix) in enumerate(combos):
         sub = df[(df.n_ind == n_ind) & (df.innovation == innov) & (df.mixing == mix)]
         tag = "calibrated combination" if ci == 0 else "sensitivity combination"
@@ -151,10 +151,11 @@ def main() -> int:
                     help="redraw the figure from RECORDS_CSV and the observed shares in OUT_MD, without simulating")
     args = ap.parse_args()
     if args.figure_only:
-        import pandas as pd
         import re
+
+        import pandas as pd
         rec_df = pd.read_csv(RECORDS_CSV)
-        row = re.search(r"^\| phases \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \|$", OUT_MD.read_text(), re.M)
+        row = re.search(r"^\| phases \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \|$", OUT_MD.read_text(), re.MULTILINE)
         obs = {"phases": dict(zip(STATS, (float(x) for x in row.groups())))}
         first = rec_df.iloc[0]
         draw_figure(rec_df, obs, (int(first.n_ind), float(first.innovation), float(first.mixing)))
@@ -167,6 +168,7 @@ def main() -> int:
     t74 = importlib.import_module("74_phase_partition_test")
     a84 = importlib.import_module("84_phases_as_groups")
     import pandas as pd
+
     from mls_emergence.transmission.spatial import copying_weights, drift_record, sample_record
 
     data = rev.load_sets()["basin"]
@@ -183,16 +185,16 @@ def main() -> int:
     m_obs = data["m"]; d = data["d"]; totals = m_obs.sum(1)
     rates = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates[(rates.region == "basin") & (rates.model == "pooled")].iloc[0]
-    cell = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]), n_ind=int(row["n_ind"]))
+    cell = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]), "n_ind": int(row["n_ind"])}
     obs_ph = shares(m_obs.astype(float), phase, alt_ph, opt_ph, rev, sd, d)
     obs_pk = shares(m_obs.astype(float), parkin, alt_pk, opt_pk, rev, sd, d)
 
     L = ["# Could the phase-line comparison see a copying boundary if there were one?", "",
-         f"Produced by `analyses/89_partition_power.py`: {args.reps} simulated records per cell, rebuilt with "
+         (f"Produced by `analyses/89_partition_power.py`: {args.reps} simulated records per cell, rebuilt with "
          f"analysis 84's seeds at its calibrated cell (N {cell['n_ind']}, innovation {cell['innovation']}, "
          f"mixing {cell['mixing']}, 24 km along the rivers); {args.alt} same-size alternative divisions of each kind. "
          "Each entry is the median over simulated records of the share of alternatives the tested line beats, "
-         "with the share of records in which it beats at least 90 percent of them in parentheses.", "",
+         "with the share of records in which it beats at least 90 percent of them in parentheses."), "",
          "| copying factor at the phase lines | local innovation | line tested | F_ST vs random-center | F_ST vs compact | boundary excess vs random-center | boundary excess vs compact |",
          "|---|---|---|---|---|---|---|"]
     fmt = lambda v: f"{np.median(v):.2f} ({np.mean(np.array(v) >= 0.9) * 100:.0f}%)"
@@ -241,17 +243,17 @@ def main() -> int:
           "| Parkin vs rest | " + " | ".join(f"{obs_pk[c]:.2f}" for c in ("f_alt", "f_opt", "b_alt", "b_opt")) + " |", ""]
     L += distribution_section(rec_df, obs, combos)
     L += ["## Reading", "",
-          "Compare the rows with a copying boundary (factor below 1) against the row without. If the tested line "
+          ("Compare the rows with a copying boundary (factor below 1) against the row without. If the tested line "
           "beats most alternatives only when copying is restricted at it, the comparison responds, and the "
           "observed record's failure to beat them weighs against a restriction there by as much as the "
           "at-or-below fractions below differ between cells, which is moderate at best. If the rows look alike, "
           "the comparison cannot see a copying boundary and the argument from it should be dropped. "
           "Read the medians together with the distributions section: a median that moves shows the "
           "comparison responds, and only the at-or-below fractions say how strongly the observed "
-          "score weighs against a boundary.", ""]
+          "score weighs against a boundary."), ""]
     draw_figure(rec_df, obs, combos[0])
-    L += [f"Figure written to figures/{FIG}.png and its siblings; every simulated record's shares are in "
-          f"`{RECORDS_CSV.relative_to(ROOT)}`.", ""]
+    L += [(f"Figure written to figures/{FIG}.png and its siblings; every simulated record's shares are in "
+          f"`{RECORDS_CSV.relative_to(ROOT)}`."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT_MD}")

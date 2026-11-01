@@ -49,11 +49,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_GREEN, save  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "findings" / "neutrality_ppc.md"
 POOLED = ROOT / "output" / "abc_pooled_posterior.npz"
@@ -104,7 +105,7 @@ def main(fast=False):
     per_seed = np.array_split(pooled, len(seeds))
     print(f"pooled posterior: {pooled.shape[0]} draws over {len(seeds)} seeds")
 
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     M = counts.to_numpy(float)
     # ORIENTATION (fixed 2026-09-03). Must use 17_basin_results.oriented_ca,
     # which flips the correspondence axis against the radiocarbon anchors so
@@ -137,7 +138,7 @@ def main(fast=False):
         T_rep = np.sum((sims - mean) ** 2, axis=1)
         pb = float(np.mean(T_rep >= T_obs))
         print(f"  {tag}: {within}/{N_BINS} bins inside, predictive p = {pb:.3f}")
-        return dict(lo=lo, hi=hi, within=within, pb=pb, sims=sims)
+        return {"lo": lo, "hi": hi, "within": within, "pb": pb, "sims": sims}
 
     print("posterior predictive envelopes:")
     pooled_env = envelope(pooled, "pooled", 0)
@@ -147,14 +148,14 @@ def main(fast=False):
     pbs = np.array([e["pb"] for e in seed_envs])
     wins = np.array([e["within"] for e in seed_envs])
     L = ["# The neutrality envelope as a posterior predictive check", "",
-         f"Produced by `analyses/56_neutrality_ppc.py` ({'FAST' if fast else 'full'}, "
+         (f"Produced by `analyses/56_neutrality_ppc.py` ({'FAST' if fast else 'full'}, "
          f"{n_draw} predictive draws). Replaces the fixed-Ne sweep in "
          f"`analyses/18_kandler_shennan_neutrality.py` "
-         f"(`docs/FREQUENTIST_INVENTORY.md` item G).", "",
-         f"Effective population size and innovation rate are drawn from the "
+         f"(`docs/FREQUENTIST_INVENTORY.md` item G)."), "",
+         (f"Effective population size and innovation rate are drawn from the "
          f"POOLED ABC-SMC posterior ({pooled.shape[0]} draws over "
          f"{len(seeds)} seeds), not swept over fixed values and not taken from a "
-         f"single run.", "",
+         f"single run."), "",
          "## Result", "",
          "Observed per-bin Gini-Simpson diversity: "
          + ", ".join(f"{v:.3f}" for v in obs_div) + ".", "",
@@ -164,19 +165,19 @@ def main(fast=False):
     for s, e in zip(seeds, seed_envs):
         L.append(f"| seed {s} alone | {e['within']}/{N_BINS} | {e['pb']:.3f} |")
     L += ["",
-          f"Across single-seed posteriors the predictive p ranges "
+          (f"Across single-seed posteriors the predictive p ranges "
           f"{pbs.min():.3f} to {pbs.max():.3f} and the bins-inside count ranges "
           f"{wins.min()} to {wins.max()} of {N_BINS}. That spread is the "
           f"dependency `analyses/55_abc_stability.py` measured (N median 98 to "
           f"263 across seeds) propagating into the check, and it is the reason "
-          f"the pooled row is the one to report.", "",
+          f"the pooled row is the one to report."), "",
           "## Reading", ""]
     if 0.05 < pooled_env["pb"] < 0.95:
-        L += ["The neutral model reproduces the observed diversity trajectory: "
+        L += [("The neutral model reproduces the observed diversity trajectory: "
               "the predictive p sits away from both tails and the observed "
               "trajectory lies inside the predictive interval in "
-              f"{pooled_env['within']} of {N_BINS} bins.", "",
-              "**What this does not say.** A passing predictive check says the "
+              f"{pooled_env['within']} of {N_BINS} bins."), "",
+              ("**What this does not say.** A passing predictive check says the "
               "neutral model is adequate for this trajectory, not that "
               "transmission was neutral; other processes produce the same "
               "trajectory. Kandler and Shennan's own caveat also applies, that "
@@ -184,13 +185,13 @@ def main(fast=False):
               "predictive interval is wide, and drawing Ne from a posterior "
               "whose median moves by a factor of nearly three across seeds "
               "widens it further rather than narrowing it. This is concordant "
-              "evidence, and weak, which is what the supplement already says."]
+              "evidence, and weak, which is what the supplement already says.")]
     else:
-        L += [f"**The observed trajectory sits in the tail of the posterior "
+        L += [(f"**The observed trajectory sits in the tail of the posterior "
               f"predictive distribution (p = {pooled_env['pb']:.3f}).** The "
               f"neutral model does not reproduce it, which is a substantive "
               f"departure from what the supplement reports and must be chased "
-              f"before anything is written from it."]
+              f"before anything is written from it.")]
     L += ["", "## What replaces what", "",
           "| before | after |", "|---|---|",
           "| sweep over fixed Ne | Ne drawn from the ABC posterior |",

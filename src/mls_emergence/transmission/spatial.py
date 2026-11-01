@@ -45,9 +45,51 @@ def copying_weights(distances, length=24.0, labels=None, leak=1.0, kernel="expon
     return w / w.sum(1, keepdims=True)
 
 
+def kappa_for_window_f(F_W, W):
+    """Dirichlet concentration that accumulates regional F ``F_W`` over ``W`` target updates (spec 3.3).
+
+    F_W = 1 - (kappa/(kappa+1))^W, inverted in the stable form
+    1 / expm1(-log1p(-F_W) / W). F_W = 0 returns None (no update, no randomness
+    consumed). F_W must be finite in [0, 1); W a positive integer (not a bool).
+    """
+    if isinstance(W, bool) or not isinstance(W, (int, np.integer)) or W < 1:
+        raise ValueError("W must be a positive integer number of target updates")
+    if isinstance(F_W, (bool, str, bytes)) or not isinstance(F_W, (int, float, np.integer, np.floating)):
+        raise ValueError("F_W must be a real number")
+    F = float(F_W)
+    if not np.isfinite(F) or F < 0 or F >= 1:
+        raise ValueError("F_W must be finite and lie in [0, 1)")
+    if F == 0:
+        return None
+    kappa = float(1.0 / np.expm1(-np.log1p(-F) / int(W)))
+    if not np.isfinite(kappa) or kappa <= 0:
+        raise ValueError("F_W is too small to give a finite kappa at this W")
+    return kappa
+
+
+def step_target(target, kappa, rng):
+    """One Dirichlet(kappa * target) redraw of the regional target (spec 3.1).
+
+    E[target' | target] = target and Cov = (diag(target) - target target^T) /
+    (kappa + 1). A component at exactly zero stays zero (the sampler's
+    absorbing face); a positive component can reach an exact zero in float64,
+    which the caller counts as numerical target loss.
+    """
+    t = np.asarray(target, float)
+    if t.ndim != 1:
+        raise ValueError("step_target takes one 1-D target; per-node targets are not walked")
+    if t.shape[0] < 2:
+        raise ValueError("a target with one class cannot drift")
+    if (t < 0).any() or not np.isfinite(t).all() or t.sum() <= 0:
+        raise ValueError("target must be a finite non-negative vector with a positive sum")
+    if not np.isfinite(kappa) or kappa <= 0:
+        raise ValueError("kappa must be finite and positive")
+    return rng.dirichlet(float(kappa) * t / t.sum())
+
+
 def drift_record(weights, *, k=10, n_ind=120, mixing=.02, innovation=.012,
                  steps=1800, n_records=90, burnin=1200, seed=0,
-                 initial="uniform", target=None):
+                 initial="uniform", target=None, target_kappa=None, return_targets=False):
     """Return (record time, node, class) frequencies after an explicit burn-in.
 
     ``target`` is the class distribution an innovation event draws from. None
@@ -55,6 +97,16 @@ def drift_record(weights, *, k=10, n_ind=120, mixing=.02, innovation=.012,
     (normalized here) gives class-specific innovation rates ``innovation *
     target``; frequencies then start at the target unless ``initial`` is
     monomorphic.
+
+    ``target_kappa`` (regional-drift spec 3.1): when set, the 1-D target is
+    redrawn from Dirichlet(kappa * target) after the learner draw of every
+    post-burn-in step, saved or not, by ``step_target``; the learner draw at
+    step t uses the snapshot p_t and the update after it makes p_{t+1}. None
+    keeps the target fixed and consumes no extra random number, so the output
+    is identical to the model without the argument. ``return_targets`` also
+    returns the snapshots used at the recorded steps as a second array,
+    shape (n_records, k) for a shared target and (n_records, n, k) for a
+    per-node target (constant when the target is fixed).
     """
     w = np.asarray(weights, float)
     if w.ndim != 2 or w.shape[0] != w.shape[1] or (w < 0).any() or not np.allclose(w.sum(1), 1):
@@ -108,6 +160,13 @@ def drift_record(weights, *, k=10, n_ind=120, mixing=.02, innovation=.012,
         target = target / target.sum(1, keepdims=True)
     else:
         raise ValueError("target must be 1-D or 2-D")
+    if target_kappa is not None:
+        if target.ndim != 1:
+            raise ValueError("target_kappa walks one shared target; a per-node target cannot be combined with it")
+        if k < 2:
+            raise ValueError("target_kappa needs at least two classes")
+        if isinstance(target_kappa, (bool, np.bool_)) or not np.isfinite(target_kappa) or target_kappa <= 0:
+            raise ValueError("target_kappa must be finite and positive, or None")
     rng = np.random.default_rng(seed)
     p = np.tile(target, (len(w), 1)) if target.ndim == 1 else target.copy()
     if initial == "monomorphic":
@@ -116,7 +175,7 @@ def drift_record(weights, *, k=10, n_ind=120, mixing=.02, innovation=.012,
     elif initial != "uniform":
         raise ValueError("initial must be uniform or monomorphic")
     record_at = set(np.linspace(0, steps - 1, n_records).astype(int))
-    records = []
+    records = []; targets = []
     for t in range(-burnin, steps):
         q = (1 - mixing) * p + mixing * (w @ p)
         q = (1 - innovation) * q + innovation * target
@@ -128,6 +187,12 @@ def drift_record(weights, *, k=10, n_ind=120, mixing=.02, innovation=.012,
         p = draw / draw.sum(1, keepdims=True)
         if t in record_at:
             records.append(p.copy())
+            if return_targets:
+                targets.append(np.array(target, float, copy=True) if target.ndim == 1 else target.copy())
+        if target_kappa is not None and t >= 0:
+            target = step_target(target, target_kappa, rng)
+    if return_targets:
+        return np.stack(records), np.stack(targets)
     return np.stack(records)
 
 

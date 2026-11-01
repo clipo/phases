@@ -79,7 +79,7 @@ def non_types(cols):
     """Classes that are descriptors or residuals rather than named types."""
     return [c for c in cols
             if str(c).lower().startswith("unidentified")
-            or re.match(r"(thin|fine) ware", str(c), re.I)]
+            or re.match(r"(thin|fine) ware", str(c), re.IGNORECASE)]
 
 
 def load():
@@ -131,9 +131,9 @@ def main() -> int:
     rng = np.random.default_rng(SEED)
 
     L = ["# What the southeast-Missouri comparison classes actually are", "",
-         "Produced by `analyses/66_cmv_class_composition.py`. "
+         ("Produced by `analyses/66_cmv_class_composition.py`. "
          f"{Mm.shape[0]} assemblages, {Mm.shape[1]} classes, {total:.0f} sherds: "
-         "the set analysis 47 calls `cmv`.", "",
+         "the set analysis 47 calls `cmv`."), "",
          "## Composition", "", "| class | share of all sherds |", "|---|---:|"]
     share = Mm.sum(0) / total
     for c, v in share.sort_values(ascending=False).head(12).items():
@@ -141,23 +141,23 @@ def main() -> int:
     plain_n = Mm[PLAIN].to_numpy().sum()
     dec_n = Mm[dec].to_numpy().sum()
     per = Mm[dec].to_numpy().sum(1)
-    L += ["", f"Plain wares ({', '.join(PLAIN)}) hold **{plain_n:.0f} of {total:.0f} "
+    L += ["", (f"Plain wares ({', '.join(PLAIN)}) hold **{plain_n:.0f} of {total:.0f} "
           f"sherds, {100 * plain_n / total:.1f} percent**. The non-plain remainder is "
           f"{dec_n:.0f} sherds ({100 * dec_n / total:.1f} percent), a median of "
           f"{np.median(per):.0f} per assemblage over {len(dec)} classes; "
           f"**{int((per >= 30).sum())} of {len(per)} assemblages** reach the 30-sherd "
-          "minimum the study imposes when it is applied to that material.", "",
+          "minimum the study imposes when it is applied to that material."), "",
           "### What the non-plain sherds are", "", "| class | share of non-plain |", "|---|---:|"]
     dshare = Mm[dec].sum(0) / dec_n
     for c, v in dshare.sort_values(ascending=False).head(8).items():
         L.append(f"| {c} | {100 * v:.1f}% |")
 
     L += ["", "## Where the between-cluster differentiation lives", "",
-          f"Cultural $F_{{ST}}$ across the {len(np.unique(labels))} spatial clusters, by subset. "
+          (f"Cultural $F_{{ST}}$ across the {len(np.unique(labels))} spatial clusters, by subset. "
           "The null resamples every assemblage from the regional pooled profile at its own "
           f"observed count, so it carries no spatial structure at all ({N_NULL} draws, seed "
           f"{SEED}); it separates sampling from everything else, and is NOT the paper's drift "
-          "null.", "",
+          "null."), "",
           "| subset | classes | sherds | $F_{ST}$ | pooled-profile null (median, 95%) |",
           "|---|---:|---:|---:|---|"]
     subsets = [
@@ -172,7 +172,7 @@ def main() -> int:
     rows = {}
     for name, sub in subsets:
         mat = Mm[sub].to_numpy(float)
-        f, n_used = fst(mat, labels)
+        f, _n_used = fst(mat, labels)
         nv = pooled_null(mat, labels, rng)
         rows[name] = f
         L.append(f"| {name} | {len(sub)} | {mat.sum():.0f} | {f:.4f} | "
@@ -183,14 +183,14 @@ def main() -> int:
                     for c in np.unique(labels)])
     only1 = (byc > 0).sum(0) == 1
     L += ["", "## Reading", "",
-          f"The reported comparison value of {rows['all classes, as analyzed']:.4f} is a blend in "
+          (f"The reported comparison value of {rows['all classes, as analyzed']:.4f} is a blend in "
           f"which {100 * plain_n / total:.0f} percent of the weight is undecorated utility ware. "
           f"The plain component on its own differentiates more strongly "
           f"({rows['plain wares only']:.4f}), and the coarse-versus-fine paste ratio alone more "
           f"strongly still ({rows['Mississippi Plain vs Bell Plain only']:.4f}). That is a "
           "manufacturing variable, so a between-group difference in it is the signature Table 1 "
-          "files under environmental patchiness rather than under bounded interaction.", "",
-          f"The non-plain subset differentiates far more ({rows['non-plain only']:.4f}), and that "
+          "files under environmental patchiness rather than under bounded interaction."), "",
+          (f"The non-plain subset differentiates far more ({rows['non-plain only']:.4f}), and that "
           "is not pure sampling: the pooled-profile null for the same subset sits two orders of "
           "magnitude below it. But it is not a clean stylistic measurement either. Varney Red, a "
           "chronologically diagnostic red-filmed ware that the Woodland exclusion does not catch, "
@@ -199,10 +199,10 @@ def main() -> int:
           f"{int(only1.sum())} of the {len(dec)} non-plain classes occur in only one of the four "
           f"spatial clusters while holding {Mm[dec].to_numpy(float)[:, only1].sum():.0f} sherds "
           "between them, so rarity and spatial restriction are confounded at this sample size and "
-          "cannot be separated.", "",
-          "The conclusion is not that the comparison set is differentiated or undifferentiated. "
+          "cannot be separated."), "",
+          ("The conclusion is not that the comparison set is differentiated or undifferentiated. "
           "It is that the set cannot resolve the question the basin set is being asked, which is "
-          "the paper's own empirical-sufficiency criterion applied to itself.", ""]
+          "the paper's own empirical-sufficiency criterion applied to itself."), ""]
 
     seen: dict[str, list] = {}
     for c in cols:
@@ -210,8 +210,8 @@ def main() -> int:
     dups = {k: v for k, v in seen.items() if len(v) > 1}
     if dups:
         L += ["## A defect in the source table", "",
-              "These class names collide under case normalization, so one class is carried as "
-              "two. No result here turns on them; they should be merged in the source.", "",
+              ("These class names collide under case normalization, so one class is carried as "
+              "two. No result here turns on them; they should be merged in the source."), "",
               "| names | sherds |", "|---|---|"]
         for v in dups.values():
             L.append(f"| {', '.join(map(repr, v))} | {', '.join(str(int(Mm[c].sum())) for c in v)} |")

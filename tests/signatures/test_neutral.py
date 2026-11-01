@@ -1,5 +1,7 @@
 import numpy as np
+
 from mls_emergence.signatures import neutral
+
 
 def test_homozygosity_uniform_vs_concentrated():
     uniform = np.array([25, 25, 25, 25])
@@ -37,6 +39,7 @@ def test_theta_e_refuses_the_all_singletons_boundary():
     simply refusing hard cases."""
     import numpy as np
     import pytest
+
     from mls_emergence.signatures.neutral import theta_e
 
     # k == n: every sherd a distinct class -> no finite root
@@ -59,6 +62,7 @@ def test_neutrality_verdict_carries_its_own_caveat():
     travel without saying so, since quoting the dict is how a caveat gets
     dropped (rule 6)."""
     import numpy as np
+
     from mls_emergence.signatures.neutral import neutrality_verdict
 
     res = neutrality_verdict(np.array([40, 30, 20, 10]))
@@ -85,6 +89,7 @@ def test_homozygosity_is_the_unbiased_form_not_the_plug_in():
     estimator is in use rather than merely bracketing it.
     """
     import pytest
+
     from mls_emergence.signatures.neutral import homozygosity_f
     assert homozygosity_f(np.array([2.0, 2.0])) == pytest.approx(4.0 / 12.0, abs=1e-12)
     assert homozygosity_f(np.array([2.0, 2.0])) != pytest.approx(0.5, abs=1e-6)
@@ -96,6 +101,7 @@ def test_theta_f_inverts_homozygosity():
     """theta = (1 - F)/F, checked against a hand value rather than by calling
     homozygosity_f again. F = 1/3 for counts (2,2), so theta = 2."""
     import pytest
+
     from mls_emergence.signatures.neutral import theta_f
     assert theta_f(np.array([2.0, 2.0])) == pytest.approx(2.0, abs=1e-12)
 
@@ -105,6 +111,7 @@ def test_ewens_expected_k_sums_theta_over_theta_plus_i_from_zero():
     first term is exactly 1 for any theta. Starting the sum at i = 1 instead
     would give 1.083 rather than 1.833 below, which this rejects."""
     import pytest
+
     from mls_emergence.signatures.neutral import _ewens_expected_k
     #   theta = 1, n = 3: 1/1 + 1/2 + 1/3 = 11/6
     assert _ewens_expected_k(1.0, 3) == pytest.approx(11.0 / 6.0, abs=1e-12)

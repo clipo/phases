@@ -58,16 +58,17 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
 
 OUT_MD = ROOT / "output" / "findings" / "tempo_mode_posterior.md"
 # Figure S6 panel C reads this, replacing output/tempo_akaike.npz (2026-09-02).
 OUT_NPZ = ROOT / "output" / "tempo_posterior.npz"
 N_BINS = 6
-FULL = dict(draws=2000, tune=2000, chains=4)
-FAST = dict(draws=600, tune=800, chains=2)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4}
+FAST = {"draws": 600, "tune": 800, "chains": 2}
 N_DIRICHLET = 4000
 
 
@@ -117,20 +118,20 @@ def fit_ou_drift(y, sd_obs, t, cfg, seed=0):
                           progressbar=False, compute_convergence_checks=False)
     e = np.asarray(idata.sample_stats["energy"].values)
     q = lambda n: np.asarray(idata.posterior[n].values).ravel()
-    return dict(
-        alpha=q("alpha"), mu=q("mu"),
-        rhat=float(np.max(np.concatenate([np.atleast_1d(v.values).ravel()
+    return {
+        "alpha": q("alpha"), "mu": q("mu"),
+        "rhat": float(np.max(np.concatenate([np.atleast_1d(v.values).ravel()
                    for v in az.rhat(idata).data_vars.values()]))),
-        ess=float(np.min(np.concatenate([np.atleast_1d(v.values).ravel()
+        "ess": float(np.min(np.concatenate([np.atleast_1d(v.values).ravel()
                   for v in az.ess(idata).data_vars.values()]))),
-        n_div=int(idata.sample_stats["diverging"].sum()),
-        n_total=int(idata.sample_stats["diverging"].size),
-        ebfmi=float(np.min((np.diff(e, axis=1) ** 2).mean(axis=1) / e.var(axis=1))))
+        "n_div": int(idata.sample_stats["diverging"].sum()),
+        "n_total": int(idata.sample_stats["diverging"].size),
+        "ebfmi": float(np.min((np.diff(e, axis=1) ** 2).mean(axis=1) / e.var(axis=1)))}
 
 
 def main(fast=False):
     cfg = FAST if fast else FULL
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     M = counts.to_numpy(float)
     # ORIENTATION (fixed 2026-09-03). Must use 17_basin_results.oriented_ca,
     # which flips the correspondence axis against the radiocarbon anchors so
@@ -165,35 +166,35 @@ def main(fast=False):
     print(f"recovery: true mu {true_mu:+.3f} -> {np.median(rm):+.4f} [{rlo:+.4f}, {rhi:+.4f}]")
 
     L = ["# Tempo and mode as parameters, not model selection", "",
-         f"Produced by `analyses/54_tempo_mode_posterior.py` "
+         (f"Produced by `analyses/54_tempo_mode_posterior.py` "
          f"({'FAST' if fast else 'full'}). Gini-Simpson diversity over "
-         f"{len(binmat)} seriation bins.", "",
-         "Replaces AICc and Akaike weights over four time-series models with the "
+         f"{len(binmat)} seriation bins."), "",
+         ("Replaces AICc and Akaike weights over four time-series models with the "
          "posteriors of the two parameters that distinguish them "
          "(`docs/FREQUENTIST_INVENTORY.md` item E). BM, GRW, Stasis and OU are "
-         "regions of one parameter space, not separate hypotheses.", "",
+         "regions of one parameter space, not separate hypotheses."), "",
          "## The two parameters", "",
          "| parameter | meaning | median | 95% CI | reading |",
          "|---|---|---|---|---|",
-         f"| alpha | mean reversion; ~0 is BM, large is Stasis | {np.median(a):.3f} | "
+         (f"| alpha | mean reversion; ~0 is BM, large is Stasis | {np.median(a):.3f} | "
          f"[{np.percentile(a,2.5):.3f}, {np.percentile(a,97.5):.3f}] | "
-         f"{'consistent with a random walk, no resolved attractor' if np.percentile(a,2.5) < 0.2 else 'an attractor is resolved'} |",
-         f"| mu | directional drift per bin; 0 is unbiased | {np.median(m):+.4f} | "
+         f"{'consistent with a random walk, no resolved attractor' if np.percentile(a,2.5) < 0.2 else 'an attractor is resolved'} |"),
+         (f"| mu | directional drift per bin; 0 is unbiased | {np.median(m):+.4f} | "
          f"[{np.percentile(m,2.5):+.4f}, {np.percentile(m,97.5):+.4f}] | "
          f"P(mu > 0) = {(m>0).mean():.3f}; "
-         f"{'no resolved direction' if (np.percentile(m,2.5) < 0 < np.percentile(m,97.5)) else 'a direction is resolved'} |",
+         f"{'no resolved direction' if (np.percentile(m,2.5) < 0 < np.percentile(m,97.5)) else 'a direction is resolved'} |"),
          "", "## Diagnostics (rule 16)", "",
-         f"- empirical: R-hat {res['rhat']:.4f}, min ESS {res['ess']:.0f}, "
+         (f"- empirical: R-hat {res['rhat']:.4f}, min ESS {res['ess']:.0f}, "
          f"divergences {res['n_div']}/{res['n_total']} "
-         f"({100*res['n_div']/res['n_total']:.2f}%), E-BFMI {res['ebfmi']:.3f}",
-         f"- recovery: R-hat {rec['rhat']:.4f}, min ESS {rec['ess']:.0f}, "
-         f"divergences {rec['n_div']}/{rec['n_total']}, E-BFMI {rec['ebfmi']:.3f}",
+         f"({100*res['n_div']/res['n_total']:.2f}%), E-BFMI {res['ebfmi']:.3f}"),
+         (f"- recovery: R-hat {rec['rhat']:.4f}, min ESS {rec['ess']:.0f}, "
+         f"divergences {rec['n_div']}/{rec['n_total']}, E-BFMI {rec['ebfmi']:.3f}"),
          "", "## Rule 20(c): recovery of a directional series", "",
-         f"`mu ~ Normal(0, 0.5)` is centred on zero, which is the paper's own "
+         (f"`mu ~ Normal(0, 0.5)` is centred on zero, which is the paper's own "
          f"conclusion, so it is sympathetic. A series simulated with a true "
          f"drift of {true_mu:+.3f} per bin returns **{np.median(rm):+.4f}** "
          f"[{rlo:+.4f}, {rhi:+.4f}], "
-         f"{'covering the truth' if covered else '**not covering the truth**'}.",
+         f"{'covering the truth' if covered else '**not covering the truth**'}."),
          "",
          # Coverage by a fit that did not converge is not recovery (rule 17). This
          # sentence said "a real directional signal is recovered" beside an R-hat
@@ -221,14 +222,14 @@ def main(fast=False):
          "to explain the same monotone change. With six points the data "
          "cannot separate them.",
          "",
-         "**Selecting a single model concealed this.** Reporting that the "
+         ("**Selecting a single model concealed this.** Reporting that the "
          "trajectory 'favours the unbiased random walk' names a winner among "
          "four options without saying that two of the underlying behaviours are "
          "indistinguishable on this record. The parameter posteriors say it "
          "directly: alpha spans BM to Stasis and mu spans both signs, so the "
          "defensible claim is that the diversity trajectory is consistent with "
          "a random walk and does not exclude either directional change or mean "
-         "reversion.", "",
+         "reversion."), "",
          "## The second conversion in this script", "",
          "Analysis 20 obtained each bin's diversity sampling variance by "
          "resampling `multinomial(Ntot, pr)` 500 times at the plug-in "

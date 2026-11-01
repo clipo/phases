@@ -58,32 +58,35 @@ import warnings
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import matplotlib.patheffects as pe
-import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-import networkx as nx
-from scipy.spatial import cKDTree
-from pyproj import Transformer
-from shapely.geometry import box, MultiPoint, Point
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+import geopandas as gpd
+import matplotlib.lines as mlines
+import matplotlib.patches as mpatches
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import pandas as pd
+from pyproj import Transformer
+from scipy.spatial import cKDTree
+from shapely.geometry import MultiPoint, Point, box
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from figstyle import save, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL
+from figstyle import OI_BLUE, OI_GREEN, OI_ORANGE, OI_VERMIL, save
 
 warnings.filterwarnings("ignore")
 
-from mls_emergence.dataio.pfg import load_pfg_counts
+import itertools
+
 from mls_emergence.dataio.coords import read_assemblage_xy
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
+from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 
 DATA = ROOT / "data"
 SHP = DATA / "Shapefiles"
@@ -324,7 +327,7 @@ def _add_scale_bar(ax: plt.Axes, extent: tuple, bar_km: int = 50) -> None:
     Placed at bottom-left of the axes in axes-fraction coordinates.
     In UTM15N, 1 m = 1 m so we convert km -> m directly.
     """
-    e_min, e_max, n_min, n_max = extent
+    e_min, e_max, _n_min, _n_max = extent
     width_m = e_max - e_min
     bar_m = bar_km * 1000
     frac = bar_m / width_m   # fraction of axes width
@@ -335,7 +338,7 @@ def _add_scale_bar(ax: plt.Axes, extent: tuple, bar_km: int = 50) -> None:
         xy=(x0 + frac, y0),
         xytext=(x0, y0),
         xycoords="axes fraction",
-        arrowprops=dict(arrowstyle="-", lw=2.0, color="black"),
+        arrowprops={"arrowstyle": "-", "lw": 2.0, "color": "black"},
     )
     # Tick ends
     for xf in (x0, x0 + frac):
@@ -344,7 +347,7 @@ def _add_scale_bar(ax: plt.Axes, extent: tuple, bar_km: int = 50) -> None:
             xy=(xf, y0 + 0.012),
             xytext=(xf, y0 - 0.012),
             xycoords="axes fraction",
-            arrowprops=dict(arrowstyle="-", lw=1.5, color="black"),
+            arrowprops={"arrowstyle": "-", "lw": 1.5, "color": "black"},
         )
     ax.text(
         x0 + frac / 2, y0 + 0.022,
@@ -362,7 +365,7 @@ def _add_north_arrow(ax: plt.Axes, x0: float = 0.93, y0: float = 0.10) -> None:
         xycoords="axes fraction",
         ha="center", va="center",
         fontsize=9, fontweight="bold",
-        arrowprops=dict(arrowstyle="-|>", lw=1.5, color="black"),
+        arrowprops={"arrowstyle": "-|>", "lw": 1.5, "color": "black"},
     )
 
 
@@ -552,15 +555,14 @@ def river_distance_matrix(coords_latlon, tol: float = 250.0,
     G = nx.Graph()
 
     def add_line(coords):
-        for (ax, ay), (bx, by) in zip(coords[:-1], coords[1:]):
+        for (ax, ay), (bx, by) in itertools.pairwise(coords):
             a = (round(ax, 1), round(ay, 1))
             b = (round(bx, 1), round(by, 1))
             if a == b:
                 continue
             w = float(np.hypot(a[0] - b[0], a[1] - b[1]))
             if G.has_edge(a, b):
-                if w < G[a][b]["weight"]:
-                    G[a][b]["weight"] = w
+                G[a][b]["weight"] = min(G[a][b]["weight"], w)
             else:
                 G.add_edge(a, b, weight=w)
 
@@ -748,7 +750,7 @@ def make_map() -> None:
     try:
         from shapely import concave_hull as _concave_hull
         _hull = _concave_hull(_mp, ratio=0.35)
-    except Exception:
+    except Exception:  # noqa: BLE001  any concave-hull failure falls back to the convex hull
         _hull = _mp.convex_hull
     parkin_region = _hull.buffer(BUFFER_M)
 

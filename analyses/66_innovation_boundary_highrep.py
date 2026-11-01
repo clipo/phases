@@ -35,7 +35,7 @@ def stamp():
         raise RuntimeError("65 --only C --reps 1200 did not leave its two outputs")
     OUT_MD.write_text(OUT_MD.read_text(encoding="utf-8").rstrip("\n")
                       + f"\n\nRun through `analyses/66_innovation_boundary_highrep.py` "
-                        f"(65 --only C --reps 1200 --tag c_highrep) on {datetime.date.today().isoformat()}; "
+                        f"(65 --only C --reps 1200 --tag c_highrep) on {datetime.date.today().isoformat()}; "  # noqa: DTZ011  local date stamp
                         f"the JSON beside it is `output/other_departures_c_highrep.json`.\n",
                       encoding="utf-8")
 

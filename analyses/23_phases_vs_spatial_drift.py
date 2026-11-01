@@ -35,41 +35,27 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import numpy as np
 import networkx as nx
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
-from mls_emergence.signatures.assortativity import (  # noqa: E402
-    similarity_matrix, mantel,
+import make_figures as mf
+
+from mls_emergence.signatures.assortativity import (
+    mantel,
+    similarity_matrix,
 )
 
 OUT = ROOT / "output" / "phases_vs_spatial_drift.md"
-EARTH_KM_PER_DEG = 111.32
-
-
-# --------------------------------------------------------------------------- #
-# geometry
-# --------------------------------------------------------------------------- #
-def geo_km(coords: np.ndarray) -> np.ndarray:
-    """Pairwise great-circle-ish distance (km) via equirectangular approximation.
-
-    coords columns are [Latitude, Longitude]. At ~35 N over a ~100 km basin the
-    equirectangular error is well under 1 percent, far below what matters here.
-    """
-    lat = coords[:, 0]
-    lon = coords[:, 1]
-    mlat = np.deg2rad(lat.mean())
-    x = np.deg2rad(lon) * np.cos(mlat) * EARTH_KM_PER_DEG / np.deg2rad(1)
-    y = np.deg2rad(lat) * EARTH_KM_PER_DEG / np.deg2rad(1)
-    p = np.column_stack([x, y])
-    d = p[:, None, :] - p[None, :, :]
-    return np.sqrt((d ** 2).sum(-1))
+# geo_km moved, body unchanged, to mls_emergence.dataio.basin on 2026-10-16
+# (one distance function for simulator and models, probe spec row 7).
+from mls_emergence.dataio.basin import EARTH_KM_PER_DEG, geo_km  # noqa: F401
 
 
 # --------------------------------------------------------------------------- #
@@ -271,7 +257,7 @@ def stats_for_matrix(counts, geo_dist, seed=0):
                                     for c in np.unique(labels)
                                     if counts[labels == c].sum() > 0])) \
         if len(np.unique(labels)) >= 2 else np.nan
-    return dict(dd_r=r_dd, Q=Q, ncom=ncom, be=be, fst=float(fst))
+    return {"dd_r": r_dd, "Q": Q, "ncom": ncom, "be": be, "fst": float(fst)}
 
 
 # --------------------------------------------------------------------------- #
@@ -314,15 +300,15 @@ def main():
     parkin_comm = labels[names.index("Parkin")] if "Parkin" in names else None
     comm_sizes = {int(c): int((labels == c).sum()) for c in np.unique(labels)}
     L += ["## Part B. Excess beyond isolation-by-distance",
-          f"- Ceramic communities (greedy modularity on BR graph): {ncom} communities, "
-          f"modularity Q = {Q:.3f}; sizes {comm_sizes}.",
+          (f"- Ceramic communities (greedy modularity on BR graph): {ncom} communities, "
+          f"modularity Q = {Q:.3f}; sizes {comm_sizes}."),
           f"- Raw within-minus-between BR similarity gap: {raw_gap:+.1f} BR units.",
-          f"- Distance-CONTROLLED within-minus-between gap (boundary excess): "
-          f"{be_obs:+.1f} BR units.",
+          (f"- Distance-CONTROLLED within-minus-between gap (boundary excess): "
+          f"{be_obs:+.1f} BR units."),
           "  Under pure isolation-by-distance this collapses to ~0; a genuine",
           "  interaction boundary leaves a positive excess.",
-          f"- Partial Mantel, ceramic distance vs community membership controlling "
-          f"for geography: r = {r_pm:+.3f} (p = {p_pm:.4f}).",
+          (f"- Partial Mantel, ceramic distance vs community membership controlling "
+          f"for geography: r = {r_pm:+.3f} (p = {p_pm:.4f})."),
           f"- Parkin falls in community {parkin_comm}.", ""]
 
     # ---- PART C: generative spatial-drift null --------------------------- #

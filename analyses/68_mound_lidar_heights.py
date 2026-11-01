@@ -88,9 +88,9 @@ def _pixel_of(meta: dict, lat: float, lon: float, shape) -> tuple[int, int]:
 
 def measure(z, lrm, seed_rc, mpp, edge_m, ring, pctl) -> dict | None:
     """Height of the mound containing `seed_rc`, under one set of choices."""
-    from scipy.ndimage import label, binary_dilation
+    from scipy.ndimage import binary_dilation, label
 
-    lab, n = label(lrm > edge_m)
+    lab, _n = label(lrm > edge_m)
     r, c = seed_rc
     r = int(np.clip(r, 0, z.shape[0] - 1)); c = int(np.clip(c, 0, z.shape[1] - 1))
     comp = lab[r, c]
@@ -166,16 +166,16 @@ def main() -> int:
             continue
         all_rows += rows
         h = np.array([r["height_ft"] for r in rows])
-        mid = [r for r in rows if r["edge_m"] == 0.5 and r["pctl"] == 50
-               and r["ring"] == "10-40 m"][0]
+        mid = next(r for r in rows if r["edge_m"] == 0.5 and r["pctl"] == 50
+               and r["ring"] == "10-40 m")
         name = meta.get("site_name") or site
         lines += [f"## {site} ({name})", "",
                   f"- Recorded in the 2006 compilation: **{meta['recorded_height_ft']:.1f} ft**",
-                  f"- Lidar, at the reference operating point (edge 0.5 m, baseline the "
+                  (f"- Lidar, at the reference operating point (edge 0.5 m, baseline the "
                   f"median of the 10-40 m annulus): **{mid['height_ft']:.1f} ft "
-                  f"({mid['height_m']:.2f} m)**, footprint {mid['footprint_m2']:.0f} m2",
-                  f"- Across the {len(rows)}-cell sensitivity grid: {h.min():.1f} to "
-                  f"{h.max():.1f} ft", "",
+                  f"({mid['height_m']:.2f} m)**, footprint {mid['footprint_m2']:.0f} m2"),
+                  (f"- Across the {len(rows)}-cell sensitivity grid: {h.min():.1f} to "
+                  f"{h.max():.1f} ft"), "",
                   "| edge (m) | annulus | pctl | footprint (m2) | height (m) | height (ft) |",
                   "|---|---|---|---|---|---|"]
         for r in rows:

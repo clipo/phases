@@ -60,26 +60,26 @@ def main() -> int:
         rows.append((N, float(np.median(f)), float(np.percentile(f, 95))))
 
     L = ["# How many decorated sherds does an assemblage need?", "",
-         f"Pairs of multinomial samples of size n from the basin's pooled profile "
+         (f"Pairs of multinomial samples of size n from the basin's pooled profile "
          f"(Gini-Simpson diversity {1 - (pooled ** 2).sum():.3f}), {args.draws:,} draws per "
-         "size. The two share one profile, so all of the F_ST between them is sampling.", "",
-         f"Observed between-cluster F_ST at five clusters, {len(counts)} assemblages: "
-         f"**{obs:.4f}**.", "",
-         "| decorated sherds per assemblage | spurious F_ST, median | 95th percentile | "
-         "median as a share of the observed |", "|---|---|---|---|"]
+         "size. The two share one profile, so all of the F_ST between them is sampling."), "",
+         (f"Observed between-cluster F_ST at five clusters, {len(counts)} assemblages: "
+         f"**{obs:.4f}**."), "",
+         ("| decorated sherds per assemblage | spurious F_ST, median | 95th percentile | "
+         "median as a share of the observed |"), "|---|---|---|---|"]
     for N, med, hi in rows:
         mark = "**" if N == THRESHOLD else ""
         L.append(f"| {mark}{N}{mark} | {med:.4f} | {hi:.4f} | {100 * med / obs:.0f}% |")
     t_med, t_hi = next((med, hi) for N, med, hi in rows if N == THRESHOLD)
-    L += ["", f"At {THRESHOLD} sherds the artifact's median is {100 * t_med / obs:.0f} percent of the observed "
-              "differentiation and its 95th",
-          f"percentile ({t_hi:.4f}) {'falls below' if t_hi < obs else 'does not fall below'} it; "
+    L += ["", (f"At {THRESHOLD} sherds the artifact's median is {100 * t_med / obs:.0f} percent of the observed "
+              "differentiation and its 95th"),
+          (f"percentile ({t_hi:.4f}) {'falls below' if t_hi < obs else 'does not fall below'} it; "
           "above that the bias shrinks slowly. Mainfort (2003) "
-          "kept sites with 800",
-          "or more sherds in all, and decorated sherds are 13 percent of his table, so his "
-          "rule is about 100",
-          "decorated sherds. The analytic expectation for two equal samples from one "
-          "profile is close to 1/n.", ""]
+          "kept sites with 800"),
+          ("or more sherds in all, and decorated sherds are 13 percent of his table, so his "
+          "rule is about 100"),
+          ("decorated sherds. The analytic expectation for two equal samples from one "
+          "profile is close to 1/n."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[6:]))
     return 0

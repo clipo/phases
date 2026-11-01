@@ -12,10 +12,10 @@ the note in main().
 
 Usage: .venv/bin/python analyses/50_revision_figures.py [--valley]
 """
-from pathlib import Path
 import importlib
 import json
 import sys
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -25,17 +25,19 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+import geopandas as gpd
+import make_map as mm
 import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+from figstyle import panel_label, save
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib.patches import Patch
-import geopandas as gpd
 
-import make_map as mm
-from figstyle import panel_label, save
 from mls_emergence.transmission.spatial import sample_record
+
 rev = importlib.import_module("47_revision_analysis")
 demo = importlib.import_module("25_drift_vs_groups_demo")
 
@@ -92,7 +94,7 @@ def sel(base, region, model, sampling):
 
 def rate_of(rates, region, model):
     r = rates[(rates.region == region) & (rates.model == model)].iloc[0]
-    return dict(innovation=float(r.innovation), mixing=float(r.mixing), n_ind=int(r.n_ind))
+    return {"innovation": float(r.innovation), "mixing": float(r.mixing), "n_ind": int(r.n_ind)}
 
 
 # --------------------------------------------------------------------------- #
@@ -115,11 +117,11 @@ def fig8(sets, s, base):
     axB.legend(fontsize=6, loc="upper right", frameon=False)
     panel_label(axB, "B")
     fig.tight_layout(); save(fig, "fig8_lmv_drift_groups")
-    return dict(nc_co=co.ncom.describe().to_dict(), nc_tt=tt.ncom.describe().to_dict(),
-                fst_co=np.nanpercentile(co.community_fst, [2.5, 50, 97.5]).tolist(),
-                fst_tt=np.nanpercentile(tt.community_fst, [2.5, 50, 97.5]).tolist(),
-                p_co=rev.tail(obs["community_fst"], co.community_fst),
-                p_tt=rev.tail(obs["community_fst"], tt.community_fst))
+    return {"nc_co": co.ncom.describe().to_dict(), "nc_tt": tt.ncom.describe().to_dict(),
+                "fst_co": np.nanpercentile(co.community_fst, [2.5, 50, 97.5]).tolist(),
+                "fst_tt": np.nanpercentile(tt.community_fst, [2.5, 50, 97.5]).tolist(),
+                "p_co": rev.tail(obs["community_fst"], co.community_fst),
+                "p_tt": rev.tail(obs["community_fst"], tt.community_fst)}
 
 
 def fig9(sets, s, base, co):
@@ -158,13 +160,13 @@ def fig9(sets, s, base, co):
     axA.legend(fontsize=6.5, loc="upper right", framealpha=0.9)
     panel_label(axA, "A")
 
-    axB.boxplot([P_basin, P_off], positions=[0, 1], widths=0.6, medianprops=dict(color="0.15"))
+    axB.boxplot([P_basin, P_off], positions=[0, 1], widths=0.6, medianprops={"color": "0.15"})
     axB.scatter(np.zeros(len(P_basin)), P_basin, s=14, c="0.15", alpha=0.55, zorder=3)
     axB.scatter(np.ones(len(P_off)), P_off, s=14, c="0.55", alpha=0.55, zorder=3)
     axB.set_xticks([0, 1]); axB.set_xticklabels([f"Parkin\n(n={len(P_basin)})", f"others\n(n={len(P_off)})"], fontsize=7.5)
     axB.set_ylabel("P(shares Parkin's community)", fontsize=8); axB.set_ylim(0, 1); axB.tick_params(labelsize=7)
     axB.text(0.04, 0.04, f"AUC = {auc:.2f}", transform=axB.transAxes, fontsize=8,
-             bbox=dict(boxstyle="round", fc="white", ec="0.6", alpha=0.9))
+             bbox={"boxstyle": "round", "fc": "white", "ec": "0.6", "alpha": 0.9})
     panel_label(axB, "B")
 
     axC.hist(null, bins=20, color="0.72", edgecolor="0.3", linewidth=0.3)
@@ -186,9 +188,9 @@ def fig9(sets, s, base, co):
     panel_label(axD, "D")
     save(fig, "fig9_parkin_pullout")
     n_outside = sum(1 for r in rows[1:] if r[1] > r[3])
-    return dict(auc=float(auc), p_mw=float(p_mw), P_basin_mean=float(P_basin.mean()), P_off_mean=float(P_off.mean()),
-                obs=obs, null_pct=np.nanpercentile(null, [2.5, 50, 97.5]).tolist(), p_upper=p_obs,
-                loo_outside=n_outside, loo_total=len(rows) - 1)
+    return {"auc": float(auc), "p_mw": float(p_mw), "P_basin_mean": float(P_basin.mean()), "P_off_mean": float(P_off.mean()),
+                "obs": obs, "null_pct": np.nanpercentile(null, [2.5, 50, 97.5]).tolist(), "p_upper": p_obs,
+                "loo_outside": n_outside, "loo_total": len(rows) - 1}
 
 
 def figS9(sets, s, base, grid):
@@ -224,9 +226,9 @@ def figS9(sets, s, base, grid):
             axb.plot([lo, hi], [y + off, y + off], color=color, lw=lw, solid_capstyle="butt")
         axb.plot([obs], [y], "D", ms=8, color="black", zorder=5)
         axb.text(obs, y + 0.34, f"observed {obs:+.3f}", ha="center", fontsize=6.5)
-        summary[name] = dict(obs=obs, drift=np.nanpercentile(drift, [2.5, 97.5]).tolist(), p_drift=rev.tail(obs, drift),
-                             drift_alt=np.nanpercentile(drift_alt, [2.5, 97.5]).tolist(), p_alt=rev.tail(obs, drift_alt),
-                             groups=np.nanpercentile(grp, [2.5, 97.5]).tolist(), p_groups=rev.tail(obs, grp))
+        summary[name] = {"obs": obs, "drift": np.nanpercentile(drift, [2.5, 97.5]).tolist(), "p_drift": rev.tail(obs, drift),
+                             "drift_alt": np.nanpercentile(drift_alt, [2.5, 97.5]).tolist(), "p_alt": rev.tail(obs, drift_alt),
+                             "groups": np.nanpercentile(grp, [2.5, 97.5]).tolist(), "p_groups": rev.tail(obs, grp)}
     axb.set_yticks([1, 0]); axb.set_yticklabels(["LMV basin", "CMV (Miss.)"], fontsize=8); axb.set_ylim(-0.6, 1.7)
     axb.set_xlabel("between-cluster cultural $F_{ST}$")
     from matplotlib.ticker import MultipleLocator as _ML
@@ -267,10 +269,10 @@ def figS3(sets, s, base, grid, rates):
             # 0.01 steps crowd into each other across this narrow panel.
             ax.xaxis.set_major_locator(_ML(0.02))
         panel_label(ax, "ABCD"[j])
-        summary[key] = dict(obs=obs[key], drift=np.nanpercentile(drift[key], [2.5, 97.5]).tolist(),
-                            groups=np.nanpercentile(grp[key], [2.5, 97.5]).tolist(),
-                            in_drift=bool(np.nanpercentile(drift[key], 2.5) <= obs[key] <= np.nanpercentile(drift[key], 97.5)),
-                            in_groups=bool(np.nanpercentile(grp[key], 2.5) <= obs[key] <= np.nanpercentile(grp[key], 97.5)))
+        summary[key] = {"obs": obs[key], "drift": np.nanpercentile(drift[key], [2.5, 97.5]).tolist(),
+                            "groups": np.nanpercentile(grp[key], [2.5, 97.5]).tolist(),
+                            "in_drift": bool(np.nanpercentile(drift[key], 2.5) <= obs[key] <= np.nanpercentile(drift[key], 97.5)),
+                            "in_groups": bool(np.nanpercentile(grp[key], 2.5) <= obs[key] <= np.nanpercentile(grp[key], 97.5))}
     # One legend above the top row, clear of every observed line.
     _h, _l = fig.axes[0].get_legend_handles_labels()
     fig.legend(_h, _l, loc="lower center", bbox_to_anchor=(0.5, 0.97), ncol=2,
@@ -339,9 +341,9 @@ def figS4(sets, s, base, co):
     axB.legend(fontsize=6, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.20))
     panel_label(axB, "B")
     save(fig, "figS3_emergent_phases")
-    return dict(rho_distance=float(rho), P_range=[float(P[nonpk].min()), float(P[nonpk].max())], obs=obs,
-                p_co=rev.tail(obs, sel(base, "basin", MAIN, "contemporaneous").community_fst),
-                p_tt=rev.tail(obs, sel(base, "basin", MAIN, "time_transgressive").community_fst))
+    return {"rho_distance": float(rho), "P_range": [float(P[nonpk].min()), float(P[nonpk].max())], "obs": obs,
+                "p_co": rev.tail(obs, sel(base, "basin", MAIN, "contemporaneous").community_fst),
+                "p_tt": rev.tail(obs, sel(base, "basin", MAIN, "time_transgressive").community_fst)}
 
 
 def figS5(sets, s, base):
@@ -387,10 +389,10 @@ def figS5(sets, s, base):
         for model in (MAIN, ALT):
             f = calib[(calib.region == region) & (calib.model == model) & calib.matched]
             f2 = f[f.stage2_matched.astype(bool)]
-            out[f"{region}/{model}"] = dict(n_matched=int(len(f)), n_matched_stage2=int(len(f2)),
-                                             max_fst_stage2=float(f2.stage2_fst_median.max()) if len(f2) else None,
-                                             n_reaching_observed_stage2=int((f2.stage2_fst_median >= obs).sum()),
-                                             n_covering_observed_stage2=int(((f2.stage2_lo <= obs) & (obs <= f2.stage2_hi)).sum()))
+            out[f"{region}/{model}"] = {"n_matched": len(f), "n_matched_stage2": len(f2),
+                                             "max_fst_stage2": float(f2.stage2_fst_median.max()) if len(f2) else None,
+                                             "n_reaching_observed_stage2": int((f2.stage2_fst_median >= obs).sum()),
+                                             "n_covering_observed_stage2": int(((f2.stage2_lo <= obs) & (obs <= f2.stage2_hi)).sum())}
     return out
 
 
@@ -442,7 +444,7 @@ def main():
     # run is legible as carried over rather than passing for fresh.
     from datetime import datetime
     stamps = dict(prev.get("_written", {}))
-    stamps.update({k: datetime.now().isoformat(timespec="seconds") for k in out})
+    stamps.update({k: datetime.now().isoformat(timespec="seconds") for k in out})  # noqa: DTZ005  local time stamp
     prev["_written"] = {k: v for k, v in stamps.items() if k in prev}
     fv.write_text(json.dumps(prev, indent=2, default=float))
     print(json.dumps(out, indent=2, default=float))

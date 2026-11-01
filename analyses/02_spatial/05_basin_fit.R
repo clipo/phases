@@ -1,3 +1,10 @@
+# SUPERSEDED 2026-10-16. This script sources R/fit_spatial.R, which was
+# rewritten in pilot step 3 of the latent-group probe (the previous layer's
+# treedepth diagnostic was wrong from its first commit; discussion log,
+# Finding 1). The functions it calls no longer exist, so it does not run
+# against the new layer. It is kept as a record of what was done; its
+# findings files are unverified (inventory class 4). The A0 refit is
+# analyses/probe_latent_groups/ (pilot step 4).
 # 05_basin_fit.R -- the basin GP fit the paper's headline number comes from.
 #
 # WHY THIS EXISTS. The abstract reports that 96 percent of assemblage-level
@@ -102,7 +109,7 @@ L <- c(
          "`gp_posterior_predictive.md` shows the model reproduces cultural F_ST, the ",
          "distance decay and the spread of within-assemblage diversity, so ",
          "misspecification is excluded as the explanation. What remains is that `rho` ",
-         "is flat above the design's resolving ceiling: the basin spans about 128 km ",
+         "is flat above the design's resolving ceiling: the basin spans about 79 km (corrected 2026-10-16 from 128 km, a figure from the superseded 29-site set) ",
          "and the posterior piles up against the top of its range, which is the data ",
          "saying no decay in composition is detectable across the drainage."),
   "",

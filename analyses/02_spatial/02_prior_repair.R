@@ -1,5 +1,22 @@
 #!/usr/bin/env Rscript
+# SUPERSEDED 2026-10-16. This script sources R/fit_spatial.R, which was
+# rewritten in pilot step 3 of the latent-group probe (the previous layer's
+# treedepth diagnostic was wrong from its first commit; discussion log,
+# Finding 1). The functions it calls no longer exist, so it does not run
+# against the new layer. It is kept as a record of what was done; its
+# findings files are unverified (inventory class 4). The A0 refit is
+# analyses/probe_latent_groups/ (pilot step 4).
 #' Does a resolvable-range prior on rho remove the ridge?
+#'
+#' CORRECTION 2026-10-16. The geometry below (5.03 km, 127.8 km) and the
+#' percentages derived from it describe the superseded 29-site hydrological
+#' set. The current phase-based 28-assemblage set has nearest-neighbour median
+#' 4.32 km and maximum pairwise distance 79.1 km (geo_km on the loader's
+#' coordinates). NN_MEDIAN and MAX_D are updated; the prose percentages were
+#' not recomputed, this script has not been re-run, and its findings file
+#' (spatial_prior_repair.md) is stale. The "100% treedepth saturation" in the
+#' next paragraph was never measured (R/fit_spatial.R counted depth >= 10
+#' under a maximum of 12 or 13; see the discussion log, Finding 1).
 #'
 #' THE PROBLEM. analyses/02_spatial/01_recovery.R found the full model hitting
 #' 100% treedepth saturation with ZERO divergences at every length scale: a long
@@ -35,7 +52,7 @@ source(here("R", "fit_spatial.R"))
 options(mc.cores = as.integer(Sys.getenv("MLS_MC_CORES", "2")))
 
 IG_A <- 2.5874; IG_B <- 38.7141
-NN_MEDIAN <- 5.03; MAX_D <- 127.8
+NN_MEDIAN <- 4.32; MAX_D <- 79.1   # corrected 2026-10-16, see header
 rhos <- c(5, 10, 20, 40, 80)
 
 cat(strrep("=", 80), "\n"); cat("Prior repair: uniform-on-log vs resolvable-range inverse-gamma\n")

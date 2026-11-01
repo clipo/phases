@@ -9,8 +9,8 @@ from __future__ import annotations
 import json
 import os
 import time
-import urllib.request
 import urllib.error
+import urllib.request
 
 EMAIL = "clipo@binghamton.edu"
 OUTDIR = "docs/references/pdfs"

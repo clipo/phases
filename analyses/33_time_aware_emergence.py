@@ -43,21 +43,24 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.colors import Normalize, LinearSegmentedColormap  # noqa: E402
-from matplotlib.cm import ScalarMappable  # noqa: E402
-from matplotlib.patches import Rectangle  # noqa: E402
-import matplotlib.patheffects as pe  # noqa: E402
-import pandas as pd  # noqa: E402
-import geopandas as gpd  # noqa: E402
-import make_figures as mf  # noqa: E402  (applies house style on import)
-import make_map as mm  # noqa: E402  (reuse the fig1 river basemap)
+import geopandas as gpd
+import make_figures as mf
+import make_map as mm
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+from matplotlib.patches import Rectangle
+
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 res = importlib.import_module("17_basin_results")
-from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
-from scipy.stats import spearmanr  # noqa: E402
+from scipy.stats import spearmanr
+
+from mls_emergence.signatures.variance import cultural_fst
 
 OUT_MD = ROOT / "output" / "time_aware_emergence.md"
 OUT_FIG = ROOT / "figures" / "33_time_aware_emergence.png"
@@ -255,7 +258,7 @@ def main():
     # consensus across N_CONS realizations (cached for fast re-plotting)
     # River-network distances are needed whether or not the consensus runs are
     # cached: the reported co-membership gradient is measured on this metric.
-    river_km, _, access_km, rinfo = mm.river_distance_matrix(coords)
+    river_km, _, _access_km, rinfo = mm.river_distance_matrix(coords)
     print(f"river network: largest component {rinfo['largest_component']} nodes, "
           f"max access {rinfo['max_access_km']:.1f} km, "
           f"{rinfo['n_unreachable']} unreachable pairs")
@@ -289,7 +292,9 @@ def main():
     rho_co = spearmanr(river_pk[nonpk], P_co[nonpk]).correlation
     rho_tt = spearmanr(river_pk[nonpk], P_tt[nonpk]).correlation
     rho_co_straight = spearmanr(geo_pk[nonpk], P_co[nonpk]).correlation
-    rho_tt_straight = spearmanr(geo_pk[nonpk], P_tt[nonpk]).correlation
+    # Computed but not yet reported: the report quotes only the contemporaneous
+    # straight-line value, so the time-transgressive one is not side by side.
+    rho_tt_straight = spearmanr(geo_pk[nonpk], P_tt[nonpk]).correlation  # noqa: F841
 
     # ---- figure: A = P(shares Parkin's community) on the river basemap;
     #              B = drift reproduces the observed between-group F_ST ----
@@ -357,26 +362,26 @@ def main():
     L = [
         f"# Time-aware emergence of phase-like structure (n = {n})",
         "",
-        f"Drift field on the real layout at the positive-control corner, copying kernel "
+        (f"Drift field on the real layout at the positive-control corner, copying kernel "
         f"on river-network (along-waterway) distance: interaction length {LEN_KM:.0f} "
         f"river-km, mixing {M_BETWEEN}, innovation {MU}, {T_STEPS} steps, {N_REC} slices, "
         f"window {WIN}; {N_CONS} realizations. CA1 inertia (observed) = {frac:.2f}. "
-        f"Focal node: {names[pk]}.",
+        f"Focal node: {names[pk]}."),
         "",
         "## Probability of sharing Parkin's emergent community",
-        f"- Contemporaneous (pure spatial drift) snapshot, shown in Figure 8A: mean "
+        (f"- Contemporaneous (pure spatial drift) snapshot, shown in Figure 8A: mean "
         f"P = {P_co[nonpk].mean():.2f} (range {P_co[nonpk].min():.2f}-{P_co[nonpk].max():.2f}) "
         f"across the other {n - 1} assemblages; co-membership falls with distance from "
         f"Parkin (Spearman rho = {rho_co:+.2f} on river-network distance, "
-        f"{rho_co_straight:+.2f} straight-line), the intuitive spatial gradient.",
-        f"- Time-transgressive sampling: mean P = {P_tt[nonpk].mean():.2f} "
+        f"{rho_co_straight:+.2f} straight-line), the intuitive spatial gradient."),
+        (f"- Time-transgressive sampling: mean P = {P_tt[nonpk].mean():.2f} "
         f"(range {P_tt[nonpk].min():.2f}-{P_tt[nonpk].max():.2f}); "
         f"{_distance_clause(rho_tt, rho_co)} Assemblages at different seriation "
         "positions carry different repertoires, so membership reflects space and "
-        "time jointly.",
-        "- Either way, no assemblage is a certain member (P = 1) or non-member (P = 0) of "
+        "time jointly."),
+        ("- Either way, no assemblage is a certain member (P = 1) or non-member (P = 0) of "
         "Parkin's group: membership is graded and probabilistic, so the 'phase' has no "
-        "stable membership.",
+        "stable membership."),
         "",
         "## Emergent communities and between-group cultural F_ST",
         "| case | communities | F_ST |",
@@ -385,16 +390,16 @@ def main():
         f"| contemporaneous drift | -- | {np.nanmean(fst_co):.3f} |",
         f"| time-transgressive drift | {nc_tt.mean():.1f} | {np.nanmean(fst_tt):.3f} |",
         "",
-        f"- Phase-like structure (>= 2 communities): {np.mean(nc_tt >= 2) * 100:.0f}% of "
-        f"runs; mean {nc_tt.mean():.1f} (range {int(nc_tt.min())}-{int(nc_tt.max())}).",
+        (f"- Phase-like structure (>= 2 communities): {np.mean(nc_tt >= 2) * 100:.0f}% of "
+        f"runs; mean {nc_tt.mean():.1f} (range {int(nc_tt.min())}-{int(nc_tt.max())})."),
         f"- Time-transgressive record seriates: mean |Spearman rho| = {np.nanmean(rho):.2f}.",
         "",
-        "Interpretation: across many drift realizations on the real geography, with no "
+        ("Interpretation: across many drift realizations on the real geography, with no "
         "boundary imposed, membership in Parkin's emergent community is graded and "
         "probabilistic rather than marking a bounded set, and the between-group cultural "
         "F_ST sits at the observed level rather than the much higher value a bounded "
         "group would leave. The phase is the fuzzy, spatially structured residue of "
-        "drift, not a society.",
+        "drift, not a society."),
         "",
         f"Figure: {OUT_FIG.relative_to(ROOT)}",
     ]

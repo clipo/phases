@@ -41,10 +41,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_GREEN, OI_ORANGE, save  # noqa: E402
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_GREEN, OI_ORANGE, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "findings" / "fst_prior_justification.md"
 PRIORS = [("Uniform(0,1)", 1.0, 1.0), ("Beta(1,3)", 1.0, 3.0),
@@ -98,13 +99,13 @@ def main(fast=False):
     u = rows["Uniform(0,1)"]
     b10 = rows["Beta(1,10)"]
     L = ["# What does the F_ST prior imply about data?", "",
-         f"Produced by `analyses/57_fst_prior_predictive.py` "
+         (f"Produced by `analyses/57_fst_prior_predictive.py` "
          f"({'FAST' if fast else 'full'}, {n_draw} draws per prior). Closes F2 "
-         f"and supplies rule 20(a) for the Balding-Nichols prior.", "",
-         f"Design: the St. Francis basin as analysis 43 fits it, "
+         f"and supplies rule 20(a) for the Balding-Nichols prior."), "",
+         (f"Design: the St. Francis basin as analysis 43 fits it, "
          f"{gc.shape[0]} spatial clusters over {K} decorated classes at the real "
          f"per-cluster sherd totals {sizes.astype(int).tolist()}. "
-         f"**Observed Gini-Simpson F_ST = {obs:.4f}.**", "",
+         f"**Observed Gini-Simpson F_ST = {obs:.4f}.**"), "",
          "## Induced prior predictive distribution of F_ST", "",
          "| prior | median | 95% predictive interval | P(F_ST > 0.30) |",
          "|---|---|---|---|"]
@@ -113,43 +114,43 @@ def main(fast=False):
         L.append(f"| {name} | {np.median(s):.3f} | [{np.percentile(s,2.5):.3f}, "
                  f"{np.percentile(s,97.5):.3f}] | **{float((s>BIG).mean()):.3f}** |")
     L += ["", "## Reading", "",
-          f"Before seeing any data, `F ~ Uniform(0, 1)` expects a median "
+          (f"Before seeing any data, `F ~ Uniform(0, 1)` expects a median "
           f"Gini-Simpson F_ST of **{np.median(u):.3f}** at this design and puts "
           f"**{100*float((u>BIG).mean()):.0f} percent** of its mass above 0.30. "
           f"The observed value is {obs:.4f}. Nobody holds the belief that "
           f"decorated-ceramic assemblages a few tens of kilometres apart in one "
           f"drainage are that strongly differentiated, so on the scale that "
           f"matters the flat prior is not uninformative; it is strongly and "
-          f"wrongly informative.", "",
-          f"`Beta(1, 10)` expects a median of {np.median(b10):.3f} with "
+          f"wrongly informative."), "",
+          (f"`Beta(1, 10)` expects a median of {np.median(b10):.3f} with "
           f"{100*float((b10>BIG).mean()):.0f} percent above 0.30, which is a "
-          f"defensible prior belief for this setting.", "",
+          f"defensible prior belief for this setting."), "",
           "## The family constraint", "",
-          "Any `Beta(a, b)` with `a > 1` has density exactly zero at F = 0 and "
+          ("Any `Beta(a, b)` with `a > 1` has density exactly zero at F = 0 and "
           "so asserts a priori that panmixia is impossible. Because the whole "
           "comparison in analyses 43 and 44 is against panmixia, that is "
           "disqualifying rather than merely unattractive. Beta(2, 20) is "
           "included in the table only to show what the excluded shape does; the "
           "admissible family is `Beta(1, b)`, of which Uniform(0, 1) is the "
-          "b = 1 member.", "",
+          "b = 1 member."), "",
           "## Direction, and why the burden is asymmetric (rule 20)", "",
-          "Uniform(0, 1) leans toward LARGE F_ST. For the posterior that is "
+          ("Uniform(0, 1) leans toward LARGE F_ST. For the posterior that is "
           "**conservative**: the paper argues F_ST is small, and a prior pulling "
           "the other way cannot manufacture that conclusion, which is why the "
           "reported posteriors are not in doubt. For a Bayes factor the lean "
           "reverses and becomes **sympathetic**: spreading prior mass over "
           "values the data never support penalises the structured model against "
           "panmixia, which is the direction of the paper's own reading. A prior "
-          "can lean two ways at once, and rule 20 requires both be named.", "",
+          "can lean two ways at once, and rule 20 requires both be named."), "",
           "## Disposition", "",
-          "The prior predictive disqualifies Uniform(0, 1) as a description of "
+          ("The prior predictive disqualifies Uniform(0, 1) as a description of "
           "prior belief, and `../mataa` reached the same verdict independently "
           "on three of its own designs. Because the lean is conservative for the "
           "posterior, no reported posterior is overturned by this; what changes "
           "is that the prior can no longer be defended as uninformative, and any "
           "Bayes factor computed under it is reading the prior as much as the "
           "data. Adopting Beta(1, 10) as primary with Uniform reported alongside "
-          "is the change this finding supports.", ""]
+          "is the change this finding supports."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
 

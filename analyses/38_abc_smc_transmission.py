@@ -23,12 +23,17 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from mls_emergence.inference import (  # noqa: E402
-    abc_smc, regression_adjust, weighted_mean, weighted_quantile, resample,
+from mls_emergence.inference import (
+    abc_smc,
+    regression_adjust,
+    resample,
+    weighted_mean,
+    weighted_quantile,
 )
 
 abc19 = importlib.import_module("19_abc_transmission")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 res = importlib.import_module("17_basin_results")
 
 N_BINS_LOCAL = abc19.N_BINS
@@ -40,8 +45,8 @@ PRIOR_LO = np.array([0.001, -0.5, 50.0, 5.0])
 PRIOR_HI = np.array([0.05, 0.5, 1000.0, 30.0])
 
 # full-run and smoke settings
-FULL = dict(n_particles=800, n_rounds=6)
-FAST = dict(n_particles=60, n_rounds=2)
+FULL = {"n_particles": 800, "n_rounds": 6}
+FAST = {"n_particles": 60, "n_rounds": 2}
 
 
 def prior_sampler(rng):
@@ -73,7 +78,7 @@ def distance(s, s_obs):
 
 
 def load_obs():
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)
     rank = ca.rank().to_numpy()
     bins = pd.qcut(pd.Series(rank, index=counts.index), N_BINS_LOCAL,
@@ -131,18 +136,18 @@ def main(fast=False):
     prior_sd = (PRIOR_HI[1] - PRIOR_LO[1]) / np.sqrt(12)
 
     L = ["# ABC-SMC inference of the transmission bias", "",
-         f"Basin curated set (n = {counts.shape[0]}), {K} decorated types, "
+         (f"Basin curated set (n = {counts.shape[0]}), {K} decorated types, "
          f"{N_BINS_LOCAL} ordinal bins. ABC-SMC with local-linear regression "
          f"adjustment, {cfg['n_particles']} particles, {cfg['n_rounds']} rounds "
          f"({'SMOKE' if fast else 'full'} config). Same model and summary "
-         "statistics as 19_abc_transmission.py.", "",
+         "statistics as 19_abc_transmission.py."), "",
          "## Posterior of the transmission-bias parameter b", "",
          f"- Posterior mean b = {mean:+.3f}, 95% interval [{lo:+.3f}, {hi:+.3f}].",
-         f"- The 95% interval {'INCLUDES' if lo <= 0 <= hi else 'EXCLUDES'} the "
-         "neutral value b = 0.",
+         (f"- The 95% interval {'INCLUDES' if lo <= 0 <= hi else 'EXCLUDES'} the "
+         "neutral value b = 0."),
          f"- P(b > 0) = {p_pos:.2f} (0.5 = no directional information).",
-         f"- Posterior SD {post_sd:.3f} vs prior SD {prior_sd:.3f} "
-         f"(ratio {post_sd/prior_sd:.2f}).", "",
+         (f"- Posterior SD {post_sd:.3f} vs prior SD {prior_sd:.3f} "
+         f"(ratio {post_sd/prior_sd:.2f})."), "",
          "## Early vs late halves", "",
          f"- Early-half b = {e_mean:+.3f} [{e_lo:+.3f}, {e_hi:+.3f}].",
          f"- Late-half b = {l_mean:+.3f} [{l_lo:+.3f}, {l_hi:+.3f}].",

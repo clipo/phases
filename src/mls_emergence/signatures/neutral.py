@@ -1,4 +1,12 @@
+"""Signature 1, departure from neutral transmission.
+
+Provides the homozygosity estimate ``homozygosity_f``, Neiman's ``theta_f``,
+the Ewens estimate ``theta_e``, and the descriptive ``neutrality_verdict`` that
+compares the two. Used by ``validation.harness``, ``make_figures.py`` and
+analyses 05, 06, 07 and 09.
+"""
 from __future__ import annotations
+
 import numpy as np
 from scipy.optimize import brentq
 

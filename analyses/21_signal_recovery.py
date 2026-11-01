@@ -20,14 +20,16 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_ORANGE, OI_GREEN, OI_PURPLE, save  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_GREEN, OI_ORANGE, OI_PURPLE, OI_VERMIL, save
+
 res = importlib.import_module("17_basin_results")
-from mls_emergence.signatures.seriation import seriation_groups  # noqa: E402
-from mls_emergence.signatures.sampling import rarefy  # noqa: E402
+from mls_emergence.signatures.sampling import rarefy
+from mls_emergence.signatures.seriation import seriation_groups
 
 OUT = ROOT / "output" / "signal_recovery.md"
 N_BINS = 6
@@ -223,7 +225,7 @@ def empirical_fst_trend(op=None, n_draws: int = TREND_DRAWS, seed: int = TREND_S
             "lo": float(vals.mean() - 1.96 * se), "hi": float(vals.mean() + 1.96 * se),
             "p_lo": float(np.percentile(vals, 2.5)),
             "p_hi": float(np.percentile(vals, 97.5)),
-            "n_draws": int(len(vals))}
+            "n_draws": len(vals)}
 
 
 def _dir(rho):
@@ -298,9 +300,7 @@ def draw_recovery_figure():
 
 def main():
     op = operating_point()
-    counts, coords = op["counts"], op["coords"]
-    ca, K, Ni = op["ca"], op["K"], op["Ni"]
-    have, cc_c, sil, k = op["have"], op["cc_c"], op["sil"], op["k"]
+    K, k = op["K"], op["k"]
     keep = op["keep"]
     clusters, bins_arr = op["clusters"], op["bins_arr"]
     coords_c, N_arr, real_M = op["coords_c"], op["N_arr"], op["real_M"]
@@ -366,8 +366,8 @@ def main():
         thr = float(np.nanpercentile(calibration, 95))
         pw = np.array([np.mean(Tmat[si][~np.isnan(Tmat[si])] > thr) for si in range(len(S_GRID))])
         above = np.where(pw >= POWER_TARGET)[0]
-        power[w] = dict(thr=thr, power=pw, s_star=float(S_GRID[above[0]]) if len(above) else float("nan"),
-                        null_mean=float(np.nanmean(Tmat[0])))
+        power[w] = {"thr": thr, "power": pw, "s_star": float(S_GRID[above[0]]) if len(above) else float("nan"),
+                        "null_mean": float(np.nanmean(Tmat[0]))}
     thr1 = power[1]["thr"]
     # One definition of this statistic (rule 6): the 4,000-draw estimator
     # `trend`, not the 400-draw B_EMP mean, which printed -0.06 beside its
@@ -381,92 +381,92 @@ def main():
 
     # Machine-readable summary of the grid (power is a design property of the
     # injected alternative, not an empirical confidence bound on s).
-    summary = dict(n=n, k=k, n_bins=N_BINS, depth=NRARE, seeds=N_SEEDS,
-                   raw=raw_emp, empirical=rar_emp_mean,
-                   empirical_fst_trend=trend,  # the one definition (rule 6)
-                   empirical_fst_interval=[trend["p_lo"], trend["p_hi"]],
-                   strengths=S_GRID.tolist(), response={sg: v.tolist() for sg, v in persig.items()},
-                   power={str(w): {key: value.tolist() if isinstance(value, np.ndarray) else value
-                                   for key, value in row.items()} for w, row in power.items()})
+    summary = {"n": n, "k": k, "n_bins": N_BINS, "depth": NRARE, "seeds": N_SEEDS,
+                   "raw": raw_emp, "empirical": rar_emp_mean,
+                   "empirical_fst_trend": trend,  # the one definition (rule 6)
+                   "empirical_fst_interval": [trend["p_lo"], trend["p_hi"]],
+                   "strengths": S_GRID.tolist(), "response": {sg: v.tolist() for sg, v in persig.items()},
+                   "power": {str(w): {key: value.tolist() if isinstance(value, np.ndarray) else value
+                                   for key, value in row.items()} for w, row in power.items()}}
     (ROOT / "output" / "revision_recovery.json").write_text(json.dumps(summary, indent=2))
 
     # ---- report ----
     L = [
         "# Record-matched, size-controlled signal recovery", "",
-        f"Real configuration: {n} assemblages, {K} decorated types, k = {k} spatial clusters, "
+        (f"Real configuration: {n} assemblages, {K} decorated types, k = {k} spatial clusters, "
         f"{N_BINS} ordinal bins. Synthetic assemblages are generated at the real per-assemblage "
         f"sample sizes; both synthetic and real assemblages are rarefied to a common count "
         f"NRARE = {NRARE} before scoring. {N_SEEDS} seeds per cell, {B_EMP} empirical "
-        f"rarefactions.", "",
-        "The s = 0 baseline is a fixed shared Zipf profile with multinomial sampling, not a "
+        f"rarefactions."), "",
+        ("The s = 0 baseline is a fixed shared Zipf profile with multinomial sampling, not a "
         "spatially evolving drift null; the injection imposes increasing divergence and profile "
         "concentration, and every recovery statement below refers only to that alternative. "
         "The seriation statistic is the number of maximal deterministic IDSS groups per assemblage "
-        "within a bin (continuity 0.10), not an ordered-row proxy.", "",
+        "within a bin (continuity 0.10), not an ordered-row proxy."), "",
         "## The sample-size confound", "",
-        f"- Assemblage sample size trends with seriation position at Spearman rho = {size_conf:+.2f}, "
-        f"so a size-sensitive signature can rise or fall along the axis through sampling alone.",
-        f"- Raw (uncontrolled) empirical F_ST trend = {raw_emp['fst']:+.2f} (the Figure 5 value); "
+        (f"- Assemblage sample size trends with seriation position at Spearman rho = {size_conf:+.2f}, "
+        f"so a size-sensitive signature can rise or fall along the axis through sampling alone."),
+        (f"- Raw (uncontrolled) empirical F_ST trend = {raw_emp['fst']:+.2f} (the Figure 5 value); "
         f"after rarefaction it is {trend['mean']:+.3f}, averaged over {trend['n_draws']} draws "
         f"(single-rarefaction 2.5th to 97.5th percentiles {trend['p_lo']:+.2f} to {trend['p_hi']:+.2f}, "
         f"SD {trend['sd']:.2f}: the record does not resolve the sign of this trend). "
         f"The Monte Carlo standard error of the {trend['n_draws']}-draw mean is {trend['se']:.3f}; "
         f"it describes the compute budget, not the record, and is not the interval to quote (rule 6). "
-        f"The raw {_dir(raw_emp['fst'])} is a sampling artifact.",
+        f"The raw {_dir(raw_emp['fst'])} is a sampling artifact."),
         "",
         "## Which signatures recover the injected emergence (rarefied, no averaging)", "",
         "| s | " + " | ".join(SIG_LABEL[s] for s in SIG) + " |", "|---|" + "---|" * len(SIG)]
     for si, s in enumerate(S_GRID):
         L.append(f"| {s:.1f} | " + " | ".join(f"{persig[sg][si]:+.2f}" for sg in SIG) + " |")
     L += ["",
-          "**Reading.** Only cultural F_ST tracks the injected signal monotonically (null near "
+          ("**Reading.** Only cultural F_ST tracks the injected signal monotonically (null near "
           "zero, rising to ~+1 at strong emergence). The neutral departure is non-monotonic in "
           f"conformity (the known U-shape), the spatial boundary is unresponsive at k = {k} clusters, "
           "and the seriation group count does not rise in the hypothesized direction. At this record's resolution the criterion "
-          "is carried by F_ST; the other three signatures are not reliable discriminators here.",
+          "is carried by F_ST; the other three signatures are not reliable discriminators here."),
           "",
           "## F_ST detector (calibrated; false-positive rate 0.05)", "",
           "| s | power (w=1) | power (time-averaged w=3) |", "|---|---|---|"]
     for si, s in enumerate(S_GRID):
         L.append(f"| {s:.1f} | {power[1]['power'][si]:.2f} | {power[3]['power'][si]:.2f} |")
     L += ["",
-          f"- Detection threshold s* = {_s_star_text(power[1])} (no averaging) / "
+          (f"- Detection threshold s* = {_s_star_text(power[1])} (no averaging) / "
           f"{_s_star_text(power[3])} (time-averaged): the weakest emergence recovered at power "
-          f">= {POWER_TARGET:.0%}. Time-averaging penalty: {_penalty_text(power)}.",
-          f"- Null (s=0) F_ST trend mean {power[1]['null_mean']:+.2f}; detection threshold "
-          f"{thr1:+.2f}.",
-          "- Thresholds use 400 separate null calibration draws per window; the s = 0 test row "
-          "estimates the achieved false-positive rate independently.", "",
+          f">= {POWER_TARGET:.0%}. Time-averaging penalty: {_penalty_text(power)}."),
+          (f"- Null (s=0) F_ST trend mean {power[1]['null_mean']:+.2f}; detection threshold "
+          f"{thr1:+.2f}."),
+          ("- Thresholds use 400 separate null calibration draws per window; the s = 0 test row "
+          "estimates the achieved false-positive rate independently."), "",
           "## Empirical placement (size-controlled)", "",
-          f"- Rarefied empirical F_ST trend = {emp_fst_mean:+.3f} "
+          (f"- Rarefied empirical F_ST trend = {emp_fst_mean:+.3f} "
           f"[{trend['p_lo']:+.2f}, {trend['p_hi']:+.2f}] (single-rarefaction 2.5th to 97.5th "
-          f"percentiles over {trend['n_draws']} draws; the same estimator as above).",
-          f"- On the recovery curve this corresponds to a nominal injected strength s ~ "
+          f"percentiles over {trend['n_draws']} draws; the same estimator as above)."),
+          (f"- On the recovery curve this corresponds to a nominal injected strength s ~ "
           f"{nominal_s:.2f}, {'at or above' if emp_resolvable else 'below'} the resolution limit "
-          f"s* = {s_star1:.2f} that this record can reliably detect.",
-          f"- The data show {'a resolvable emergence signal' if emp_resolvable else 'no resolvable emergence'}: "
-          f"the faint trend is not distinguishable from the no-emergence null at this resolution.",
-          "- The rarefaction percentiles condition on the observed sites, partition and ordering; "
+          f"s* = {s_star1:.2f} that this record can reliably detect."),
+          (f"- The data show {'a resolvable emergence signal' if emp_resolvable else 'no resolvable emergence'}: "
+          f"the faint trend is not distinguishable from the no-emergence null at this resolution."),
+          ("- The rarefaction percentiles condition on the observed sites, partition and ordering; "
           "they are not a confidence interval over all archaeological uncertainties. The signed "
-          "trend reverses with axis orientation.",
+          "trend reverses with axis orientation."),
           "",
           "## Verdict", "",
-          f"At the record's own resolution and sample sizes, and with the size confound removed by "
+          (f"At the record's own resolution and sample sizes, and with the size confound removed by "
           f"rarefaction, the discrimination is carried by cultural F_ST. The apparent raw F_ST {_dir(raw_emp['fst'])} "
           f"({raw_emp['fst']:+.2f}) is an artifact of the sample-size-versus-position trend "
           f"(rho {size_conf:+.2f}) and vanishes under size control, leaving a trend of "
           f"{trend['mean']:+.3f}, with single-rarefaction percentiles {trend['p_lo']:+.2f} to {trend['p_hi']:+.2f}. "
           f"The other three signatures do not reliably discriminate at this "
-          f"resolution and are reported as weak corroboration only.",
+          f"resolution and are reported as weak corroboration only."),
           "",
-          "**How the strength of any closure is reported.** The detection threshold, power curve and "
+          ("**How the strength of any closure is reported.** The detection threshold, power curve and "
           "five percent false-positive rate that this section used to report are withdrawn under the "
           "project's rule 18 (no frequentist inference supports a substantive claim). The simulation "
           "grid above is a simulated likelihood, so the reportable quantity is a POSTERIOR over the "
           "injected closure strength, computed by analyses/53_closure_strength_posterior.py and "
           "written to output/findings/closure_strength_posterior.md. It is what Figure 5's right "
           "panel now draws. The power numbers this script still computes internally are retained "
-          "only to build that grid and must not be quoted."]
+          "only to build that grid and must not be quoted.")]
     OUT.write_text("\n".join(L), encoding="utf-8")
 
     # ---- figure ----

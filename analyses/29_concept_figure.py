@@ -33,15 +33,18 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import pandas as pd  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+import pandas as pd
+
 demo = importlib.import_module("25_drift_vs_groups_demo")
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 r21 = importlib.import_module("21_signal_recovery")
-from mls_emergence.signatures.sampling import rarefy  # noqa: E402
+from mls_emergence.signatures.sampling import rarefy
+
 res17 = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "figures" / "fig3_concept.png"

@@ -2,8 +2,12 @@ import numpy as np
 import pytest
 
 from mls_emergence.inference import (
-    fst_from_frequencies, sample_fst, fst_summary,
-    gini_simpson_summary, gini_simpson_posterior, bayes_factor_structure,
+    bayes_factor_structure,
+    fst_from_frequencies,
+    fst_summary,
+    gini_simpson_posterior,
+    gini_simpson_summary,
+    sample_fst,
 )
 
 

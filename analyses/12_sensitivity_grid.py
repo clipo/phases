@@ -21,17 +21,19 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from mls_emergence.dataio.coords import read_assemblage_xy
-from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 from scipy.stats import spearmanr
+
+from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
 
 DATA = ROOT / "data" / "raw"
 OUT = ROOT / "output" / "sensitivity_grid.md"
@@ -108,9 +110,9 @@ def main():
     lat = coords_full["Latitude"]
 
     L = ["# Sensitivity of the no-convergence verdict (forking-paths grid)", "",
-         "For each cell: ordinal Spearman trend of neutral departure / cultural F_ST / "
+         ("For each cell: ordinal Spearman trend of neutral departure / cultural F_ST / "
          "spatial boundary along the CA axis, and the CONVERGENCE verdict (all three "
-         f"rising, rho > +{RISE:.1f}). k = number of spatial clusters (auto = silhouette).", "",
+         f"rising, rho > +{RISE:.1f}). k = number of spatial clusters (auto = silhouette)."), "",
          "| lat cut | n | bins | k | neutral | F_ST | spatial | converges? |",
          "|---|---|---|---|---|---|---|---|"]
     any_conv = False
@@ -124,11 +126,11 @@ def main():
                 kf = None if kspec == "auto" else kspec
                 try:
                     panel, kused = per_bin_signatures(c_sub, co_sub, nb, k_fixed=kf)
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001  the failure is recorded in the table by class name
                     L.append(f"| {latcut} | {n} | {nb} | {kspec} | err | err | err | {e.__class__.__name__} |")
                     continue
                 rn, rf, rs = trend(panel["neutral"]), trend(panel["fst"]), trend(panel["spatial"])
-                conv = all((x is not np.nan and np.isfinite(x) and x > RISE) for x in (rn, rf, rs))
+                conv = all((np.isfinite(x) and x > RISE) for x in (rn, rf, rs))
                 any_conv = any_conv or conv
                 kshow = f"{kused}" if kspec == "auto" else f"{kspec}"
                 # An undefined trend is a finding about the design (too few bins
@@ -144,13 +146,13 @@ def main():
     n_cells = sum(1 for l in L if l.startswith("| ") and l.rstrip().endswith(("| YES |", "| no |")))
     neu = [float(l.split("|")[5]) for l in L if l.startswith("| ") and l.split("|")[5].strip()[:1] in "+-"]
     L += ["",
-          f"**Convergence (all three continuous signatures rising, rho > {RISE:+.1f}) appears in "
+          (f"**Convergence (all three continuous signatures rising, rho > {RISE:+.1f}) appears in "
           f"{n_conv} of {n_cells} cells.** Neutral-departure trends run {min(neu):+.2f} to "
           f"{max(neu):+.2f} across cells. These are raw, unrarefied trends: assemblage size rises "
           "along the seriation, and the record-matched recovery experiment shows only cultural "
           "F_ST is interpretable at this resolution, so a cell that converges here is not "
           "evidence of closure. The grid shows how far raw trends move with the analyst's "
-          "choices of latitude cut, bin count and cluster number."]
+          "choices of latitude cut, bin count and cluster number.")]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")
     print("\n".join(L))

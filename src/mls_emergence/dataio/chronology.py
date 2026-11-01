@@ -1,5 +1,14 @@
+"""Period assignments from the LMV settlement compilation.
+
+Provides ``load_period_assignments``, which reads the two UTM-zone sheets of the
+compiled site table (``LMVData.xlsx``) and keeps the identity and period
+columns. Exercised by ``tests/dataio/test_chronology.py``; the analyses take
+period through ``dataio.settlement.join_pfg_to_lmv`` instead.
+"""
 from __future__ import annotations
+
 from pathlib import Path
+
 import pandas as pd
 
 PERIOD_SHEETS = ["Locations-Zone-15", "Locations-Zone-16"]

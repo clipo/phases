@@ -71,11 +71,11 @@ def main() -> None:
     L = [
         "# River-network geometry for the basin assemblages",
         "",
-        f"Produced by `analyses/61_river_network_geometry.py`. "
-        f"{n} assemblages, {int(ok.sum())} pairs.",
+        (f"Produced by `analyses/61_river_network_geometry.py`. "
+        f"{n} assemblages, {int(ok.sum())} pairs."),
         "",
-        "The along-waterway metric used by the copying kernel in "
-        "`33_time_aware_emergence.py` and `34_emergence_robustness.py`.",
+        ("The along-waterway metric used by the copying kernel in "
+        "`33_time_aware_emergence.py` and `34_emergence_robustness.py`."),
         "",
         "| quantity | value |",
         "|---|---|",
@@ -90,14 +90,14 @@ def main() -> None:
         "",
         "## Reading",
         "",
-        "The three detour summaries differ because the per-pair ratio is "
+        ("The three detour summaries differ because the per-pair ratio is "
         "right-skewed: a pair that is close in a straight line but must route "
         "around a meander carries a very large ratio and pulls the mean above "
         "the median. Quoting an unnamed 'average' is therefore ambiguous at the "
-        "0.7 level here, which is why the supplement names the summary it uses.",
+        "0.7 level here, which is why the supplement names the summary it uses."),
         "",
-        "None of these figures enters a result. The simulations consume the "
-        "distance matrix itself, never a summary of it.",
+        ("None of these figures enters a result. The simulations consume the "
+        "distance matrix itself, never a summary of it."),
         "",
     ]
     # Which distance does the pottery follow? Added 2026-09-21. The supplement
@@ -134,14 +134,14 @@ def main() -> None:
         f"| river, straight-line held fixed | {partial(cer, rr, gg):.3f} |",
         f"| straight-line, river held fixed | {partial(cer, gg, rr):.3f} |",
         "",
-        f"The two metrics correlate at {spearmanr(rr, gg).statistic:.3f}. If the pottery "
-        "followed the waterways, the river",
-        "metric would carry information the straight-line one lacks. Read the third row "
-        "for that. A null",
-        "there does not show that waterways were unimportant: the network is MODERN "
-        "hydrography, and the",
-        "St. Francis, Tyronza and Mississippi have all moved since these sites were "
-        "occupied, so the metric",
+        (f"The two metrics correlate at {spearmanr(rr, gg).statistic:.3f}. If the pottery "
+        "followed the waterways, the river"),
+        ("metric would carry information the straight-line one lacks. Read the third row "
+        "for that. A null"),
+        ("there does not show that waterways were unimportant: the network is MODERN "
+        "hydrography, and the"),
+        ("St. Francis, Tyronza and Mississippi have all moved since these sites were "
+        "occupied, so the metric"),
         "may be measuring the wrong rivers.",
     ]
     # The comparison that matters is BETWEEN phases (author, 2026-09-21). Within
@@ -153,8 +153,8 @@ def main() -> None:
     lab = np.array(ph.assign_primary_phases([str(i) for i in counts.index], coords)[0])
     same = (lab[:, None] == lab[None, :])[iu][ok]
     L += ["", "### Within phases and between them", "",
-          "| pairs | n | straight-line | river | river, straight-line held fixed | "
-          "straight-line, river held fixed |", "|---|---|---|---|---|---|"]
+          ("| pairs | n | straight-line | river | river, straight-line held fixed | "
+          "straight-line, river held fixed |"), "|---|---|---|---|---|---|"]
     for label, sel in (("within a phase", same), ("between phases", ~same)):
         L.append(f"| {label} | {int(sel.sum())} | {spearmanr(cer[sel], gg[sel]).statistic:.3f} | "
                  f"{spearmanr(cer[sel], rr[sel]).statistic:.3f} | "
@@ -177,23 +177,23 @@ def main() -> None:
     for nm, cd_, g_, r_ in rows:
         L.append(f"| {nm} | {cd_:.3f} | {g_:.1f} | {r_:.1f} | {r_ / g_:.2f} |")
     cds = [t[1] for t in rows]
-    L += ["", f"Across the {len(rows)} phase pairs ceramic distance rank-correlates "
+    L += ["", (f"Across the {len(rows)} phase pairs ceramic distance rank-correlates "
               f"{spearmanr(cds, [t[2] for t in rows]).statistic:.3f} with straight-line "
               f"distance and {spearmanr(cds, [t[3] for t in rows]).statistic:.3f} with river "
-              "distance. Ten pairs is indicative, no more.", "",
-          "The largest detours join phases on the St. Francis to phases on the Mississippi, "
-          "which the network can",
-          "connect only through their confluence far to the south. Those distances describe "
-          "the routing of the modern",
+              "distance. Ten pairs is indicative, no more."), "",
+          ("The largest detours join phases on the St. Francis to phases on the Mississippi, "
+          "which the network can"),
+          ("connect only through their confluence far to the south. Those distances describe "
+          "the routing of the modern"),
           "network, and they are what the drift model's copying kernel uses.",
     ]
     L += [
         "",
         "## The grain of the record",
         "",
-        f"Nearest-neighbour spacing of the {n} assemblages: median {np.median(nn):.1f} km, "
+        (f"Nearest-neighbour spacing of the {n} assemblages: median {np.median(nn):.1f} km, "
         f"quartiles {np.percentile(nn, 25):.1f} to {np.percentile(nn, 75):.1f} km. No "
-        "spatial statistic here",
+        "spatial statistic here"),
         "can resolve structure much finer than that.",
     ]
 

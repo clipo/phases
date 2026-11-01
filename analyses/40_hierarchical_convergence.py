@@ -43,8 +43,8 @@ OUT_MD = ROOT / "output" / "hierarchical_convergence.md"
 OUT_NC = ROOT / "output" / "hierarchical_convergence.nc"
 PANEL_SIGS = ["neutral_departure", "fst", "spatial_boundary"]
 
-FULL = dict(draws=2000, tune=2000, chains=4, n_boot=800)
-FAST = dict(draws=300, tune=300, chains=2, n_boot=80)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4, "n_boot": 800}
+FAST = {"draws": 300, "tune": 300, "chains": 2, "n_boot": 80}
 
 
 def _zstd(x):
@@ -114,7 +114,7 @@ def main(fast=False):
     import matplotlib.pyplot as plt
     from figstyle import OI_BLUE, OI_VERMIL, save
 
-    from mls_emergence.inference import sample_convergence, convergence_summary
+    from mls_emergence.inference import convergence_summary, sample_convergence
 
     a07 = importlib.import_module("07_refined_empirical")
 
@@ -163,15 +163,15 @@ def main(fast=False):
 
     sig_names = labels + ["seriation"]
     L = ["# Hierarchical Bayesian convergence posterior", "",
-         f"Four emergence slopes (3 CA-panel signatures + seriation fragmentation), "
+         (f"Four emergence slopes (3 CA-panel signatures + seriation fragmentation), "
          f"partial pooling, measurement-error likelihood. {'FAST' if fast else 'full'} "
-         f"config: {cfg['draws']} draws x {cfg['chains']} chains.", "",
+         f"config: {cfg['draws']} draws x {cfg['chains']} chains."), "",
          "## Convergence", "",
          f"- **P(all four slopes > 0) = {s['p_convergence']:.3f}**.",
-         f"- Convergence-score slope mean {s['cscore_slope_mean']:+.3f}, "
-         f"P(>0) = {s['cscore_slope_p_pos']:.3f}.",
-         f"- Shared emergence slope mu: mean {s['mu_mean']:+.3f}, "
-         f"P(>0) = {s['mu_p_pos']:.3f}.", "",
+         (f"- Convergence-score slope mean {s['cscore_slope_mean']:+.3f}, "
+         f"P(>0) = {s['cscore_slope_p_pos']:.3f}."),
+         (f"- Shared emergence slope mu: mean {s['mu_mean']:+.3f}, "
+         f"P(>0) = {s['mu_p_pos']:.3f}."), "",
          "## Per-signature slopes (emergence-oriented, standardized)", "",
          "| signature | posterior mean | 95% interval | P(>0) |",
          "|---|---|---|---|"]
@@ -180,8 +180,8 @@ def main(fast=False):
                  f"[{s['b_hdi95'][i][0]:+.3f}, {s['b_hdi95'][i][1]:+.3f}] | "
                  f"{s['b_p_pos'][i]:.3f} |")
     L += ["", "## MCMC diagnostics", "",
-          f"- max R-hat = {rhat:.4f} (want < 1.01); min ESS = {ess:.0f}; "
-          f"divergences = {ndiv}.", ""]
+          (f"- max R-hat = {rhat:.4f} (want < 1.01); min ESS = {ess:.0f}; "
+          f"divergences = {ndiv}."), ""]
 
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

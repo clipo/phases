@@ -7,7 +7,7 @@ achieves is a property of the criterion, not of the harness.
 """
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 import numpy as np
 import pandas as pd

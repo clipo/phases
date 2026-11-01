@@ -54,6 +54,11 @@ WRITE_FUNCS = {"save", "save_all", "savefig", "savetxt", "savez"}
 TRACKED = ("output/", "figures/", "data/processed/", "data/stan/")
 # Figure helpers take a bare stem and write four sibling formats.
 FIG_HELPERS = {"save", "save_all"}
+# Methods whose receiver IS the path (Path.write_text). For every other
+# attribute write (frame.to_csv, fig.savefig) the receiver is an object, and
+# trying it as the path credited a frame's to_csv with the file the frame was
+# READ from (found 2026-10-19; tests/test_build_manifest.py).
+RECEIVER_IS_PATH = {"write_text", "write_bytes"}
 
 
 
@@ -136,6 +141,22 @@ def python_outputs(path: Path) -> tuple[set[str], set[str]]:
 
     outs: set[str] = set()
     deps: set[str] = set()
+    # Declared template outputs (rule 15, 2026-10-19). A script whose output
+    # names come from command-line arguments writes nothing this pass can
+    # resolve; it declares its artifact families in MANIFEST_OUTPUTS as
+    # repo-relative templates ("output/x/table_{generator}.csv"), which are
+    # listed as written, braces and all. A declared path outside the tracked
+    # directories is an error rather than a silent drop.
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name) \
+                and node.targets[0].id == "MANIFEST_OUTPUTS":
+            if not isinstance(node.value, (ast.List, ast.Tuple)) or not all(
+                    isinstance(e, ast.Constant) and isinstance(e.value, str) for e in node.value.elts):
+                raise SystemExit(f"{path}: MANIFEST_OUTPUTS must be a list of string templates")
+            for e in node.value.elts:
+                if not e.value.startswith(TRACKED):
+                    raise SystemExit(f"{path}: declared output {e.value!r} is outside the tracked directories {TRACKED}")
+                outs.add(e.value)
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call) or node in dead:
             continue
@@ -156,10 +177,10 @@ def python_outputs(path: Path) -> tuple[set[str], set[str]]:
 
         # The path is either the receiver (path.write_text(...)) or an argument.
         cands: list[ast.AST] = list(node.args)
-        if isinstance(fn, ast.Attribute) and name not in FIG_HELPERS:
-            # path.write_text(...) -- the receiver IS the path. For the figure
-            # helpers the receiver is the module (mf.save_all), so trying it
-            # first would resolve to nothing and mask the real argument.
+        if isinstance(fn, ast.Attribute) and name in RECEIVER_IS_PATH:
+            # path.write_text(...) -- the receiver IS the path. For every other
+            # method the receiver is a frame, a figure or a module, never the
+            # path, so it is not tried.
             cands.insert(0, fn.value)
         for c in cands:
             v = _literal_join(c, syms)
@@ -176,9 +197,12 @@ def python_outputs(path: Path) -> tuple[set[str], set[str]]:
     return outs, deps
 
 
-R_WRITE = re.compile(r'(?:writeLines|saveRDS|ggsave|write\.csv)\s*\([^;]*?'
-                     r'here\(([^)]*)\)', re.S)
+R_VERBS = r'(?:writeLines|saveRDS|ggsave|write\.csv|write_json)'
+R_WRITE = re.compile(R_VERBS + r'\s*\([^;]*?here\(([^)]*)\)', re.DOTALL)
 R_ASSIGN = re.compile(r'(\w+)\s*<-\s*here\(([^)]*)\)')
+# write_json(x, file.path(OUTD, "name.json")) with OUTD <- here(...): the directory variable plus one literal name
+# (validate_a1.R and a1_prior_check.R; found missing by the whole-branch review of 2026-10-19).
+R_FILEPATH = re.compile(R_VERBS + r'\s*\([^;]*?file\.path\(\s*(\w+)\s*,\s*"([^"]+)"\s*\)', re.DOTALL)
 
 
 def r_outputs(path: Path) -> set[str]:
@@ -187,8 +211,12 @@ def r_outputs(path: Path) -> set[str]:
     named = {m.group(1): m.group(2) for m in R_ASSIGN.finditer(t)}
     chains = [m.group(1) for m in R_WRITE.finditer(t)]
     for var, chain in named.items():
-        if re.search(rf'(?:writeLines|saveRDS|ggsave)\s*\([^;]*\b{var}\b', t):
+        if re.search(R_VERBS + rf'\s*\([^;]*\b{var}\b(?!\s*,)', t) and not re.search(rf'file\.path\(\s*{var}\s*,', t):
             chains.append(chain)
+    for m in R_FILEPATH.finditer(t):
+        var, name = m.group(1), m.group(2)
+        if var in named:
+            chains.append(named[var] + f', "{name}"')
     for chain in chains:
         segs = re.findall(r'"([^"]+)"', chain)
         if segs:
@@ -227,12 +255,12 @@ def order(rows: dict[str, dict]) -> tuple[list[str], list[tuple[str, str]]]:
     while remaining:
         ready = sorted(k for k, d in remaining.items() if not (d - seen))
         if not ready:  # a cycle: take the lowest-numbered and note it
-            ready = [sorted(remaining)[0]]
+            ready = [min(remaining)]
         for k in ready:
             done.append(k)
             seen.add(k)
             remaining.pop(k)
-    return done, sorted(set(tuple(sorted(c)) for c in cycles))
+    return done, sorted({tuple(sorted(c)) for c in cycles})
 
 
 def render(rows: dict[str, dict]) -> str:
@@ -263,9 +291,9 @@ def render(rows: dict[str, dict]) -> str:
         "",
         "Which script produces which artifact, and the order they run in.",
         "",
-        "**Generated. Do not edit by hand.** Written by "
+        ("**Generated. Do not edit by hand.** Written by "
         "`scripts/build_manifest.py`, which parses the scripts rather than "
-        "trusting a list. Regenerate after adding or renaming any analysis:",
+        "trusting a list. Regenerate after adding or renaming any analysis:"),
         "",
         "```",
         "    .venv/bin/python scripts/build_manifest.py",
@@ -274,34 +302,38 @@ def render(rows: dict[str, dict]) -> str:
         "",
         f"{len(rows)} scripts produce {n_art} tracked artifacts.",
         "",
-        "Writes are detected from the call that performs them "
+        ("Writes are detected from the call that performs them "
         "(`write_text`, `to_csv`, `savefig`, `save_all`, `savez`, `writeLines`, "
-        "`saveRDS`), with paths resolved through each script's own module-level "
-        "constants. Reads are deliberately NOT counted: an earlier regex "
+        "`saveRDS`, `write_json`), with paths resolved through each script's own "
+        "module-level constants. A script whose output names come from its "
+        "arguments declares its artifact families in a `MANIFEST_OUTPUTS` list of "
+        "templates, listed here with their `{placeholders}`; the commands that fill "
+        "them are in that script's docstring and in each findings file's header. "
+        "Reads are deliberately NOT counted: an earlier regex "
         "version credited `21_signal_recovery.py` with producing "
         "`output/closure_posterior.npz`, which it only consumes and `53` "
-        "writes.",
+        "writes."),
         "",
-        "A figure is listed once, under whichever extension the script names. "
+        ("A figure is listed once, under whichever extension the script names. "
         "`figstyle.save_all` writes four siblings from one call (`.png`, "
         "`.svg`, `.pdf`, `.tiff`), and only the `.svg` is tracked in git; "
         "`figures/*.png` is ignored, so the PNGs a manuscript build consumes "
-        "are derived artifacts that must be regenerated rather than cloned.",
+        "are derived artifacts that must be regenerated rather than cloned."),
         "",
         "## Order",
         "",
-        "Topologically sorted by sibling import: a script may be run at any "
+        ("Topologically sorted by sibling import: a script may be run at any "
         "point after everything above it. The order is derived from the "
         "`importlib.import_module` edges between scripts, and verified to have "
-        "no violations apart from the mutual pair noted below.",
+        "no violations apart from the mutual pair noted below."),
         "",
-        "**What this order is not.** It has not been executed as a single "
+        ("**What this order is not.** It has not been executed as a single "
         "top-to-bottom pass, and several entries take hours (the ABC-SMC fits, "
         "the 500-realisation drift simulations, the Stan GP fits). Import edges "
         "also do not capture every dependency: a script that reads an artifact "
         "another wrote, without importing it, is ordered correctly here only "
         "because the numbering already reflects that. Treat this as the "
-        "dependency record rule 15 asks for, not as a proven build script.",
+        "dependency record rule 15 asks for, not as a proven build script."),
         "",
     ]
     if cycles:
@@ -324,23 +356,23 @@ def render(rows: dict[str, dict]) -> str:
 
     if contested:
         L += ["", "## Written by more than one script", "",
-              "Not necessarily wrong (a figure may be produced by the analysis "
+              ("Not necessarily wrong (a figure may be produced by the analysis "
               "that owns it and by a figure driver), but each is a place where "
               "running the pipeline in a different order gives a different "
-              "file, so the owner should be the later entry in the order above.",
+              "file, so the owner should be the later entry in the order above."),
               ""]
         for o, ps in sorted(contested.items()):
             L.append(f"- `{o}`: " + ", ".join(f"`{p}`" for p in sorted(ps)))
 
     L += ["", "## Not covered here", "",
-          "- `analyses/figstyle.py`, `make_map.py` are helpers imported by "
-          "other scripts rather than entry points.",
-          "- `analyses/00_setup/*.R` set up and record the R toolchain; they "
-          "produce no analysis artifact.",
-          "- Scripts that only print are omitted, since they leave nothing to "
-          "regenerate.",
-          "- Inputs under `data/raw/` and `data/Shapefiles/` are tracked "
-          "sources, not derived artifacts; see `data/DATA_INVENTORY.md`.",
+          ("- `analyses/figstyle.py`, `make_map.py` are helpers imported by "
+          "other scripts rather than entry points."),
+          ("- `analyses/00_setup/*.R` set up and record the R toolchain; they "
+          "produce no analysis artifact."),
+          ("- Scripts that only print are omitted, since they leave nothing to "
+          "regenerate."),
+          ("- Inputs under `data/raw/` and `data/Shapefiles/` are tracked "
+          "sources, not derived artifacts; see `data/DATA_INVENTORY.md`."),
           ""]
     return "\n".join(L)
 
@@ -356,7 +388,7 @@ def main() -> int:
             print("MANIFEST.md is stale. Regenerate:")
             print("    .venv/bin/python scripts/build_manifest.py")
             r = subprocess.run(["diff", "-u", str(MANIFEST), "-"],
-                               input=text, text=True, capture_output=True)
+                               input=text, text=True, capture_output=True, check=False)
             print(r.stdout[:4000])
             return 1
         print(f"MANIFEST.md is current ({len(rows)} scripts).")

@@ -84,8 +84,9 @@ def main() -> int:
     mm = importlib.import_module("make_map")
     ph = importlib.import_module("36_canonical_phase_map")
     bam = importlib.import_module("build_analysis_matrix")
-    from mls_emergence.dataio.settlement import load_lmv
     from pyproj import Transformer
+
+    from mls_emergence.dataio.settlement import load_lmv
 
     counts, coords = mf._load_curated()
     names28 = [str(i) for i in counts.index]
@@ -156,18 +157,18 @@ def main() -> int:
 
     cur = {p: int((lab28 == p).sum()) for p in PHASES}
     L = ["# Which existing collections would a lower sherd minimum admit?", "",
-         "Produced by `analyses/98_small_collections.py`. PFGData.xlsx holds "
+         ("Produced by `analyses/98_small_collections.py`. PFGData.xlsx holds "
          f"{n_rows} collection rows with a PFG site number, {n_sites} distinct site numbers "
          f"(each takes its largest row, since some rows overlap); {n_no_coord} have no coordinate in the "
          f"settlement compilation; {n_out_of_scheme} of the rest lie in or nearest the Nodena area or "
          "outside the frame of Phillips's figure. Of the sites in the Kent, Parkin and Walls areas, "
          f"{int((in_scheme & (P['analyzed_as'] != '')).sum())} are analyzed assemblages, recognized by site "
          f"number; {int((in_scheme & (P['analyzed_as'] == '') & (P['decorated'] == 0)).sum())} "
-         f"hold no sherd of the ten classes. **{len(cand)} collections remain as candidates.**", "",
+         f"hold no sherd of the ten classes. **{len(cand)} collections remain as candidates.**"), "",
          f"The analysis now holds {sum(cur.values())} assemblages (" + ", ".join(f"{p} {n}" for p, n in cur.items())
          + f") at a minimum of {CURRENT_MINIMUM} decorated sherds.", "",
-         "| minimum decorated sherds | collections added | Kent / Parkin / Walls added | assemblages in all | "
-         "added within 10 km of an analyzed assemblage of another phase | median decorated sherds of those added |",
+         ("| minimum decorated sherds | collections added | Kent / Parkin / Walls added | assemblages in all | "
+         "added within 10 km of an analyzed assemblage of another phase | median decorated sherds of those added |"),
          "|---|---|---|---|---|---|"]
     for mn in MINIMA:
         sub = cand[cand["decorated"] >= mn]
@@ -175,23 +176,23 @@ def main() -> int:
                  + f" | {sum(cur.values()) + len(sub)} | {int((sub['km_to_other_phase'] <= 10).sum())} | "
                  + (f"{sub['decorated'].median():.0f}" if len(sub) else "-") + " |")
     L += ["",
-          f"A candidate with {CURRENT_MINIMUM} or more decorated sherds was left out because the analysis matrix "
-          "was built from a list of named assemblages, not because of its count.", "",
+          (f"A candidate with {CURRENT_MINIMUM} or more decorated sherds was left out because the analysis matrix "
+          "was built from a list of named assemblages, not because of its count."), "",
           "## The candidates", "",
-          "| site | name | phase | decorated sherds | plainware sherds | km to nearest analyzed assemblage | "
-          "km to nearest analyzed assemblage of another phase |",
+          ("| site | name | phase | decorated sherds | plainware sherds | km to nearest analyzed assemblage | "
+          "km to nearest analyzed assemblage of another phase |"),
           "|---|---|---|---|---|---|---|"]
     for r in cand.itertuples(index=False):
         L.append(f"| {r.number} | {r.name}{' (within 1 km of an analyzed assemblage)' if r.flag_close else ''} | "
                  f"{r.phase}{' (nearest area)' if r.by_nearest else ''} | "
                  f"{int(r.decorated)} | {int(r.plain)} | {r.km_to_analyzed:.1f} | {r.km_to_other_phase:.1f} |")
     L += ["", "## Reading", "",
-          "Counts are of the ten analysis classes only. Plainware counts (Neeley's Ferry Plain and Bell Plain) "
+          ("Counts are of the ten analysis classes only. Plainware counts (Neeley's Ferry Plain and Bell Plain) "
           "are listed because most collections hold far more plain than decorated sherds; they are paste and "
-          "temper categories, not decoration, and are not part of the analysis.", "",
-          "Phase is by position in Phillips's areas, as for the analyzed assemblages. The coordinates are the "
+          "temper categories, not decoration, and are not part of the analysis."), "",
+          ("Phase is by position in Phillips's areas, as for the analyzed assemblages. The coordinates are the "
           "settlement compilation's, which carry the PFG site table's precision and the corrections recorded "
-          "there; none of these sites has been checked individually as the analyzed ones were.", ""]
+          "there; none of these sites has been checked individually as the analyzed ones were."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[:14]))
     print(f"wrote {OUT_MD} and {OUT_CSV}")

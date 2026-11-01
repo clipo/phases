@@ -104,7 +104,7 @@ def main() -> int:
         plist = sorted(set(labs))
         pidx = np.array([plist.index(l) for l in labs])
         k = len(plist)
-        r = dict(sizes={pn: int((labs == pn).sum()) for pn in plist}, n_direct=int(direct.sum()))
+        r = {"sizes": {pn: int((labs == pn).sum()) for pn in plist}, "n_direct": int(direct.sum())}
         r["basin"] = t86.compare(m, pidx, pts, rev, t74, args.draws, args.alt, 86000, dist=data["d"])
         parkin = np.array([1 if l == "Parkin" else 0 for l in labs])
         r["parkin"] = t86.compare(m, parkin, pts, rev, t74, args.draws, args.alt, 86200, dist=data["d"])
@@ -164,8 +164,8 @@ def main() -> int:
           "Assigned by nearness under Phillips: "
           + "; ".join(f"{names[i]} ({lb[i]}, {km[i]:.1f} km outside the line)" for i in np.where(db)[0]) + ".",
           "",
-          f"## Do the phase lines separate the pottery better than other divisions? ({args.draws} posterior draws, "
-          f"{args.alt} alternatives of each kind)", "",
+          (f"## Do the phase lines separate the pottery better than other divisions? ({args.draws} posterior draws, "
+          f"{args.alt} alternatives of each kind)"), "",
           f"| three phases | {keys[0]} | {keys[1]} |", "|---|---|---|",
           row("plug-in F_ST", lambda r: f"{r['basin']['plug_in']:.4f}"),
           row("F_ST under the scheme, posterior median (95% CrI)", lambda r: q(r["basin"]["phase"])),
@@ -188,11 +188,11 @@ def main() -> int:
           row("P(larger boundary excess than random centers)", lambda r: f"{r['parkin']['be_p_alt']:.2f}"),
           row("P(larger boundary excess than compact)", lambda r: f"{r['parkin']['be_p_opt']:.2f}"),
           "",
-          f"## What recovers the scheme? (adjusted Rand index over the directly assigned assemblages, k-means, "
-          f"{args.seeds} starts, chi-square composition; median, with the range over starts)", "",
+          (f"## What recovers the scheme? (adjusted Rand index over the directly assigned assemblages, k-means, "
+          f"{args.seeds} starts, chi-square composition; median, with the range over starts)"), "",
           f"| weight on composition | {keys[0]} | {keys[1]} |", "|---|---|---|"]
     for w in weights:
-        L.append(row(wname.get(w, f"{w:g}"), lambda r: "{:.3f} ({:.3f} to {:.3f})".format(*r["recovery"][w])))
+        L.append(row(wname.get(w, f"{w:g}"), lambda r, w=w: "{:.3f} ({:.3f} to {:.3f})".format(*r["recovery"][w])))
     L += [row(f"same-size divisions around random centers (median of {args.random})",
               lambda r: f"{r['random']:.3f}"), ""]
     OUT_MD.write_text("\n".join(L))

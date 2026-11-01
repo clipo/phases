@@ -35,13 +35,15 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import pandas as pd  # noqa: E402
-import geopandas as gpd  # noqa: E402
-import make_figures as mf  # noqa: E402  (house style + DECORATED_TYPES)
-import make_map as mm  # noqa: E402  (river basemap + river-network distance)
+import geopandas as gpd
+import make_figures as mf
+import make_map as mm
+import matplotlib.pyplot as plt
+import pandas as pd
+
 m33 = importlib.import_module("33_time_aware_emergence")
 res17 = importlib.import_module("17_basin_results")
 m35 = importlib.import_module("35_basin_pullout")
@@ -167,25 +169,25 @@ def main():
     L = [
         f"# Phase-like groups under drift across the lower Mississippi Valley (n = {n})",
         "",
-        f"Forward neutral drift on the river-network geography of all {n} Mainfort-PFG "
+        (f"Forward neutral drift on the river-network geography of all {n} Mainfort-PFG "
         f"decorated LMV assemblages, no boundary imposed, {N_CONS} realizations. Groups "
-        f"are greedy-modularity communities on the Brainerd-Robinson similarity graph.",
+        f"are greedy-modularity communities on the Brainerd-Robinson similarity graph."),
         "",
-        f"- Number of groups, contemporaneous (pure-space) sampling: mean {nc_co.mean():.2f} "
-        f"(range {int(nc_co.min())}-{int(nc_co.max())}).",
-        f"- Number of groups, time-transgressive sampling: mean {nc_tt.mean():.2f} "
+        (f"- Number of groups, contemporaneous (pure-space) sampling: mean {nc_co.mean():.2f} "
+        f"(range {int(nc_co.min())}-{int(nc_co.max())})."),
+        (f"- Number of groups, time-transgressive sampling: mean {nc_tt.mean():.2f} "
         f"(range {int(nc_tt.min())}-{int(nc_tt.max())}); the early-to-late repertoire "
-        f"turnover collapses the count toward two time-defined groups.",
-        f"- Named culture-historical phases in this set: {N_NAMED}. Observed data cluster "
-        f"into {obs_ncom} groups.",
-        f"- Between-group cultural F_ST: observed {obs_fst:.3f}; contemporaneous drift "
+        f"turnover collapses the count toward two time-defined groups."),
+        (f"- Named culture-historical phases in this set: {N_NAMED}. Observed data cluster "
+        f"into {obs_ncom} groups."),
+        (f"- Between-group cultural F_ST: observed {obs_fst:.3f}; contemporaneous drift "
         f"mean {fco.mean():.3f} (95% {np.percentile(fco, 2.5):.3f} to "
-        f"{np.percentile(fco, 97.5):.3f}); time-transgressive drift mean {ftt.mean():.3f}.",
+        f"{np.percentile(fco, 97.5):.3f}); time-transgressive drift mean {ftt.mean():.3f}."),
         "",
-        "Interpretation: drift structured by geography already produces a few spatially "
+        ("Interpretation: drift structured by geography already produces a few spatially "
         "coherent, phase-like groups, fewer than the seven named phases the regional "
         "scheme draws, at about the observed level of differentiation. The named phases "
-        "subdivide the valley more finely than the drift structure supports.",
+        "subdivide the valley more finely than the drift structure supports."),
         "",
         f"Figure: {OUT_FIG.relative_to(ROOT)}",
     ]

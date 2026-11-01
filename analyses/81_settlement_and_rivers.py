@@ -59,11 +59,12 @@ def main() -> int:
     from pyproj import Transformer
     from shapely import STRtree
     from shapely.geometry import Point
+
     from mls_emergence.dataio.settlement import load_lmv
     mf = importlib.import_module("make_figures")
     mm = importlib.import_module("make_map")
 
-    counts, coords = mf._load_curated()
+    _counts, coords = mf._load_curated()
     xy = coords.to_numpy(float)
     E, N = Transformer.from_crs("EPSG:4326", mm.UTM15N, always_xy=True).transform(
         xy[:, 1], xy[:, 0])
@@ -102,15 +103,15 @@ def main() -> int:
         return float(D.min(1).mean() / (0.5 / np.sqrt(len(x) / area)))
 
     L = ["# What do the rivers do: carry interaction, or decide where people lived?", "",
-         f"{len(sx)} late-period sites (period A or B component) in the mapped area; "
-         f"{N_RANDOM:,} uniformly random points in the same area for comparison.", "",
+         (f"{len(sx)} late-period sites (period A or B component) in the mapped area; "
+         f"{N_RANDOM:,} uniformly random points in the same area for comparison."), "",
          "## 1. Do sites hug the rivers?", "",
          "| channels | sites, median km (quartiles) | random points, median km (quartiles) |",
          "|---|---|---|"]
     ce_rows = []
     for label, geoms in (("every mapped channel", every), ("major rivers only", major)):
         tree = STRtree(geoms)
-        dist = lambda x, y: np.array([Point(a, b).distance(geoms[tree.nearest(Point(a, b))])
+        dist = lambda x, y, geoms=geoms, tree=tree: np.array([Point(a, b).distance(geoms[tree.nearest(Point(a, b))])
                                       / 1000.0 for a, b in zip(x, y)])
         ds, dr = dist(sx, sy), dist(rx, ry)
         L.append(f"| {label} | **{np.median(ds):.2f}** ({np.percentile(ds, 25):.2f}-"
@@ -124,23 +125,23 @@ def main() -> int:
             sims.append(clark_evans(rx[idx], ry[idx]))
         ce_rows.append((label, np.median(sims), *np.percentile(sims, [2.5, 97.5])))
     L += ["", "## 2. Is that what makes settlement clumped?", "",
-          f"Clark-Evans ratio of the late-period sites: **{clark_evans(sx, sy):.2f}**; of the "
+          (f"Clark-Evans ratio of the late-period sites: **{clark_evans(sx, sy):.2f}**; of the "
           f"{len(E)} analysed assemblages: **{clark_evans(E, N):.2f}** "
-          "(1 is random, below 1 is clumped).", "",
-          "| random points placed at the sites' own distances from | Clark-Evans ratio, "
-          f"median of {args.sims} (2.5th-97.5th) |", "|---|---|"]
+          "(1 is random, below 1 is clumped)."), "",
+          ("| random points placed at the sites' own distances from | Clark-Evans ratio, "
+          f"median of {args.sims} (2.5th-97.5th) |"), "|---|---|"]
     for label, med, lo, hi in ce_rows:
         L.append(f"| {label} | {med:.2f} ({lo:.2f}-{hi:.2f}) |")
-    L += ["", "Settlement is tied to the rivers and it is clumped, but the first does not "
-              "produce the second:",
-          "points that hug the rivers exactly as closely as the sites do are close to "
-          "randomly spaced. The sites",
-          "concentrate on particular reaches. Many carry the names of oxbow lakes, which "
-          "suggests relict",
-          "meander belts rather than active channels, but no geomorphic layer is in hand "
-          "to test that.", "",
-          "The hydrography is modern. Channels have moved since these sites were "
-          "occupied, so distances to",
+    L += ["", ("Settlement is tied to the rivers and it is clumped, but the first does not "
+              "produce the second:"),
+          ("points that hug the rivers exactly as closely as the sites do are close to "
+          "randomly spaced. The sites"),
+          ("concentrate on particular reaches. Many carry the names of oxbow lakes, which "
+          "suggests relict"),
+          ("meander belts rather than active channels, but no geomorphic layer is in hand "
+          "to test that."), "",
+          ("The hydrography is modern. Channels have moved since these sites were "
+          "occupied, so distances to"),
           "channels are distances to where the water is now.", ""]
 
     # ---- 3. The same two questions with the small streams in.
@@ -157,19 +158,19 @@ def main() -> int:
     fine = fine[fine.intersects(_box(ext[0], ext[2], ext[1], ext[3]))]
     orders = sorted(int(o) for o in fine["ORD_FLOW"].unique())
     L += ["## 3. With the small streams in", "",
-          "Parts 1 and 2 rest on a 1:2,000,000 national layer and the major rivers. Here the same two "
+          ("Parts 1 and 2 rest on a 1:2,000,000 national layer and the major rivers. Here the same two "
           "measures use HydroRIVERS (Lehner and Grill 2013) with reaches added from the largest flow order "
           "to the smallest it holds. A lower order is a larger river; the discharge column is the smallest "
-          "long-term mean discharge among the reaches included.", "",
-          "| reaches included | channel length (km) | smallest mean discharge (m3/s) | sites, median km "
+          "long-term mean discharge among the reaches included."), "",
+          ("| reaches included | channel length (km) | smallest mean discharge (m3/s) | sites, median km "
           "(quartiles) | random points, median km (quartiles) | sites within 1 km | random points within 1 km "
-          f"| Clark-Evans of random points at the sites\' distances, median of {args.sims} (2.5th-97.5th) |",
+          f"| Clark-Evans of random points at the sites\' distances, median of {args.sims} (2.5th-97.5th) |"),
           "|---|---|---|---|---|---|---|---|"]
     for o in orders:
         sub = fine[fine["ORD_FLOW"] <= o]
         geoms = [g for g in sub.geometry if g is not None and not g.is_empty]
         tree = STRtree(geoms)
-        dist = lambda x, y: np.array([Point(a_, b_).distance(geoms[tree.nearest(Point(a_, b_))])
+        dist = lambda x, y, geoms=geoms, tree=tree: np.array([Point(a_, b_).distance(geoms[tree.nearest(Point(a_, b_))])
                                       / 1000.0 for a_, b_ in zip(x, y)])
         ds, dr = dist(sx, sy), dist(rx, ry)
         sims = []
@@ -185,11 +186,11 @@ def main() -> int:
                  f"{(dr <= 1).mean():.0%} | {np.median(sims):.2f} "
                  f"({np.percentile(sims, 2.5):.2f}-{np.percentile(sims, 97.5):.2f}) |")
     L += ["",
-          "HydroRIVERS is derived from a 15 arc-second elevation grid (about 500 m), so on flat alluvial "
+          ("HydroRIVERS is derived from a 15 arc-second elevation grid (about 500 m), so on flat alluvial "
           "ground its small reaches are routed flow paths rather than surveyed channels, and it holds no "
           "oxbow lakes, bayous or sloughs as such. It is also modern. The table says how the comparison "
           "changes as smaller streams are counted; it does not recover the water as it lay when the "
-          "sites were occupied.", ""]
+          "sites were occupied."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[4:]))
     return 0

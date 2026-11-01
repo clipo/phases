@@ -52,11 +52,11 @@ def main(reps):
             m = a47.sample_record(field, data["ranks"], totals, np.random.default_rng(SEED0 + 500000 + 1000 * i + s))
             f.append(a47.fst_by(m, part))
         f = np.asarray(f, float); f = f[np.isfinite(f)]
-        rows.append(dict(n_ind=int(r.n_ind), innovation=float(r.innovation), mixing=float(r.mixing),
-                         six_seed_median=float(r.fst_median), median=float(np.median(f)),
-                         lo=float(np.percentile(f, 2.5)), hi=float(np.percentile(f, 97.5)),
-                         covers_observed=bool(np.percentile(f, 2.5) <= obs <= np.percentile(f, 97.5)),
-                         share_reaching=float(np.mean(f >= obs)), n=int(len(f))))
+        rows.append({"n_ind": int(r.n_ind), "innovation": float(r.innovation), "mixing": float(r.mixing),
+                         "six_seed_median": float(r.fst_median), "median": float(np.median(f)),
+                         "lo": float(np.percentile(f, 2.5)), "hi": float(np.percentile(f, 97.5)),
+                         "covers_observed": bool(np.percentile(f, 2.5) <= obs <= np.percentile(f, 97.5)),
+                         "share_reaching": float(np.mean(f >= obs)), "n": len(f)})
         print(f"{i+1}/{len(matched)} n={r.n_ind:>5.0f} inn={r.innovation:.4f} mix={r.mixing:.3f} "
               f"six-seed {r.fst_median:.4f} -> {reps}-seed {np.median(f):.4f}", flush=True)
     df = pd.DataFrame(rows)
@@ -66,26 +66,26 @@ def main(reps):
     top5_six = set(df.sort_values("six_seed_median", ascending=False).head(5).index)
     top5_big = set(df.sort_values("median", ascending=False).head(5).index)
     L = ["# Is the cell most favorable to drift identifiable?", "",
-         f"Produced by `scripts/measure_calibration_stability.py`, {reps} fresh seeds per matched "
+         (f"Produced by `scripts/measure_calibration_stability.py`, {reps} fresh seeds per matched "
          f"cell (seed family {SEED0}), pooled-profile model, basin, {len(df)} diversity-matched cells "
          f"from `output/revision_2026_09/calibration.csv`. Partition F_ST is the statistic analysis 47 "
-         f"ranks cells by; observed {obs:.4f}.", "",
+         f"ranks cells by; observed {obs:.4f}."), "",
          "## Does the six-seed ranking survive?", "",
-         f"- Spearman rank correlation between the six-seed medians and the {reps}-seed medians across "
-         f"matched cells: **{rho:+.2f}**.",
-         f"- Six-seed winner: ({six_win.n_ind:.0f} learners, innovation {six_win.innovation}, mixing "
+         (f"- Spearman rank correlation between the six-seed medians and the {reps}-seed medians across "
+         f"matched cells: **{rho:+.2f}**."),
+         (f"- Six-seed winner: ({six_win.n_ind:.0f} learners, innovation {six_win.innovation}, mixing "
          f"{six_win.mixing}); six-seed median {six_win.six_seed_median:.4f}, {reps}-seed median "
-         f"**{six_win['median']:.4f}** [{six_win.lo:.4f}, {six_win.hi:.4f}].",
-         f"- {reps}-seed winner: ({big_win.n_ind:.0f} learners, innovation {big_win.innovation}, mixing "
-         f"{big_win.mixing}); median **{big_win['median']:.4f}** [{big_win.lo:.4f}, {big_win.hi:.4f}].",
+         f"**{six_win['median']:.4f}** [{six_win.lo:.4f}, {six_win.hi:.4f}]."),
+         (f"- {reps}-seed winner: ({big_win.n_ind:.0f} learners, innovation {big_win.innovation}, mixing "
+         f"{big_win.mixing}); median **{big_win['median']:.4f}** [{big_win.lo:.4f}, {big_win.hi:.4f}]."),
          f"- Overlap of the top five cells under the two rankings: {len(top5_six & top5_big)} of 5.", "",
          "## The envelope across matched cells", "",
-         f"- {reps}-seed medians run {df['median'].min():.4f} to {df['median'].max():.4f} "
-         f"(median of medians {df['median'].median():.4f}).",
-         f"- Cells whose 95 percent interval covers the observed {obs:.4f}: "
-         f"**{int(df.covers_observed.sum())} of {len(df)}**.",
-         f"- Share of realizations reaching the observed value, across cells: median "
-         f"{df.share_reaching.median():.1%}, max {df.share_reaching.max():.1%}.", "",
+         (f"- {reps}-seed medians run {df['median'].min():.4f} to {df['median'].max():.4f} "
+         f"(median of medians {df['median'].median():.4f})."),
+         (f"- Cells whose 95 percent interval covers the observed {obs:.4f}: "
+         f"**{int(df.covers_observed.sum())} of {len(df)}**."),
+         (f"- Share of realizations reaching the observed value, across cells: median "
+         f"{df.share_reaching.median():.1%}, max {df.share_reaching.max():.1%}."), "",
          "## Every matched cell", "",
          f"| learners | innovation | mixing | six-seed median | {reps}-seed median | 95% | covers observed | share reaching |",
          "|---|---|---|---|---|---|---|---|"]
@@ -93,10 +93,10 @@ def main(reps):
         L.append(f"| {r.n_ind:.0f} | {r.innovation} | {r.mixing} | {r.six_seed_median:.4f} | {r['median']:.4f} | "
                  f"[{r.lo:.4f}, {r.hi:.4f}] | {'yes' if r.covers_observed else 'no'} | {r.share_reaching:.1%} |")
     L += ["", "## Reading", "",
-          "If the rank correlation is low and the winners differ, the argmax over six-seed medians is "
+          ("If the rank correlation is low and the winners differ, the argmax over six-seed medians is "
           "selecting sampling noise, and the single-cell drift comparison that the manuscript reports "
           "is not a property of the calibration but of the seed. The envelope rows above are what the "
-          "matched set as a whole says.", ""]
+          "matched set as a whole says."), ""]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[:20]))
 

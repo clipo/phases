@@ -31,10 +31,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+
 demo = importlib.import_module("25_drift_vs_groups_demo")
 g26 = importlib.import_module("26_cmv_phase_groupness")
 
@@ -101,8 +103,8 @@ def main():
         lab = mf._kmeans_labels(cc_c, k, seed=7)
         obs = fst_by(counts, lab)
         drift, grp = region_nulls(counts, coords, lab)
-        regions.append(dict(name=name, counts=counts, lab=lab, k=k, obs=obs,
-                            drift=drift, grp=grp, n=len(counts)))
+        regions.append({"name": name, "counts": counts, "lab": lab, "k": k, "obs": obs,
+                            "drift": drift, "grp": grp, "n": len(counts)})
 
     plt.rcParams.update({"font.family": "sans-serif",
                          "font.sans-serif": ["Arial", "DejaVu Sans"], "font.size": 8})

@@ -64,10 +64,11 @@ data {
   array[N, K] int<lower=0> y;           // counts
   matrix[N, N] D;                       // pairwise distance, km
 
-  // rho prior. 1 = inv_gamma(a, b); 2 = uniform on log(rho) in [rho_lo, rho_hi].
-  // Both are offered because the choice is contested and rule 20 requires the
-  // sensitivity refit to lean the other way; neither is hard-coded.
-  int<lower=1, upper=2> prior_rho_type;
+  // rho prior. 1 = inv_gamma(a, b); 2 = uniform on log(rho) in [rho_lo, rho_hi];
+  // 3 = uniform on rho in [rho_lo, rho_hi] (added 2026-10-16 as the rule-20
+  // sensitivity prior leaning toward long ranges; latent-group probe spec 4.1).
+  // Offered as data because the choice is contested; none is hard-coded.
+  int<lower=1, upper=3> prior_rho_type;
   real<lower=0> prior_rho_a;
   real<lower=0> prior_rho_b;
   real<lower=0> rho_lo;
@@ -76,6 +77,11 @@ data {
   int<lower=1, upper=3> kernel;         // 1 exp, 2 Matern 3/2, 3 Matern 5/2
   int<lower=0, upper=1> use_tau;        // 0 removes the non-spatial term
   real<lower=0> prior_scale_sd;         // half-normal sd, tau and sigma alike
+  // Intercept prior as data (2026-10-18, D25): the hard-coded Normal(0, 2) was too narrow for the
+  // log-odds of rare classes against the reference, so the field's constant mode carried 0.3 to 5.6
+  // logits of the class baselines (discussion log, 2026-10-18).
+  vector[K - 1] prior_alpha_mean;
+  real<lower=0> prior_alpha_sd;
   int<lower=0, upper=1> likelihood;     // 0 = prior predictive
 }
 transformed data {
@@ -110,8 +116,9 @@ model {
   if (use_tau) tau ~ normal(0, prior_scale_sd);
   sigma ~ normal(0, prior_scale_sd);
   if (prior_rho_type == 1) rho ~ inv_gamma(prior_rho_a, prior_rho_b);
-  else target += -log(rho);             // p(rho) proportional to 1/rho
-  alpha ~ normal(0, 2);
+  else if (prior_rho_type == 2) target += -log(rho);   // p(rho) proportional to 1/rho
+  // prior_rho_type == 3: uniform on [rho_lo, rho_hi], nothing to add.
+  alpha ~ normal(prior_alpha_mean, prior_alpha_sd);
   to_vector(z_f) ~ std_normal();
 
   if (likelihood) {
@@ -128,12 +135,14 @@ generated quantities {
   real half_distance = hc * rho;        // correlation 0.5; the primary scale
   real spatial_share = use_tau ? square(sigma) / (square(sigma) + square(tau[1])) : 1;
   array[N, K] int y_rep;
+  vector[N] log_lik;                    // pointwise, for held-out scoring (added 2026-10-16, probe spec 4)
   {
     for (i in 1:N) {
       vector[K] eta;
       eta[1] = 0;
       for (k in 2:K) eta[k] = alpha[k - 1] + f[i, k - 1];
       y_rep[i] = multinomial_logit_rng(eta, n_i[i]);
+      log_lik[i] = multinomial_logit_lpmf(y[i] | eta);
     }
   }
 }

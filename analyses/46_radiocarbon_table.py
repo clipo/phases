@@ -90,15 +90,15 @@ def main() -> None:
     n_mf = int((df["source"] == "Mainfort 2001").sum())
     n_al = len(df) - n_mf
     L = ["# Radiocarbon determinations used in the St. Francis basin chronology", "",
-         f"{len(df)} determinations: {n_mf} from Mainfort (2001) (primary basin SPD and "
+         (f"{len(df)} determinations: {n_mf} from Mainfort (2001) (primary basin SPD and "
          f"seriation-vs-calendar test) and {n_al} net-new Mississippian dates from the "
          f"Alvey lower-valley compilation (personal communication, 2022; robustness check "
-         f"only). Calibrated medians are point calibrations against IntCal20.", "",
-         "Lab-number prefixes denote the radiocarbon laboratory, not a location: "
+         f"only). Calibrated medians are point calibrations against IntCal20."), "",
+         ("Lab-number prefixes denote the radiocarbon laboratory, not a location: "
          "Beta = Beta Analytic; TX = University of Texas at Austin; M = University "
          "of Michigan; SMU = Southern Methodist University; UGa = University of "
          "Georgia; DRI = Desert Research Institute. Sites are keyed by Smithsonian "
-         "trinomial (state-county-site).", "",
+         "trinomial (state-county-site)."), "",
          "| Site | Trinomial | Lab number | 14C age BP | ± | Cal median AD | Source | Used in |",
          "|---|---|---|---|---|---|---|---|"]
     for _, r in df.iterrows():

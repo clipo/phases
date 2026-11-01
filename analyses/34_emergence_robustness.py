@@ -36,14 +36,16 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402  (applies house style on import)
-import make_map as mm  # noqa: E402  (river-network distance)
+import make_figures as mf
+import make_map as mm
+import matplotlib.pyplot as plt
+
 m33 = importlib.import_module("33_time_aware_emergence")
 res = importlib.import_module("17_basin_results")
-from scipy.stats import spearmanr  # noqa: E402
+from scipy.stats import spearmanr
 
 OUT_MD = ROOT / "output" / "emergence_robustness.md"
 OUT_CSV = ROOT / "output" / "emergence_robustness.csv"
@@ -95,7 +97,7 @@ def box_by_factor(ax, levels, factor_col, val_col, obs, xlabel, title, fmt="%g")
             for lv in levels]
     pos = np.arange(len(levels))
     ax.boxplot(data, positions=pos, widths=0.6,
-               medianprops=dict(color="0.5"))
+               medianprops={"color": "0.5"})
     ax.axhline(obs, ls="--", c="0.0", lw=1.2, label=f"observed ({obs:.2f})")
     ax.set_xticks(pos)
     ax.set_xticklabels([fmt % lv for lv in levels])
@@ -191,24 +193,24 @@ def main():
     L = [
         f"# Robustness of phase-like emergence to contingency and factors (n = {n})",
         "",
-        f"Grid: interaction length {LEN_GRID} km, between-node mixing {MIX_GRID}, "
+        (f"Grid: interaction length {LEN_GRID} km, between-node mixing {MIX_GRID}, "
         f"innovation {MU_GRID}; {N_SEEDS} seeds per cell; {len(arr)} "
-        "time-transgressive runs total.",
+        "time-transgressive runs total."),
         f"Observed data: {obs_ncom} communities, between-group F_ST = {obs_fst:.3f}.",
         "",
         "## Headline robustness",
         # Counts, not just percentages: at :.0f a 430/432 rounds to "100%" and
         # hides the two runs that produced a single community (rule 1).
-        f"- Phase-like structure (>= 2 emergent communities): "
-        f"{n_phase} of {n_all} runs ({frac_phase*100:.1f}%).",
-        f"- Emergent F_ST at or below the observed value: "
-        f"{n_le_obs} of {n_fin} runs ({frac_le_obs*100:.1f}%).",
-        f"- Emergent F_ST within a factor of two of observed "
+        (f"- Phase-like structure (>= 2 emergent communities): "
+        f"{n_phase} of {n_all} runs ({frac_phase*100:.1f}%)."),
+        (f"- Emergent F_ST at or below the observed value: "
+        f"{n_le_obs} of {n_fin} runs ({frac_le_obs*100:.1f}%)."),
+        (f"- Emergent F_ST within a factor of two of observed "
         f"({0.5*obs_fst:.3f}-{2*obs_fst:.3f}): "
-        f"{n_bracket} of {n_fin} runs ({frac_bracket*100:.1f}%).",
-        f"- Mean emergent communities {np.nanmean(nc_c):.1f} "
+        f"{n_bracket} of {n_fin} runs ({frac_bracket*100:.1f}%)."),
+        (f"- Mean emergent communities {np.nanmean(nc_c):.1f} "
         f"(range {int(np.nanmin(nc_c))}-{int(np.nanmax(nc_c))}); "
-        f"mean F_ST {np.nanmean(fst_c):.3f}; mean seriation |rho| {np.nanmean(rho_c):.2f}.",
+        f"mean F_ST {np.nanmean(fst_c):.3f}; mean seriation |rho| {np.nanmean(rho_c):.2f}."),
         "",
         "## Marginal effects (mean +/- sd)",
         f"- F_ST by interaction length (km): {fmt3(marg(LEN_GRID, lk_c, fst_c))}",
@@ -216,14 +218,14 @@ def main():
         f"- F_ST by innovation rate: {fmt3(marg(MU_GRID, mu_c, fst_c))}",
         f"- communities by interaction length (km): {fmt3(marg(LEN_GRID, lk_c, nc_c))}",
         "",
-        "Interpretation: across stochastic replicates and the full factor grid, "
+        ("Interpretation: across stochastic replicates and the full factor grid, "
         "neutral drift on the real geography reliably produces phase-like, spatially "
         "coherent communities, and the between-group F_ST stays at or near the observed "
         "level rather than the much higher value bounded groups would leave. The "
         "appearance of phase structure is a generic outcome of distance-structured "
         "drift on this layout, not an artifact of one tuned parameter set. F_ST is "
         "essentially flat across interaction length and falls with more mixing or "
-        "more innovation, as expected.",
+        "more innovation, as expected."),
         "",
         f"Figure: {OUT_FIG.relative_to(ROOT)}",
     ]

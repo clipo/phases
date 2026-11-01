@@ -47,26 +47,26 @@ import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import spearmanr
 
-from mls_emergence.dataio.pfg import load_pfg_counts
 from mls_emergence.dataio.coords import read_assemblage_xy
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
-from mls_emergence.signatures.neutral import theta_f, theta_e
-from mls_emergence.signatures.variance import cultural_fst
+from mls_emergence.dataio.matrix import read_analysis_matrix
+from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 from mls_emergence.signatures.assortativity import (
-    boundary_excess,
     _kmeans_labels,
+    boundary_excess,
     geo_distance,
 )
+from mls_emergence.signatures.neutral import theta_e, theta_f
 from mls_emergence.signatures.seriation import seriation_solutions
-from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
+from mls_emergence.signatures.variance import cultural_fst
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -157,7 +157,7 @@ def correspondence_axis(M: np.ndarray):
     Dr_inv = np.diag(1.0 / np.sqrt(r))
     Dc_inv = np.diag(1.0 / np.sqrt(c))
     S = Dr_inv @ (P - np.outer(r, c)) @ Dc_inv
-    U, sig, Vt = np.linalg.svd(S, full_matrices=False)
+    U, sig, _Vt = np.linalg.svd(S, full_matrices=False)
     row_scores = Dr_inv @ U @ np.diag(sig)
     ordinate = row_scores[:, 0]
     inertia = sig ** 2
@@ -644,7 +644,7 @@ def bootstrap_panel_once(inp: PanelInputs, n_bins: int,
     cco_s = cc_have[[have_coords_ids.index(i) for i in samp]]
     try:
         bb = pd.qcut(ca_s, q=n_bins, labels=False, duplicates="drop")
-    except Exception:
+    except Exception:  # noqa: BLE001  a failed resample is dropped; narrowing would change which draws survive
         return None
     rows = {}
     for bb_id in sorted(pd.Series(bb).dropna().unique()):

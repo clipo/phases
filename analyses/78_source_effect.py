@@ -82,14 +82,14 @@ def main() -> int:
     merged = np.array([str(src.loc[n, "source_used"]).startswith("Lipo") for n in names])
 
     L = ["# Is the drift shortfall an artefact of merging data sources?", "",
-         f"Basin phase set, {len(names)} assemblages: {int((~merged).sum())} rows carrying the "
+         (f"Basin phase set, {len(names)} assemblages: {int((~merged).sum())} rows carrying the "
          f"survey's counts alone (PFGData.xlsx) and {int(merged.sum())} carrying Lipo's (2001) compilation, which holds "
          f"the Phillips-Ford-Griffin counts plus his 1996-97 field collections. The two are "
          f"tallies of the same material, so each assemblage uses one of them, the larger, and "
-         f"none is a sum (scripts/build_analysis_matrix.py).", "",
+         f"none is a sum (scripts/build_analysis_matrix.py)."), "",
          "## 1. Is source confounded with place?", "",
-         "| cluster | assemblages | survey alone | Lipo compilation | sherds, survey alone | "
-         "sherds, Lipo compilation |", "|---|---|---|---|---|---|"]
+         ("| cluster | assemblages | survey alone | Lipo compilation | sherds, survey alone | "
+         "sherds, Lipo compilation |"), "|---|---|---|---|---|---|"]
     for g in np.unique(labels):
         s = labels == g
         L.append(f"| {int(g)} ({', '.join([n for n, x in zip(names, s) if x][:3])}...) | "
@@ -97,12 +97,12 @@ def main() -> int:
                  f"{int(m[s & ~merged].sum()):,} | {int(m[s & merged].sum()):,} |")
 
     L += ["", "## 2. Do the sources differ once place is held?", "",
-          "Stated as a posterior probability (rule 18, 2026-09-23): each assemblage's class "
+          ("Stated as a posterior probability (rule 18, 2026-09-23): each assemblage's class "
           "proportions are drawn from Dirichlet(counts + 1/2), and for each draw the F_ST between "
           "the two kinds of row is compared with the F_ST of a random split of the same cluster "
-          "into groups of the same sizes.", "",
-          "| cluster | F_ST, survey-alone rows against compilation rows, posterior median [95%] | "
-          "random splits, posterior median | P(source split differs more than a random split) |",
+          "into groups of the same sizes."), "",
+          ("| cluster | F_ST, survey-alone rows against compilation rows, posterior median [95%] | "
+          "random splits, posterior median | P(source split differs more than a random split) |"),
           "|---|---|---|---|"]
     rng = np.random.default_rng(78)
     n_draws = min(args.splits, 2000)
@@ -127,8 +127,8 @@ def main() -> int:
     data = rev.load_sets()["basin"]
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == MODEL)].iloc[0]
-    rates = dict(innovation=float(row.innovation), mixing=float(row.mixing),
-                 n_ind=int(row.n_ind))
+    rates = {"innovation": float(row.innovation), "mixing": float(row.mixing),
+                 "n_ind": int(row.n_ind)}
     totals = data["m"].sum(1)
     # The merged rows reach only the clusters Lipo's compilation covers, so the
     # raw Mainfort-against-merged contrast compares five clusters with four. The
@@ -153,10 +153,10 @@ def main() -> int:
         if (seed + 1) % 50 == 0:
             print(f"  {seed + 1}/{args.reps}", flush=True)
     L += ["", "## 3. Does the excess over drift survive in a single source?", "",
-          f"Between-cluster F_ST at k = {args.k}, the same clusters throughout, against "
-          f"{args.reps} calibrated drift realizations scored on the same subset.", "",
-          "| subset | assemblages | clusters represented | median sherds per assemblage | "
-          "observed F_ST | drift median (95 percent) | shortfall |",
+          (f"Between-cluster F_ST at k = {args.k}, the same clusters throughout, against "
+          f"{args.reps} calibrated drift realizations scored on the same subset."), "",
+          ("| subset | assemblages | clusters represented | median sherds per assemblage | "
+          "observed F_ST | drift median (95 percent) | shortfall |"),
           "|---|---|---|---|---|---|---|"]
     for k, sel in subsets.items():
         d = np.array(sims[k], float)
@@ -165,14 +165,14 @@ def main() -> int:
                  f"{int(np.median(m[sel].sum(1)))} | {obs:.4f} | "
                  f"{np.median(d):.4f} ({np.percentile(d, 2.5):.4f}-"
                  f"{np.percentile(d, 97.5):.4f}) | **{obs / np.median(d):.1f}x** |")
-    L += ["", "**Source and sample size are not separable here.** The rows carrying the survey's counts alone "
-          "are also the small",
-          "ones, so a larger shortfall among them may be an analyst or collection-regime "
-          "effect, or",
-          "overdispersion in small surface collections, or both. Either is a property of "
-          "the record",
-          "rather than of past interaction, which is the distinction that matters for the "
-          "residual.", ""]
+    L += ["", ("**Source and sample size are not separable here.** The rows carrying the survey's counts alone "
+          "are also the small"),
+          ("ones, so a larger shortfall among them may be an analyst or collection-regime "
+          "effect, or"),
+          ("overdispersion in small surface collections, or both. Either is a property of "
+          "the record"),
+          ("rather than of past interaction, which is the distinction that matters for the "
+          "residual."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[4:]))
     return 0

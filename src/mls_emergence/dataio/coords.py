@@ -117,9 +117,9 @@ def pfg_datum_table(xy: pd.DataFrame, utm: pd.DataFrame | None = None,
         name = str(r["Assemblages"]).strip()
         lat, lon = float(r["Latitude"]), float(r["Longitude"])
         if name not in utm.index:
-            rows.append(dict(assemblage=name, site_number=None, klass="no_pfg_utm",
-                             d_nad83_m=float("nan"), d_nad27_m=float("nan"),
-                             lat_nad27=float("nan"), lon_nad27=float("nan")))
+            rows.append({"assemblage": name, "site_number": None, "klass": "no_pfg_utm",
+                             "d_nad83_m": float("nan"), "d_nad27_m": float("nan"),
+                             "lat_nad27": float("nan"), "lon_nad27": float("nan")})
             continue
         u = utm.loc[name]
         z = int(u["zone"])
@@ -131,8 +131,8 @@ def pfg_datum_table(xy: pd.DataFrame, utm: pd.DataFrame | None = None,
         d83 = _planar_m(lat, lon, la83, lo83)
         d27 = _planar_m(lat, lon, la27, lo27)
         klass = "converted" if d83 <= tol_m else ("near" if d83 <= 100 else "other")
-        rows.append(dict(assemblage=name, site_number=u["site_number"], klass=klass,
-                         d_nad83_m=d83, d_nad27_m=d27, lat_nad27=la27, lon_nad27=lo27))
+        rows.append({"assemblage": name, "site_number": u["site_number"], "klass": klass,
+                         "d_nad83_m": d83, "d_nad27_m": d27, "lat_nad27": la27, "lon_nad27": lo27})
     return pd.DataFrame(rows).set_index("assemblage")
 
 

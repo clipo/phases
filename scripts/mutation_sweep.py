@@ -95,7 +95,7 @@ def main() -> int:
         try:
             r = subprocess.run([PY_BIN, "-m", "pytest", "-q", "-x", tests],
                                cwd=ROOT, capture_output=True, text=True,
-                               timeout=900)
+                               timeout=900, check=False)
             rc = r.returncode
         finally:
             # Restore unconditionally, including on timeout or interrupt: a

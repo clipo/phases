@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from mls_emergence.signatures.sampling import rarefy
 
 

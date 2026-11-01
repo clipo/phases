@@ -1,6 +1,18 @@
+"""The LMV settlement table: loading, site-id matching and published corrections.
+
+Provides ``load_lmv`` (both UTM-zone sheets, with the coordinate corrections and
+the NAD27-to-NAD83 conversion of PFG-sourced rows applied), ``normalize_grid``
+and ``join_pfg_to_lmv`` (matching PFG assemblages to settlement records by
+normalized grid designator), and the mound-height and site-coordinate
+correction readers. Used by the empirical analyses (05, 06, 07, 09, 16, 17),
+the settlement and sampling analyses (64, 67, 80, 81, 97, 98),
+``make_figures.py``, ``make_map.py`` and ``scripts/measure_datum.py``.
+"""
 from __future__ import annotations
+
 import re
 from pathlib import Path
+
 import pandas as pd
 
 ZONE_SHEETS = ["Locations-Zone-15", "Locations-Zone-16"]
@@ -178,8 +190,9 @@ def load_height_corrections(path):
 
     Returns a frame indexed by normalized site number.
     """
-    import pandas as pd
     from pathlib import Path
+
+    import pandas as pd
 
     df = pd.read_csv(Path(path))
     df["_key"] = df["site_number"].astype(str).map(normalize_grid)

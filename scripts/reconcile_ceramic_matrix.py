@@ -21,8 +21,14 @@ Mainfort-only rows.
 
 Run: .venv/bin/python scripts/reconcile_ceramic_matrix.py
 """
-import pandas as pd, numpy as np, re, itertools
+import itertools
+import re
 from collections import Counter
+
+import numpy as np
+import pandas as pd
+
+
 def norm(s): return re.sub(r'[^a-z0-9]','',str(s).lower())
 TY=['Parkin_Punctated','Barton/Kent/MPI','Painted','Fortune_Noded','Ranch_Incised','Walls_Engraved','Wallace_Incised','Rhodes_Incised','Vernon_Paul_Applique','Hull_Engraved']
 F='data/raw/mainfort-pfg-cpl.xlsx'
@@ -55,7 +61,8 @@ for _,r in u.iterrows():
         if hit!='unreconciled': break
     tal[str(r['Assemblages'])]=hit
     share[str(r['Assemblages'])]=float(src['CPL'].sum()/uv.sum()) if uv.sum() and 'CPL' in hit else 0.0
-mem={ln.strip() for ln in open('data/processed/basin_members_curated.txt') if ln.strip()}
+with open('data/processed/basin_members_curated.txt') as fh:
+    mem={ln.strip() for ln in fh if ln.strip()}
 print("all 55:",dict(Counter(tal.values())))
 print(f"basin {len(mem)}:",dict(Counter(v for a,v in tal.items() if a in mem)))
 # Written out so analyses can ask whether source is confounded with place

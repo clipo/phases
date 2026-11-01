@@ -37,12 +37,15 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.lines import Line2D  # noqa: E402
-import make_figures as mf  # noqa: E402
-from mls_emergence.dataio.matrix import MAINFORT_SITES, read_mainfort_replication  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+from mls_emergence.dataio.matrix import MAINFORT_SITES, read_mainfort_replication
+
 m36 = importlib.import_module("36_canonical_phase_map")
 m83 = importlib.import_module("83_mainfort_replication")
 

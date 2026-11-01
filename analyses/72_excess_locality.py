@@ -114,8 +114,8 @@ def main() -> int:
 
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == MODEL)].iloc[0]
-    rates = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]),
-                 n_ind=int(row["n_ind"]))
+    rates = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]),
+                 "n_ind": int(row["n_ind"])}
     totals = data["m"].sum(1)
 
     sim_terms, sim_fst = [], []
@@ -133,14 +133,14 @@ def main() -> int:
     for i, g in enumerate(np.unique(labels)):
         members = [n for n, l in zip(names, labels) if l == g]
         drift_med = float(np.median(sim_terms[:, i]))
-        rows.append(dict(
-            cluster=int(g), n_assemblages=len(members),
-            sherds=int(m_obs[labels == g].sum()),
-            observed_term=float(obs_terms[i]),
-            share_of_observed=float(obs_terms[i] / obs_fst) if obs_fst else np.nan,
-            drift_median_term=drift_med,
-            excess=float(obs_terms[i] / drift_med) if drift_med > 0 else np.nan,
-            members=", ".join(members)))
+        rows.append({
+            "cluster": int(g), "n_assemblages": len(members),
+            "sherds": int(m_obs[labels == g].sum()),
+            "observed_term": float(obs_terms[i]),
+            "share_of_observed": float(obs_terms[i] / obs_fst) if obs_fst else np.nan,
+            "drift_median_term": drift_med,
+            "excess": float(obs_terms[i] / drift_med) if drift_med > 0 else np.nan,
+            "members": ", ".join(members)})
     df = pd.DataFrame(rows).sort_values("excess", ascending=False)
 
     # Leave one cluster out, observed and drift alike, and recompute the shortfall.
@@ -153,8 +153,8 @@ def main() -> int:
                           rev.simulate(data, 95000 + s, MODEL, **rates),
                           data["ranks"], totals, np.random.default_rng(96000 + s))[keep]
                           for s in range(min(args.reps, 120))]])
-        loo.append(dict(dropped=int(g), observed=o, drift_median=float(np.median(d)),
-                        shortfall=o / float(np.median(d)) if np.median(d) > 0 else np.nan))
+        loo.append({"dropped": int(g), "observed": o, "drift_median": float(np.median(d)),
+                        "shortfall": o / float(np.median(d)) if np.median(d) > 0 else np.nan})
     loo_df = pd.DataFrame(loo)
 
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
@@ -168,10 +168,10 @@ def main() -> int:
                "EVEN: every cluster is above drift by a similar factor, which is what "
                "grain predicts and closure does not")
     L = ["# Where does the drift shortfall live?", "",
-         f"Basin phase set, {counts.shape[0]} assemblages, k = {args.k}, "
-         f"{args.reps} drift realizations, calibrated {MODEL} model.",
-         f"Observed F_ST {obs_fst:.4f} against a drift median of "
-         f"{float(np.median(sim_fst)):.4f}, an overall shortfall of {overall:.1f}x.", "",
+         (f"Basin phase set, {counts.shape[0]} assemblages, k = {args.k}, "
+         f"{args.reps} drift realizations, calibrated {MODEL} model."),
+         (f"Observed F_ST {obs_fst:.4f} against a drift median of "
+         f"{float(np.median(sim_fst)):.4f}, an overall shortfall of {overall:.1f}x."), "",
          "## Per-cluster contribution", "",
          "| cluster | n | sherds | observed term | share of observed F_ST | drift median term | excess |",
          "|---|---|---|---|---|---|---|"]
@@ -179,8 +179,8 @@ def main() -> int:
         L.append(f"| {r['cluster']} | {r['n_assemblages']} | {r['sherds']:,} | "
                  f"{r['observed_term']:.4f} | {r['share_of_observed'] * 100:.0f}% | "
                  f"{r['drift_median_term']:.4f} | **{r['excess']:.1f}x** |")
-    L += ["", f"Excess ranges from {np.nanmin(ex):.1f}x to {np.nanmax(ex):.1f}x, "
-              f"a ratio of {spread:.1f}.", "",
+    L += ["", (f"Excess ranges from {np.nanmin(ex):.1f}x to {np.nanmax(ex):.1f}x, "
+              f"a ratio of {spread:.1f}."), "",
           f"**{verdict}.**", "",
           "## Leave one cluster out", "",
           "| dropped | observed F_ST | drift median | shortfall |",
@@ -188,8 +188,8 @@ def main() -> int:
     for _, r in loo_df.iterrows():
         L.append(f"| {r['dropped']} | {r['observed']:.4f} | {r['drift_median']:.4f} | "
                  f"{r['shortfall']:.1f}x |")
-    L += ["", "If the excess were one cluster's closure, dropping that cluster would "
-              "collapse the shortfall toward 1. Read the column for that.", "",
+    L += ["", ("If the excess were one cluster's closure, dropping that cluster would "
+              "collapse the shortfall toward 1. Read the column for that."), "",
           "## Cluster membership", ""]
     for _, r in df.iterrows():
         L.append(f"- **cluster {r['cluster']}** ({r['n_assemblages']}): {r['members']}")

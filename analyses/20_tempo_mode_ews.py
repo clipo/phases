@@ -57,17 +57,19 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.ndimage import gaussian_filter1d
 from scipy.optimize import minimize
 from scipy.stats import kendalltau
-from scipy.ndimage import gaussian_filter1d
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")  # headless backend for make_figures' pyplot use
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 res = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "output" / "tempo_mode_ews.md"
@@ -159,7 +161,7 @@ def ews_indicators(x, w_frac, bw):
     resid = x - trend
     w = max(5, int(round(w_frac * n)))
     pos, sds, ar = [], [], []
-    for s in range(0, n - w + 1):
+    for s in range(n - w + 1):
         seg = resid[s:s + w]
         sds.append(seg.std(ddof=1))
         a = np.corrcoef(seg[:-1], seg[1:])[0, 1] if seg.std() > 0 else 0.0
@@ -176,7 +178,7 @@ def ews_surrogate_p(resid, w, obs_tv, obs_ta, nsurr=3000):
     for _ in range(nsurr):
         sh = RNG.permutation(resid)
         s2, a2, p2 = [], [], []
-        for s in range(0, n - w + 1):
+        for s in range(n - w + 1):
             seg = sh[s:s + w]
             s2.append(seg.std(ddof=1))
             a2.append(np.corrcoef(seg[:-1], seg[1:])[0, 1] if seg.std() > 0 else 0.0)
@@ -201,7 +203,7 @@ def _trend(tau, rng):
 
 
 def main():
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)
     n = counts.shape[0]
     types = list(counts.columns)
@@ -253,7 +255,7 @@ def main():
     order = ca.sort_values().index
     div_seq = np.array([gini_simpson(counts.loc[a].to_numpy(float)) for a in order])
     bw0, wf0 = 3.0, 0.5
-    pos, sds, ar, tv, ta, resid, w = ews_indicators(div_seq, wf0, bw0)
+    _pos, _sds, _ar, tv, ta, resid, w = ews_indicators(div_seq, wf0, bw0)
     pv, pa = ews_surrogate_p(resid, w, tv, ta)
     # sensitivity sweep
     sweep = []
@@ -268,8 +270,8 @@ def main():
     L = ["# Tempo-and-mode and early-warning-signal tests", "",
          f"Basin curated set (n = {n}), {len(types)} decorated types, oriented CA axis.", "",
          "## (1) Tempo and mode (Hunt 2006/2008; OU-vs-BM model selection)", "",
-         f"Per-type trajectories tested: {n_typetested}. Models fit on the {len(blabs)}-bin "
-         "level vector with sampling variances; comparison by AICc.", "",
+         (f"Per-type trajectories tested: {n_typetested}. Models fit on the {len(blabs)}-bin "
+         "level vector with sampling variances; comparison by AICc."), "",
          "**Decorated-type trajectories, best-model tally:**", "",
          "| model | types selecting it | mean Akaike weight |", "|---|---|---|"]
     for m in MODELS:
@@ -282,11 +284,11 @@ def main():
         L.append(f"| {m} | {aicc_div[m]:.1f} | {w_div[m]:.2f} |")
     direct = type_winners["GRW"]
     L += ["",
-          f"- Diversity trajectory best model: **{best_div}** (weight {w_div[best_div]:.2f}), "
-          f"directional GRW weight {w_div['GRW']:.2f}.",
+          (f"- Diversity trajectory best model: **{best_div}** (weight {w_div[best_div]:.2f}), "
+          f"directional GRW weight {w_div['GRW']:.2f}."),
           f"- Directional (GRW) is selected for {direct} of {n_typetested} type trajectories.",
           "",
-          "**Reading.** We lead with the Gini-Simpson diversity trajectory, which the "
+          ("**Reading.** We lead with the Gini-Simpson diversity trajectory, which the "
           f"correspondence-analysis ordering does not arrange by construction. It selects "
           f"the unbiased random walk decisively (BM weight {w_div['BM']:.2f}), the neutral-drift "
           "expectation, with negligible support for the directional, stasis, or OU "
@@ -296,18 +298,18 @@ def main():
           "almost by construction, and only a few types are abundant enough across the "
           "sequence to fit. A regime transition would register as a coherent directional shift "
           "in the aggregate trait, which it does not. The robust reading is drift, not a "
-          "sustained directional transition.", ""]
+          "sustained directional transition."), ""]
 
     verdict_ews = ("rising in both variance and autocorrelation (an early-warning signal)"
                    if (pv < 0.05 and pa < 0.05) else
                    "not jointly rising beyond the permutation null (no early-warning signal)")
     L += ["## (2) Early-warning signals (Scheffer et al. 2009; Dakos et al. 2012)", "",
-          f"Trait: Gini-Simpson diversity of the {n} assemblages ordered by CA position. "
-          f"Gaussian detrending (bandwidth {bw0:.0f}), rolling window {w} of {n}.", "",
+          (f"Trait: Gini-Simpson diversity of the {n} assemblages ordered by CA position. "
+          f"Gaussian detrending (bandwidth {bw0:.0f}), rolling window {w} of {n}."), "",
           f"- Rolling-variance trend: Kendall tau = {tv:+.2f} (permutation p = {pv:.3f}).",
           f"- Lag-1 autocorrelation trend: Kendall tau = {ta:+.2f} (permutation p = {pa:.3f}).",
-          f"- Sensitivity across window 0.4-0.6 and bandwidth 2-4: variance tau in "
-          f"[{tv_rng[0]:+.2f}, {tv_rng[1]:+.2f}], AR(1) tau in [{ta_rng[0]:+.2f}, {ta_rng[1]:+.2f}].",
+          (f"- Sensitivity across window 0.4-0.6 and bandwidth 2-4: variance tau in "
+          f"[{tv_rng[0]:+.2f}, {tv_rng[1]:+.2f}], AR(1) tau in [{ta_rng[0]:+.2f}, {ta_rng[1]:+.2f}]."),
           "",
           f"**Reading.** The indicators are {verdict_ews}. Critical slowing down toward a "
           "bifurcation inflates the variance and the lag-1 autocorrelation together, and a "
@@ -324,11 +326,11 @@ def main():
           "work with, and it shows no robust early-warning signal of an approaching transition. "
           "The result is concordant with the static criterion and the tempo test.", "",
           "## Verdict", "",
-          "Neither dynamic probe recovers a transition the static criterion missed. The "
+          ("Neither dynamic probe recovers a transition the static criterion missed. The "
           "aggregate diversity trajectory is best described by neutral drift (BM) rather than "
           "a directional shift, and the early-warning indicators do not rise together toward "
           "contact. Both are concordant with the no-convergence reading, now tested in the "
-          "time domain rather than only on static states."]
+          "time domain rather than only on static states.")]
     OUT.write_text("\n".join(L), encoding="utf-8")
 
     # ---- persist the tempo-and-mode Akaike weights for the manuscript figure ----

@@ -32,6 +32,7 @@ from mls_emergence.transmission.model import (
     SIGMA,
     coupling_robustness,
 )
+
 try:
     from signaling.emergence import phi_star
 except ImportError as _e:  # monument-mls required only for this parent-model analysis
@@ -208,7 +209,7 @@ def _write_report(ps: float, summary: pd.DataFrame, threshold_coupling: float) -
 def _write_figure(summary: pd.DataFrame, threshold_coupling: float) -> None:
     try:
         import matplotlib.pyplot as plt
-    except Exception:
+    except Exception:  # noqa: BLE001  the figure is optional; any import failure skips it
         return
     plt.rcParams.update(
         {

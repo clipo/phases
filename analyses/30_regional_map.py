@@ -25,10 +25,10 @@ import importlib
 import sys
 from pathlib import Path
 
+import cartopy.io.shapereader as shpreader
+import geopandas as gpd
 import numpy as np
 import pandas as pd
-import geopandas as gpd
-import cartopy.io.shapereader as shpreader
 from pyproj import Transformer
 from shapely.geometry import box
 
@@ -36,12 +36,14 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import matplotlib.patheffects as pe  # noqa: E402
-import make_figures as mf  # noqa: E402
-from figstyle import save_all  # noqa: E402
+import make_figures as mf
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+from figstyle import save_all
+
 mm = importlib.import_module("make_map")
 
 UTM = "EPSG:26915"
@@ -65,7 +67,7 @@ def ne(resolution, category, name):
 
 def main():
     # --- assemblages first, to center and zoom the extent on the data ---
-    cdf, codf = mf._load_curated()
+    _cdf, codf = mf._load_curated()
     cc = pd.read_csv(ROOT / "data" / "processed" / "williams1954_cmv_coords.tsv", sep="\t")
     all_lon = np.concatenate([codf["Longitude"].to_numpy(float), cc["lon"].to_numpy(float)])
     all_lat = np.concatenate([codf["Latitude"].to_numpy(float), cc["lat"].to_numpy(float)])
@@ -120,7 +122,7 @@ def main():
     # sat on the neighboring basin markers. West of the basin is empty.
     ax.annotate("Parkin", (par_e, par_n), xytext=(-38, 6), textcoords="offset points",
                 fontsize=8, weight="bold", color="black", ha="right", va="center", zorder=9,
-                arrowprops=dict(arrowstyle="-", color="black", lw=0.6, shrinkB=5),
+                arrowprops={"arrowstyle": "-", "color": "black", "lw": 0.6, "shrinkB": 5},
                 path_effects=[pe.withStroke(linewidth=2.4, foreground="white")])
     lab(-89.30, 36.92, "Cairo Lowland", color=C_CMV)
     lab(-89.62, 36.55, "Sikeston Ridge", color=C_CMV)
@@ -162,7 +164,7 @@ def main():
                 pos.y0 + 0.50 * pos.height - 0.5 * ih,
                 iw, ih]
         mm._add_na_inset(fig, ext, rect=rect)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001  the inset is decorative; any failure is printed and skipped
         print("inset skipped:", exc)
 
     save_all(fig, OUT)

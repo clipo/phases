@@ -105,8 +105,8 @@ def main() -> int:
         raise ValueError("simulation set and curated set list assemblages differently")
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == MODEL)].iloc[0]
-    rates = dict(innovation=float(row.innovation), mixing=float(row.mixing),
-                 n_ind=int(row.n_ind))
+    rates = {"innovation": float(row.innovation), "mixing": float(row.mixing),
+                 "n_ind": int(row.n_ind)}
     totals = data["m"].sum(1)
 
     def recover(m: np.ndarray) -> list[float]:
@@ -139,11 +139,11 @@ def main() -> int:
         arr = np.array([r[how] for r in sims])
         for j, w in enumerate(WEIGHTS):
             d = arr[:, j]
-            rows.append(dict(method=how, weight="pottery alone" if not np.isfinite(w) else w,
-                             observed=obs[how][j], drift_median=float(np.median(d)),
-                             drift_lo=float(np.percentile(d, 2.5)),
-                             drift_hi=float(np.percentile(d, 97.5)),
-                             share_of_drift_at_or_above_observed=float(np.mean(d >= obs[how][j]))))
+            rows.append({"method": how, "weight": "pottery alone" if not np.isfinite(w) else w,
+                             "observed": obs[how][j], "drift_median": float(np.median(d)),
+                             "drift_lo": float(np.percentile(d, 2.5)),
+                             "drift_hi": float(np.percentile(d, 97.5)),
+                             "share_of_drift_at_or_above_observed": float(np.mean(d >= obs[how][j]))})
     df = pd.DataFrame(rows)
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUT_CSV, index=False)
@@ -167,19 +167,19 @@ def main() -> int:
     png = fs.save_all(fig, FIG, close=True)
 
     L = ["# Would a culture historian have found these phases in pottery made by drift?", "",
-         f"Basin phase set, {len(names)} assemblages, {k} phases; agreement scored on the "
-         f"{int(mapped.sum())} assemblages inside a Phillips (1970) phase area.",
-         f"{args.reps} realizations of the calibrated {MODEL} drift model "
+         (f"Basin phase set, {len(names)} assemblages, {k} phases; agreement scored on the "
+         f"{int(mapped.sum())} assemblages inside a Phillips (1970) phase area."),
+         (f"{args.reps} realizations of the calibrated {MODEL} drift model "
          f"({rates['n_ind']} learners, innovation {rates['innovation']}, mixing "
-         f"{rates['mixing']}), which contains no groups,",
-         "sampled at the observed sherd totals and clustered exactly as the real record is in "
-         "`76_phase_recovery.py`",
-         f"(chi-square composition), by two methods: k-means (median of {args.seeds} "
-         "initializations) and Ward linkage.", ""]
+         f"{rates['mixing']}), which contains no groups,"),
+         ("sampled at the observed sherd totals and clustered exactly as the real record is in "
+         "`76_phase_recovery.py`"),
+         (f"(chi-square composition), by two methods: k-means (median of {args.seeds} "
+         "initializations) and Ward linkage."), ""]
     for how in METHODS:
         L += [f"## {METHOD_NAME[how]}", "",
-              "| weight on composition | real pottery | drift pottery, median (95 percent) | "
-              "share of drift records at or above the real one |", "|---|---|---|---|"]
+              ("| weight on composition | real pottery | drift pottery, median (95 percent) | "
+              "share of drift records at or above the real one |"), "|---|---|---|---|"]
         for r in rows:
             if r["method"] != how:
                 continue
@@ -187,16 +187,16 @@ def main() -> int:
                      f"({r['drift_lo']:.3f} to {r['drift_hi']:.3f}) | "
                      f"{100 * r['share_of_drift_at_or_above_observed']:.0f}% |")
         L.append("")
-    L += ["The weight-zero row is the site map alone and is the same in both columns by "
-          "construction.", "",
-          "Read the rows where pottery enters. Where the real pottery sits inside what drift "
-          "pottery gives,",
-          "the published phases are as recoverable from a record with no social groups in it "
-          "as from the",
-          "real one, and the appearance of phases needs nothing beyond distance decay and "
-          "where the sites are.",
-          "Where the real pottery sits above it, the record carries phase-aligned structure "
-          "that drift on",
+    L += [("The weight-zero row is the site map alone and is the same in both columns by "
+          "construction."), "",
+          ("Read the rows where pottery enters. Where the real pottery sits inside what drift "
+          "pottery gives,"),
+          ("the published phases are as recoverable from a record with no social groups in it "
+          "as from the"),
+          ("real one, and the appearance of phases needs nothing beyond distance decay and "
+          "where the sites are."),
+          ("Where the real pottery sits above it, the record carries phase-aligned structure "
+          "that drift on"),
           "this geography does not produce.", "",
           f"Figure written to {png.name} and its siblings.", ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

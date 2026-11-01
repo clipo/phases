@@ -332,43 +332,43 @@ def main() -> int:
     png = fs.save_all(fig, FIG, close=True)
 
     L = ["# Is groupness a gradient or an edge?", "",
-         f"Basin phase set, {len(names)} assemblages, 10 decorated classes. "
-         f"Turnover is the root sum of squares of the",
-         f"weighted-least-squares gradient of the class proportions, Gaussian "
-         f"bandwidth {args.bandwidth:g} km,",
-         f"on a {args.grid} x {args.grid} grid, masked where the local weight sum "
-         f"falls below {MIN_WEIGHT:g}.", "",
+         (f"Basin phase set, {len(names)} assemblages, 10 decorated classes. "
+         f"Turnover is the root sum of squares of the"),
+         (f"weighted-least-squares gradient of the class proportions, Gaussian "
+         f"bandwidth {args.bandwidth:g} km,"),
+         (f"on a {args.grid} x {args.grid} grid, masked where the local weight sum "
+         f"falls below {MIN_WEIGHT:g}."), "",
          "## Do the phase boundaries lie on ridges of turnover?", ""]
     if len(on_b):
-        L += [f"Median turnover along the internal phase boundaries is "
-              f"**{obs_med:.5f}** per km,",
+        L += [(f"Median turnover along the internal phase boundaries is "
+              f"**{obs_med:.5f}** per km,"),
               f"from {len(on_b)} points sampled at 1.5 km spacing.", "",
-              "**Against boundaries of the same construction drawn elsewhere** "
-              f"({len(alt_med)} partitions",
-              "carrying the phases' group sizes, seeds at random, assigned by exact "
-              "minimum-cost",
-              f"matching, each dissolved into territories the same way): median "
-              f"{np.median(alt_med):.5f} per km,",
-              f"and the phase boundaries sit at the **{t74.ordinal(pct_alt)} percentile**. "
-              "This is the number to read.", "",
-              "**Against the whole mapped area** (median "
+              ("**Against boundaries of the same construction drawn elsewhere** "
+              f"({len(alt_med)} partitions"),
+              ("carrying the phases' group sizes, seeds at random, assigned by exact "
+              "minimum-cost"),
+              (f"matching, each dissolved into territories the same way): median "
+              f"{np.median(alt_med):.5f} per km,"),
+              (f"and the phase boundaries sit at the **{t74.ordinal(pct_alt)} percentile**. "
+              "This is the number to read."), "",
+              ("**Against the whole mapped area** (median "
               f"{np.median(bg):.5f} over {int(ok.sum()):,} unmasked grid points): "
-              f"the {t74.ordinal(pct_field)}",
-              "percentile. **Do not read this one.** Turnover falls where local support "
-              "rises",
-              "(Spearman -0.40; median 0.0159 per km where the local weight sum is 2 to "
-              "4, against",
-              "0.0108 where it is 6 to 9), because a regression fitted to few nearby "
-              "assemblages",
-              "extrapolates steeply. Voronoi boundaries lie in the interior of the site "
-              "distribution,",
-              "where support is highest, so ANY boundaries built this way score low "
-              "against the whole",
+              f"the {t74.ordinal(pct_field)}"),
+              ("percentile. **Do not read this one.** Turnover falls where local support "
+              "rises"),
+              ("(Spearman -0.40; median 0.0159 per km where the local weight sum is 2 to "
+              "4, against"),
+              ("0.0108 where it is 6 to 9), because a regression fitted to few nearby "
+              "assemblages"),
+              ("extrapolates steeply. Voronoi boundaries lie in the interior of the site "
+              "distribution,"),
+              ("where support is highest, so ANY boundaries built this way score low "
+              "against the whole"),
               "field. The matched comparison above removes that.", "",
-              "A boundary between interaction communities is a place where composition "
-              "changes fast",
-              "over a short distance, so it would sit high against the matched "
-              "comparison.", ""]
+              ("A boundary between interaction communities is a place where composition "
+              "changes fast"),
+              ("over a short distance, so it would sit high against the matched "
+              "comparison."), ""]
     else:
         L += ["No internal boundaries were recovered; nothing to report here.", ""]
     if sweep is not None:
@@ -383,17 +383,17 @@ def main() -> int:
                      f"{int(r.min_group)} |")
         L += [""]
         if first is not None and len(inside):
-            L += [f"The record sits inside the drift band at a radius of "
+            L += [(f"The record sits inside the drift band at a radius of "
                   f"{inside.radius_km.max():.0f} km and leaves it by "
-                  f"{first.radius_km:.0f} km.", ""]
-        L += ["**The smallest-group column is the limit on this table.** Once a "
-              "partition isolates a",
-              "single assemblage, that group matches its own profile exactly and "
-              "contributes to",
-              "between-group variance for a reason that is arithmetic rather than "
-              "archaeological.",
-              "Rows whose smallest group is 1 or 2 are reported but should not be "
-              "read as evidence",
+                  f"{first.radius_km:.0f} km."), ""]
+        L += [("**The smallest-group column is the limit on this table.** Once a "
+              "partition isolates a"),
+              ("single assemblage, that group matches its own profile exactly and "
+              "contributes to"),
+              ("between-group variance for a reason that is arithmetic rather than "
+              "archaeological."),
+              ("Rows whose smallest group is 1 or 2 are reported but should not be "
+              "read as evidence"),
               "of structure at that scale.", ""]
     L += [f"Figure written to {png.name} and its siblings.", ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)

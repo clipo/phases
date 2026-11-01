@@ -38,9 +38,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 res = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "output" / "abc_transmission.md"
@@ -87,7 +89,7 @@ def simulate(mu, b, N, w, K, rng):
 
 
 def main():
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)
     rank = ca.rank().to_numpy()
     bins = pd.qcut(pd.Series(rank, index=counts.index), N_BINS, labels=False, duplicates="drop")
@@ -125,24 +127,24 @@ def main():
     post_sd = np.std(post_b)
 
     L = ["# ABC inference of the transmission bias (dynamically-sufficient test)", "",
-         f"Basin curated set (n = {counts.shape[0]}), {K} decorated types, {N_BINS} ordinal "
-         f"bins. {N_SIM} prior draws, closest {n_acc} accepted. Time-averaging window inferred.",
+         (f"Basin curated set (n = {counts.shape[0]}), {K} decorated types, {N_BINS} ordinal "
+         f"bins. {N_SIM} prior draws, closest {n_acc} accepted. Time-averaging window inferred."),
          "",
          "## Posterior of the transmission-bias parameter b", "",
          f"- Posterior mean b = {post_b.mean():+.3f}, 95% interval [{lo:+.3f}, {hi:+.3f}].",
          f"- The 95% interval {'INCLUDES' if lo <= 0 <= hi else 'EXCLUDES'} the neutral value b = 0.",
          f"- P(b > 0) = {p_pos:.2f} (0.5 = no directional information).",
-         f"- Posterior SD {post_sd:.3f} vs prior SD {prior_sd:.3f} "
+         (f"- Posterior SD {post_sd:.3f} vs prior SD {prior_sd:.3f} "
          f"(ratio {post_sd/prior_sd:.2f}; much less than 1 means the data strongly "
-         f"constrain b rather than leaving it at the prior).", ""]
+         f"constrain b rather than leaving it at the prior)."), ""]
 
     L += ["## Early vs late halves (transition / mode-shift test)", "",
-          f"- Early-half posterior b = {early.mean():+.3f} [{np.percentile(early,2.5):+.3f}, "
-          f"{np.percentile(early,97.5):+.3f}].",
-          f"- Late-half posterior b = {late.mean():+.3f} [{np.percentile(late,2.5):+.3f}, "
-          f"{np.percentile(late,97.5):+.3f}].",
-          f"- Shift early->late: {late.mean()-early.mean():+.3f}; "
-          f"{'no resolved shift (intervals overlap)' if (np.percentile(early,2.5) <= late.mean() <= np.percentile(early,97.5)) else 'possible shift'}.",
+          (f"- Early-half posterior b = {early.mean():+.3f} [{np.percentile(early,2.5):+.3f}, "
+          f"{np.percentile(early,97.5):+.3f}]."),
+          (f"- Late-half posterior b = {late.mean():+.3f} [{np.percentile(late,2.5):+.3f}, "
+          f"{np.percentile(late,97.5):+.3f}]."),
+          (f"- Shift early->late: {late.mean()-early.mean():+.3f}; "
+          f"{'no resolved shift (intervals overlap)' if (np.percentile(early,2.5) <= late.mean() <= np.percentile(early,97.5)) else 'possible shift'}."),
           ""]
     verdict = ("The posterior of the transmission bias is tightly constrained near neutral "
                f"(95% interval [{lo:+.3f}, {hi:+.3f}], including b = 0; posterior SD {post_sd:.3f} "

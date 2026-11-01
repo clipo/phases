@@ -81,21 +81,21 @@ def main() -> int:
         # reported as not runnable rather than run on an empty set.
         OUT_MD.write_text("\n".join([
             "# Is the drift shortfall an edge effect of a closed basin?", "",
-            f"NOT RUNNABLE on the primary matrix. All {len(wn)} assemblages in it lie inside "
-            "the basin, so there are no",
-            "outside neighbours to add. The assemblages beyond the basin's edge are known "
-            "only from Mainfort's (2003)",
-            "table, which this project keeps as a separate comparison and does not mix into "
-            "the matrix the drift model",
-            "is calibrated on. The question stays open. Answering it would need counts for "
-            "sites beyond the Nodena and",
-            "Parchman edges from a source independent of his, or a ruling that his counts "
-            "may stand in as boundary",
+            (f"NOT RUNNABLE on the primary matrix. All {len(wn)} assemblages in it lie inside "
+            "the basin, so there are no"),
+            ("outside neighbours to add. The assemblages beyond the basin's edge are known "
+            "only from Mainfort's (2003)"),
+            ("table, which this project keeps as a separate comparison and does not mix into "
+            "the matrix the drift model"),
+            ("is calibrated on. The question stays open. Answering it would need counts for "
+            "sites beyond the Nodena and"),
+            ("Parchman edges from a source independent of his, or a ruling that his counts "
+            "may stand in as boundary"),
             "conditions only (never scored).", "",
-            "An earlier run, on the matrix that summed the two sources, found a partial "
-            "effect at the one edge it could",
-            "reach (Nodena, 15.8-fold to 10.3-fold). That number described the defective "
-            "matrix and is superseded.", ""]), encoding="utf-8")
+            ("An earlier run, on the matrix that summed the two sources, found a partial "
+            "effect at the one edge it could"),
+            ("reach (Nodena, 15.8-fold to 10.3-fold). That number described the defective "
+            "matrix and is superseded."), ""]), encoding="utf-8")
         print(f"edge-effect test not runnable: no assemblages outside the basin; wrote {OUT_MD}")
         return 0
 
@@ -174,22 +174,22 @@ def main() -> int:
            for a in res}
 
     L = ["# Is the drift shortfall an edge effect of a closed basin?", "",
-         f"Basin phase set, {len(bn)} assemblages scored; the open arm simulates "
-         f"{len(wn)} ({len(outside)} outside the set).",
-         f"k = {args.k}, {args.reps} realizations per arm on shared seeds, calibrated "
+         (f"Basin phase set, {len(bn)} assemblages scored; the open arm simulates "
+         f"{len(wn)} ({len(outside)} outside the set)."),
+         (f"k = {args.k}, {args.reps} realizations per arm on shared seeds, calibrated "
          f"{MODEL} cell ({n_ind} learners, innovation {innovation}, mixing {mixing}), "
-         f"interaction length {LENGTH:g} river-km.", "",
+         f"interaction length {LENGTH:g} river-km."), "",
          "| arm | observed F_ST | drift median | shortfall | H_S | richness | H_T |",
          "|---|---|---|---|---|---|---|",
-         f"| observed | {obs_fst:.4f} | | | {obs_div['hs']:.3f} | {obs_div['rich']:.2f} | "
-         f"{obs_div['ht']:.3f} |"]
+         (f"| observed | {obs_fst:.4f} | | | {obs_div['hs']:.3f} | {obs_div['rich']:.2f} | "
+         f"{obs_div['ht']:.3f} |")]
     for a in res:
         L.append(f"| {a} | {obs_fst:.4f} | {fst[a]:.4f} | **{obs_fst / fst[a]:.1f}x** | "
                  f"{div[a]['hs']:.3f} | {div[a]['rich']:.2f} | {div[a]['ht']:.3f} |")
     L += ["", "## Per cluster", "",
-          "| cluster | n | outside assemblages within one interaction length | "
+          ("| cluster | n | outside assemblages within one interaction length | "
           "observed term | excess, closed | excess, open | excess, open with distinct "
-          "outside |", "|---|---|---|---|---|---|---|"]
+          "outside |"), "|---|---|---|---|---|---|---|"]
     names_by = {int(g): [n for n, l in zip(bn, labels) if l == g] for g in np.unique(labels)}
     for i, g in enumerate(np.unique(labels)):
         ec = obs_terms[i] / med["closed"][i] if med["closed"][i] > 0 else np.nan
@@ -199,12 +199,12 @@ def main() -> int:
         L.append(f"| {int(g)} ({', '.join(names_by[int(g)][:3])}...) | "
                  f"{int((labels == g).sum())} | {reach[int(g)]} | {obs_terms[i]:.4f} | "
                  f"{ec:.1f}x | {eo:.1f}x | **{e3:.1f}x** |")
-    L += ["", f"The outside assemblages' pooled profile differs from the basin's by an "
-              f"L1 distance of {l1:.3f}", "(0 identical, 2 disjoint).",
-          "", "A cluster with no outside assemblage within one interaction length has "
-              "an edge this test",
-          "cannot open; its row says nothing about whether an edge effect operates "
-          "there.", ""]
+    L += ["", (f"The outside assemblages' pooled profile differs from the basin's by an "
+              f"L1 distance of {l1:.3f}"), "(0 identical, 2 disjoint).",
+          "", ("A cluster with no outside assemblage within one interaction length has "
+              "an edge this test"),
+          ("cannot open; its row says nothing about whether an edge effect operates "
+          "there."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[5:]))
     return 0

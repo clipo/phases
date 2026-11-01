@@ -66,6 +66,7 @@ def test_bounded_adjustment_stays_inside_the_prior_box():
     adjusted without bounds must leave the box, or this test is not testing the
     thing it is named for."""
     import numpy as np
+
     from mls_emergence.inference.abc_smc import SMCResult
     from mls_emergence.inference.regression import regression_adjust
 

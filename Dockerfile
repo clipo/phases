@@ -1,6 +1,7 @@
-# Container for reproducing "Are the phases real? Distinguishing bounded
-# interaction groups from spatially structured drift in central Mississippi
-# Valley decorated ceramics."
+# Container for the Python levels of "What Are Phases? Geographic Structure,
+# Neutral Copying, and the Search for Social Boundaries in the Lower
+# Mississippi Valley" (run_all.sh levels 1 and 2 and the manuscript build).
+# R and rstan for the Stan fits (level 3) are not in this image; see README.md.
 #
 # Build:  docker build -t phases .
 # Run the full pipeline (writes into the container; mount to keep outputs):

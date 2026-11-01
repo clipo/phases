@@ -176,8 +176,9 @@ def main() -> int:
     sd = importlib.import_module("23_phases_vs_spatial_drift")
     a84 = importlib.import_module("84_phases_as_groups")
     a80 = importlib.import_module("80_boundaries_in_settlement_gaps")
-    from mls_emergence.dataio.settlement import load_lmv
     from pyproj import Transformer
+
+    from mls_emergence.dataio.settlement import load_lmv
 
     data = rev.load_sets()["basin"]
     counts, coords = mf._load_curated()
@@ -193,7 +194,7 @@ def main() -> int:
 
     rates = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates[(rates.region == "basin") & (rates.model == "pooled")].iloc[0]
-    cell = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]), n_ind=int(row["n_ind"]))
+    cell = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]), "n_ind": int(row["n_ind"])}
 
     # ---- the late-period sites without an analyzed assemblage (analysis 80's selection)
     tr = Transformer.from_crs("EPSG:4326", mm.UTM15N, always_xy=True)
@@ -244,8 +245,8 @@ def main() -> int:
         ("collections", minimum): the existing PFG collections with at least
         that many decorated sherds, at their own locations and counts."""
         if spec == 0:
-            return dict(d=data["d"], phase=phase28, ranks=data["ranks"], totals=totals28,
-                        spatial=data["labels"])
+            return {"d": data["d"], "phase": phase28, "ranks": data["ranks"], "totals": totals28,
+                        "spatial": data["labels"]}
         if isinstance(spec, tuple):
             pick = np.flatnonzero(coll_totals >= spec[1])
             x_add, p_add, r_add, t_add = coll_xy[pick], coll_phase[pick], coll_ranks[pick], coll_totals[pick]
@@ -255,10 +256,10 @@ def main() -> int:
         allxy = np.vstack([xy, x_add])
         d = mm.river_distance_matrix(allxy)[0]
         centred = allxy - allxy.mean(0)
-        return dict(d=d, phase=np.concatenate([phase28, p_add]),
-                    ranks=np.concatenate([data["ranks"], r_add]),
-                    totals=np.concatenate([totals28, t_add]),
-                    spatial=mf._kmeans_labels(centred, len(np.unique(data["labels"])), seed=7))
+        return {"d": d, "phase": np.concatenate([phase28, p_add]),
+                    "ranks": np.concatenate([data["ranks"], r_add]),
+                    "totals": np.concatenate([totals28, t_add]),
+                    "spatial": mf._kmeans_labels(centred, len(np.unique(data["labels"])), seed=7)}
 
     half = n_added_all // 2
     designs = [
@@ -274,8 +275,8 @@ def main() -> int:
         designs.append((f"the {n_c} excluded collections with at least {mn} decorated sherds added",
                         ("collections", mn), 1))
     n_c = int((coll_totals >= COLLECTION_MINIMA[-1]).sum())
-    designs.append((f"the {n_c} excluded collections with at least {COLLECTION_MINIMA[-1]} added, "
-                    f"classes split in four", ("collections", COLLECTION_MINIMA[-1]), 4))
+    designs.append(((f"the {n_c} excluded collections with at least {COLLECTION_MINIMA[-1]} added, "
+                    f"classes split in four"), ("collections", COLLECTION_MINIMA[-1]), 4))
 
     summaries = a84.SUMMARIES
     jobs_of = lambda base: [(li, si, leak, s, args.reps, base)
@@ -322,16 +323,16 @@ def main() -> int:
             pr = p_restriction(sub, summaries, a84.ACCEPT, RESTRICTED)
             pl = p_restriction(sub, summaries, a84.ACCEPT, LOCAL)
             auc = float((pr[:, None] > pl[None, :]).mean() + 0.5 * (pr[:, None] == pl[None, :]).mean())
-            cellmask = lambda t: (sub.leak == t[0]) & (sub.strength == t[1])
-            results.append(dict(
-                design=label + ("" if sherds == 1 else f", sherds x{SHERD_FACTOR}"),
-                sites=len(phase), classes=10 * parts, sherds=sherds,
-                p_restricted=np.percentile(pr, [10, 50, 90]), p_local=np.percentile(pl, [10, 50, 90]),
-                auc=auc,
-                fst_restricted=float(sub[cellmask(RESTRICTED)].phase_fst.median()),
-                fst_local=float(sub[cellmask(LOCAL)].phase_fst.median()),
-                be_restricted=float(sub[cellmask(RESTRICTED)].be_phase.median()),
-                be_local=float(sub[cellmask(LOCAL)].be_phase.median())))
+            cellmask = lambda t, sub=sub: (sub.leak == t[0]) & (sub.strength == t[1])
+            results.append({
+                "design": label + ("" if sherds == 1 else f", sherds x{SHERD_FACTOR}"),
+                "sites": len(phase), "classes": 10 * parts, "sherds": sherds,
+                "p_restricted": np.percentile(pr, [10, 50, 90]), "p_local": np.percentile(pl, [10, 50, 90]),
+                "auc": auc,
+                "fst_restricted": float(sub[cellmask(RESTRICTED)].phase_fst.median()),
+                "fst_local": float(sub[cellmask(LOCAL)].phase_fst.median()),
+                "be_restricted": float(sub[cellmask(RESTRICTED)].be_phase.median()),
+                "be_local": float(sub[cellmask(LOCAL)].be_phase.median())})
             r = results[-1]
             print(f"  {r['design']}: P(restriction) {r['p_restricted'][1]:.2f} with one, "
                   f"{r['p_local'][1]:.2f} without; ordered correctly in {auc:.2f} of pairs", flush=True)
@@ -342,14 +343,14 @@ def main() -> int:
 
     prior = float(np.mean([l < 1 for l in a84.LEAKS]))
     L = ["# What record would separate local innovation from restricted copying?", "",
-         f"Produced by `analyses/97_design_to_separate.py`. {args.reps} runs per setting on analysis 84's "
+         (f"Produced by `analyses/97_design_to_separate.py`. {args.reps} runs per setting on analysis 84's "
          f"sixteen-setting grid, at the calibrated combination (N {cell['n_ind']}, innovation "
          f"{cell['innovation']:g}, mixing {cell['mixing']:g}), for each design. Each run made with "
          f"**restricted copying** (copying across the phase lines cut to {RESTRICTED[0]:g}, one regional "
          f"pool) or with **local innovation** (copying unrestricted, {LOCAL[1]:g} of classes reordered by "
          f"phase) is put through analysis 84's rejection ABC ({a84.ACCEPT:.0%} of runs kept, six "
          f"summaries), left out of its own reference table, and the posterior probability of a "
-         f"restriction at the phase lines is read off. The prior is {prior:.2f}.", "",
+         f"restriction at the phase lines is read off. The prior is {prior:.2f}."), "",
          f"Added sites: {n_independent} late-period sites of the settlement compilation lie more than "
          f"{a80.EXCLUDE_KM:g} km from every analyzed assemblage (analysis 80's selection); {n_added_all} of "
          f"them fall in or nearest the Kent, Parkin or Walls areas and are used. Phases of the "
@@ -358,9 +359,9 @@ def main() -> int:
          + f". Sherd counts for added sites are drawn from the observed counts (seed {SITE_SEED}). "
          "The excluded collections are those of `output/findings/small_collections.md`, each at its own "
          "location, Phillips phase and decorated-sherd count.", "",
-         "| design | sites | classes | P(restriction), made with one: median (10th to 90th) | made without one: "
+         ("| design | sites | classes | P(restriction), made with one: median (10th to 90th) | made without one: "
          "median (10th to 90th) | pairs ordered correctly | between-phase F_ST, medians (with / without) | "
-         "boundary excess, medians (with / without) |",
+         "boundary excess, medians (with / without) |"),
          "|---|---|---|---|---|---|---|---|"]
     for r in results:
         L.append(f"| {r['design']} | {r['sites']} | {r['classes']} | "
@@ -371,18 +372,18 @@ def main() -> int:
     base_r = results[0]
     best = max(results, key=lambda r: r["auc"])
     L += ["", "## Reading", "",
-          "\"Pairs ordered correctly\" is the share of (restricted, local-innovation) pairs of records in "
+          ("\"Pairs ordered correctly\" is the share of (restricted, local-innovation) pairs of records in "
           "which the restricted one gets the higher posterior probability of a restriction: 0.5 means the "
           "procedure cannot tell the two explanations apart, 1 that it always can. It is a description of "
-          "the simulated records, not a test (rule 18).", "",
-          f"On the record as it is, the share is {base_r['auc']:.2f}, and the posterior is "
+          "the simulated records, not a test (rule 18)."), "",
+          (f"On the record as it is, the share is {base_r['auc']:.2f}, and the posterior is "
           f"{base_r['p_restricted'][1]:.2f} for records made with a restriction against "
           f"{base_r['p_local'][1]:.2f} for records made without one (prior {prior:.2f}). The highest "
-          f"share among the designs is {best['auc']:.2f}, for \"{best['design']}\".", "",
-          "The model is not recalibrated to the finer classes or the larger site set, so compare the "
+          f"share among the designs is {best['auc']:.2f}, for \"{best['design']}\"."), "",
+          ("The model is not recalibrated to the finer classes or the larger site set, so compare the "
           "designs with each other and not with the record. Finer classes are a geometric split of the "
           "ten classes' frequencies; real attribute classes need not behave that way. The added sites "
-          "are where late-period sites are recorded, which is not where collections exist.", ""]
+          "are where late-period sites are recorded, which is not where collections exist."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[8:]))
     print(f"wrote {OUT_MD}")

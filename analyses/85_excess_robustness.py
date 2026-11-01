@@ -67,7 +67,7 @@ def main() -> int:
 
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == a72.MODEL)].iloc[0]
-    rates = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]), n_ind=int(row["n_ind"]))
+    rates = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]), "n_ind": int(row["n_ind"])}
 
     obs_terms = terms(m_obs, labels)
     sims = [rev.sample_record(rev.simulate(data, 95000 + s, a72.MODEL, **rates),
@@ -87,12 +87,12 @@ def main() -> int:
     post = np.array(post)
 
     L = ["# Is the finer-scale excess a sampling effect?", "",
-         f"Produced by `analyses/85_excess_robustness.py`. Basin, {len(names)} assemblages, k = {K} "
+         (f"Produced by `analyses/85_excess_robustness.py`. Basin, {len(names)} assemblages, k = {K} "
          f"spatial clusters (the division of analysis 72), calibrated pooled-profile cell "
          f"({rates['n_ind']} learners, innovation {rates['innovation']}, mixing {rates['mixing']}), "
-         f"{args.reps} drift runs, {args.draws} draws for (a) and (b).", "",
-         "| cluster | assemblages | sherds | observed term | (a) sampling alone, median [95%] | drift median | "
-         "(b) excess over drift median, posterior median [95%] | share of drift runs reaching the observed term |",
+         f"{args.reps} drift runs, {args.draws} draws for (a) and (b)."), "",
+         ("| cluster | assemblages | sherds | observed term | (a) sampling alone, median [95%] | drift median | "
+         "(b) excess over drift median, posterior median [95%] | share of drift runs reaching the observed term |"),
          "|---|---|---|---|---|---|---|---|"]
     order = np.argsort(-(obs_terms / np.where(drift_med > 0, drift_med, np.nan)))
     for i in order:
@@ -118,10 +118,10 @@ def main() -> int:
             dm = float(np.median([terms(mm[keep], lab)[gi] for mm in sims]))
             L.append(f"| {g} | {names[j]} | {o:.4f} | {dm:.4f} | {o / dm:.1f} |")
     L += ["", "## Reading", "",
-          "(a) says how large each cluster's term would be from finite samples alone. (b) carries the "
+          ("(a) says how large each cluster's term would be from finite samples alone. (b) carries the "
           "uncertainty in the observed counts into the excess; a posterior that stays above 1 says the "
           "excess is not an accident of which sherds were collected. (c) says whether the excess belongs "
-          "to the cluster or to one collection in it.", ""]
+          "to the cluster or to one collection in it."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L))

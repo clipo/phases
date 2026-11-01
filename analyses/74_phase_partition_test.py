@@ -116,22 +116,11 @@ OUT_MD = ROOT / "output" / "findings" / "phase_partition_test.md"
 OUT_CSV = ROOT / "output" / "findings" / "phase_partition_ensembles.csv"
 SWEEP_CSV = ROOT / "output" / "findings" / "scale_sweep.csv"
 FIG = "fig12_phase_partition"
-EARTH_KM_PER_DEG = 111.32          # as analyses/23_phases_vs_spatial_drift.geo_km
-
-
-def km_xy(xy: np.ndarray) -> np.ndarray:
-    """Coordinates as centred kilometres, equirectangular about the mean latitude.
-
-    Degrees of longitude are 18 percent shorter than degrees of latitude at 35 N,
-    so a Euclidean norm on raw degrees stretches the basin east-west by that
-    much. It makes no material difference to the percentiles here (checked: the
-    random-boundary ensemble moves by about one percentile point), but inertia
-    is reported in km^2 and has to be in real units to be read.
-    """
-    mlat = np.deg2rad(xy[:, 0].mean())
-    p = np.column_stack([xy[:, 1] * np.cos(mlat) * EARTH_KM_PER_DEG,
-                         xy[:, 0] * EARTH_KM_PER_DEG])
-    return p - p.mean(0)
+# km_xy moved, body unchanged, to mls_emergence.dataio.basin on 2026-10-16
+# (probe spec row 7). Degrees of longitude are 18 percent shorter than degrees
+# of latitude at 35 N, so a Euclidean norm on raw degrees would stretch the
+# basin east-west by that much; inertia is reported in km^2.
+from mls_emergence.dataio.basin import EARTH_KM_PER_DEG, km_xy  # noqa: F401
 
 
 def inertia(pts: np.ndarray, lab: np.ndarray) -> float:
@@ -238,7 +227,7 @@ def main() -> int:
     xy = coords.to_numpy(float)
     names = [str(i) for i in counts.index]
 
-    labels_ph, derived = ph.assign_primary_phases(names, xy)
+    labels_ph, _derived = ph.assign_primary_phases(names, xy)
     phases = sorted(set(labels_ph))
     phase_idx = np.array([phases.index(l) for l in labels_ph])
     k = len(phases)
@@ -285,12 +274,12 @@ def main() -> int:
     rho = float(pd.Series(alt_in).corr(pd.Series(alt), method="spearman"))
     rho_opt = float(pd.Series(opt_in).corr(pd.Series(opt), method="spearman"))
 
-    pd.DataFrame(dict(
-        ensemble=(["random_boundary"] * len(alt) + ["compactness_matched"] * len(opt)),
-        fst=np.concatenate([alt, opt]),
-        inertia_km2=np.concatenate([alt_in, opt_in]),
-        ari_with_phases=np.concatenate([np.full(len(alt), np.nan), opt_ari]),
-    )).to_csv(OUT_CSV, index=False)
+    pd.DataFrame({
+        "ensemble": (["random_boundary"] * len(alt) + ["compactness_matched"] * len(opt)),
+        "fst": np.concatenate([alt, opt]),
+        "inertia_km2": np.concatenate([alt_in, opt_in]),
+        "ari_with_phases": np.concatenate([np.full(len(alt), np.nan), opt_ari]),
+    }).to_csv(OUT_CSV, index=False)
 
     sweep = pd.read_csv(SWEEP_CSV) if SWEEP_CSV.exists() else None
     if sweep is not None:
@@ -366,52 +355,52 @@ def main() -> int:
     png = fs.save_all(fig, FIG, close=True)
 
     L = ["# Are the phase boundaries where the differences are?", "",
-         f"Basin phase set, {len(names)} assemblages, {k} phases "
-         f"({', '.join(f'{p} {int((phase_idx == i).sum())}' for i, p in enumerate(phases))}).",
-         f"Phase partition cultural F_ST **{fst_phase:.4f}**, within-group inertia "
-         f"**{in_phase:.1f} km^2** per assemblage.", "",
+         (f"Basin phase set, {len(names)} assemblages, {k} phases "
+         f"({', '.join(f'{p} {int((phase_idx == i).sum())}' for i, p in enumerate(phases))})."),
+         (f"Phase partition cultural F_ST **{fst_phase:.4f}**, within-group inertia "
+         f"**{in_phase:.1f} km^2** per assemblage."), "",
          "| partition ensemble | median F_ST | median inertia (km^2) | the phases sit at |",
          "|---|---|---|---|",
-         f"| labels shuffled, n = {args.shuffles} | {np.median(shuffled):.4f} | "
+         (f"| labels shuffled, n = {args.shuffles} | {np.median(shuffled):.4f} | "
          f"(geography destroyed) | above {int(np.sum(shuffled < fst_phase)):,} of "
-         f"{args.shuffles:,} draws |",
-         f"| same sizes, boundaries at random, n = {args.alt} | {np.median(alt):.4f} | "
+         f"{args.shuffles:,} draws |"),
+         (f"| same sizes, boundaries at random, n = {args.alt} | {np.median(alt):.4f} | "
          f"{np.median(alt_in):.0f} | **{ordinal(pct_alt)} pct** "
-         f"({ordinal(alt_lo)}-{ordinal(alt_hi)}) |",
-         f"| same sizes, compactness matched, n = {args.opt} | {np.median(opt):.4f} | "
+         f"({ordinal(alt_lo)}-{ordinal(alt_hi)}) |"),
+         (f"| same sizes, compactness matched, n = {args.opt} | {np.median(opt):.4f} | "
          f"{np.median(opt_in):.0f} | **{ordinal(pct_opt)} pct** "
-         f"({ordinal(opt_lo)}-{ordinal(opt_hi)}) |",
+         f"({ordinal(opt_lo)}-{ordinal(opt_hi)}) |"),
          "",
          "Percentiles are one-sided empirical percentiles of the ensemble, with the",
          f"2.5th-97.5th range over {2000} resamples of the same draw count in brackets.",
          "",
          "## Did the compactness match hold?", "",
          f"The phases' inertia is {in_phase:.1f} km^2 per assemblage. The random-boundary",
-         f"ensemble's median is {np.median(alt_in):.0f} ({np.percentile(alt_in, 5):.0f}"
+         (f"ensemble's median is {np.median(alt_in):.0f} ({np.percentile(alt_in, 5):.0f}"
          f"-{np.percentile(alt_in, 95):.0f}); the compactness-matched ensemble's is "
          f"{np.median(opt_in):.0f} ({np.percentile(opt_in, 5):.0f}"
-         f"-{np.percentile(opt_in, 95):.0f}).",
-         f"{100 * np.mean(np.asarray(opt_in) < in_phase):.0f} percent of the compactness-matched "
-         f"partitions and {100 * np.mean(np.asarray(alt_in) < in_phase):.0f} percent of the",
+         f"-{np.percentile(opt_in, 95):.0f})."),
+         (f"{100 * np.mean(np.asarray(opt_in) < in_phase):.0f} percent of the compactness-matched "
+         f"partitions and {100 * np.mean(np.asarray(alt_in) < in_phase):.0f} percent of the"),
          "random-boundary ones are tighter than the phases.", "",
-         f"Across the random-boundary draws, inertia and F_ST correlate at Spearman "
-         f"{rho:+.2f}, and",
-         f"across the compactness-matched draws at {rho_opt:+.2f}. So differentiation here "
-         "is NOT",
+         (f"Across the random-boundary draws, inertia and F_ST correlate at Spearman "
+         f"{rho:+.2f}, and"),
+         (f"across the compactness-matched draws at {rho_opt:+.2f}. So differentiation here "
+         "is NOT"),
          "a simple function of how tight the groups are, and the looseness above does not",
          "by itself bias the comparison. The superseded greedy generator did show such a",
          "coupling (-0.35), which is a fact about that generator's fractured partitions",
          "rather than about this statistic. Panel B plots both clouds.", "",
          "## What the compactness search recovers", "",
-         f"Of {args.opt} restarts, **{exact}** ({100 * exact / args.opt:.1f} percent) "
-         "returned the phase partition",
-         f"exactly (adjusted Rand index 1.0); the mean ARI with the phases is "
-         f"{opt_ari.mean():.2f}.",
-         f"The lowest inertia found anywhere in the search is {opt_in.min():.1f} km^2 "
-         f"against the phases'",
-         f"{in_phase:.1f}, so the phases are within "
+         (f"Of {args.opt} restarts, **{exact}** ({100 * exact / args.opt:.1f} percent) "
+         "returned the phase partition"),
+         (f"exactly (adjusted Rand index 1.0); the mean ARI with the phases is "
+         f"{opt_ari.mean():.2f}."),
+         (f"The lowest inertia found anywhere in the search is {opt_in.min():.1f} km^2 "
+         f"against the phases'"),
+         (f"{in_phase:.1f}, so the phases are within "
          f"{100 * (in_phase / opt_in.min() - 1):.1f} percent of the most compact "
-         f"{k}-way division",
+         f"{k}-way division"),
          "of these assemblages at these group sizes.", "",
          "## Reading", "",
          "Beating shuffled labels says only that nearby assemblages resemble one another,",

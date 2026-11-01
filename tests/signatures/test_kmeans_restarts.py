@@ -5,6 +5,7 @@ reference optimum is computed with scipy's k-means2, an implementation
 independent of the one under test, over many restarts (rule 3).
 """
 from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -14,9 +15,11 @@ XY = Path("data/raw/mainfort-pfg-cplXY.txt")
 @pytest.mark.skipif(not XY.exists(), reason="coordinate file absent")
 @pytest.mark.parametrize("k", [2, 3, 4, 5, 6])
 def test_kmeans_labels_reach_global_optimum(k):
-    import importlib, sys
+    import importlib
+    import sys
     sys.path.insert(0, "analyses")
     from scipy.cluster.vq import kmeans2
+
     from mls_emergence.signatures.assortativity import _kmeans_labels
     mf = importlib.import_module("make_figures")
     _, coords = mf._load_curated()

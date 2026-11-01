@@ -59,7 +59,7 @@ sys.path.insert(0, str(ROOT / "analyses"))
 r21 = importlib.import_module("21_signal_recovery")
 res = importlib.import_module("17_basin_results")
 mf = res.mf
-from mls_emergence.signatures import variance as V  # noqa: E402
+from mls_emergence.signatures import variance as V
 
 OUT = ROOT / "output" / "findings" / "gini_simpson_bias.md"
 FAST = "--fast" in sys.argv
@@ -98,8 +98,8 @@ def _rho(M, clusters, bins_arr, fn) -> float:
 
 def main() -> None:
     L = ["# Does the plug-in Gini-Simpson bias change a reported result?", "",
-         f"Produced by `analyses/62_gini_simpson_bias.py`"
-         f"{' (--fast)' if FAST else ''}.", ""]
+         (f"Produced by `analyses/62_gini_simpson_bias.py`"
+         f"{' (--fast)' if FAST else ''}."), ""]
 
     # ---- 1. per-bin diversity trajectory -------------------------------- #
     counts_df, _ = mf._load_curated()
@@ -114,9 +114,9 @@ def main() -> None:
         a, u = V.gini_simpson(pooled), gs_unbiased(pooled)
         pi.append(a); ub.append(u)
         L.append(f"| {b} | {pooled.sum():.0f} | {a:.4f} | {u:.4f} | {u - a:+.4f} |")
-    L += ["", f"Bins pool thousands of sherds, so the bias is at most "
+    L += ["", (f"Bins pool thousands of sherds, so the bias is at most "
           f"{100 * max(abs(u - a) / a for a, u in zip(pi, ub)):.2f} percent and the "
-          "declining trajectory is unchanged (Spearman -1.000 either way).", ""]
+          "declining trajectory is unchanged (Spearman -1.000 either way)."), ""]
 
     # ---- 2. the F_ST trajectory trend ------------------------------------ #
     op = r21.operating_point()
@@ -145,16 +145,16 @@ def main() -> None:
     oa, ou = float(np.mean(obs_a)), float(np.mean(obs_u))
 
     L += ["## 2. The size-controlled F_ST trajectory trend", "",
-          f"Groups here are cluster-by-bin cells on rarefied data, holding "
+          (f"Groups here are cluster-by-bin cells on rarefied data, holding "
           f"{min(sizes):.0f} to {max(sizes):.0f} sherds (median "
-          f"{np.median(sizes):.0f}), which is where the bias bites.", "",
+          f"{np.median(sizes):.0f}), which is where the bias bites."), "",
           f"- plug-in trend  **{oa:+.4f}**", f"- unbiased trend **{ou:+.4f}**",
           f"- shift {ou - oa:+.4f}, over {len(obs_a)} rarefactions", ""]
 
     # ---- 3. does the INFERENCE move? ------------------------------------- #
     L += ["## 3. Does the inferred closure strength move?", "",
-          "The recovery curve is built by scoring synthetic assemblages with the "
-          "same estimator, so the bias appears on both sides of the mapping.", "",
+          ("The recovery curve is built by scoring synthetic assemblages with the "
+          "same estimator, so the bias appears on both sides of the mapping."), "",
           "| injected s | plug-in curve | unbiased curve | shift |", "|---|---|---|---|"]
     curve_a, curve_u = [], []
     for s in S_GRID:
@@ -180,22 +180,22 @@ def main() -> None:
         return float(np.interp(obs, c, g))
 
     s_a, s_u = invert(curve_a, oa), invert(curve_u, ou)
-    L += ["", f"Inverting each curve at its own observed value gives an implied "
+    L += ["", (f"Inverting each curve at its own observed value gives an implied "
           f"closure strength of **{s_a:.2f}** under the plug-in and **{s_u:.2f}** "
-          "under the unbiased estimator.", "",
+          "under the unbiased estimator."), "",
           "## Verdict", "",
-          "The bias is real and it does move the descriptive statistic, by more "
+          ("The bias is real and it does move the descriptive statistic, by more "
           "than the statistic's own magnitude. It does not move the claim. "
           "Correcting the estimator lifts the recovery curve by more than it "
           "lifts the observed value, so the observation lands at a slightly "
           "LOWER closure strength than before, and both readings sit at the "
           "closure-strength posterior's published median of about 0.30. The "
           "correction weakens the case for closure rather than strengthening "
-          "it, so the paper's conclusion does not depend on this choice.", "",
-          "The plug-in is kept. This file is why that is a defended choice "
+          "it, so the paper's conclusion does not depend on this choice."), "",
+          ("The plug-in is kept. This file is why that is a defended choice "
           "rather than an inherited one (rule 20 in spirit: the estimator, like "
           "a prior, is checked against the direction it would push the "
-          "hypothesis).", ""]
+          "hypothesis)."), ""]
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(L), encoding="utf-8")

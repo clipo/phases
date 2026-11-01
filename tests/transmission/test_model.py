@@ -8,18 +8,17 @@ both valid initial conditions on opposite sides of the saddle.
 from __future__ import annotations
 
 import numpy as np
+from signaling.emergence import phi_star
 
 from mls_emergence.signatures import convergence
 from mls_emergence.transmission.model import (
-    SIGMA,
     LAMBDA_W,
+    SIGMA,
     coupling_robustness,
     emit_signatures,
     phi_trajectory,
     simulate_copying,
 )
-
-from signaling.emergence import phi_star
 
 
 def _coords(n_groups: int, seed: int = 0) -> np.ndarray:

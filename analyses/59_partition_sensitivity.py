@@ -44,17 +44,18 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, save  # noqa: E402
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "findings" / "partition_sensitivity.md"
 K_GRID = [2, 3, 4, 5, 6]
 SEEDS = list(range(1, 21))
 PRIOR = ("beta", 1.0, 10.0)          # the adopted primary prior (D-31)
-FULL = dict(draws=1500, tune=1500, chains=4, target_accept=0.95)
-FAST = dict(draws=400, tune=600, chains=2, target_accept=0.95)
+FULL = {"draws": 1500, "tune": 1500, "chains": 4, "target_accept": 0.95}
+FAST = {"draws": 400, "tune": 600, "chains": 2, "target_accept": 0.95}
 REPORTED_FST = 0.0063               # output/bayesian_fst.md, Gini-Simpson readout, k=2
 REPORTED_WIDTH = 0.0025              # width of the reported 95% CI, [0.0050, 0.0075]
 
@@ -80,18 +81,19 @@ def group_counts(counts, labels):
 
 def fit(gc, cfg, seed=0):
     import arviz as az
-    from mls_emergence.inference import sample_fst, gini_simpson_summary
+
+    from mls_emergence.inference import gini_simpson_summary, sample_fst
     idata = sample_fst(gc, random_seed=seed, f_prior=PRIOR, **cfg)
     g = gini_simpson_summary(idata, gc, seed=0)
     s = np.asarray(g["gst_samples"], float)
     flat = lambda d: np.concatenate([np.atleast_1d(v.values).ravel()
                                      for v in d.data_vars.values()])
-    return dict(med=float(np.median(s)),
-                lo=float(np.percentile(s, 2.5)), hi=float(np.percentile(s, 97.5)),
-                rhat=float(np.max(flat(az.rhat(idata)))),
-                ess=float(np.min(flat(az.ess(idata)))),
-                ndiv=int(idata.sample_stats["diverging"].sum()),
-                ntot=int(idata.sample_stats["diverging"].size))
+    return {"med": float(np.median(s)),
+                "lo": float(np.percentile(s, 2.5)), "hi": float(np.percentile(s, 97.5)),
+                "rhat": float(np.max(flat(az.rhat(idata)))),
+                "ess": float(np.min(flat(az.ess(idata)))),
+                "ndiv": int(idata.sample_stats["diverging"].sum()),
+                "ntot": int(idata.sample_stats["diverging"].size)}
 
 
 def main(fast=False):
@@ -135,15 +137,15 @@ def main(fast=False):
     spread3 = float(meds3.max() - meds3.min())
 
     L = ["# How much of the reported F_ST is the partition we drew?", "",
-         f"Produced by `analyses/59_partition_sensitivity.py` "
+         (f"Produced by `analyses/59_partition_sensitivity.py` "
          f"({'FAST' if fast else 'full'}). F15 measurements M1 and M3. "
          f"Basin, {coords.shape[0]} assemblages, Beta(1,10) prior throughout. "
          f"Not a test: this is the spread of the posterior across choices we "
-         f"made, reported as a spread.", "",
-         f"**Pre-stated threshold.** The reported F_ST is {REPORTED_FST:.4f} with a 95 "
+         f"made, reported as a spread."), "",
+         (f"**Pre-stated threshold.** The reported F_ST is {REPORTED_FST:.4f} with a 95 "
          f"percent interval of width {REPORTED_WIDTH:.4f}. A choice that moves "
          f"the median by more than that matters more than the data's own "
-         f"uncertainty. This was written down before the numbers were seen.", "",
+         f"uncertainty. This was written down before the numbers were seen."), "",
          "## M1. Sensitivity to k", "",
          "| k | silhouette | F_ST median | 95% CI | R-hat | min ESS | divergences |",
          "|---|---|---|---|---|---|---|"]
@@ -165,9 +167,9 @@ def main(fast=False):
              f"That is {spread1/REPORTED_WIDTH:.2f} times the data's own "
              f"uncertainty, so the choice of k is not the dominant term."), "",
           f"## M3. Sensitivity to the k-means seed at k = {k_sel}", "",
-          f"{len(m3)} seeds. Posterior medians span {meds3.min():.4f} to "
+          (f"{len(m3)} seeds. Posterior medians span {meds3.min():.4f} to "
           f"{meds3.max():.4f}, a spread of **{spread3:.4f}** "
-          f"({spread3/REPORTED_WIDTH:.2f} times the reported interval width).",
+          f"({spread3/REPORTED_WIDTH:.2f} times the reported interval width)."),
           "",
           ("The seed is not a meaningful degree of freedom: the k-means helper "
            "takes the best of several initialisations, and at this k the "
@@ -178,15 +180,15 @@ def main(fast=False):
            "of the reported number, which is not defensible and must be "
            "reported or removed."), "",
           "## What this means for M2", ""]
-    L += ([f"k-dependence is the dominant term, so the partition-at-fixed-grain "
-           f"ensemble (M2) is worth running: the question becomes whether the "
-           f"specific partition is special among partitions of the same grain, "
-           f"or just one draw."]
+    L += ([("k-dependence is the dominant term, so the partition-at-fixed-grain "
+           "ensemble (M2) is worth running: the question becomes whether the "
+           "specific partition is special among partitions of the same grain, "
+           "or just one draw.")]
           if spread1 > REPORTED_WIDTH else
-          [f"k-dependence is smaller than the data's own uncertainty, which "
-           f"weakens the case for running M2. The partition is not obviously "
-           f"carrying the result, and the honest framing may simply be to "
-           f"report the dependence measured here alongside the number."])
+          [("k-dependence is smaller than the data's own uncertainty, which "
+           "weakens the case for running M2. The partition is not obviously "
+           "carrying the result, and the honest framing may simply be to "
+           "report the dependence measured here alongside the number.")])
     L += ["", "## Diagnostics (rule 16)", ""]
     for k in sorted(m1):
         r = m1[k]

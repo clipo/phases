@@ -1,5 +1,7 @@
 import numpy as np
+
 from mls_emergence.signatures import assortativity as A
+
 
 def test_brainerd_robinson_identical_is_200():
     a = np.array([50, 30, 20]); b = np.array([50, 30, 20])

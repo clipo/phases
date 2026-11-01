@@ -1,17 +1,17 @@
 # Bayesian cultural F_ST for the basin (Balding-Nichols model)
 
-Observed St. Francis basin (canonical drainage membership, 28 assemblages), 2 spatial clusters, 10 decorated types. Balding-Nichols Dirichlet-multinomial (F ~ Beta(1,10), per-cluster frequencies marginalized), 2000 draws x 4 chains (full). The estimator is shared with a sibling project for consistency of method; no data is shared.
+Observed St. Francis basin (canonical drainage membership, 29 assemblages), 3 spatial clusters, 10 decorated types. Balding-Nichols Dirichlet-multinomial (F ~ Beta(1,10), per-cluster frequencies marginalized), 2000 draws x 4 chains (full). The estimator is shared with a sibling project for consistency of method; no data is shared.
 
 ## 1. Cultural F_ST parameter (Balding-Nichols theta)
 
-- Posterior median F_ST = 0.0704 (mean 0.0812), 95% credible interval [0.0102, 0.1794].
+- Posterior median F_ST = 0.0634 (mean 0.0696), 95% credible interval [0.0235, 0.1330].
 - Beta(1,10) prior on F_ST, adopted on prior-predictive grounds (analyses/57). It leans toward SMALL F_ST, which is the direction of this paper's conclusion, so the Uniform(0,1) refit below is the check that the prior is not doing the work.
-- Prior sensitivity (Uniform(0,1) prior on F): median 0.1011, 95% CI [0.0114, 0.2422].
+- Prior sensitivity (Uniform(0,1) prior on F): median 0.0731, 95% CI [0.0220, 0.1579].
 
 ## 2. Gini-Simpson F_ST (the manuscript estimator), conjugate readout
 
-- Posterior median = 0.0063 (mean 0.0063), 95% credible interval [0.0050, 0.0075].
-- Frequentist plug-in (variance.cultural_fst) = 0.0062, which falls inside the 95% interval.
+- Posterior median = 0.0178 (mean 0.0179), 95% credible interval [0.0157, 0.0200].
+- Frequentist plug-in (variance.cultural_fst) = 0.0179, which falls inside the 95% interval.
 
 This readout is a credible interval on the exact estimator the manuscript reports, reconstructed from the same fit as p_g | x_g ~ Dirichlet((1-F)/F * pi + x_g).
 
@@ -27,5 +27,5 @@ What stands in its place is section 1: the posterior for F itself, under a prior
 
 ## MCMC diagnostics
 
-- Beta(1,10) prior (primary): max R-hat = 1.0008 (want < 1.01); min bulk ESS = 3410; min tail ESS = 4332; divergences = 0/8000 (0.00%); treedepth >= 10 = 0; min E-BFMI = 0.943 (want > 0.3).
-- Uniform(0,1) prior (sensitivity refit): max R-hat = 1.0011 (want < 1.01); min bulk ESS = 3257; min tail ESS = 4144; divergences = 0/8000 (0.00%); treedepth >= 10 = 0; min E-BFMI = 0.949 (want > 0.3).
+- Beta(1,10) prior (primary): max R-hat = 1.0008 (want < 1.01); min bulk ESS = 4504; min tail ESS = 4251; divergences = 0/8000 (0.00%); treedepth >= 10 = 0; min E-BFMI = 0.990 (want > 0.3).
+- Uniform(0,1) prior (sensitivity refit): max R-hat = 1.0015 (want < 1.01); min bulk ESS = 4299; min tail ESS = 4515; divergences = 0/8000 (0.00%); treedepth >= 10 = 0; min E-BFMI = 0.979 (want > 0.3).

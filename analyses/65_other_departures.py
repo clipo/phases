@@ -60,7 +60,11 @@ sys.path.insert(0, str(ROOT / "analyses"))
 
 r47 = importlib.import_module("47_revision_analysis")
 sd = importlib.import_module("23_phases_vs_spatial_drift")
-from mls_emergence.transmission.spatial import copying_weights, drift_record, sample_record  # noqa: E402
+from mls_emergence.transmission.spatial import (
+    copying_weights,
+    drift_record,
+    sample_record,
+)
 
 OUT_MD = ROOT / "output" / "findings" / "other_departures.md"
 OUT_JSON = ROOT / "output" / "other_departures.json"
@@ -210,13 +214,13 @@ def run_region(sets, region, cell_by_region, rows):
         # posterior over the departure's strength given the observation, which
         # is what turns "the median passes through the observed value" into a
         # statement with an interval on it (rule 18).
-        r = dict(departure=dep, setting=label, observed=obs_fst,
-                 draws=[float(x) for x in fsts] if SAVE_DRAWS else None,
-                 fst_median=float(np.median(fsts)),
-                 fst_lo=float(np.percentile(fsts, 2.5)),
-                 fst_hi=float(np.percentile(fsts, 97.5)),
-                 reach=float(np.mean(fsts >= obs_fst)),
-                 diversity_matched=bool(matched(ach, obs_div)), achieved=ach)
+        r = {"departure": dep, "setting": label, "observed": obs_fst,
+                 "draws": [float(x) for x in fsts] if SAVE_DRAWS else None,
+                 "fst_median": float(np.median(fsts)),
+                 "fst_lo": float(np.percentile(fsts, 2.5)),
+                 "fst_hi": float(np.percentile(fsts, 97.5)),
+                 "reach": float(np.mean(fsts >= obs_fst)),
+                 "diversity_matched": bool(matched(ach, obs_div)), "achieved": ach}
         rows.append(dict(r, region=region))
         print(f"  {dep} {label:<28} F_ST {r['fst_median']:.4f} "
               f"[{r['fst_lo']:.4f}, {r['fst_hi']:.4f}]  shortfall "
@@ -282,19 +286,19 @@ def main() -> int:
         OUT_JSON.write_text(json.dumps(rows, indent=2))
 
     L = ["# The three remaining departures from the drift null", "",
-         f"Produced by `analyses/65_other_departures.py`{' (--fast)' if FAST else ''}, "
-         f"{N_REAL} realizations per cell, each region at its own calibrated cell.", "",
-         "The St. Francis basin is the test; the southeast-Missouri (`cmv`) set is a "
+         (f"Produced by `analyses/65_other_departures.py`{' (--fast)' if FAST else ''}, "
+         f"{N_REAL} realizations per cell, each region at its own calibrated cell."), "",
+         ("The St. Francis basin is the test; the southeast-Missouri (`cmv`) set is a "
          "comparison, not a replication, because those deposits are on the whole earlier "
-         "and were collected under a different sampling regime.", ""]
+         "and were collected under a different sampling regime."), ""]
     for reg in sorted({r.get("region") for r in rows}):
         c = cell_by_region[reg]
         o = next(r["observed"] for r in rows if r.get("region") == reg)
         L.append(f"- **{reg}**: observed $F_{{ST}}$ {o:.4f}; calibrated cell N {c['n_ind']}, "
                  f"innovation {c['innovation']}, mixing {c['mixing']}.")
     L += ["",
-          "A cell closes the gap only if it reaches its region's observed value AND stays "
-          "inside the calibration's 10 percent diversity tolerance.", "",
+          ("A cell closes the gap only if it reaches its region's observed value AND stays "
+          "inside the calibration's 10 percent diversity tolerance."), "",
           "| region | departure | setting | median $F_{ST}$ | 95% | shortfall | reaches obs | diversity |",
           "|---|---|---|---:|---|---:|---:|:---:|"]
     names = {"A": "transport geography", "B": "accumulation spans",

@@ -17,6 +17,13 @@ from scipy.linalg import solve_triangular
 
 @dataclass
 class SMCResult:
+    """Final population and run record returned by ``abc_smc``.
+
+    Rows of ``thetas``, ``summaries`` and ``distances`` describe the same
+    accepted particle; ``weights`` sums to one. The three per-round lists have
+    one entry per completed round, in round order.
+    """
+
     thetas: np.ndarray       # (n_particles, d) final weighted population
     weights: np.ndarray      # (n_particles,) normalized importance weights
     summaries: np.ndarray    # (n_particles, s_dim) accepted summaries
@@ -167,12 +174,23 @@ def abc_smc(prior_sampler, prior_logpdf, simulator, summary, distance, s_obs,
 
 
 def weighted_mean(values: np.ndarray, weights: np.ndarray) -> float:
+    """Weighted mean of ``values``, sum(w * v) / sum(w).
+
+    Weights need not be normalized. Returns a Python float.
+    """
     values = np.asarray(values, float)
     weights = np.asarray(weights, float)
     return float(np.sum(values * weights) / np.sum(weights))
 
 
 def weighted_quantile(values: np.ndarray, weights: np.ndarray, q: float) -> float:
+    """Weighted quantile of ``values`` at probability ``q`` (0 to 1).
+
+    Values are sorted, each is placed at the midpoint of its share of the
+    cumulative normalized weight, and ``q`` is linearly interpolated between
+    those positions. ``q`` below the first or above the last midpoint returns
+    the smallest or largest value.
+    """
     values = np.asarray(values, float)
     weights = np.asarray(weights, float)
     order = np.argsort(values)
@@ -185,6 +203,8 @@ def weighted_quantile(values: np.ndarray, weights: np.ndarray, q: float) -> floa
 
 def resample(values: np.ndarray, weights: np.ndarray, size: int,
              rng: np.random.Generator) -> np.ndarray:
+    """Draw ``size`` rows of ``values`` with replacement, with probability
+    proportional to ``weights``, using ``rng``. Returns the drawn rows."""
     values = np.asarray(values)
     p = np.asarray(weights, float)
     p = p / p.sum()

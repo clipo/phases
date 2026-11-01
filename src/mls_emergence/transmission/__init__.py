@@ -18,10 +18,10 @@ from mls_emergence.transmission.model import (
 )
 
 __all__ = [
-    "SIGMA",
     "LAMBDA_W",
+    "SIGMA",
+    "coupling_robustness",
+    "emit_signatures",
     "phi_trajectory",
     "simulate_copying",
-    "emit_signatures",
-    "coupling_robustness",
 ]

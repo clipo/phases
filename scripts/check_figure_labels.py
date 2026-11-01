@@ -27,7 +27,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMENT = re.compile(r"<!--\s*(.*?)\s*-->", re.S)
+COMMENT = re.compile(r"<!--\s*(.*?)\s*-->", re.DOTALL)
 # Matplotlib's own provenance comments, which carry a timestamp and so differ on
 # every run regardless of content.
 BOILERPLATE = ("Matplotlib", "Created with")
@@ -43,14 +43,14 @@ def text_of(svg: str) -> Counter:
 
 def head_version(rel: str) -> str | None:
     r = subprocess.run(
-        ["git", "show", f"HEAD:{rel}"], cwd=ROOT, capture_output=True, text=True
+        ["git", "show", f"HEAD:{rel}"], cwd=ROOT, capture_output=True, text=True, check=False
     )
     return r.stdout if r.returncode == 0 else None
 
 
 def main() -> int:
     tracked = subprocess.run(
-        ["git", "ls-files", "figures/*.svg"], cwd=ROOT, capture_output=True, text=True
+        ["git", "ls-files", "figures/*.svg"], cwd=ROOT, capture_output=True, text=True, check=False
     ).stdout.split()
     checked = bad = 0
     for rel in sorted(tracked):

@@ -22,15 +22,21 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 grid = importlib.import_module("12_sensitivity_grid")
 ch = importlib.import_module("11_chronology_14c")
-from mls_emergence.dataio.pfg import load_pfg_counts  # noqa: E402
-from mls_emergence.dataio.settlement import (  # noqa: E402
-    load_lmv, join_pfg_to_lmv, normalize_grid,
-    load_height_corrections, apply_height_corrections)
+from mls_emergence.dataio.pfg import load_pfg_counts
+from mls_emergence.dataio.settlement import (
+    apply_height_corrections,
+    join_pfg_to_lmv,
+    load_height_corrections,
+    load_lmv,
+    normalize_grid,
+)
 
 OUT = ROOT / "output" / "basin_results.md"
 PARKIN_BROAD = "11-N-1"
@@ -117,7 +123,7 @@ def main():
         s = P[col].dropna()
         return spearmanr(s.index.to_numpy(float), s.values) if len(s) >= 3 else (np.nan, np.nan)
 
-    L += ["## Four-signature trajectory (k = %d clusters, 6 bins)" % k, "",
+    L += [f"## Four-signature trajectory (k = {k:d} clusters, 6 bins)", "",
           "| signature | Spearman rho | p |", "|---|---|---|"]
     for c in ["neutral", "seriation", "fst", "spatial"]:
         r, p = tr(c)
@@ -128,8 +134,8 @@ def main():
     conv = z.mean(axis=1).dropna()
     cr, cp = spearmanr(conv.index.to_numpy(float), conv.values) if len(conv) >= 3 else (np.nan, np.nan)
     cslope = np.polyfit(conv.index.to_numpy(float), conv.values, 1)[0] if len(conv) >= 2 else np.nan
-    L += ["", f"- Convergence score (3 continuous signatures): slope = {cslope:+.3f}, "
-          f"Spearman rho = {cr:+.2f}, p = {cp:.3f}.",
+    L += ["", (f"- Convergence score (3 continuous signatures): slope = {cslope:+.3f}, "
+          f"Spearman rho = {cr:+.2f}, p = {cp:.3f}."),
           "- Seriation fragmentation (per-assemblage membership vs CA): see table above.", ""]
 
     # correlation matrix (4 signatures across bins)
@@ -137,8 +143,8 @@ def main():
     offdiag = C.values[np.triu_indices(4, 1)]
     L += ["## Empirical 4-signature correlation (across bins)",
           f"- Mean |r| off-diagonal = {np.nanmean(np.abs(offdiag)):.2f} (simulation genuine 0.88).",
-          f"- neutral-seriation r = {C.loc['neutral','seriation']:+.2f}; "
-          f"fst-spatial r = {C.loc['fst','spatial']:+.2f}.", ""]
+          (f"- neutral-seriation r = {C.loc['neutral','seriation']:+.2f}; "
+          f"fst-spatial r = {C.loc['fst','spatial']:+.2f}."), ""]
 
     L += ["## IDSS group structure (cont = 0.1)",
           f"- n_groups = {n_groups}, max size = {max_sz}, bridges = {nbridge}/{n}.",
@@ -172,9 +178,9 @@ def main():
     primacy = float(ht.iloc[0] / ht.iloc[1]) if len(ht) >= 2 else np.nan
     L += ["## Settlement (broad basin)",
           f"- Broad basin sites: {len(bm)}.",
-          f"- Mound-height ranking: {len(ht)} sites with height > 0; Parkin "
+          (f"- Mound-height ranking: {len(ht)} sites with height > 0; Parkin "
           f"{'rank ' + str(p_ht_rank) + '/' + str(len(ht)) if p_ht_rank else 'unranked'} "
-          f"at {ht.get(PARKIN_BROAD, float('nan')):.1f} ft; tallest/second = {primacy:.2f}.", ""]
+          f"at {ht.get(PARKIN_BROAD, float('nan')):.1f} ft; tallest/second = {primacy:.2f}."), ""]
 
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")

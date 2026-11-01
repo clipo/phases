@@ -32,6 +32,7 @@ treated as flat rather than as unimodality violations.
 """
 
 from __future__ import annotations
+
 import numpy as np
 
 
@@ -133,9 +134,7 @@ def _order_is_valid(matrix: np.ndarray, order: list[int], tol: float = 0.0,
     if not co_present.any(axis=1).all():
         return False
     jumps = np.abs(np.diff(f, axis=0))
-    if (jumps > cont).any():
-        return False
-    return True
+    return not (jumps > cont).any()
 
 
 def _canonical(order: list[int]) -> tuple[int, ...]:
@@ -186,13 +185,12 @@ def _extend(matrix, order, remaining, tol, cont, found, visited, limits, prep):
                         visited, limits, prep)
                 if limits["truncated"]:
                     return
-    if not extended:
-        # No assemblage can be appended at either end: this ordering is maximal
-        # under end-extension. Record it; orderings that turn out to be subsets
-        # of a larger group (reached from a different seed) are pruned once at
-        # the end of ``seriation_solutions``.
-        if key not in found:
-            found[key] = list(order)
+    # No assemblage can be appended at either end: this ordering is maximal
+    # under end-extension. Record it; orderings that turn out to be subsets
+    # of a larger group (reached from a different seed) are pruned once at
+    # the end of ``seriation_solutions``.
+    if not extended and key not in found:
+        found[key] = list(order)
 
 
 def seriation_solutions(matrix: np.ndarray, tol: float = 0.0,

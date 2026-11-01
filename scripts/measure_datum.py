@@ -23,11 +23,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from mls_emergence.dataio import coords as C  # noqa: E402
-from mls_emergence.dataio.settlement import load_lmv  # noqa: E402
-from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
-from mls_emergence.signatures.assortativity import _kmeans_labels  # noqa: E402
-from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
+from mls_emergence.dataio import coords as C
+from mls_emergence.dataio.matrix import read_analysis_matrix
+from mls_emergence.dataio.settlement import load_lmv
+from mls_emergence.signatures.assortativity import _kmeans_labels
+from mls_emergence.signatures.variance import cultural_fst
 
 XY = ROOT / "data" / "raw" / "mainfort-pfg-cplXY.txt"
 OUT = ROOT / "output" / "findings" / "datum_conversion.md"
@@ -101,9 +101,9 @@ def main():
     n_conv = int((lmv["Datum"] != "as recorded").sum())
 
     L = ["# The NAD27 conversion: ledger and measured effect", "",
-         f"Produced by `scripts/measure_datum.py`. Tolerance {C.PFG_DATUM_TOL_M:.0f} m "
+         (f"Produced by `scripts/measure_datum.py`. Tolerance {C.PFG_DATUM_TOL_M:.0f} m "
          f"(PFG UTMs are rounded to 10 m). Basin set of {len(members)} assemblages "
-         f"from `basin_members_curated.txt`.", "",
+         f"from `basin_members_curated.txt`."), "",
          "## Assemblage coordinates (`mainfort-pfg-cplXY.txt`, after the published corrections)", "",
          "| class | all assemblages | basin members | meaning |", "|---|---|---|---|"]
     meaning = {"converted": "file coordinate is PFG's UTM read as NAD83; moved to the NAD27 reading",
@@ -121,19 +121,19 @@ def main():
         L.append(f"| {name} | {r['site_number'] or '-'} | {r['klass']} | {f(r['d_nad83_m'])} | "
                  f"{f(r['d_nad27_m'])} | {f(r['d_mainfort_own_m'])} |")
     near_own = table[(table["klass"] == "near") & (table["d_mainfort_own_m"] <= C.PFG_DATUM_TOL_M)]
-    L += ["", f"Of the {int((table['klass']=='near').sum())} near cases, "
+    L += ["", (f"Of the {int((table['klass']=='near').sum())} near cases, "
           f"{len(near_own)} coincide with Mainfort's own coordinate for the site "
           f"(`mainfortXY` sheet) within tolerance; those are his points, whose datum is "
           f"not recorded, and they stand as recorded under the 2026-09-19 ruling on "
-          f"non-PFG coordinates.", "",
+          f"non-PFG coordinates."), "",
           "## Settlement table (`LMVData.xlsx`)", "",
-          f"{n_conv} rows whose Source begins with \"PFG\", or that the settlement correction "
+          (f"{n_conv} rows whose Source begins with \"PFG\", or that the settlement correction "
           f"table replaced with PFG UTMs, converted from EPSG:267zz to EPSG:269zz; all others "
           f"as recorded. For the basin's assemblage sites the compilation's UTMs are identical "
-          f"to PFG's site table digit for digit, which is why the Source label is trusted.", "",
+          f"to PFG's site table digit for digit, which is why the Source label is trusted."), "",
           "## Effect on the basin set", "",
-          f"Assemblages moved: {int((moved > 1).sum())} of {len(members)}, by "
-          f"{moved[moved > 1].min():.0f} to {moved[moved > 1].max():.0f} m.", "",
+          (f"Assemblages moved: {int((moved > 1).sum())} of {len(members)}, by "
+          f"{moved[moved > 1].min():.0f} to {moved[moved > 1].max():.0f} m."), "",
           "| k | same partition? | plug-in F_ST before | after |", "|---|---|---|---|"]
     for k, same, fb, fa in rows:
         L.append(f"| {k} | {'yes' if same else 'NO'} | {fb:.6f} | {fa:.6f} |")

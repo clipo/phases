@@ -1,8 +1,15 @@
 # Does kernels.stanfunctions' MATRIX code match the R kernels it was copied
-# from? Separated from test-kernels.R because it needs rstan, and rstan makes
-# this session hang on exit on this toolchain.
+# from? Separated from test-kernels.R because it needs rstan.
 #
-# STATUS: skipped. See the skip() reason below.
+# It skips unless NOT_CRAN=true is set (skip_on_cran()). Run it as
+#   NOT_CRAN=true Rscript -e \
+#     'testthat::test_file("tests/testthat/test-kernels-stan.R")'
+# Measured 2026-10-16: the earlier form of this test included the kernel file
+# by ABSOLUTE PATH, and rstan::stanc() never returned on that input (no
+# compiler running; 500 s limit and a 10-minute run both ended in the hang),
+# which is the "hang" the previous header described. With the file included
+# by name and its directory passed as `isystem`, the same assertions run in
+# about 7 s. The A0 model uses the relative form already.
 
 library(testthat)
 library(rstan)
@@ -20,10 +27,8 @@ test_that("the Stan implementation agrees with the R kernel it was copied from",
   # correlation spans the full range rather than clustering near 1.
   skip_on_cran()
   fns <- tempfile(fileext = ".stan")
-  writeLines(c("functions {",
-               paste0("#include ", here("stan", "spatial", "kernels.stanfunctions")),
-               "}", "model {}"), fns)
-  expose_stan_functions(stanc(file = fns))
+  writeLines(c("functions {", "#include kernels.stanfunctions", "}", "model {}"), fns)
+  expose_stan_functions(stanc(file = fns, isystem = here("stan", "spatial")))
 
   D <- matrix(c(0, 5, 20, 5, 0, 12, 20, 12, 0), 3, 3)
   for (k in 1:3) {

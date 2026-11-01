@@ -92,10 +92,10 @@ def main():
 
     L = ["# Where does the Dirichlet-multinomial density break?", "",
          "Produced by `analyses/58_dm_numerical_floor.py`. Closes F8.", "",
-         f"Test case: a realistic bin, {K} classes and n = {int(y.sum())} sherds, "
+         (f"Test case: a realistic bin, {K} classes and n = {int(y.sum())} sherds, "
          f"with symmetric pi. The reference is the exact sum-of-logs form, which "
          f"calls no gamma function and therefore shares no arithmetic with the "
-         f"implementation it audits (rule 3).", "",
+         f"implementation it audits (rule 3)."), "",
          "| a0 | implied F | exact log pmf | PyMC log pmf | relative error |",
          "|---|---|---|---|---|"]
     for a0, F, ex, pv, rel in rows:
@@ -106,23 +106,23 @@ def main():
           + (f", and first exceeds a relative error of 1e-6 at a0 = {first_bad:.0e}."
              if first_bad else ", and never exceeds a relative error of 1e-6 anywhere on this grid."),
           "",
-          f"**Does this project's sampler reach the bad region?** a0 = (1 - F)/F, "
-          f"so a0 = 1e6 corresponds to F = 1e-6 and a0 = 1e17 to F = 1e-17. The "
-          f"basin posterior under the adopted Beta(1,10) prior has a median F of "
-          f"0.064 with a 95 percent interval of [0.0215, 0.1346], which puts a0 "
-          f"between about 6 and 45. That is fifteen orders of magnitude away from "
-          f"anywhere the density degrades.", "",
-          "**Verdict: latent, not live.** The concern was legitimate, the "
+          ("**Does this project's sampler reach the bad region?** a0 = (1 - F)/F, "
+          "so a0 = 1e6 corresponds to F = 1e-6 and a0 = 1e17 to F = 1e-17. The "
+          "basin posterior under the adopted Beta(1,10) prior has a median F of "
+          "0.064 with a 95 percent interval of [0.0215, 0.1346], which puts a0 "
+          "between about 6 and 45. That is fifteen orders of magnitude away from "
+          "anywhere the density degrades."), "",
+          ("**Verdict: latent, not live.** The concern was legitimate, the "
           "arithmetic does degrade eventually, and no fit this project reports "
           "goes anywhere near it. The prior change recorded in D-31 makes this "
           "safer still, since Beta(1,10) puts even less mass near F = 0 than the "
-          "flat prior it replaced.", "",
-          "**Why it was still worth measuring.** ../mataa's own first "
+          "flat prior it replaced."), "",
+          ("**Why it was still worth measuring.** ../mataa's own first "
           "investigation of this concluded that cancellation was NOT the problem, "
           "and their second, six days later, found it catastrophic at a0 = 1e17 "
           "and traced a frozen chain to it. Both findings were correct at their "
           "own operating points. Ours is the benign one, and now it is measured "
-          "rather than assumed.", ""]
+          "rather than assumed."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"\nwrote {OUT_MD}")

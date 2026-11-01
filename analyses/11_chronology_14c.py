@@ -31,11 +31,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_ORANGE, save  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_ORANGE, OI_VERMIL, save
 
 DATA = ROOT / "data" / "raw"
 OUT = ROOT / "output" / "chronology_14c.md"
@@ -118,9 +119,9 @@ def main() -> None:
     parkin = df[df["prov"] == "Parkin"]
 
     L = ["# Radiocarbon chronology of the St. Francis basin (IntCal20)", "",
-         "Calibration of the Mainfort (2001) determinations against IntCal20 "
+         ("Calibration of the Mainfort (2001) determinations against IntCal20 "
          "(Reimer et al. 2020). Probabilistic point calibration; SPDs are summed "
-         "normalized calibrated densities. Calendar ages reported as AD.", ""]
+         "normalized calibrated densities. Calendar ages reported as AD."), ""]
     L.append(f"- Total parsed determinations: {len(df)} across {df['prov'].nunique()} proveniences.")
     L.append(f"- St. Francis basin Parkin-phase subset: {len(basin)} dates from "
              f"{basin['prov'].nunique()} sites ({', '.join(sorted(basin['prov'].unique()))}).")
@@ -233,9 +234,9 @@ def main() -> None:
         L.append(f"| {r['assem']} | {int(r['n'])} | {r['median_ad']:.0f} | {r['ca1']:+.3f} |")
     if len(A) >= 3:
         rho, p = spearmanr(A["ca1"], A["median_ad"])
-        L += ["", f"**CA1 vs pooled median calendar age: Spearman rho = {rho:+.2f}, "
+        L += ["", (f"**CA1 vs pooled median calendar age: Spearman rho = {rho:+.2f}, "
               f"p = {p:.3f}** (n = {len(A)} anchors). Compare the manuscript's prior "
-              f"5-anchor single-date orientation (rho +0.50, p 0.39)."]
+              f"5-anchor single-date orientation (rho +0.50, p 0.39).")]
     L.append("")
 
     # --- Figure: basin SPD + anchor scatter ---

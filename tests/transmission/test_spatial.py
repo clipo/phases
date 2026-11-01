@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from mls_emergence.transmission.spatial import copying_weights, drift_record, sample_record
 
 
@@ -64,6 +65,7 @@ def test_per_node_population_changes_drift_rate_not_just_shape():
     per-node vector. If the vector were ignored and one scalar used, the two
     would be exchangeable and this ordering would appear only by chance."""
     import numpy as np
+
     from mls_emergence.transmission.spatial import drift_record
     w = _ring(6)
     n_ind = np.array([20, 20, 20, 5000, 5000, 5000])
@@ -81,13 +83,14 @@ def test_per_node_innovation_target_separates_groups():
     one shared profile they must not, beyond drift. The second assertion is the
     probe that makes the first mean something."""
     import numpy as np
+
     from mls_emergence.transmission.spatial import drift_record
     w = _ring(6)
     shared = np.array([.4, .3, .2, .1])
     split = np.vstack([np.tile(shared, (3, 1)),
                        np.tile(shared[::-1], (3, 1))])
-    kw = dict(k=4, n_ind=4000, steps=600, n_records=20, burnin=300,
-              innovation=0.05, mixing=0.01, seed=5)
+    kw = {"k": 4, "n_ind": 4000, "steps": 600, "n_records": 20, "burnin": 300,
+              "innovation": 0.05, "mixing": 0.01, "seed": 5}
     apart = drift_record(w, target=split, **kw)[-1]
     together = drift_record(w, target=shared, **kw)[-1]
     d_apart = abs(apart[:3].mean(0) - apart[3:].mean(0)).sum()
@@ -102,6 +105,7 @@ def test_per_site_window_averages_different_spans():
     record that changes through time the two must differ. Built on a record with
     a deliberate trend so that averaging has something to average over."""
     import numpy as np
+
     from mls_emergence.transmission.spatial import sample_record
     t, n, k = 20, 4, 3
     rec = np.zeros((t, n, k))
@@ -132,6 +136,7 @@ def test_heterogeneous_inputs_guard_their_length(bad, match):
     """Rule 5. A vector of the wrong length is the likely mistake here, and it
     would otherwise broadcast or truncate into a plausible-looking result."""
     import numpy as np
+
     from mls_emergence.transmission.spatial import drift_record, sample_record
     w = _ring(6)
     if bad == "pop":

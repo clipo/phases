@@ -51,10 +51,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, save  # noqa: E402
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_VERMIL, save
 
 a59 = importlib.import_module("59_partition_sensitivity")
 
@@ -62,7 +63,7 @@ OUT_MD = ROOT / "output" / "findings" / "partition_ensemble.md"
 K = 2                                # silhouette-selected grain, analysis 59 M1
 N_PART = 30 if "--fast" in sys.argv else 150
 PRIOR = ("beta", 1.0, 10.0)
-CFG = dict(draws=600, tune=800, chains=2, target_accept=0.95)
+CFG = {"draws": 600, "tune": 800, "chains": 2, "target_accept": 0.95}
 
 
 def random_voronoi(coords, k, rng, min_per_cell=2, tries=500):
@@ -127,41 +128,41 @@ def main(fast=False):
          f"{coords.shape[0]} assemblages, k = {K}, Beta(1,10) prior, "
          f"{len(meds)} random contiguous (Voronoi) partitions"
          + (f" ({bad} rejected for empty or singleton cells)." if bad else "."), "",
-         "Not a test: no null and no p-value. This locates our partition inside "
-         "an ensemble of equally defensible ones and reports the spread.", "",
+         ("Not a test: no null and no p-value. This locates our partition inside "
+         "an ensemble of equally defensible ones and reports the spread."), "",
          "## Result", "",
          "| | cultural F_ST |", "|---|---|",
-         f"| **the k-means partition we use** | **{ours['med']:.4f}** "
-         f"[{ours['lo']:.4f}, {ours['hi']:.4f}] |",
+         (f"| **the k-means partition we use** | **{ours['med']:.4f}** "
+         f"[{ours['lo']:.4f}, {ours['hi']:.4f}] |"),
          f"| ensemble median | {np.median(meds):.4f} |",
          f"| ensemble 5th to 95th percentile | {np.percentile(meds,5):.4f} to {np.percentile(meds,95):.4f} |",
          f"| ensemble full range | {meds.min():.4f} to {meds.max():.4f} |",
          f"| **our partition's position in the ensemble** | **{_ordinal(pct)} percentile** |",
          "", "## Reading", ""]
     if inside:
-        L += [f"Our partition sits at the {_ordinal(pct)} percentile, which is "
+        L += [(f"Our partition sits at the {_ordinal(pct)} percentile, which is "
               f"unremarkable. At this number of clusters the specific partition k-means found "
               f"is **one draw from a family of equally defensible partitions**, "
-              f"and the F_ST defined on it is not a property the data single out.",
+              f"and the F_ST defined on it is not a property the data single out."),
               "",
-              f"Combined with M1, where the median moved {m1_spread:.4f} across k against "
+              (f"Combined with M1, where the median moved {m1_spread:.4f} across k against "
               f"a data-driven interval width of {a59.REPORTED_WIDTH:.4f}, the picture is that the "
               f"reported F_ST is set both by **how finely the field is divided** and by "
               f"**where the cuts fall**: divisions with the same number of groups span "
               f"{np.percentile(meds,5):.4f} to {np.percentile(meds,95):.4f} (5th to 95th percentile). "
-              f"A quantity this sensitive to the cutting cannot be read on its own."]
+              f"A quantity this sensitive to the cutting cannot be read on its own.")]
     else:
-        L += [f"Our partition sits at the {_ordinal(pct)} percentile of the ensemble, "
+        L += [(f"Our partition sits at the {_ordinal(pct)} percentile of the ensemble, "
               f"outside the 20th to 80th band set in advance. It is doing "
               f"something the alternatives do not, and the current framing has a "
-              f"measured defence rather than only an assertion."]
+              f"measured defence rather than only an assertion.")]
     L += ["", "## What follows", "",
-          "The partition-free alternative is already in hand and needs no such "
+          ("The partition-free alternative is already in hand and needs no such "
           "defence: the spatial GP contains no partition at all. Its predictive "
           "check on the observed F_ST is in `output/findings/gp_posterior_predictive.md` "
           "and its spatial share in `output/findings/gp_basin_fit.md`; they are "
           "not copied here. The framing decision this measurement feeds is recorded in "
-          "`docs/superpowers/plans/2026-09-02-f15-partition-dependence.md`.", ""]
+          "`docs/superpowers/plans/2026-09-02-f15-partition-dependence.md`."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
 

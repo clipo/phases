@@ -211,23 +211,23 @@ def main() -> int:
                     lab = cluster(F, k, how, sd, mf)
                     a_all.append(ari(pidx, lab))
                     a_map.append(ari(pidx[mapped], lab[mapped]))
-                rows.append(dict(transform=kind, w=w, algorithm=how,
-                                 ari_all=float(np.median(a_all)),
-                                 ari_mapped=float(np.median(a_map)),
-                                 ari_mapped_lo=float(np.min(a_map)),
-                                 ari_mapped_hi=float(np.max(a_map)),
-                                 n_seeds=len(a_all)))
+                rows.append({"transform": kind, "w": w, "algorithm": how,
+                                 "ari_all": float(np.median(a_all)),
+                                 "ari_mapped": float(np.median(a_map)),
+                                 "ari_mapped_lo": float(np.min(a_map)),
+                                 "ari_mapped_hi": float(np.max(a_map)),
+                                 "n_seeds": len(a_all)})
         # composition alone, the far end of the axis
         for how in ("kmeans", "ward", "average"):
             seeds = range(args.seeds) if how == "kmeans" else [0]
             a_all = [ari(pidx, cluster(C, k, how, sd, mf)) for sd in seeds]
             a_map = [ari(pidx[mapped], cluster(C, k, how, sd, mf)[mapped]) for sd in seeds]
-            rows.append(dict(transform=kind, w=np.inf, algorithm=how,
-                             ari_all=float(np.median(a_all)),
-                             ari_mapped=float(np.median(a_map)),
-                             ari_mapped_lo=float(np.min(a_map)),
-                             ari_mapped_hi=float(np.max(a_map)),
-                             n_seeds=len(a_all)))
+            rows.append({"transform": kind, "w": np.inf, "algorithm": how,
+                             "ari_all": float(np.median(a_all)),
+                             "ari_mapped": float(np.median(a_map)),
+                             "ari_mapped_lo": float(np.min(a_map)),
+                             "ari_mapped_hi": float(np.max(a_map)),
+                             "n_seeds": len(a_all)})
     df = pd.DataFrame(rows)
     # `df.transform` resolves to the DataFrame METHOD, not this column, so a
     # filter written that way is silently always False and the tables below
@@ -325,17 +325,17 @@ def main() -> int:
                                    f"{'; '.join(unscored) if unscored else 'none'} |")
     L = ["# What recovers the phase scheme: the pottery, or the map?", "",
          f"Basin phase set, {len(names)} assemblages, {k} phases, 10 decorated classes.",
-         f"{int(derived.sum())} assemblages lie inside no Phillips (1970) phase area and take the "
-         f"nearest, a geographic",
-         f"rule; they are EXCLUDED from the column the conclusion rests on, leaving "
-         f"{int(mapped.sum())}",
+         (f"{int(derived.sum())} assemblages lie inside no Phillips (1970) phase area and take the "
+         f"nearest, a geographic"),
+         (f"rule; they are EXCLUDED from the column the conclusion rests on, leaving "
+         f"{int(mapped.sum())}"),
          "assemblages inside a phase area.", "",
-         "Agreement is the adjusted Rand index: 0 in expectation for unrelated "
-         "partitions, 1 for",
-         "identical ones. Weight 0 is the site map alone; the last row is the "
-         "pottery alone.", "",
-         f"| composition transform | weight on composition | ARI, all {len(names)} | ARI, the "
-         f"{int(mapped.sum())} inside an area | k-means seed range |",
+         ("Agreement is the adjusted Rand index: 0 in expectation for unrelated "
+         "partitions, 1 for"),
+         ("identical ones. Weight 0 is the site map alone; the last row is the "
+         "pottery alone."), "",
+         (f"| composition transform | weight on composition | ARI, all {len(names)} | ARI, the "
+         f"{int(mapped.sum())} inside an area | k-means seed range |"),
          "|---|---|---|---|---|"]
     for kind in ("raw", "clr", "chisq"):
         for _, r in df[(df["transform"] == kind) & (df["algorithm"] == "kmeans")].iterrows():
@@ -351,13 +351,13 @@ def main() -> int:
             a = df[(df["transform"] == kind) & (df["algorithm"] == how) & (df["w"] == 0)]
             b = df[(df["transform"] == kind) & (df["algorithm"] == how) & ~np.isfinite(df["w"])]
             if len(a) and len(b):
-                L.append(f"| {kind} | {how} | {a["ari_mapped"].iloc[0]:.3f} | "
-                         f"{b["ari_mapped"].iloc[0]:.3f} |")
+                L.append(f"| {kind} | {how} | {a['ari_mapped'].iloc[0]:.3f} | "
+                         f"{b['ari_mapped'].iloc[0]:.3f} |")
     L += ["", "## How much of the log-ratio answer is the zero convention?", "",
-          f"{int((m == 0).sum())} of {m.size} cells ({100 * (m == 0).mean():.0f} percent) "
-          "are zero, so the log-ratio transform",
-          "cannot be computed without deciding what a zero is worth. Map plus log-ratio "
-          "composition",
+          (f"{int((m == 0).sum())} of {m.size} cells ({100 * (m == 0).mean():.0f} percent) "
+          "are zero, so the log-ratio transform"),
+          ("cannot be computed without deciding what a zero is worth. Map plus log-ratio "
+          "composition"),
           "at half weight, on the assemblages inside a phase area, under five conventions:", "",
           "| zero convention | ARI |", "|---|---|"]
     for label, a in zero_rows:
@@ -378,14 +378,14 @@ def main() -> int:
           *_misplaced_rows,
           "",
           "## Reading", "",
-          f"Partitions carrying the phases' own group sizes with boundaries placed at "
+          (f"Partitions carrying the phases' own group sizes with boundaries placed at "
           f"random agree with the phases at a median ARI of {np.median(rnd):.3f} "
-          f"({args.random} draws), which is what",
+          f"({args.random} draws), which is what"),
           "the group sizes manufacture on their own.", "",
-          f"Under the chi-square transform, which carries no free parameter, k-means, on the "
-          f"{int(mapped.sum())} assemblages",
-          f"assigned directly: the site map alone, {_a0:.3f}; the best agreement, {_best:.3f}, at a "
-          f"composition weight of {_wbest}; the pottery alone, {_ainf:.3f}.", "",
+          (f"Under the chi-square transform, which carries no free parameter, k-means, on the "
+          f"{int(mapped.sum())} assemblages"),
+          (f"assigned directly: the site map alone, {_a0:.3f}; the best agreement, {_best:.3f}, at a "
+          f"composition weight of {_wbest}; the pottery alone, {_ainf:.3f}."), "",
           "How to read the three values. A scheme that divides the map would be recovered by",
           "the map alone, well above what the group sizes manufacture, and adding the pottery",
           "would not help. A scheme that reads the pottery would be recovered better as the",

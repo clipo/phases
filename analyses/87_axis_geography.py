@@ -50,11 +50,11 @@ def main() -> int:
     r2 = 1 - ((ca - X @ b) ** 2).sum() / ((ca - ca.mean()) ** 2).sum()
     s = pd.Series(ca, index=counts.index)
     rank = s.rank().astype(int)
-    df = pd.DataFrame(dict(ca=ca, phase=labs), index=counts.index)
+    df = pd.DataFrame({"ca": ca, "phase": labs}, index=counts.index)
     by = df.groupby("phase").ca.agg(["count", "mean", "min", "max"])
     L = ["# How much of the seriation axis is place rather than time?", "",
-         f"Produced by `analyses/87_axis_geography.py`. First correspondence-analysis axis of the "
-         f"{len(ca)} basin assemblages, oriented as every analysis and Figure 4 use it (17_basin_results.oriented_ca: pooled calibrated medians, weakly).", "",
+         (f"Produced by `analyses/87_axis_geography.py`. First correspondence-analysis axis of the "
+         f"{len(ca)} basin assemblages, oriented as every analysis and Figure 4 use it (17_basin_results.oriented_ca: pooled calibrated medians, weakly)."), "",
          f"- Rank correlation with latitude: **{r_lat:+.2f}**; with longitude: {r_lon:+.2f}.",
          f"- Share of the axis's variance explained by a linear fit on latitude and longitude: **{r2:.2f}**.", "",
          "## Dated assemblages on the axis", "",
@@ -65,8 +65,8 @@ def main() -> int:
     for p, r in by.iterrows():
         L.append(f"| {p} | {int(r['count'])} | {r['mean']:+.2f} | {r['min']:+.2f} | {r['max']:+.2f} |")
     L += ["", "## Reading", "",
-          "The two earliest dated sites and the latest share one end of the axis, and the axis tracks "
-          "latitude closely. It orders place at least as much as time.", ""]
+          ("The two earliest dated sites and the latest share one end of the axis, and the axis tracks "
+          "latitude closely. It orders place at least as much as time."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L))

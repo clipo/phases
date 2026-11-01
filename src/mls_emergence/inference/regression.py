@@ -21,6 +21,22 @@ def _from_unbounded(z, lo, hi):
 
 
 def regression_adjust(result, s_obs, param_indices=None, bounds=None) -> np.ndarray:
+    """Local-linear adjustment of an ABC-SMC population toward ``s_obs``.
+
+    ``result`` is an ``SMCResult``; ``s_obs`` the observed summary vector.
+    The parameters are regressed on (summary - s_obs) with Epanechnikov kernel
+    weights on the ABC distance (bandwidth the largest accepted distance), and
+    each particle is moved by minus the fitted slope times its own
+    (summary - s_obs), i.e. to the point where its summary would equal
+    ``s_obs``. ``param_indices`` selects columns of ``result.thetas`` (all by
+    default). ``bounds``, a (lower, upper) pair of per-parameter arrays over
+    all parameters, runs the adjustment on the logit scale so every adjusted
+    value stays inside the box; without it the shift is on the natural scale
+    and can leave the prior support.
+
+    Returns an (n_particles, n_selected_params) array. The importance weights
+    in ``result.weights`` are not used by the fit and are not changed.
+    """
     thetas = result.thetas
     S = np.asarray(result.summaries, float)
     s_obs = np.asarray(s_obs, float)

@@ -224,6 +224,12 @@ def group_profiles(
 
 
 def sample_counts(profiles: np.ndarray, n_per_group: int, rng: np.random.Generator) -> np.ndarray:
+    """Multinomial sherd counts from latent profiles.
+
+    ``profiles`` is a G x K array whose rows sum to 1; each group draws
+    ``n_per_group`` sherds, groups in row order from the one ``rng``. Returns a
+    G x K integer array whose rows sum to ``n_per_group``.
+    """
     counts = np.zeros(profiles.shape, dtype=int)
     for g in range(profiles.shape[0]):
         counts[g] = rng.multinomial(n_per_group, profiles[g])

@@ -1,5 +1,7 @@
-import pytest
 from pathlib import Path
+
+import pytest
+
 from mls_emergence.dataio import chronology
 
 LMV = Path("data/LMVData.xlsx")

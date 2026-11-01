@@ -1,4 +1,11 @@
 #!/usr/bin/env Rscript
+# SUPERSEDED 2026-10-16. This script sources R/fit_spatial.R, which was
+# rewritten in pilot step 3 of the latent-group probe (the previous layer's
+# treedepth diagnostic was wrong from its first commit; discussion log,
+# Finding 1). The functions it calls no longer exist, so it does not run
+# against the new layer. It is kept as a record of what was done; its
+# findings files are unverified (inventory class 4). The A0 refit is
+# analyses/probe_latent_groups/ (pilot step 4).
 #' Does the composition GP recover a known length scale at this design?
 #'
 #' THE GATE for the spatial-field direction. analyses/48_length_scale_recovery.py
@@ -26,8 +33,11 @@ source(here("R", "fit_spatial.R"))
 options(mc.cores = as.integer(Sys.getenv("MLS_MC_CORES", "2")))
 
 cat(strrep("=", 80), "\n"); cat("Spatial composition GP: recovery on known truth\n")
-cat("Basin site spacing: nearest-neighbour median 5.03 km, min 1.64, max 22.2;\n")
-cat("median pairwise 45.9 km. A length scale below the nearest-neighbour\n")
+# Geometry corrected 2026-10-16 to the current 28-assemblage phase-based set
+# (geo_km on the loader's coordinates); the figures before that date described
+# the superseded 29-site hydrological set. This script has not been re-run.
+cat("Basin site spacing: nearest-neighbour median 4.32 km, min 1.19, max 15.1;\n")
+cat("median pairwise 36.6 km. A length scale below the nearest-neighbour\n")
 cat("spacing is not separable from a nugget, which bounds what is recoverable.\n")
 cat(strrep("=", 80), "\n")
 
@@ -58,7 +68,7 @@ for (r in rhos) {
 }
 
 L <- c("# Does the composition GP recover a known length scale?", "",
-       sprintf("Produced by `analyses/02_spatial/01_recovery.R` on %s. Data simulated from the model by `analyses/49_write_stan_data.py` at the real basin geometry (29 assemblages, 10 classes, real sherd totals, max pairwise distance 127.8 km). Exponential kernel, uniform prior on log(rho) over [0.5, 300] km, true sigma %.1f, true tau %.1f, true spatial share %.2f.",
+       sprintf("Produced by `analyses/02_spatial/01_recovery.R` on %s. Data simulated from the model by `analyses/49_write_stan_data.py` at the real basin geometry (28 assemblages, 10 classes, real sherd totals, max pairwise distance 79.1 km). Exponential kernel, uniform prior on log(rho) over [0.5, 300] km, true sigma %.1f, true tau %.1f, true spatial share %.2f.",
                format(Sys.Date()), truth$truth$`5.0`$sigma, truth$truth$`5.0`$tau,
                truth$truth$`5.0`$spatial_share),
        "", "## Recovery of rho", "",
@@ -151,7 +161,7 @@ if (length(sat)) {
                         tru1[min(sat)], tru1[min(sat)], tru1[min(sat) + 1],
                         med1[min(sat)], med1[min(sat) + 1]),
          "",
-         "**This is a second, independent witness for the ceiling.** `analyses/48_length_scale_recovery.py` located it near 32 km from summary statistics on drift simulations, with no GP anywhere in it; this locates it from a fitted latent field on data simulated from the model itself. Two methods sharing no machinery agree, which rule 10 says to treat as signal rather than coincidence. The common cause is geometric: the basin is 128 km across, so a decay longer than a few tens of km is not expressed inside the study window at all.", "")
+         "**This is a second, independent witness for the ceiling.** `analyses/48_length_scale_recovery.py` located it near 32 km from summary statistics on drift simulations, with no GP anywhere in it; this locates it from a fitted latent field on data simulated from the model itself. Two methods sharing no machinery agree, which rule 10 says to treat as signal rather than coincidence. The common cause is geometric: the basin is 79 km across [corrected 2026-10-16 from 128 km; this paragraph was written on the superseded 29-site geometry and has not been re-derived], so a decay longer than a few tens of km is not expressed inside the study window at all.", "")
 } else {
   L <- c(L, "", "No saturation detected: every doubling of the truth moves the estimate.", "")
 }

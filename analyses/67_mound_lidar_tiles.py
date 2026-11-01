@@ -53,7 +53,7 @@ import subprocess
 import sys
 import time
 import urllib.request
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -114,16 +114,16 @@ def fetch_dem(lat: float, lon: float, span_m: float, dest: Path) -> dict:
             "mercator_inflation": k,
             "size_px": px,
             "center_lat": lat, "center_lon": lon,
-            "fetched_utc": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            "fetched_utc": datetime.now(UTC).isoformat(timespec="seconds")}
 
 
 def render(dem: Path, out_stub: Path) -> dict:
     """Hillshade and local-relief PNGs. Returns relief statistics."""
+    import matplotlib
     from PIL import Image
     from scipy.ndimage import gaussian_filter
-    import matplotlib
     matplotlib.use("Agg")
-    import matplotlib.cm as cm
+    from matplotlib import cm
 
     hs_tif = out_stub.with_suffix(".hs.tif")
     subprocess.run(["gdaldem", "hillshade", "-z", "4", "-az", "315", "-alt", "45",
@@ -189,9 +189,11 @@ def detect(z, lrm) -> dict:
 def basin_sites() -> pd.DataFrame:
     """Basin sites with a recorded mound height, with lat/lon."""
     import importlib
+
     from pyproj import Transformer
+
     from mls_emergence.dataio.pfg import load_pfg_counts
-    from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv
+    from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv
 
     b17 = importlib.import_module("17_basin_results")
     mf = importlib.import_module("make_figures")

@@ -52,14 +52,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
 
 OUT_MD = ROOT / "output" / "findings" / "bayesian_increment_test.md"
 N_BINS = 6
-FULL = dict(draws=2000, tune=2000, chains=4)
-FAST = dict(draws=600, tune=800, chains=2)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4}
+FAST = {"draws": 600, "tune": 800, "chains": 2}
 
 
 def increments_by_class(counts, ca_rank, n_bins=N_BINS):
@@ -106,22 +107,22 @@ def fit_hierarchical(groups, cfg, seed=0):
     div = int(idata.sample_stats["diverging"].sum())
     tot = int(idata.sample_stats["diverging"].size)
     e = np.asarray(idata.sample_stats["energy"].values)
-    return dict(
-        idata=idata, names=names,
-        mu_pop=np.asarray(idata.posterior["mu_pop"].values).ravel(),
-        mu=idata.posterior["mu"].values.reshape(-1, len(names)),
-        rhat=float(np.max(np.concatenate([np.atleast_1d(v.values).ravel()
+    return {
+        "idata": idata, "names": names,
+        "mu_pop": np.asarray(idata.posterior["mu_pop"].values).ravel(),
+        "mu": idata.posterior["mu"].values.reshape(-1, len(names)),
+        "rhat": float(np.max(np.concatenate([np.atleast_1d(v.values).ravel()
                    for v in az.rhat(idata).data_vars.values()]))),
-        ess=float(np.min(np.concatenate([np.atleast_1d(v.values).ravel()
+        "ess": float(np.min(np.concatenate([np.atleast_1d(v.values).ravel()
                   for v in az.ess(idata).data_vars.values()]))),
-        n_div=div, n_total=tot,
-        ebfmi=float(np.min((np.diff(e, axis=1) ** 2).mean(axis=1) / e.var(axis=1))))
+        "n_div": div, "n_total": tot,
+        "ebfmi": float(np.min((np.diff(e, axis=1) ** 2).mean(axis=1) / e.var(axis=1)))}
 
 
 def main(fast=False):
     from scipy.stats import ttest_1samp
     cfg = FAST if fast else FULL
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     ca1, _, _ = mf.correspondence_axis(counts.to_numpy(float))
     groups = increments_by_class(counts, pd.Series(ca1).rank().to_numpy())
     print(f"{len(groups)} testable classes, "
@@ -133,7 +134,7 @@ def main(fast=False):
     # Rule 20(c): recovery at a value the zero-centred prior disfavours.
     rng = np.random.default_rng(0)
     sim = {n: rng.normal(0.0, 1.0, len(v)) for n, v in groups.items()}
-    key = list(sim)[0]
+    key = next(iter(sim))
     sim[key] = rng.normal(1.5, 1.0, len(groups[key]))   # one genuinely drifting class
     rec = fit_hierarchical(sim, cfg, seed=1)
     ri = list(rec["names"]).index(key)
@@ -141,19 +142,19 @@ def main(fast=False):
     rec_lo, rec_hi = np.percentile(rec_mu, [2.5, 97.5])
 
     L = ["# The frequency increment test, made hierarchical", "",
-         f"Produced by `analyses/52_bayesian_fit_increments.py` "
+         (f"Produced by `analyses/52_bayesian_fit_increments.py` "
          f"({'FAST' if fast else 'full'}). {len(groups)} testable decorated "
-         f"classes over {N_BINS} seriation bins.", "",
-         "Replaces nine independent one-sample t-tests and a rejection count "
-         "with one hierarchical model (`docs/FREQUENTIST_INVENTORY.md` item F).",
+         f"classes over {N_BINS} seriation bins."), "",
+         ("Replaces nine independent one-sample t-tests and a rejection count "
+         "with one hierarchical model (`docs/FREQUENTIST_INVENTORY.md` item F)."),
          "", "## Population-level departure from drift", "",
-         f"- mu_pop posterior median **{np.median(mp):+.3f}**, 95% credible "
-         f"interval [{np.percentile(mp, 2.5):+.3f}, {np.percentile(mp, 97.5):+.3f}].",
+         (f"- mu_pop posterior median **{np.median(mp):+.3f}**, 95% credible "
+         f"interval [{np.percentile(mp, 2.5):+.3f}, {np.percentile(mp, 97.5):+.3f}]."),
          f"- P(mu_pop > 0) = {float((mp > 0).mean()):.3f}.",
          "",
-         "Under neutral drift the rescaled increments have mean zero, so this "
+         ("Under neutral drift the rescaled increments have mean zero, so this "
          "interval is the direct statement about whether the assemblage as a "
-         "whole departs from drift.", "",
+         "whole departs from drift."), "",
          "## Per-class posteriors, with the frequentist test alongside", "",
          "| class | n increments | mean Y | t-test p | **posterior mu** | **95% CI** | P(mu > 0) |",
          "|---|---|---|---|---|---|---|"]
@@ -166,21 +167,21 @@ def main(fast=False):
                  f"{np.percentile(m, 97.5):+.3f}] | {float((m > 0).mean()):.3f} |")
 
     L += ["", "## Diagnostics (rule 16)", "",
-          f"- empirical fit: R-hat {res['rhat']:.4f}, min ESS {res['ess']:.0f}, "
+          (f"- empirical fit: R-hat {res['rhat']:.4f}, min ESS {res['ess']:.0f}, "
           f"divergences {res['n_div']}/{res['n_total']} "
-          f"({100*res['n_div']/res['n_total']:.2f}%), E-BFMI {res['ebfmi']:.3f}",
-          f"- recovery fit: R-hat {rec['rhat']:.4f}, min ESS {rec['ess']:.0f}, "
-          f"divergences {rec['n_div']}/{rec['n_total']}, E-BFMI {rec['ebfmi']:.3f}",
+          f"({100*res['n_div']/res['n_total']:.2f}%), E-BFMI {res['ebfmi']:.3f}"),
+          (f"- recovery fit: R-hat {rec['rhat']:.4f}, min ESS {rec['ess']:.0f}, "
+          f"divergences {rec['n_div']}/{rec['n_total']}, E-BFMI {rec['ebfmi']:.3f}"),
           "", "## Rule 20(c): recovery against a prior that leans toward neutrality", "",
-          f"`mu_pop ~ Normal(0, 1)` centres on exactly the conclusion the paper "
-          f"draws, so the prior is sympathetic and has to be shown not to be "
-          f"doing the work. One class was simulated with a true mean of +1.5, a "
-          f"value the prior disfavours and partial pooling actively shrinks; the "
-          f"other classes were simulated neutral.", "",
-          f"Recovered: **{np.median(rec_mu):+.3f}** with 95% interval "
+          ("`mu_pop ~ Normal(0, 1)` centres on exactly the conclusion the paper "
+          "draws, so the prior is sympathetic and has to be shown not to be "
+          "doing the work. One class was simulated with a true mean of +1.5, a "
+          "value the prior disfavours and partial pooling actively shrinks; the "
+          "other classes were simulated neutral."), "",
+          (f"Recovered: **{np.median(rec_mu):+.3f}** with 95% interval "
           f"[{rec_lo:+.3f}, {rec_hi:+.3f}]. Coverage of the true +1.5: "
           f"{'yes' if rec_lo <= 1.5 <= rec_hi else '**NO**'}. Shrinkage of the "
-          f"median: **{1.5 / max(abs(np.median(rec_mu)), 1e-9):.1f}x**.",
+          f"median: **{1.5 / max(abs(np.median(rec_mu)), 1e-9):.1f}x**."),
           "",
           # Coverage alone is too weak a bar. An interval wide enough to cover
           # anything covers the truth too. The median must also not be dragged
@@ -198,21 +199,21 @@ def main(fast=False):
            "unresolved. The population-level mu_pop remains reportable, but "
            "per-class posteriors must not be read as evidence that individual "
            "classes are neutral.**"), "",
-          "**A second caution about the empirical interval.** mu_pop on the real "
+          ("**A second caution about the empirical interval.** mu_pop on the real "
           "data is [-0.032, +0.052], far tighter than the recovery interval. "
           "That is not because the real data are more informative. With every "
           "class near zero, tau collapses toward zero and the classes are pooled "
           "almost completely, which makes mu_pop precise; in the recovery data "
           "one genuinely departing class inflates tau and widens everything. The "
           "tight empirical interval is therefore partly a consequence of the "
-          "answer, and should be quoted with that stated.", "",
+          "answer, and should be quoted with that stated."), "",
           "## Why this also fixes a multiplicity problem", "",
-          "\"Seven of nine testable classes are consistent with unbiased drift\" "
+          ("\"Seven of nine testable classes are consistent with unbiased drift\" "
           "counts rejections across nine uncorrected tests, where about 0.45 "
           "false rejections are expected at alpha = 0.05 even if every class is "
           "neutral. Partial pooling replaces the count with per-class posteriors "
           "that are already shrunk toward the group, so no correction is applied "
-          "because none is needed.", ""]
+          "because none is needed."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"mu_pop = {np.median(mp):+.3f} [{np.percentile(mp,2.5):+.3f}, {np.percentile(mp,97.5):+.3f}]")

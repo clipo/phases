@@ -20,11 +20,12 @@ import warnings
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
 from scipy.stats import spearmanr
 
 # Project root and sys.path setup so `analyses` is importable as a package.
@@ -32,28 +33,48 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from figstyle import save, save_all, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL, OI_SKY, OI_PURPLE, OI_BLACK  # noqa: F401  (save_all re-exported as mf.save_all)
+from figstyle import (  # noqa: F401  (save_all re-exported as mf.save_all)
+    OI_BLACK,
+    OI_BLUE,
+    OI_GREEN,
+    OI_ORANGE,
+    OI_PURPLE,
+    OI_SKY,
+    OI_VERMIL,
+    save,
+    save_all,
+)
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
+from mls_emergence.dataio.basin import DECORATED_TYPES  # noqa: F401  (re-exported; many analyses read mf.DECORATED_TYPES)
+from mls_emergence.dataio.basin import basin_members as _basin_members
+from mls_emergence.dataio.basin import load_curated as _load_curated
 from mls_emergence.dataio.pfg import load_pfg_counts
-from mls_emergence.dataio.coords import read_assemblage_xy
-from mls_emergence.dataio.settlement import (load_lmv, join_pfg_to_lmv,
-                                             normalize_grid,
-                                             load_height_corrections,
-                                             apply_height_corrections)
-from mls_emergence.signatures.neutral import theta_f, theta_e
-from mls_emergence.signatures.variance import cultural_fst
-from mls_emergence.signatures.assortativity import boundary_excess, _kmeans_labels, geo_distance
+from mls_emergence.dataio.settlement import (
+    apply_height_corrections,
+    join_pfg_to_lmv,
+    load_height_corrections,
+    load_lmv,
+    normalize_grid,
+)
+from mls_emergence.signatures.assortativity import _kmeans_labels, boundary_excess, geo_distance
+from mls_emergence.signatures.neutral import theta_e, theta_f
 from mls_emergence.signatures.seriation import seriation_groups
+from mls_emergence.signatures.variance import cultural_fst
 from mls_emergence.validation.harness import (
-    run_blind, discriminates, signatures_over_axis, SIGNATURE_COLUMNS,
+    SIGNATURE_COLUMNS,
+    discriminates,
+    run_blind,
+    signatures_over_axis,
 )
 from mls_emergence.validation.mechanisms import (
-    gen_group_emergence, gen_aggregated_signaling, gen_patchiness, gen_drift_space,
+    gen_aggregated_signaling,
+    gen_drift_space,
+    gen_group_emergence,
+    gen_patchiness,
 )
-from mls_emergence.dataio.matrix import read_analysis_matrix  # noqa: E402
 
 DATA = ROOT / "data"
 FIGURES = ROOT / "figures"
@@ -61,11 +82,8 @@ FIGURES.mkdir(exist_ok=True)
 
 PARKIN_CUR = "Parkin"
 PARKIN_BROAD = "11-N-1"
-DECORATED_TYPES = [
-    "Parkin_Punctated", "Barton/Kent/MPI", "Painted", "Fortune_Noded",
-    "Ranch_Incised", "Walls_Engraved", "Wallace_Incised", "Rhodes_Incised",
-    "Vernon_Paul_Applique", "Hull_Engraved",
-]
+# DECORATED_TYPES moved to mls_emergence.dataio.basin on 2026-10-16 (one
+# definition, rule 6) and is imported above.
 CONT_PRIMARY = 0.10
 
 # ---------------------------------------------------------------------------
@@ -85,7 +103,7 @@ def correspondence_axis(M: np.ndarray):
     Dr_inv = np.diag(1.0 / np.sqrt(r))
     Dc_inv = np.diag(1.0 / np.sqrt(c))
     S = Dr_inv @ (P - np.outer(r, c)) @ Dc_inv
-    U, sig, Vt = np.linalg.svd(S, full_matrices=False)
+    U, sig, _Vt = np.linalg.svd(S, full_matrices=False)
     row_scores = Dr_inv @ U @ np.diag(sig)
     inertia = sig ** 2
     frac = float(inertia[0] / inertia.sum()) if inertia.sum() > 0 else np.nan
@@ -158,37 +176,11 @@ def zscore_series(s: pd.Series) -> pd.Series:
 # ---------------------------------------------------------------------------
 # Load shared curated data once
 # ---------------------------------------------------------------------------
-def _load_curated():
-    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
-    cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
-    cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
-    type_cols = [c for c in DECORATED_TYPES if c in cur.columns]
-    counts = cur[type_cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
-    row_tot = counts.sum(axis=1)
-    counts = counts[row_tot > 0]
-    # Coordinates
-    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
-    xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
-    xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
-    coords_ll = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(
-        pd.to_numeric, errors="coerce"
-    )
-    # Restrict to the St. Francis basin, defined HYDROLOGICALLY as assemblages
-    # within 20 km of the St. Francis / Tyronza / L'Anguille drainage (the
-    # canonical member list is generated by analyses/16_basin_membership.py).
-    # This replaces the earlier latitude cut, which admitted Mississippi-River
-    # sites that are not in the St. Francis drainage.
-    members = _basin_members("curated")
-    keep = [a for a in counts.index if a in members]
-    counts = counts.loc[keep]
-    coords_ll = coords_ll.loc[keep]
-    return counts, coords_ll
-
-
-def _basin_members(which: str) -> set:
-    """Canonical drainage-basin membership (analyses/16_basin_membership.py)."""
-    f = DATA / "processed" / f"basin_members_{which}.txt"
-    return {ln.strip() for ln in f.read_text().splitlines() if ln.strip()}
+# The loader and the membership reader moved, bodies unchanged, to
+# mls_emergence.dataio.basin on 2026-10-16 (probe spec, inventory row 3): a
+# fitting pipeline should not import a figure script to read its data. The
+# old names stay as aliases (imported above) because about sixty analyses
+# call them.
 
 
 # ---------------------------------------------------------------------------
@@ -291,7 +283,7 @@ def fig4_validation() -> None:
 # F3: CA ordination of the curated decorated set
 # ---------------------------------------------------------------------------
 def fig4_ca_ordination() -> None:
-    counts, coords_ll = _load_curated()
+    counts, _coords_ll = _load_curated()
     M = counts.to_numpy(float)
     ca1, ca2, inertia_frac1 = correspondence_axis(M)
 
@@ -338,7 +330,7 @@ def fig4_ca_ordination() -> None:
     cbar.ax.tick_params(labelsize=7)
 
     ax.set_xlabel(f"CA dimension 1 ({inertia_frac1:.2f} inertia)", fontsize=9)
-    _, _, frac2 = correspondence_axis(M)
+    _, _, _frac2 = correspondence_axis(M)
     # compute dim2 inertia separately
     M2 = counts.to_numpy(float)
     total2 = M2.sum()
@@ -363,7 +355,7 @@ def fig4_ca_ordination() -> None:
 # (Replaces the unreadable force-directed hairball of fig5_idss_network.)
 # ---------------------------------------------------------------------------
 def fig7_idss_structure() -> None:
-    counts, coords_ll = _load_curated()
+    counts, _coords_ll = _load_curated()
     M = counts.to_numpy(float)
     idx = list(counts.index)
     sg = seriation_groups(M, cont=CONT_PRIMARY)
@@ -483,7 +475,7 @@ def fig7_idss_structure() -> None:
             xy=(top_vals[pi], y_pos[pi]),
             xytext=(top_vals[pi] + 1.5, y_pos[pi] - 0.8),
             fontsize=6, color=OI_VERMIL,
-            arrowprops=dict(arrowstyle="-", color=OI_VERMIL, lw=0.7),
+            arrowprops={"arrowstyle": "-", "color": OI_VERMIL, "lw": 0.7},
         )
 
     # Legend proxy for color meaning
@@ -506,7 +498,7 @@ def fig7_idss_structure() -> None:
 # ---------------------------------------------------------------------------
 def fig5_idss_network() -> None:
     """Legacy network hairball — not called by main(). Kept for reference."""
-    counts, coords_ll = _load_curated()
+    counts, _coords_ll = _load_curated()
     M = counts.to_numpy(float)
     idx = list(counts.index)
     sg = seriation_groups(M, cont=CONT_PRIMARY)
@@ -688,7 +680,7 @@ def fig6_empirical_trajectory() -> None:
             cco_s = cc_c[[have_coords_ids.index(i) for i in samp]]
             try:
                 bb = pd.qcut(ca_s, q=6, labels=False, duplicates="drop")
-            except Exception:
+            except Exception:  # noqa: BLE001, S112  a failed resample is dropped; narrowing would change which draws survive
                 continue
             bvals = []
             for bb_id in sorted(pd.Series(bb).dropna().unique()):

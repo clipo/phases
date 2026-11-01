@@ -23,8 +23,8 @@ for _p in (ROOT, ROOT / "analyses", ROOT / "src"):
     if str(_p) not in sys.path:
         sys.path.insert(0, str(_p))
 
-from mls_emergence.signatures import assortativity as A  # noqa: E402
-from mls_emergence.signatures import variance as V  # noqa: E402
+from mls_emergence.signatures import assortativity as A
+from mls_emergence.signatures import variance as V
 
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 
@@ -103,3 +103,54 @@ def test_seriation_axis_is_oriented_later_is_higher_and_north_is_higher():
     lat = coords.reindex(ca.index).to_numpy(float)[:, 0]
     rho = spearmanr(ca.to_numpy(float), lat)[0]
     assert rho == pytest.approx(0.77, abs=0.01)
+
+
+def test_rim_partial_rank_correlation_keeps_direction_and_removes_a_shared_cause():
+    """Analysis 100, part D: decoration difference against attribute difference, distance removed.
+
+    Positive means pairs that differ more in the attribute also differ more in
+    decoration at a given distance. A negative value would mean they differ
+    LESS, and reading the paper's +0.06 with the other sign would turn "age
+    does not go with the difference" into "older pairs are more alike".
+    """
+    ra = importlib.import_module("100_rim_attributes")
+    rng = np.random.default_rng(100)
+    dist = rng.uniform(0, 100, 400)
+    own = rng.normal(0, 30, 400)
+    # the attribute carries its own signal into decoration: positive with distance removed
+    attr = dist + own
+    assert ra.partial_spearman(dist + own + rng.normal(0, 5, 400), attr, dist) > 0.5
+    # reversed signal: negative
+    assert ra.partial_spearman(dist - own + rng.normal(0, 5, 400), attr, dist) < -0.5
+    # both follow distance and nothing else: positive as it stands, near zero with distance removed.
+    # A rival that did not remove distance would report the first number for the second.
+    a, b = dist + rng.normal(0, 10, 400), dist + rng.normal(0, 10, 400)
+    assert ra.spearman(a, b) > 0.7
+    assert abs(ra.partial_spearman(a, b, dist)) < 0.15
+
+
+def test_per_class_share_size_correlation_sign():
+    # Per-type step (spec 4.4 item 5; findings per_type_generators_*.md): rho_c is the Spearman correlation of a
+    # class's share with the site's sherd total. Positive means the share RISES with collection size (the record's
+    # Parkin_Punctated, +0.42); negative means it falls (Painted, -0.57). A flipped sign would read the common class
+    # as concentrated in small collections.
+    for _q in (ROOT / "analyses" / "per_type", ROOT / "analyses" / "probe_latent_groups"):
+        if str(_q) not in sys.path:
+            sys.path.insert(0, str(_q))
+    pct = importlib.import_module("per_class_table")
+    n = np.array([100, 200, 400, 800]); share = np.array([0.1, 0.2, 0.3, 0.4])
+    y = np.column_stack([np.rint(n * share), n - np.rint(n * share)]).astype(int)
+    row = pct.per_class_rows(y, labels=np.array([0, 0, 1, 1]))
+    assert row["rho_0"] > 0 and row["rho_1"] < 0
+
+
+def test_collection_log_odds_ratio_sign():
+    # Composition by collection (D36 closing step; findings composition_by_collection.md): the log odds ratio is the Lipo
+    # addition MINUS the PFG part, so positive means the class is a larger share of Lipo's 1996-97 collection than of the
+    # 1940 collection at the same site. A flipped sign would attribute to the survey what belongs to the later collection.
+    for _q in (ROOT / "analyses" / "per_type", ROOT / "analyses" / "probe_latent_groups", ROOT / "scripts"):
+        if str(_q) not in sys.path:
+            sys.path.insert(0, str(_q))
+    cbc = importlib.import_module("composition_by_collection")
+    r = cbc.log_odds_ratio(np.array([80, 20]), np.array([20, 80]), np.random.default_rng(1), draws=4000)
+    assert r.loc[0, "median"] > 0 and r.loc[1, "median"] < 0

@@ -38,9 +38,10 @@ ROOT = Path(__file__).resolve().parents[1]
 MANAGED_PREFIXES = [
     "analyses/", "src/", "tests/", "scripts/", "stan/", "R/",
     "output/", "figures/", "docs/manuscript/",
+    "examples/",          # the worked example for phasecheck, written by scripts/export_phasecheck_example.py
 ]
-# Individually published tracked files at the repo root.
-MANAGED_ROOT_FILES = ["pyproject.toml", "MANIFEST.md"]
+# Individually published tracked files.
+MANAGED_ROOT_FILES = ["pyproject.toml", "MANIFEST.md", "docs/PHASECHECK.md"]
 # Never published, whatever git says. `sync_drive.sh` is the authors' own
 # working tool: it names a private Google Drive folder and does nothing for
 # reproduction, so it is a working document in the same sense as CLAUDE.md.
@@ -51,7 +52,28 @@ MANAGED_ROOT_FILES = ["pyproject.toml", "MANIFEST.md"]
 # `REVIEW_2026-09-24.md` is a review log, which the policy above keeps private;
 # it sits under docs/manuscript/ and would otherwise be published with it.
 EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh",
-                 "REVIEW_2026-09-24.md"}
+                 "REVIEW_2026-09-24.md",
+                 # Working documents under docs/manuscript/ (2026-11-01): earlier
+                 # drafts, a coauthor's edit copy, simulated reviews, the cover
+                 # letter, the figure plan and a citation audit log. None is
+                 # needed to reproduce the paper, and the review logs are kept
+                 # private by the policy above.
+                 "MAIN_TEXT-old2.md", "MAIN_TEXT-madsen-edits-1.md",
+                 "SIMULATED_REVIEWS.md", "COVER_LETTER.md", "FIGURE_PLAN.md",
+                 "references-citation-audit.md"}
+# Tracked prefixes inside a managed prefix that are not published.
+EXCLUDE_PREFIXES = ["docs/manuscript/revisions/"]   # the September 2026 revision archive
+# Data files the code reads that are NOT published, with the reason. The sync
+# removes them from the release if present. Mainfort's rim-attribute file is
+# unpublished data he shared with the authors; publishing it, and the counts
+# derived from it, needs his consent (STATUS.md, 2026-10-31 and 2026-11-01).
+WITHHELD = {
+    "data/raw/mainfort_miss_rims.xls": "Mainfort's unpublished rim file; consent pending",
+    "data/processed/mainfort_rim_counts.csv": "derived from mainfort_miss_rims.xls; consent pending",
+}
+# Built manuscript PDFs: gitignored here, published when present on disk so a
+# reader has the rendered paper beside the sources and the docx.
+BUILT_PDFS = ["docs/manuscript/MAIN_TEXT.pdf", "docs/manuscript/SUPPLEMENTAL_TEXT.pdf"]
 # Left to the release repo: licensing, citation, container, CI, its own README.
 UNMANAGED = {
     "README.md", "LICENSE", "LICENSE-data", "CITATION.cff", ".zenodo.json",
@@ -116,11 +138,17 @@ def release_set() -> set[str]:
     for p in tracked_files():
         if Path(p).name in EXCLUDE_NAMES or p in UNMANAGED:
             continue
+        if any(p.startswith(pre) for pre in EXCLUDE_PREFIXES):
+            continue
         if any(p.startswith(pre) for pre in MANAGED_PREFIXES) or p in MANAGED_ROOT_FILES:
             keep.add(p)
     keep |= set(data_files())
+    keep |= {p for p in BUILT_PDFS if (ROOT / p).is_file()}
     keep.discard("data/processed/.gitkeep")
-    return keep
+    withheld = keep & set(WITHHELD)
+    for p in sorted(withheld):
+        print(f"WITHHELD {p}: {WITHHELD[p]}")
+    return keep - withheld
 
 
 def managed(path: str) -> bool:
@@ -164,8 +192,11 @@ def main() -> int:
                     if managed(p) and not p.startswith("output/"))
     stale_outputs = sorted(p for p in have - want if p.startswith("output/"))
     keep_untouched = sorted(p for p in have - want if not managed(p))
+    # A tracked release file that is missing from the release's working tree
+    # (deleted by hand, or by an earlier sync run) is rewritten, not compared.
     update = sorted(p for p in (want & have)
-                    if not filecmp.cmp(ROOT / p, dest / p, shallow=False))
+                    if not (dest / p).is_file()
+                    or not filecmp.cmp(ROOT / p, dest / p, shallow=False))
 
     print(f"release set: {len(want)} files")
     print(f"  add:    {len(add)}")

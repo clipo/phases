@@ -5,9 +5,9 @@ and not the deterministic IDSS estimator used in the revised recovery analysis.
 """
 import importlib
 import json
-from pathlib import Path
 import sys
-import numpy as np
+from pathlib import Path
+
 from scipy.stats import beta
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,8 +20,8 @@ def main():
     for seed in range(n):
         result=v.discriminates(v.run_blind(v.GENERATORS,seed),deriv_threshold=v.DERIV_THRESHOLD)
         for key,r in result.items(): hits[key]+=int(r['convergent'])
-    summary={key:dict(hits=h,total=n,interval=[float(beta.ppf(.025,h,n-h+1)) if h else 0.,
-              float(beta.ppf(.975,h+1,n-h)) if h<n else 1.]) for key,h in hits.items()}
+    summary={key:{"hits": h,"total": n,"interval": [float(beta.ppf(.025,h,n-h+1)) if h else 0.,
+              float(beta.ppf(.975,h+1,n-h)) if h<n else 1.]} for key,h in hits.items()}
     (ROOT/'output/revision_idealized_validation.json').write_text(json.dumps(summary,indent=2))
     print(json.dumps(summary,indent=2))
 

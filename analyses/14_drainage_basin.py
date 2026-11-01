@@ -18,15 +18,16 @@ import importlib
 import sys
 from pathlib import Path
 
-import numpy as np
 import geopandas as gpd
+import numpy as np
 from scipy.stats import spearmanr
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
 grid = importlib.import_module("12_sensitivity_grid")  # reuse loaders/signatures
 
@@ -55,10 +56,10 @@ def main():
     latcut_set = set(lat.index[lat >= 34.5])
 
     L = ["# Drainage-based basin definition (vs the latitude cut)", "",
-         f"Basin proximity to the St. Francis drainage ({', '.join(sorted(DRAINAGE))}), "
-         f"distance in km (UTM 15N).", "",
-         f"- Median distance of curated assemblages to the drainage: "
-         f"{pts['dist_km'].median():.1f} km.", ""]
+         (f"Basin proximity to the St. Francis drainage ({', '.join(sorted(DRAINAGE))}), "
+         f"distance in km (UTM 15N)."), "",
+         (f"- Median distance of curated assemblages to the drainage: "
+         f"{pts['dist_km'].median():.1f} km."), ""]
     L.append("Membership comparison (drainage threshold vs lat >= 34.5 set of "
              f"{len(latcut_set)}):")
     L.append("")
@@ -113,14 +114,14 @@ def main():
             L.append(f"- threshold {thr} km (n = {len(members)}, k = {k}): neutral "
                      f"rho = {rn:+.2f}, F_ST rho = {rf:+.2f}, spatial rho = {rs:+.2f}; "
                      f"converges? {'YES' if conv else 'no'}.")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001  the failure is recorded in the report by class name
             L.append(f"- threshold {thr} km: error ({e.__class__.__name__})")
     L += ["",
-          "Reading: the drainage-defined basin closely matches the latitude-cut basin, "
+          ("Reading: the drainage-defined basin closely matches the latitude-cut basin, "
           "and the no-convergence verdict holds under the hydrological boundary as well, "
           "so the result does not depend on the latitude cut. The southern St-Francis-type "
           "sites excluded by the latitude cut are reported above with their drainage "
-          "distances, making the boundary choice explicit rather than arbitrary."]
+          "distances, making the boundary choice explicit rather than arbitrary.")]
 
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")

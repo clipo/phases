@@ -45,7 +45,7 @@ MAIN = ROOT / "docs" / "manuscript" / "MAIN_TEXT.md"
 SUPP = ROOT / "docs" / "manuscript" / "SUPPLEMENTAL_TEXT.md"
 FIGS = ROOT / "figures"
 
-COMMENT = re.compile(r"<!--\s*(.*?)\s*-->", re.S)
+COMMENT = re.compile(r"<!--\s*(.*?)\s*-->", re.DOTALL)
 BOILER = ("Matplotlib", "Created with")
 # A statistic, not an axis tick: two or more decimals, or a percentage.
 # Three or more decimals, or an explicit percentage. Two decimals admitted
@@ -81,7 +81,7 @@ def captions() -> dict[str, tuple[str, str]]:
             continue
         t = path.read_text()
         for m in re.finditer(r"!\[(.*?)\]\(([^)]*?/)?([A-Za-z0-9_]+)\.(?:png|svg|pdf)\)",
-                             t, re.S):
+                             t, re.DOTALL):
             body, stem = m.group(1), m.group(3)
             lab = re.match(r"\*\*(Figure [^.]*)\.\*\*", body)
             out[stem] = (lab.group(1) if lab else stem, body)

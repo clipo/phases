@@ -1,4 +1,11 @@
 #!/usr/bin/env Rscript
+# SUPERSEDED 2026-10-16. This script sources R/fit_spatial.R, which was
+# rewritten in pilot step 3 of the latent-group probe (the previous layer's
+# treedepth diagnostic was wrong from its first commit; discussion log,
+# Finding 1). The functions it calls no longer exist, so it does not run
+# against the new layer. It is kept as a record of what was done; its
+# findings files are unverified (inventory class 4). The A0 refit is
+# analyses/probe_latent_groups/ (pilot step 4).
 #' Does marginalising the nugget remove the ridge?
 #'
 #' The two-additive-fields form (composition_gp.stan) saturated max_treedepth on

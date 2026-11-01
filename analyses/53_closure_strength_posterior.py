@@ -55,17 +55,18 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy.stats import norm, spearmanr
+from scipy.stats import norm
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, save  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "findings" / "closure_strength_posterior.md"
 # Figure 4's right panel reads this. Written so analysis 21 does not have to
@@ -137,9 +138,9 @@ def posterior_over_s(T_grid, t_obs):
 def summarize(p):
     c = np.cumsum(p)
     q = lambda a: float(np.interp(a, c, S_FINE))
-    return dict(median=q(0.5), lo=q(0.025), hi=q(0.975),
-                p_ge_05=float(p[S_FINE >= 0.5].sum()),
-                p_ge_03=float(p[S_FINE >= 0.3].sum()))
+    return {"median": q(0.5), "lo": q(0.025), "hi": q(0.975),
+                "p_ge_05": float(p[S_FINE >= 0.5].sum()),
+                "p_ge_03": float(p[S_FINE >= 0.3].sum())}
 
 
 def main(fast=False):
@@ -210,14 +211,14 @@ def main(fast=False):
     o1, o3 = out[1], out[3]
     covered = rec["lo"] <= 0.7 <= rec["hi"]
     L = ["# A posterior on closure strength", "",
-         f"Produced by `analyses/53_closure_strength_posterior.py` "
+         (f"Produced by `analyses/53_closure_strength_posterior.py` "
          f"({'FAST' if fast else 'full'}: {n_seeds} seeds per grid point, "
-         f"{b_emp} empirical rarefactions).", "",
-         "Replaces the calibrated detector, its five percent false-positive "
+         f"{b_emp} empirical rarefactions)."), "",
+         ("Replaces the calibrated detector, its five percent false-positive "
          "rate, its power curve and its detection threshold with one quantity "
-         "(`docs/FREQUENTIST_INVENTORY.md` item A). No test is performed.", "",
-         f"Observed statistic: the rarefied F_ST trajectory rank correlation, "
-         f"T = **{t_obs:+.4f}**.", "",
+         "(`docs/FREQUENTIST_INVENTORY.md` item A). No test is performed."), "",
+         (f"Observed statistic: the rarefied F_ST trajectory rank correlation, "
+         f"T = **{t_obs:+.4f}**."), "",
          "## Posterior over injected closure strength s", "",
          "| time-averaging | median | 95% credible interval | P(s >= 0.3) | P(s >= 0.5) |",
          "|---|---|---|---|---|",
@@ -226,10 +227,10 @@ def main(fast=False):
          f"| none (w = 1), axis reversed (T = {-t_obs:+.4f}) | **{rev[1]['median']:.3f}** | [{rev[1]['lo']:.3f}, {rev[1]['hi']:.3f}] | {rev[1]['p_ge_03']:.3f} | {rev[1]['p_ge_05']:.3f} |",
          f"| record's (w = 3), axis reversed | **{rev[3]['median']:.3f}** | [{rev[3]['lo']:.3f}, {rev[3]['hi']:.3f}] | {rev[3]['p_ge_03']:.3f} | {rev[3]['p_ge_05']:.3f} |",
          "", "## Rule 20(c): recovery of a closure the data do not contain", "",
-         f"Data simulated at a true s = 0.7, well above anything the basin "
+         (f"Data simulated at a true s = 0.7, well above anything the basin "
          f"shows, returns a posterior median of **{rec['median']:.3f}** with "
          f"interval [{rec['lo']:.3f}, {rec['hi']:.3f}], "
-         f"{'which covers the truth' if covered else '**which does NOT cover the truth**'}.",
+         f"{'which covers the truth' if covered else '**which does NOT cover the truth**'}."),
          "",
          ("A strong closure is recovered rather than dragged toward the middle, "
           "so a low posterior on the real data is a statement about the data."
@@ -238,7 +239,7 @@ def main(fast=False):
           "posterior is therefore not interpretable and this instrument is not "
           "reportable as it stands.**"), "",
          "## Reading", "",
-         f"The old apparatus said closure of strength 0.5 or more would be "
+         (f"The old apparatus said closure of strength 0.5 or more would be "
          f"detected with power above 0.8, and read the empirical value as a "
          f"nominal strength near 0.35. The posterior says the same thing "
          f"without a null: strengths at or above 0.5 carry posterior mass "
@@ -246,13 +247,13 @@ def main(fast=False):
          f"with it, so moderate and strong closure are excluded by the data "
          f"rather than by a threshold, while weak closure remains credible. "
          f"That is the bounded non-detection the paper argues for, stated as a "
-         f"parameter.", "",
+         f"parameter."), "",
          "## Declared limitation", "",
-         "p(T | s) is approximated by a normal at each grid point, with mean and "
+         ("p(T | s) is approximated by a normal at each grid point, with mean and "
          "standard deviation taken across seeds and interpolated between them. "
          "T is a bounded rank correlation, so the approximation is reasonable in "
          "the interior and degrades near the ends. This is a simulation-based "
-         "posterior, not an exact one, and is reported as such.", ""]
+         "posterior, not an exact one, and is reported as such."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     np.savez(OUT_NPZ, s_grid=S_FINE, post_w1=o1["p"], post_w3=o3["p"],

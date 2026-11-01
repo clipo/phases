@@ -47,8 +47,8 @@ N_BINS = 6
 # Bin 4 pools 14,224 sherds, by far the most, so its posterior is the tightest
 # and the default step size is too coarse for it. Rule 17: divergences are a
 # validity signal and get fixed, not reported around.
-FULL = dict(draws=2000, tune=2000, chains=4, target_accept=0.95)
-FAST = dict(draws=400, tune=600, chains=2, target_accept=0.95)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4, "target_accept": 0.95}
+FAST = {"draws": 400, "tune": 600, "chains": 2, "target_accept": 0.95}
 # Beta(1,10) is PRIMARY from 2026-09-02; see analyses/57_fst_prior_predictive.py
 # and the note in analyses/43. Uniform(0,1) is retained as the rule-20(b)
 # sensitivity refit, deliberately leaning the other way.
@@ -58,8 +58,8 @@ PRIORS = [("Beta(1,10)", ("beta", 1.0, 10.0)), ("uniform", ("uniform",))]
 def per_bin_group_counts(inp, n_bins=N_BINS):
     """(bin -> (n_clusters, K) counts) on the BASIN, clusters re-selected on the
     basin's own coordinates. Mirrors 43_bayesian_fst.basin_group_counts."""
-    import pandas as pd
     import make_figures as mf
+    import pandas as pd
     a43 = importlib.import_module("43_bayesian_fst")
 
     members = mf._basin_members("curated")
@@ -90,7 +90,8 @@ def per_bin_group_counts(inp, n_bins=N_BINS):
 
 def main(fast=False):
     import arviz as az
-    from mls_emergence.inference import sample_fst, gini_simpson_summary
+
+    from mls_emergence.inference import gini_simpson_summary, sample_fst
     a07 = importlib.import_module("07_refined_empirical")
     cfg = FAST if fast else FULL
 
@@ -103,7 +104,7 @@ def main(fast=False):
         rows = []
         for b, gc in sorted(per_bin.items()):
             if gc is None:
-                rows.append(dict(bin=b, ok=False))
+                rows.append({"bin": b, "ok": False})
                 print(f"  [{pname}] bin {b}: fewer than two clusters present, skipped")
                 continue
             idata = sample_fst(gc, random_seed=0, f_prior=prior, **cfg)
@@ -116,12 +117,12 @@ def main(fast=False):
             ess = float(np.min(np.concatenate(
                 [np.atleast_1d(v.values).ravel()
                  for v in az.ess(idata).data_vars.values()])))
-            rows.append(dict(bin=b, ok=True, med=float(np.median(s)),
-                             sd=float(np.std(s)),
-                             lo=float(np.percentile(s, 2.5)),
-                             hi=float(np.percentile(s, 97.5)),
-                             plugin=g["plugin_fst"], rhat=rhat, ess=ess, ndiv=ndiv,
-                             n=int(gc.sum())))
+            rows.append({"bin": b, "ok": True, "med": float(np.median(s)),
+                             "sd": float(np.std(s)),
+                             "lo": float(np.percentile(s, 2.5)),
+                             "hi": float(np.percentile(s, 97.5)),
+                             "plugin": g["plugin_fst"], "rhat": rhat, "ess": ess, "ndiv": ndiv,
+                             "n": int(gc.sum())})
             print(f"  [{pname}] bin {b}: F_ST {rows[-1]['med']:.4f} "
                   f"[{rows[-1]['lo']:.4f}, {rows[-1]['hi']:.4f}]  "
                   f"n={rows[-1]['n']}  R-hat {rhat:.4f} div {ndiv}")
@@ -147,30 +148,30 @@ def main(fast=False):
                             target_accept=0.95, progressbar=False,
                             compute_convergence_checks=False)
         bs = np.asarray(idt.posterior["b"].values).ravel()
-        trend[pname] = dict(
-            med=float(np.median(bs)), lo=float(np.percentile(bs, 2.5)),
-            hi=float(np.percentile(bs, 97.5)), p_pos=float((bs > 0).mean()),
-            ndiv=int(idt.sample_stats["diverging"].sum()),
-            rhat=float(np.max(np.concatenate(
+        trend[pname] = {
+            "med": float(np.median(bs)), "lo": float(np.percentile(bs, 2.5)),
+            "hi": float(np.percentile(bs, 97.5)), "p_pos": float((bs > 0).mean()),
+            "ndiv": int(idt.sample_stats["diverging"].sum()),
+            "rhat": float(np.max(np.concatenate(
                 [np.atleast_1d(v.values).ravel()
                  for v in az.rhat(idt).data_vars.values()]))),
-            ess=float(np.min(np.concatenate(
+            "ess": float(np.min(np.concatenate(
                 [np.atleast_1d(v.values).ravel()
-                 for v in az.ess(idt).data_vars.values()]))))
+                 for v in az.ess(idt).data_vars.values()])))}
         print(f"  [{pname}] TREND slope {trend[pname]['med']:+.4f} "
               f"[{trend[pname]['lo']:+.4f}, {trend[pname]['hi']:+.4f}]  "
               f"P(>0) = {trend[pname]['p_pos']:.3f}")
 
     L = ["# Per-bin Bayesian F_ST, and the trend as a posterior", "",
-         f"Produced by `analyses/50_perbin_bayesian_fst.py` "
+         (f"Produced by `analyses/50_perbin_bayesian_fst.py` "
          f"({'FAST' if fast else 'full'}). St. Francis basin, {n_ids} "
-         f"assemblages, {k} spatial clusters, {N_BINS} seriation bins.", "",
-         "Replaces two frequentist objects with one generative one "
+         f"assemblages, {k} spatial clusters, {N_BINS} seriation bins."), "",
+         ("Replaces two frequentist objects with one generative one "
          "(`docs/FREQUENTIST_INVENTORY.md` items B and H): the rarefaction "
          "resampling interval on the reported trajectory, and the 800-draw "
          "assemblage-bootstrap standard errors that "
          "`analyses/40_hierarchical_convergence.py` feeds into its likelihood "
-         "as if known.", "",
+         "as if known."), "",
          "## Per-bin Gini-Simpson F_ST posteriors", "",
          "| bin | prior | median | 95% CI | posterior SD | plug-in | sherds | R-hat | min ESS | div |",
          "|---|---|---|---|---|---|---|---|---|---|"]
@@ -184,9 +185,9 @@ def main(fast=False):
                      f"{r['plugin']:.4f} | {r['n']} | {r['rhat']:.4f} | "
                      f"{r['ess']:.0f} | {r['ndiv']} |")
     L += ["", "## The trend, as a posterior slope", "",
-          "Slope of per-bin F_ST against standardized bin position. This is the "
+          ("Slope of per-bin F_ST against standardized bin position. This is the "
           "quantity the manuscript currently reports as a Spearman rank "
-          "correlation with a resampling interval.", "",
+          "correlation with a resampling interval."), "",
           "| prior | slope median | 95% CI | P(slope > 0) | R-hat | min ESS | div |",
           "|---|---|---|---|---|---|---|"]
     for pname, tr in trend.items():
@@ -202,20 +203,20 @@ def main(fast=False):
     primary_name, alt_name = PRIORS[0][0], PRIORS[1][0]
     u, bta = trend[primary_name], trend[alt_name]
     L += ["", "## Prior sensitivity (rule 20b)", "",
-          f"The slope moves from {u['med']:+.4f} under the {primary_name} prior to "
+          (f"The slope moves from {u['med']:+.4f} under the {primary_name} prior to "
           f"{bta['med']:+.4f} under {alt_name}, a shift of "
           f"{abs(u['med'] - bta['med']):.4f}. P(slope > 0) moves from "
           f"{u['p_pos']:.3f} to {bta['p_pos']:.3f}. Reported whether or not it "
-          f"is small, as the rule requires.", "",
+          f"is small, as the rule requires."), "",
           "## Limitation, stated rather than buried", "",
-          "This is a two-stage analysis. Each bin's posterior is summarised by "
+          ("This is a two-stage analysis. Each bin's posterior is summarised by "
           "its median and standard deviation, and those summaries are carried "
           "into the trend model, so trend uncertainty is propagated through a "
           "normal approximation to each bin's posterior rather than exactly. "
           "A single joint model of bins and trend would be better and is not "
           "what this is. The improvement over what it replaces is nonetheless "
           "categorical: a posterior standard deviation has generative status, "
-          "and a bootstrap standard deviation does not.", ""]
+          "and a bootstrap standard deviation does not."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"\nwrote {OUT_MD}")

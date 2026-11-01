@@ -1,5 +1,7 @@
 import numpy as np
+
 from mls_emergence.signatures import variance
+
 
 def test_fst_zero_when_groups_identical():
     g = np.array([[10, 10, 10], [10, 10, 10], [10, 10, 10]])
@@ -22,6 +24,7 @@ def test_degenerate_input_raises_instead_of_returning_zero():
     fails."""
     import numpy as np
     import pytest
+
     from mls_emergence.signatures.variance import cultural_fst, gini_simpson
 
     # genuinely zero differentiation: identical groups, two classes present

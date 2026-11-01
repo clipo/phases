@@ -125,7 +125,7 @@ def main() -> int:
 
     rates_all = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates_all[(rates_all.region == "basin") & (rates_all.model == "pooled")].iloc[0]
-    cell = dict(innovation=float(row["innovation"]), mixing=float(row["mixing"]), n_ind=int(row["n_ind"]))
+    cell = {"innovation": float(row["innovation"]), "mixing": float(row["mixing"]), "n_ind": int(row["n_ind"])}
 
     parkin = np.array([1 if l == "Parkin" else 0 for l in labels_ph])
 
@@ -167,18 +167,18 @@ def main() -> int:
         return all(abs(g[k].median() - obs[k]) <= TOL * abs(obs[k]) for k in ("hs", "rich", "ht"))
     cells = []
     for (leak, strength), g in df.groupby(["leak", "strength"]):
-        cells.append(dict(
-            leak=leak, strength=strength,
-            fst_med=g.phase_fst.median(), fst_lo=g.phase_fst.quantile(.025), fst_hi=g.phase_fst.quantile(.975),
-            fst_reach=float((g.phase_fst >= obs["phase_fst"]).mean()),
-            be_med=g.be_phase.median(), be_lo=g.be_phase.quantile(.025), be_hi=g.be_phase.quantile(.975),
-            be_reach=float((g.be_phase >= obs["be_phase"]).mean()),
-            sp_med=g.spatial_fst.median(),
-            pk_med=g.parkin_fst.median(), pk_lo=g.parkin_fst.quantile(.025), pk_hi=g.parkin_fst.quantile(.975),
-            pk_reach=float((g.parkin_fst >= obs["parkin_fst"]).mean()),
-            bp_med=g.be_parkin.median(), bp_lo=g.be_parkin.quantile(.025), bp_hi=g.be_parkin.quantile(.975),
-            bp_reach=float((g.be_parkin >= obs["be_parkin"]).mean()),
-            matched=matched(g)))
+        cells.append({
+            "leak": leak, "strength": strength,
+            "fst_med": g.phase_fst.median(), "fst_lo": g.phase_fst.quantile(.025), "fst_hi": g.phase_fst.quantile(.975),
+            "fst_reach": float((g.phase_fst >= obs["phase_fst"]).mean()),
+            "be_med": g.be_phase.median(), "be_lo": g.be_phase.quantile(.025), "be_hi": g.be_phase.quantile(.975),
+            "be_reach": float((g.be_phase >= obs["be_phase"]).mean()),
+            "sp_med": g.spatial_fst.median(),
+            "pk_med": g.parkin_fst.median(), "pk_lo": g.parkin_fst.quantile(.025), "pk_hi": g.parkin_fst.quantile(.975),
+            "pk_reach": float((g.parkin_fst >= obs["parkin_fst"]).mean()),
+            "bp_med": g.be_parkin.median(), "bp_lo": g.be_parkin.quantile(.025), "bp_hi": g.be_parkin.quantile(.975),
+            "bp_reach": float((g.be_parkin >= obs["be_parkin"]).mean()),
+            "matched": matched(g)})
     cdf = pd.DataFrame(cells)
 
     # ---- rejection ABC posterior over cells (uniform prior)
@@ -235,8 +235,8 @@ def main() -> int:
             for i in rng.choice(idx, size=min(40, len(idx)), replace=False):
                 pp = posterior(X[i], exclude=np.array([i]))
                 pb.append(float(pp[[l for l in LEAKS if l < 1]].sum()))
-            rec_rows.append(dict(leak=leak, strength=strength, p_boundary_median=float(np.median(pb)),
-                                 p_boundary_lo=float(np.percentile(pb, 10))))
+            rec_rows.append({"leak": leak, "strength": strength, "p_boundary_median": float(np.median(pb)),
+                                 "p_boundary_lo": float(np.percentile(pb, 10))})
     idx0 = df.index[(df.leak == 1.0) & (df.strength == 0.0)].to_numpy()
     pb0 = [float(posterior(X[i], exclude=np.array([i]))[[l for l in LEAKS if l < 1]].sum())
            for i in rng.choice(idx0, size=min(40, len(idx0)), replace=False)]
@@ -247,12 +247,12 @@ def main() -> int:
          f"pooled-profile cell ({cell['n_ind']} learners, innovation {cell['innovation']}, mixing "
          f"{cell['mixing']}), interaction length 24 km along rivers. Groups are " + ("the placebo division" if args.placebo is not None else "the published phases") + " "
          f"({', '.join(f'{p} {n}' for p, n in zip(phases, np.bincount(phase)))}).", "",
-         f"Observed: between-phase cultural F_ST **{obs['phase_fst']:.4f}**; boundary excess at phase "
+         (f"Observed: between-phase cultural F_ST **{obs['phase_fst']:.4f}**; boundary excess at phase "
          f"lines **{obs['be_phase']:+.1f}**; F_ST at the {len(np.unique(data['labels']))} spatial clusters "
-         f"{obs['spatial_fst']:.4f}.", "",
+         f"{obs['spatial_fst']:.4f}."), "",
          "## 1. Every cell", "",
-         "Leak multiplies copying across phase lines (1 = no copying boundary). Local innovation is the "
-         "share of classes reordered in each phase's source of new variants (0 = one regional pool).", "",
+         ("Leak multiplies copying across phase lines (1 = no copying boundary). Local innovation is the "
+         "share of classes reordered in each phase's source of new variants (0 = one regional pool)."), "",
          "| leak | local innovation | phase F_ST median [95%] | share reaching observed | boundary excess median [95%] | share reaching observed | diversity matched |",
          "|---|---|---|---|---|---|---|"]
     for _, c in cdf.iterrows():
@@ -261,29 +261,29 @@ def main() -> int:
                  f"{'yes' if c.matched else 'no'} |")
     base = cdf[(cdf.leak == 1.0) & (cdf.strength == 0.0)].iloc[0]
     L += ["", "## The Parkin phase against the rest of the basin", "",
-          f"Observed: Parkin-versus-rest cultural F_ST **{obs['parkin_fst']:.4f}**; boundary excess at the "
-          f"Parkin line **{obs['be_parkin']:+.1f}**. The shares are of 300 runs per cell reaching the observed value.", "",
+          (f"Observed: Parkin-versus-rest cultural F_ST **{obs['parkin_fst']:.4f}**; boundary excess at the "
+          f"Parkin line **{obs['be_parkin']:+.1f}**. The shares are of 300 runs per cell reaching the observed value."), "",
           "| copying factor | local innovation | Parkin F_ST median [95%] | share reaching | Parkin-line boundary excess median [95%] | share reaching |",
           "|---|---|---|---|---|---|"]
     for _, c in cdf.iterrows():
         L.append(f"| {c.leak:g} | {c.strength:g} | {c.pk_med:.4f} [{c.pk_lo:.4f}, {c.pk_hi:.4f}] | {_pct(c.pk_reach)} | "
                  f"{c.bp_med:+.1f} [{c.bp_lo:+.1f}, {c.bp_hi:+.1f}] | {_pct(c.bp_reach)} |")
     L += ["", "## 2. The phases under neutral copying alone (leak 1, regional pool)", "",
-          f"Between-phase F_ST: observed {obs['phase_fst']:.4f} against a median of {base.fst_med:.4f} "
+          (f"Between-phase F_ST: observed {obs['phase_fst']:.4f} against a median of {base.fst_med:.4f} "
           f"(95 percent range {base.fst_lo:.4f} to {base.fst_hi:.4f}); {_pct(base.fst_reach)} of runs reach it. "
           f"Boundary excess at phase lines: observed {obs['be_phase']:+.1f} against {base.be_med:+.1f} "
-          f"({base.be_lo:+.1f} to {base.be_hi:+.1f}); {_pct(base.be_reach)} of runs reach it.", "",
+          f"({base.be_lo:+.1f} to {base.be_hi:+.1f}); {_pct(base.be_reach)} of runs reach it."), "",
           "## 3. Posterior over the grid (rejection ABC, uniform prior over cells)", "",
-          f"Accepted the closest {ACCEPT:.0%} of {len(df)} runs on standardized "
-          f"{', '.join(SUMMARIES)}.", "",
+          (f"Accepted the closest {ACCEPT:.0%} of {len(df)} runs on standardized "
+          f"{', '.join(SUMMARIES)}."), "",
           f"- P(some copying boundary at phase lines, leak < 1) = **{p_boundary:.2f}** (prior 0.75).",
           f"- P(local innovation, share > 0) = **{p_local:.2f}** (prior 0.75).", "",
           "Sensitivity to the approximation's settings (prior 0.75 for both):", "",
           "| acceptance | summaries | P(copying boundary) | P(local innovation) |", "|---|---|---|---|"]
     for acc, label, pb, pl in sens:
         L.append(f"| {acc:.0%} | {label} | {pb:.2f} | {pl:.2f} |")
-    L += ["", "What the copying factor does to cross-phase copying (share of each site's between-site "
-          "copying that crosses a phase line, mean and maximum over sites):", "",
+    L += ["", ("What the copying factor does to cross-phase copying (share of each site's between-site "
+          "copying that crosses a phase line, mean and maximum over sites):"), "",
           "| copying factor | mean share | maximum share |", "|---|---|---|"]
     for leak, (mn, mx) in cross.items():
         L.append(f"| {leak:g} | {mn:.3f} | {mx:.3f} |")
@@ -292,17 +292,17 @@ def main() -> int:
     for (lk, pv), (st, sv) in zip(by_leak.items(), by_strength.items()):
         L.append(f"| {lk:g} | {pv:.2f} | | {st:g} | {sv:.2f} |")
     L += ["", "## 4. Recovery (rule 20c)", "",
-          "Pseudo-observations drawn from cells WITH a copying boundary, run through the same posterior "
+          ("Pseudo-observations drawn from cells WITH a copying boundary, run through the same posterior "
           "(each excluded from its own reference table). If the design can see a boundary, "
-          "P(leak < 1) should rise well above the prior of 0.75.", "",
+          "P(leak < 1) should rise well above the prior of 0.75."), "",
           "| true leak | true local innovation | P(leak < 1), median over 40 | 10th percentile |", "|---|---|---|---|"]
     for r in rec_rows:
         L.append(f"| {r['leak']:g} | {r['strength']:g} | {r['p_boundary_median']:.2f} | {r['p_boundary_lo']:.2f} |")
     L += [f"| 1 (no boundary) | 0 | {np.median(pb0):.2f} | {np.percentile(pb0, 10):.2f} |", "",
           "## Reading", "",
-          "Compare the observed posterior P(leak < 1) with the recovery rows. A value near the prior, "
+          ("Compare the observed posterior P(leak < 1) with the recovery rows. A value near the prior, "
           "or near the no-boundary row, says the data do not ask for a copying boundary at the phase "
-          "lines once local innovation is available; a value near the boundary rows says they do.", ""]
+          "lines once local innovation is available; a value near the boundary rows says they do."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L))

@@ -76,7 +76,6 @@ import runpy
 import sys
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -162,9 +161,9 @@ def build() -> tuple[pd.DataFrame, pd.DataFrame]:
             left_out.append(name)
             continue
         rows.append([name] + [int(v) for v in row])
-        prov.append(dict(assemblage=name, source_used=src,
-                         previous_total=int(r[TY].astype(float).sum()),
-                         corrected_total=int(row.sum())))
+        prov.append({"assemblage": name, "source_used": src,
+                         "previous_total": int(r[TY].astype(float).sum()),
+                         "corrected_total": int(row.sum())})
     prov = pd.DataFrame(prov)
     prov.attrs["left_out"] = left_out
     prov.attrs["mapping_exact"] = (exact, len(shared))

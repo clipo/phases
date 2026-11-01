@@ -31,10 +31,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_GREEN, save  # noqa: E402
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_GREEN, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "bayesian_fst.md"
 OUT_NC = ROOT / "output" / "bayesian_fst.nc"
@@ -42,10 +43,10 @@ OUT_NC = ROOT / "output" / "bayesian_fst.nc"
 # The marginalized Balding-Nichols model is well conditioned, so the default
 # target_accept=0.9 suffices; no funnel-taming is needed (unlike the earlier
 # non-centered Dirichlet-multinomial).
-FULL = dict(draws=2000, tune=2000, chains=4)
-FAST = dict(draws=300, tune=500, chains=2)
-BF_FULL = dict(draws=2000, chains=4)
-BF_FAST = dict(draws=500, chains=2)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4}
+FAST = {"draws": 300, "tune": 500, "chains": 2}
+BF_FULL = {"draws": 2000, "chains": 4}
+BF_FAST = {"draws": 500, "chains": 2}
 
 # PRIMARY is Beta(1,10), not Uniform(0,1). Changed 2026-09-02 on the strength of
 # the prior predictive in analyses/57_fst_prior_predictive.py: at this design the
@@ -105,7 +106,6 @@ def basin_group_counts(inp, scope: str = "basin"):
     counts_all = inp.counts.loc[list(inp.have_coords_ids)].to_numpy(float)
 
     if scope == "region":
-        ids = ids_all
         labels = np.array([inp.cluster_of[a] for a in inp.have_coords_ids])
         counts_use = counts_all
     else:
@@ -117,7 +117,6 @@ def basin_group_counts(inp, scope: str = "basin"):
                 "no assemblage in prepare_inputs() is in the canonical basin "
                 "membership; data/processed/basin_members_curated.txt is stale "
                 "or the id conventions have diverged")
-        ids = [ids_all[i] for i in keep]
         counts_use = counts_all[keep]
         coords_b = np.asarray(inp.cc_c)[keep]
         labels = _basin_cluster_labels(coords_b)
@@ -150,14 +149,16 @@ def fitted_basin_ids(inp) -> list:
 
 def main(fast=False):
     import arviz as az
+
     from mls_emergence.inference import (
-        sample_fst, fst_summary, gini_simpson_summary, bayes_factor_structure,
+        fst_summary,
+        gini_simpson_summary,
+        sample_fst,
     )
 
     a07 = importlib.import_module("07_refined_empirical")
 
     cfg = FAST if fast else FULL
-    bf_cfg = BF_FAST if fast else BF_FULL
     inp = a07.prepare_inputs()
     gc, _sizes = basin_group_counts(inp)          # scope="basin" by default
     a43_ids = fitted_basin_ids(inp)
@@ -212,53 +213,53 @@ def main(fast=False):
                   _diagnostics(idata_alt, "Uniform(0,1) prior (sensitivity refit)")]
 
     L = ["# Bayesian cultural F_ST for the basin (Balding-Nichols model)", "",
-         f"Observed St. Francis basin (canonical drainage membership, "
+         (f"Observed St. Francis basin (canonical drainage membership, "
          f"{len(a43_ids)} assemblages), {gc.shape[0]} spatial clusters, "
          f"{gc.shape[1]} decorated types. Balding-Nichols Dirichlet-multinomial "
          f"(F ~ Beta(1,10), per-cluster frequencies marginalized), "
          f"{cfg['draws']} draws x {cfg['chains']} chains "
          f"({'FAST' if fast else 'full'}). The estimator is shared with a "
-         f"sibling project for consistency of method; no data is shared.", "",
+         f"sibling project for consistency of method; no data is shared."), "",
          "## 1. Cultural F_ST parameter (Balding-Nichols theta)", "",
-         f"- Posterior median F_ST = {s['fst_median']:.4f} "
+         (f"- Posterior median F_ST = {s['fst_median']:.4f} "
          f"(mean {s['fst_mean']:.4f}), 95% credible interval "
-         f"[{s['fst_hdi95'][0]:.4f}, {s['fst_hdi95'][1]:.4f}].",
-         "- Beta(1,10) prior on F_ST, adopted on prior-predictive grounds "
+         f"[{s['fst_hdi95'][0]:.4f}, {s['fst_hdi95'][1]:.4f}]."),
+         ("- Beta(1,10) prior on F_ST, adopted on prior-predictive grounds "
          "(analyses/57). It leans toward SMALL F_ST, which is the direction "
          "of this paper's conclusion, so the Uniform(0,1) refit below is the "
-         "check that the prior is not doing the work.",
-         f"- Prior sensitivity (Uniform(0,1) prior on F): median "
+         "check that the prior is not doing the work."),
+         (f"- Prior sensitivity (Uniform(0,1) prior on F): median "
          f"{s_alt['fst_median']:.4f}, 95% CI "
-         f"[{s_alt['fst_hdi95'][0]:.4f}, {s_alt['fst_hdi95'][1]:.4f}].", "",
+         f"[{s_alt['fst_hdi95'][0]:.4f}, {s_alt['fst_hdi95'][1]:.4f}]."), "",
          "## 2. Gini-Simpson F_ST (the manuscript estimator), conjugate readout", "",
-         f"- Posterior median = {g['gst_median']:.4f} (mean {g['gst_mean']:.4f}), "
-         f"95% credible interval [{g['gst_hdi95'][0]:.4f}, {g['gst_hdi95'][1]:.4f}].",
-         f"- Frequentist plug-in (variance.cultural_fst) = {g['plugin_fst']:.4f}, "
+         (f"- Posterior median = {g['gst_median']:.4f} (mean {g['gst_mean']:.4f}), "
+         f"95% credible interval [{g['gst_hdi95'][0]:.4f}, {g['gst_hdi95'][1]:.4f}]."),
+         (f"- Frequentist plug-in (variance.cultural_fst) = {g['plugin_fst']:.4f}, "
          f"which falls "
          f"{'inside' if g['gst_hdi95'][0] <= g['plugin_fst'] <= g['gst_hdi95'][1] else 'outside'} "
-         f"the 95% interval.", "",
-         "This readout is a credible interval on the exact estimator the "
+         f"the 95% interval."), "",
+         ("This readout is a credible interval on the exact estimator the "
          "manuscript reports, reconstructed from the same fit as "
-         "p_g | x_g ~ Dirichlet((1-F)/F * pi + x_g).", "",
+         "p_g | x_g ~ Dirichlet((1-F)/F * pi + x_g)."), "",
          "## 3. Structure vs panmixia: not reported", "",
-         "The Bayes factor against exact panmixia that this section used to "
-         "carry is **demoted and no longer computed** (F1). Two reasons.", "",
-         "First, its evidence band is prior-unstable exactly where it would "
+         ("The Bayes factor against exact panmixia that this section used to "
+         "carry is **demoted and no longer computed** (F1). Two reasons."), "",
+         ("First, its evidence band is prior-unstable exactly where it would "
          "matter. `../mataa` computed the same comparison exactly and measured "
          "the Kass-Raftery band moving across a boundary, 4.48 log units from "
          "Uniform(0,1) to Beta(1,10), for a near-null case. That is the "
          "Lindley-Bartlett effect on a nested boundary comparison and no "
          "estimator fixes it, so the quantity is robust where it is not needed "
-         "and fragile where it would be load-bearing.", "",
-         "Second, exact panmixia is not the alternative anyone entertains. With "
+         "and fragile where it would be load-bearing."), "",
+         ("Second, exact panmixia is not the alternative anyone entertains. With "
          "thousands of sherds it is rejected trivially by any real assemblage "
          "set, and spatially structured neutral drift, which IS the alternative "
          "this paper tests, produces F_ST > 0 and would reject it too. The "
          "operative comparison is structure against drift, addressed by the "
-         "drift-versus-groups analysis, not by a panmixia Bayes factor.", "",
-         "What stands in its place is section 1: the posterior for F itself, "
+         "drift-versus-groups analysis, not by a panmixia Bayes factor."), "",
+         ("What stands in its place is section 1: the posterior for F itself, "
          "under a prior justified by prior predictive (analyses/57) and reported "
-         "under two priors leaning opposite ways.", "",
+         "under two priors leaning opposite ways."), "",
          "## MCMC diagnostics", "",
          *diag_lines, ""]
 

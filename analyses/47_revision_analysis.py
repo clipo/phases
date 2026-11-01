@@ -37,16 +37,16 @@ median among the stage-1 matched cells is used and flagged unmatched.
 Outputs include complete replicate tables and an
 input/code/config fingerprint; a cache is reused only when it matches.
 """
-from pathlib import Path
 import argparse
 import ast
-from concurrent.futures import ProcessPoolExecutor
 import hashlib
 import importlib
-from importlib.metadata import version
 import json
 import os
 import sys
+from concurrent.futures import ProcessPoolExecutor
+from importlib.metadata import version
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -55,12 +55,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 import matplotlib
+
 matplotlib.use("Agg")
 import make_figures as mf
 import make_map as mm
-from mls_emergence.transmission.spatial import copying_weights, drift_record, sample_record
+
+from mls_emergence.signatures.assortativity import mantel, similarity_matrix
 from mls_emergence.signatures.variance import cultural_fst
-from mls_emergence.signatures.assortativity import similarity_matrix, mantel
+from mls_emergence.transmission.spatial import copying_weights, drift_record, sample_record
 
 sd = importlib.import_module("23_phases_vs_spatial_drift")
 basin = importlib.import_module("17_basin_results")
@@ -69,14 +71,14 @@ phases = importlib.import_module("36_canonical_phase_map")
 regions = importlib.import_module("31_within_region_structure")
 OUT = ROOT / "output" / "revision_2026_09"
 MODELS = ["pooled", "uniform"]
-CONFIG = dict(k="observed class count", steps=1800, n_records=90,
-              burnin=1200, window=8, models=MODELS, tolerance=0.10,
-              calib_n_ind=[120, 2000, 10000],
-              calib_innovations=[.0002, .0005, .001, .002, .004, .008, .012, .024, .048, .1, .2],
-              calib_mixings=[.001, .002, .005, .01, .02, .05, .1, .2, .4], calib_reps=6, length=24.,
-              calib_stage2_reps=50,
-              baseline_reps=500, grid_reps=30, sensitivity_reps=50,
-              lengths=[12., 24.], leaks=[1., .5, .1, .03])
+CONFIG = {"k": "observed class count", "steps": 1800, "n_records": 90,
+              "burnin": 1200, "window": 8, "models": MODELS, "tolerance": 0.10,
+              "calib_n_ind": [120, 2000, 10000],
+              "calib_innovations": [.0002, .0005, .001, .002, .004, .008, .012, .024, .048, .1, .2],
+              "calib_mixings": [.001, .002, .005, .01, .02, .05, .1, .2, .4], "calib_reps": 6, "length": 24.,
+              "calib_stage2_reps": 50,
+              "baseline_reps": 500, "grid_reps": 30, "sensitivity_reps": 50,
+              "lengths": [12., 24.], "leaks": [1., .5, .1, .03]}
 REGION_LABEL = {"basin": "St. Francis basin", "valley": "Parkin partition", "cmv": "SE Missouri"}
 MODEL_LABEL = {"pooled": "pooled-profile innovation", "uniform": "uniform innovation"}
 
@@ -90,9 +92,9 @@ def diversity(m):
     m = np.asarray(m, float)
     p = m / m.sum(1, keepdims=True)
     pooled = m.sum(0) / m.sum()
-    return dict(hs=float((1 - (p ** 2).sum(1)).mean()),
-                rich=float((m > 0).sum(1).mean()),
-                ht=float(1 - (pooled ** 2).sum()))
+    return {"hs": float((1 - (p ** 2).sum(1)).mean()),
+                "rich": float((m > 0).sum(1).mean()),
+                "ht": float(1 - (pooled ** 2).sum())}
 
 
 def load_sets():
@@ -119,8 +121,8 @@ def load_sets():
         if name == "valley":
             _lab, _der = phases.assign_primary_phases(names, coords)
             parkin = (_lab == "Parkin") & ~_der
-        sets[name] = dict(m=m, coords=coords, names=names, d=d, ranks=ranks,
-                          labels=labs[k], parkin=parkin, pooled=m.sum(0) / m.sum())
+        sets[name] = {"m": m, "coords": coords, "names": names, "d": d, "ranks": ranks,
+                          "labels": labs[k], "parkin": parkin, "pooled": m.sum(0) / m.sum()}
     return sets
 
 
@@ -232,9 +234,9 @@ def calibrate(name, data, model):
     else:
         best = frame.loc[frame.loss.idxmin()]; how = "min_loss"
     frame["selected"] = (frame.n_ind == best.n_ind) & (frame.innovation == best.innovation) & (frame.mixing == best.mixing)
-    rates = dict(innovation=float(best.innovation), mixing=float(best.mixing), n_ind=int(best.n_ind))
-    return frame, rates, dict(matched=bool(how == "stage2"), n_matched=int(len(matched)),
-                              n_matched_stage2=int(len(matched2)), n_cells=int(len(frame)), selection=how)
+    rates = {"innovation": float(best.innovation), "mixing": float(best.mixing), "n_ind": int(best.n_ind)}
+    return frame, rates, {"matched": bool(how == "stage2"), "n_matched": len(matched),
+                              "n_matched_stage2": len(matched2), "n_cells": len(frame), "selection": how}
 
 
 def worker(args):
@@ -259,13 +261,13 @@ def worker(args):
             if name == "valley" and kind == "time_transgressive":
                 for j in np.where(data["parkin"])[0]:
                     keep = np.arange(len(m)) != j
-                    influence.append(dict(model=model, seed=seed, site=data["names"][j],
-                                          fst=fst_by(m[keep], data["parkin"][keep])))
+                    influence.append({"model": model, "seed": seed, "site": data["names"][j],
+                                          "fst": fst_by(m[keep], data["parkin"][keep])})
         if (seed + 1) % 100 == 0:
             print(f"baseline {name}/{model}: {seed+1}/{CONFIG['baseline_reps']}", flush=True)
     co = None
     if co_members:
-        co = pd.DataFrame(dict(region=name, model=model, site=data["names"], probability=np.mean(co_members, axis=0)))
+        co = pd.DataFrame({"region": name, "model": model, "site": data["names"], "probability": np.mean(co_members, axis=0)})
 
     grid = []
     for length in CONFIG["lengths"]:
@@ -279,13 +281,13 @@ def worker(args):
 
     sensitivity = []
     if name in ("basin", "valley"):
-        cases = [("longer_burnin", dict(burnin=2400)),
-                 ("monomorphic_burnin", dict(initial="monomorphic")),
-                 ("monomorphic_no_burnin", dict(initial="monomorphic", burnin=0)),
-                 ("innovation_halved", dict(innovation=rates["innovation"] / 2)),
-                 ("innovation_doubled", dict(innovation=rates["innovation"] * 2)),
-                 ("mixing_halved", dict(mixing=rates["mixing"] / 2)),
-                 ("mixing_doubled", dict(mixing=rates["mixing"] * 2))]
+        cases = [("longer_burnin", {"burnin": 2400}),
+                 ("monomorphic_burnin", {"initial": "monomorphic"}),
+                 ("monomorphic_no_burnin", {"initial": "monomorphic", "burnin": 0}),
+                 ("innovation_halved", {"innovation": rates["innovation"] / 2}),
+                 ("innovation_doubled", {"innovation": rates["innovation"] * 2}),
+                 ("mixing_halved", {"mixing": rates["mixing"] / 2}),
+                 ("mixing_doubled", {"mixing": rates["mixing"] * 2})]
         for case, kw in cases:
             for seed in range(CONFIG["sensitivity_reps"]):
                 f = simulate(data, 40000 + seed, model, **{**rates, **kw})
@@ -293,9 +295,9 @@ def worker(args):
                 st, _ = stats(m, data)
                 sensitivity.append(dict(region=name, model=model, case=case, seed=seed, **st))
         print(f"sensitivity {name}/{model} done", flush=True)
-    return dict(calibration=calibration, rates=dict(region=name, model=model, **rates, **match),
-                baseline=pd.DataFrame(rows), influence=pd.DataFrame(influence),
-                co_membership=co, grid=pd.DataFrame(grid), sensitivity=pd.DataFrame(sensitivity))
+    return {"calibration": calibration, "rates": dict(region=name, model=model, **rates, **match),
+                "baseline": pd.DataFrame(rows), "influence": pd.DataFrame(influence),
+                "co_membership": co, "grid": pd.DataFrame(grid), "sensitivity": pd.DataFrame(sensitivity)}
 
 
 def run(sets):
@@ -316,9 +318,9 @@ def _pct(a):
     """2.5, 50, 97.5 percentiles over the DEFINED (finite) values, with their count."""
     a = np.asarray(a, float); a = a[np.isfinite(a)]
     if len(a) == 0:
-        return dict(lo=float("nan"), median=float("nan"), hi=float("nan"), n_defined=0)
+        return {"lo": float("nan"), "median": float("nan"), "hi": float("nan"), "n_defined": 0}
     lo, med, hi = np.percentile(a, [2.5, 50, 97.5])
-    return dict(lo=float(lo), median=float(med), hi=float(hi), n_defined=int(len(a)))
+    return {"lo": float(lo), "median": float(med), "hi": float(hi), "n_defined": len(a)}
 
 
 def summarize(sets):
@@ -329,19 +331,19 @@ def summarize(sets):
     calib = pd.read_csv(OUT / "calibration.csv")
     rates = pd.read_csv(OUT / "calibrated_rates.csv")
     observed = {name: stats(d["m"], d)[0] for name, d in sets.items()}
-    result = dict(config=CONFIG, observed=observed, calibration=[], comparisons=[],
-                  boundary_grid=[], leave_one_out=[], sensitivity=[])
+    result = {"config": CONFIG, "observed": observed, "calibration": [], "comparisons": [],
+                  "boundary_grid": [], "leave_one_out": [], "sensitivity": []}
     for _, r in rates.iterrows():
         sel = calib[(calib.region == r.region) & (calib.model == r.model) & calib.selected].iloc[0]
         frame = base[(base.region == r.region) & (base.model == r.model) & (base.sampling == "time_transgressive")]
-        result["calibration"].append(dict(region=r.region, model=r.model, innovation=r.innovation,
-            mixing=r.mixing, n_ind=int(r.n_ind), matched=bool(r.matched), n_matched=int(r.n_matched),
-            n_matched_stage2=int(r.n_matched_stage2), selection=str(r.selection),
-            n_cells=int(r.n_cells), loss=float(sel.loss),
-            stage2=dict(fst_median=float(sel.stage2_fst_median), lo=float(sel.stage2_lo), hi=float(sel.stage2_hi),
-                        n_reps=int(CONFIG["calib_stage2_reps"])),
-            observed={k: float(sel[f"obs_{k}"]) for k in ["hs", "rich", "ht"]},
-            achieved={k: _pct(frame[k]) for k in ["hs", "rich", "ht"]}))
+        result["calibration"].append({"region": r.region, "model": r.model, "innovation": r.innovation,
+            "mixing": r.mixing, "n_ind": int(r.n_ind), "matched": bool(r.matched), "n_matched": int(r.n_matched),
+            "n_matched_stage2": int(r.n_matched_stage2), "selection": str(r.selection),
+            "n_cells": int(r.n_cells), "loss": float(sel.loss),
+            "stage2": {"fst_median": float(sel.stage2_fst_median), "lo": float(sel.stage2_lo), "hi": float(sel.stage2_hi),
+                        "n_reps": int(CONFIG["calib_stage2_reps"])},
+            "observed": {k: float(sel[f"obs_{k}"]) for k in ["hs", "rich", "ht"]},
+            "achieved": {k: _pct(frame[k]) for k in ["hs", "rich", "ht"]}})
     for (model, name, kind), frame in base.groupby(["model", "region", "sampling"]):
         for metric in ["community_fst", "spatial_fst", "ncom"] + (["parkin_fst"] if name == "valley" else []):
             a = frame[metric].to_numpy()
@@ -369,9 +371,9 @@ def summarize(sets):
     (OUT / "summary.json").write_text(json.dumps(result, indent=2))
 
     lines = ["# Calibrated spatial drift comparison", "",
-             "Two neutral innovation models, each calibrated to observed within-assemblage "
+             ("Two neutral innovation models, each calibrated to observed within-assemblage "
              "Gini-Simpson diversity, richness, and pooled diversity before comparison. "
-             "Fixed observed repertoire; full eight-slice windows; 1,200-generation burn-in.", "",
+             "Fixed observed repertoire; full eight-slice windows; 1,200-generation burn-in."), "",
              "## Calibration", "",
              "| Region | Model | N | Innovation | Mixing | Matched cells (stage 1 / stage 2) | Stage-2 F_ST median [95%] | Obs H_S / rich / H_T | Achieved (baseline median) |",
              "|---|---|---:|---:|---:|---:|---|---|---|"]
@@ -418,7 +420,7 @@ def main(force=False):
     valid = manifest.exists() and json.loads(manifest.read_text()).get("fingerprint") == key
     if force or not valid or not all((OUT / p).exists() for p in products):
         run(sets)
-        manifest.write_text(json.dumps(dict(fingerprint=key, config=CONFIG), indent=2))
+        manifest.write_text(json.dumps({"fingerprint": key, "config": CONFIG}, indent=2))
     else:
         print("validated cache fingerprint; rendering stored results", flush=True)
     summarize(sets)

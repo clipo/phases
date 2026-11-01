@@ -1,6 +1,8 @@
-import pytest
 from pathlib import Path
-from mls_emergence.dataio import settlement, pfg
+
+import pytest
+
+from mls_emergence.dataio import pfg, settlement
 
 LMV = Path("data/LMVData.xlsx"); PFG = Path("data/raw/PFGData.xlsx")
 
@@ -33,6 +35,6 @@ def test_normalize_grid_zero_o_substitution():
 @pytest.mark.skipif(not LMV.exists(), reason="LMVData gitignored/absent")
 def test_join_coverage_improves_after_reconciliation():
     counts = pfg.load_pfg_counts(PFG)
-    joined, unmatched = settlement.join_pfg_to_lmv(counts, settlement.load_lmv(LMV))
+    _joined, unmatched = settlement.join_pfg_to_lmv(counts, settlement.load_lmv(LMV))
     matched = len(counts) - len(unmatched)
     assert matched >= 245   # up from 233; aim to recover most of the 33

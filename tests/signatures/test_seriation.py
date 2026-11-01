@@ -1,4 +1,5 @@
 import numpy as np
+
 from mls_emergence.signatures import seriation as S
 
 

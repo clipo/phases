@@ -69,6 +69,7 @@ def main() -> int:
     rev = importlib.import_module("47_revision_analysis")
     a84 = importlib.import_module("84_phases_as_groups")
     from pyproj import Transformer
+
     from mls_emergence.transmission.spatial import copying_weights, drift_record, sample_record
 
     counts, coords = mf._load_curated()
@@ -99,18 +100,18 @@ def main() -> int:
             alt_pts.append(g75.sample_line(gb))
 
     L = ["# Turnover along the reconstructed phase boundaries: bandwidth and recovery", "",
-         f"Produced by `analyses/91_turnover_sensitivity.py`. Basin set, {len(names)} assemblages; "
+         (f"Produced by `analyses/91_turnover_sensitivity.py`. Basin set, {len(names)} assemblages; "
          f"{args.grid} x {args.grid} grid (analysis 75 uses 220); {len(alt_pts)} same-size alternative "
          "divisions around random centers, built as analysis 75 builds them (seed 75). The boundaries are "
          "this study's reconstruction of territories from the assemblages' Phillips (1970) phases, not his drawn lines. "
          "Percentile = share of alternatives whose median turnover along their boundaries is below the phase "
-         "boundaries'; a boundary between communities would sit high.", "",
+         "boundaries'; a boundary between communities would sit high."), "",
          "## A. Bandwidth", "",
          "| bandwidth (km) | phase boundaries, median turnover per km | alternatives, median | percentile of the phase boundaries |",
          "|---:|---:|---:|---:|"]
     props = m / m.sum(1, keepdims=True)
     for bw in BANDWIDTHS:
-        o, a, pct, n = percentile_of(props, pts_km, gx, gy, bw, b_pts, alt_pts, g75)
+        o, a, pct, _n = percentile_of(props, pts_km, gx, gy, bw, b_pts, alt_pts, g75)
         L.append(f"| {bw:g} | {o:.5f} | {a:.5f} | {pct:.1f} |")
         print(L[-1], flush=True)
     L.append("")
@@ -123,10 +124,10 @@ def main() -> int:
     rates = pd.read_csv(ROOT / "output" / "revision_2026_09" / "calibrated_rates.csv")
     row = rates[(rates.region == "basin") & (rates.model == "pooled")].iloc[0]
     L += ["## B. Recovery of a copying boundary at the phase lines", "",
-          f"{args.reps} simulated records per cell from analysis 84's grid and seeds (N {int(row['n_ind'])}, "
+          (f"{args.reps} simulated records per cell from analysis 84's grid and seeds (N {int(row['n_ind'])}, "
           f"innovation {row['innovation']}, mixing {row['mixing']}, 24 km along the rivers), sampled at the real "
           f"sherd counts, bandwidth {SIM_BANDWIDTH:g} km. Entries are percentiles of the phase boundaries among "
-          "the same alternatives.", "",
+          "the same alternatives."), "",
           "| copying factor | local innovation | percentile, 5% / 25% / 50% / 75% / 95% over records | records at or below the observed percentile |",
           "|---|---|---|---:|"]
     o_obs, _, pct_obs, _ = percentile_of(props, pts_km, gx, gy, SIM_BANDWIDTH, b_pts, alt_pts, g75)
@@ -150,10 +151,10 @@ def main() -> int:
         print(L[-1], flush=True)
     L += ["", f"Observed at this grid and bandwidth: median {o_obs:.5f} per km, percentile {pct_obs:.1f}.", "",
           "## Reading", "",
-          "If the percentile stays low across bandwidths, the result is not an artifact of 15 km. If the "
+          ("If the percentile stays low across bandwidths, the result is not an artifact of 15 km. If the "
           "boundary cells in B do not lift the phase lines' percentile above the no-boundary cell, the "
           "comparison cannot see a copying boundary on this sampling geometry, and the turnover result is "
-          "description rather than evidence against a boundary.", ""]
+          "description rather than evidence against a boundary."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT_MD}")

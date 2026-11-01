@@ -1,26 +1,24 @@
 {
-  "title": "phases: analysis code and data for \"Are the phases real? Distinguishing bounded interaction groups from spatially structured drift in lower Mississippi Valley decorated ceramics\"",
+  "title": "phases: analysis code and data for \"What Are Phases? Geographic Structure, Neutral Copying, and the Search for Social Boundaries in the Lower Mississippi Valley\"",
   "upload_type": "software",
-  "description": "Analysis code and data for the study distinguishing bounded interaction groups from spatially structured drift in late pre-contact lower Mississippi Valley decorated-ceramic assemblages. Includes the transmission-signature pipeline, the drift-versus-groups generative comparison, the manuscript figures, and the per-analysis result reports.",
-  "version": "1.0.0",
+  "description": "Analysis code and data for a study of the late pre-contact phases of the St. Francis basin, Lower Mississippi Valley: whether decorated-ceramic assemblages record geographic structure, neutral copying, or bounded social units. Includes the decorated-class matrix and its provenance, the neutral copying model, the spatial field, latent-unit and barrier Stan models, the findings files every reported number traces to, and the manuscript figures.",
+  "version": "2.0.0-dev",
   "license": "MIT",
   "access_right": "restricted",
   "access_conditions": "Held private during peer review; will be opened on publication.",
   "creators": [
     { "name": "Lipo, Carl P.", "affiliation": "Binghamton University" },
-    { "name": "DiNapoli, Robert J.", "affiliation": "Binghamton University" },
+    { "name": "DiNapoli, Beau", "affiliation": "Binghamton University" },
     { "name": "Madsen, Mark E." }
   ],
   "keywords": [
     "cultural transmission",
     "neutral models",
-    "spatially structured drift",
     "isolation by distance",
-    "frequency seriation",
-    "cultural FST",
-    "bounded interaction groups",
-    "archaeological systematics",
     "archaeological phase concept",
+    "archaeological systematics",
+    "spatial Gaussian process",
+    "cultural FST",
     "Mississippian archaeology",
     "Parkin phase",
     "lower Mississippi Valley"

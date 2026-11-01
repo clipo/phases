@@ -21,7 +21,7 @@ Coverage of the BN F parameter is checked against the generating F; coverage of 
 |---|---|---|---|---|
 | 0.020 | 0.0169 | 40 | +0.0428 | +0.0192 |
 | 0.050 | 0.0300 | 40 | +0.0478 | +0.0207 |
-| 0.100 | 0.0728 | 40 | +0.0506 | +0.0164 |
+| 0.100 | 0.0728 | 40 | +0.0506 | +0.0163 |
 | 0.200 | 0.1740 | 40 | +0.0406 | -0.0016 |
 | 0.350 | 0.3141 | 40 | +0.0171 | -0.0297 |
 | 0.500 | 0.3214 | 40 | +0.0578 | +0.0216 |
@@ -31,15 +31,15 @@ Mean absolute bias at small sizes: plug-in = 0.0621, posterior median = 0.0481 (
 ## 4. Simulation-based calibration (BN F parameter)
 
 - 200 datasets drawn from the prior; rank of true F within its posterior binned into 20 bins.
-- Chi-square uniformity: chi2 = 19.00, p = 0.457 (want p > 0.05, i.e. not distinguishable from uniform).
+- Chi-square uniformity: chi2 = 19.60, p = 0.419 (want p > 0.05, i.e. not distinguishable from uniform).
 - KS uniformity: D = 0.050, p = 0.680.
 
 ## 5. MCMC health on the real St. Francis basin fit
 
-- 2 spatial clusters, 10 decorated types; default target_accept (no funnel-taming needed).
-- max R-hat = 1.0011 (want < 1.01); min ESS = 3257; divergences = 0.
-- BN F_ST median = 0.1011, 95% CI [0.0114, 0.2422].
-- Gini-Simpson readout median = 0.0062, 95% CI [0.0051, 0.0076]; plug-in = 0.0062 (inside the interval).
+- 3 spatial clusters, 10 decorated types; default target_accept (no funnel-taming needed).
+- max R-hat = 1.0015 (want < 1.01); min ESS = 4299; divergences = 0.
+- BN F_ST median = 0.0731, 95% CI [0.0220, 0.1579].
+- Gini-Simpson readout median = 0.0179, 95% CI [0.0158, 0.0202]; plug-in = 0.0179 (inside the interval).
 
 ## 6. Bayes-factor sanity
 

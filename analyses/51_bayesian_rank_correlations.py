@@ -34,22 +34,25 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
-from mls_emergence.inference.rank_correlation import (  # noqa: E402
-    bayesian_rank_correlation, format_result,
+import make_figures as mf
+
+from mls_emergence.inference.rank_correlation import (
+    bayesian_rank_correlation,
+    format_result,
 )
 
 OUT_MD = ROOT / "output" / "findings" / "bayesian_rank_correlations.md"
 N_BINS = 6
-FULL = dict(draws=2000, tune=2000, chains=4)
-FAST = dict(draws=500, tune=800, chains=2)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4}
+FAST = {"draws": 500, "tune": 800, "chains": 2}
 
 
 def main(fast=False):
     cfg = FAST if fast else FULL
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     M = counts.to_numpy(float)
     P = M / M.sum(1, keepdims=True)
     ca1, _, _ = mf.correspondence_axis(M)
@@ -81,14 +84,14 @@ def main(fast=False):
     ]
 
     L = ["# Bayesian rank correlations, replacing the \"not significant\" claims",
-         "", f"Produced by `analyses/51_bayesian_rank_correlations.py` "
+         "", (f"Produced by `analyses/51_bayesian_rank_correlations.py` "
          f"({'FAST' if fast else 'full'}). Data preparation copied unchanged "
          f"from `analyses/13_neiman_distance_and_fit.py`, so any movement is "
-         f"attributable to the inference and not to the inputs.", "",
-         "Estimand: the correlation of van der Waerden normal scores, the "
+         f"attributable to the inference and not to the inputs."), "",
+         ("Estimand: the correlation of van der Waerden normal scores, the "
          "rank-based Bayesian analogue of Spearman's rho, with a symmetric "
          "Uniform(-1, 1) prior (rule 20: the prior leans neither way, so the "
-         "burden of defence is light).", "",
+         "burden of defence is light)."), "",
          "| claim | n | frequentist rho | p | **posterior median** | **95% CI** | **P(r > 0)** |",
          "|---|---|---|---|---|---|---|"]
     diag = []
@@ -104,21 +107,21 @@ def main(fast=False):
 
     L += ["", "## Diagnostics (rule 16, every fit)", ""] + [f"- {d}" for d in diag]
     L += ["", "## Reading", "",
-          "The frequentist and Bayesian point estimates agree closely, as they "
+          ("The frequentist and Bayesian point estimates agree closely, as they "
           "should: the same rank information is being summarised. What changes "
-          "is what can be said about it.", "",
-          "For the **divergence trajectory**, the manuscript currently says "
+          "is what can be said about it."), "",
+          ("For the **divergence trajectory**, the manuscript currently says "
           "\"no divergence trend along the sequence (Spearman's rho = +0.37, "
           "not significant)\". With six bins the posterior is very wide and "
           "straddles zero comfortably. The defensible statement is that the "
           "data do not resolve the direction of any trend, which is weaker than "
           "\"no divergence trend\" and stronger than nothing: it says the "
           "record cannot distinguish growing divergence from none, rather than "
-          "asserting there is none.", "",
-          "This is the substantive difference rule 18 is after. \"Not "
+          "asserting there is none."), "",
+          ("This is the substantive difference rule 18 is after. \"Not "
           "significant\" over six points reads as evidence of absence. A "
           "posterior that spans most of the interval says plainly that six "
-          "points cannot settle it.", ""]
+          "points cannot settle it."), ""]
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print(f"\nwrote {OUT_MD}")
