@@ -87,10 +87,13 @@ assemblage treated as unassigned.
 
 `basin_composition.json` is the 28-assemblage count matrix with site
 coordinates and the distance matrix as the spatial field, latent-unit and
-barrier models read it; `sim_rho*.json` and `sim_truth.json` are records
-simulated from the spatial field model at known range for its recovery
-checks. All are written by `analyses/49_write_stan_data.py`, which records the
-sha256 of the counts and coordinates in each file.
+barrier models read it. `a0_recovery_share*_rho*.json` are the four records
+simulated from the spatial field model at known spatial share and range for
+its recovery checks (Table S4), with their planted values in
+`a0_recovery_truth.json`. Both are written by `analyses/49_write_stan_data.py`,
+which records the sha256 of the counts and coordinates in each file.
+`sim_rho*.json` and `sim_truth.json` are the earlier version's recovery
+records, read by `analyses/02_spatial/01_recovery.R`.
 
 ## Top-level settlement tables
 

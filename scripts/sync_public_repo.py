@@ -197,6 +197,24 @@ def main() -> int:
     update = sorted(p for p in (want & have)
                     if not (dest / p).is_file()
                     or not filecmp.cmp(ROOT / p, dest / p, shallow=False))
+    # A source file git does not track here (output/*.md, output/*.csv,
+    # data/stan/*.json, the gitignored processed tables) is whatever the last
+    # local run left. If it is older than the release's committed copy, the
+    # release copy came from a later run on another machine and is kept.
+    # Found 2026-11-01: this machine's output/*.md and data/stan/*.json dated
+    # 2026-09-15 overwrote the release's 2026-10-02 copies (27,924 sherds in
+    # basin_composition.json against the current matrix's 14,101) for one
+    # commit before the comparison below existed.
+    tracked_here = set(tracked_files())
+    stale_source = []
+    for p in list(update):
+        if p in tracked_here or not (dest / p).is_file():
+            continue
+        committed = subprocess.run(["git", "log", "-1", "--format=%ct", "--", p],
+                                   cwd=dest, capture_output=True, text=True).stdout.strip()
+        if committed and (ROOT / p).stat().st_mtime < int(committed):
+            stale_source.append(p)
+    update = [p for p in update if p not in stale_source]
 
     print(f"release set: {len(want)} files")
     print(f"  add:    {len(add)}")
@@ -207,6 +225,8 @@ def main() -> int:
           f"{len(stale_outputs)}")
     for p in stale_outputs:
         print(f"STALE? {p}")
+    for p in stale_source:
+        print(f"STALE SOURCE (release copy kept; regenerate here to publish) {p}")
     for label, items in (("ADD", add), ("UPDATE", update), ("DELETE", delete)):
         for p in items:
             print(f"{label:6s} {p}")
