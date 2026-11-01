@@ -1,14 +1,17 @@
-"""Spatial-assortativity signature: does decorated similarity follow social
-rather than geographic distance?
+"""Signature 4, spatial assortativity of ceramic similarity.
 
-Provides Brainerd-Robinson similarity, a Mantel test against geographic
-distance, and the distance-controlled boundary-excess statistic that separates a
-sharp social boundary from smooth isolation by distance (a plain Mantel r cannot
-tell the two apart). Spatial clusters for the boundary excess are found by
-k-means with multiple restarts.
+Provides Brainerd-Robinson similarity (``brainerd_robinson``,
+``similarity_matrix``), pairwise Euclidean distance (``geo_distance``), the
+Mantel correlation between the two (``mantel``, ``spatial_assortativity``), the
+k-means spatial clustering used to define groups (``_kmeans_labels``,
+``_select_k``) and the distance-controlled ``boundary_excess``. Used by the
+empirical and phase analyses (05, 06, 07, 09, 15, 23, 25, 26, 28, 43, 47, 59, 60),
+``make_figures.py`` and ``validation.harness``.
 """
 from __future__ import annotations
+
 import numpy as np
+
 
 def brainerd_robinson(a: np.ndarray, b: np.ndarray) -> float:
     """BR similarity in [0,200]: 200 - sum|%a-%b|."""
@@ -18,7 +21,11 @@ def brainerd_robinson(a: np.ndarray, b: np.ndarray) -> float:
     return float(200.0 - np.sum(np.abs(pa - pb)))
 
 def similarity_matrix(counts: np.ndarray) -> np.ndarray:
-    """Pairwise Brainerd-Robinson similarity matrix (n x n) over assemblages."""
+    """Pairwise Brainerd-Robinson similarity of the rows of ``counts``.
+
+    ``counts`` is an assemblages x types array. Returns a symmetric n x n array
+    in [0, 200]; 200 means identical percentage profiles.
+    """
     n = counts.shape[0]
     S = np.zeros((n, n))
     for i in range(n):
@@ -27,7 +34,13 @@ def similarity_matrix(counts: np.ndarray) -> np.ndarray:
     return S
 
 def geo_distance(coords: np.ndarray) -> np.ndarray:
-    """Pairwise Euclidean distance matrix for the given coordinates."""
+    """Pairwise Euclidean distance between the rows of ``coords`` (n x 2).
+
+    Returns an n x n array in the units of ``coords`` (meters for projected
+    UTM input; convert before passing if km are wanted). No geodesic
+    correction is made, so latitude/longitude input gives degrees, not a
+    distance.
+    """
     d = coords[:, None, :] - coords[None, :, :]
     return np.sqrt((d ** 2).sum(-1))
 
@@ -52,7 +65,6 @@ def spatial_assortativity(counts: np.ndarray, coords: np.ndarray, n_perm: int = 
 
 
 def _kmeans_once(coords: np.ndarray, k: int, rng: np.random.Generator):
-    """One Lloyd k-means run from a random seeding; returns (labels, inertia)."""
     n = coords.shape[0]
     centers = coords[rng.choice(n, size=k, replace=False)].copy()
     labels = np.full(n, -1)
@@ -72,13 +84,20 @@ def _kmeans_once(coords: np.ndarray, k: int, rng: np.random.Generator):
     return labels, inertia
 
 
-def _kmeans_labels(coords: np.ndarray, k: int, seed: int = 0, n_init: int = 12) -> np.ndarray:
+def _kmeans_labels(coords: np.ndarray, k: int, seed: int = 0, n_init: int = 500) -> np.ndarray:
     """k-means (Lloyd) with multiple restarts; returns the lowest-inertia labeling.
 
     Restarts make the spatial partition stable: with a single fixed init, k-means
     on a clustered layout can land in an orthogonal local optimum and invert the
     within/between-cluster similarity gap. Taking the best of several inits
     removes that instability.
+
+    n_init was 12 until 2026-09-23. A blind re-derivation found that 12 is
+    enough on the 28 basin assemblages at k = 2 to 4 but not at k >= 5, where
+    the returned partition was a worse local optimum (inertia 0.2924 against
+    0.2768 at k = 5, changing the between-cluster F_ST from 0.0307 to 0.0206).
+    500 restarts on 28 points is cheap and returns the best-of-3,000 optimum
+    at k = 2 to 7 (tests/signatures/test_kmeans_restarts.py).
     """
     coords = np.asarray(coords, float)
     n = coords.shape[0]
@@ -141,6 +160,16 @@ def boundary_excess(
     pairs at matched distance, yielding a large positive excess.
 
     Returns the distance-bin-averaged (within - between) BR similarity gap.
+
+    LIMIT (measured 2026-10-02, scripts/probe_library_boundary_excess.py). A
+    bin counts as soon as it holds one within-cluster and one between-cluster
+    pair. On the per-period windows of four to ten assemblages this function
+    is called on, most counted bins hold one or two pairs, and requiring five
+    would change the sign of one call in four to six. The value on such a
+    window is not a resolved estimate. A minimum-pairs rule is not added here
+    because it would empty the bins and return the raw gap below, a different
+    statistic; the phase-line statistic the paper reports
+    (`23_phases_vs_spatial_drift.boundary_excess_labeled`) has the rule.
     """
     counts = np.asarray(counts, float)
     coords = np.asarray(coords, float)
@@ -186,3 +215,58 @@ def boundary_excess(
     # distance-controlled gap collapses toward zero even though the raw gap is
     # large; that is exactly the sharp-vs-smooth discrimination we want.
     return float(np.mean(gaps))
+
+
+# ---------------------------------------------------------------------------
+# Pair statistics for the rim R1 readings (spec 2026-10-19-rim-attributes-r1, 4.2 and 4.3)
+# ---------------------------------------------------------------------------
+
+def total_variation(P: np.ndarray) -> np.ndarray:
+    """Pairwise total variation between composition rows: 0.5 * sum_c |p_ic - p_jc|.
+
+    Zero for identical compositions and equal to |p_i - p_j| for a binary
+    trait. Not 1 - p.q, which adds half the within-site diversities of the
+    two rows to half their squared difference and can reorder pairs (Codex
+    RIM-1). Rows must be probability vectors.
+    """
+    P = np.asarray(P, float)
+    if P.ndim != 2 or not np.isfinite(P).all() or (P < 0).any() or not np.allclose(P.sum(1), 1.0, atol=1e-9, rtol=0):
+        raise ValueError("total_variation takes rows that are probability vectors")
+    return 0.5 * np.abs(P[:, None, :] - P[None, :, :]).sum(-1)
+
+
+def spearman(a: np.ndarray, b: np.ndarray) -> float:
+    """Spearman rank correlation; NaN when either vector is constant."""
+    from scipy.stats import rankdata
+    a = np.asarray(a, float); b = np.asarray(b, float)
+    if a.shape != b.shape or a.ndim != 1:
+        raise ValueError("spearman takes two vectors of the same length")
+    ra, rb = rankdata(a), rankdata(b)
+    if ra.std() == 0 or rb.std() == 0:
+        return float("nan")
+    return float(np.corrcoef(ra, rb)[0, 1])
+
+
+def partial_spearman(a: np.ndarray, b: np.ndarray, c: np.ndarray) -> float:
+    """Association of a with b after LINEAR adjustment on ranks for c: the correlation of the rank residuals of a and b
+    after least-squares removal of the centered rank of c.
+
+    This is the form analysis 100 used. It is not "at a given distance": a
+    nonlinear dependence on c survives the linear adjustment (two quadratic
+    functions of c return 1; tests). NaN when a vector is constant or a
+    residual vanishes; when c is constant the plain Spearman is returned.
+    """
+    from scipy.stats import rankdata
+    a = np.asarray(a, float); b = np.asarray(b, float); c = np.asarray(c, float)
+    if not (a.shape == b.shape == c.shape) or a.ndim != 1:
+        raise ValueError("partial_spearman takes three vectors of the same length")
+    ra, rb, rc = (rankdata(v) - (len(v) + 1) / 2.0 for v in (a, b, c))
+    if ra.std() == 0 or rb.std() == 0:
+        return float("nan")
+    if rc.std() == 0:
+        return spearman(a, b)
+    ea = ra - rc * (ra @ rc) / (rc @ rc)
+    eb = rb - rc * (rb @ rc) / (rc @ rc)
+    if ea.std() < 1e-12 or eb.std() < 1e-12:
+        return float("nan")
+    return float(np.corrcoef(ea, eb)[0, 1])

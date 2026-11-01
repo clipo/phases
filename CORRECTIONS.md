@@ -6,6 +6,65 @@ manuscript is affected.
 
 ---
 
+## 2026-11-01 — the repository now carries the restructured paper
+
+**Affects:** the whole release.
+**Manuscript affected:** the paper is a new manuscript, "What Are Phases?
+Geographic Structure, Neutral Copying, and the Search for Social Boundaries in
+the Lower Mississippi Valley", replacing "Are the phases real?". Its analyses
+are the spatial field, latent-unit and barrier Stan models under
+`stan/spatial/` with `R/fit_spatial.R`, the neutral copying model and its
+diversity-matched comparisons under `analyses/probe_latent_groups/` and
+`analyses/per_type/`, the rim analysis under `analyses/rims/`, and the phase
+recovery and settlement analyses 76 to 83. The figures are drawn by
+`analyses/93_phillips1970_phase_map.py` and `102_` to `107_` from the committed
+findings files. The earlier version's scripts, figures and result reports
+remain in the repository; `README.md` says which files the current paper
+depends on. Two data files are withheld pending consent (`data/README.md`).
+
+---
+
+## 2026-09-21 to 2026-09-22 — the analysis matrix double-counted sherds; rebuilt from two sources
+
+**Affects:** every count-based result. `data/processed/analysis_matrix.csv`
+replaces the `pfg-cpl-mainfort` sheet of `data/raw/mainfort-pfg-cpl.xlsx` as
+the decorated-class matrix.
+**Manuscript affected:** **Yes.** Every quantitative result of the paper was
+rerun from the new matrix and membership.
+
+### What was wrong
+
+The sheet every earlier result rested on summed Lipo's (2001) compilation with
+a `Mainfort` sheet. The two are not independent: the `Mainfort` sheet's counts
+are transcriptions of the same Lower Mississippi Survey files, so Phillips,
+Ford and Griffin's sherds were counted twice. The `Mainfort` sheet's Parkin
+Punctated column was also doubled relative to Mainfort's published Table 1
+(`scripts/check_matrix_against_mainfort2003.py`;
+`output/findings/matrix_integrity.md`: twice the published count at 34 of 38
+shared sites, ratio 2.00 to 2.15 at all 38).
+
+### What changed
+
+`scripts/build_analysis_matrix.py` builds the matrix from two sources with
+one source per assemblage and never a sum: the `cpl-pfg` tab of Lipo's
+compilation where an assemblage appears there, otherwise `data/raw/PFGData.xlsx`.
+Mainfort's (2003a) published table is kept as a separate comparison set
+(`data/processed/mainfort2003_matrix.csv`). Each row's source and its earlier
+and corrected totals are in `data/processed/analysis_matrix_provenance.csv`
+(Parkin, for example: 865 Parkin Punctated from the definitive counts against
+1,298 in Mainfort's table). At the same time the Parchman phase was excluded on
+geography and a 75-decorated-sherd minimum adopted
+(`output/findings/minimum_sample_size.md`), giving the 28-assemblage study
+set with 14,101 decorated sherds, and five assemblage coordinates and five
+settlement coordinates were corrected from PFG's legal descriptions
+(`data/raw/coordinate_corrections.csv`,
+`data/raw/settlement_coordinate_corrections.csv`). The datum of PFG UTMs read
+as NAD83 was corrected to NAD27 where demonstrable, moving 13 of 28 members by
+209 m with no change to membership or results
+(`output/findings/datum_conversion.md`).
+
+---
+
 ## 2026-08-31 — the Bayesian cultural F_ST was computed on 55 assemblages, not the 29-assemblage basin
 
 **Affects:** `analyses/43_bayesian_fst.py`, `analyses/44_bayesian_fst_validation.py`,

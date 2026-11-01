@@ -32,21 +32,47 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import os  # noqa: E402
-os.environ.setdefault("MLS_FIG_COLOR", "1")  # supplement figure is online-only; render in color
+import matplotlib
 
-import matplotlib  # noqa: E402
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
-from figstyle import save, OI_BLUE, OI_ORANGE  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_ORANGE, panel_label, save
 
 OUT = ROOT / "output" / "neiman_distance_and_fit.md"
 N_BINS = 6
+# Figure S1 prints the Bayesian rank correlations (rule 18), not the frequentist
+# Spearman values this script computes for its own report. They are read from
+# analysis 51's output rather than retyped, so a rerun of 51 carries through.
+BAYES_MD = ROOT / "output" / "findings" / "bayesian_rank_correlations.md"
+
+
+def _r2(txt: str) -> str:
+    """Signed two-decimal string, rounding half away from zero from the file's
+    three-decimal text (float formatting would take -0.435 to -0.43, while the
+    text rounds it to -0.44)."""
+    from decimal import ROUND_HALF_UP, Decimal
+    return f"{Decimal(txt).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):+}"
+
+
+def _bayes_rank_corr(claim: str) -> tuple[str, str, str]:
+    """(posterior median, 2.5%, 97.5%) for the row of BAYES_MD whose claim
+    column starts with `claim`. Raises if the file or row is missing: the
+    figure must not fall back to the frequentist value silently (rule 5)."""
+    import re
+    if not BAYES_MD.exists():
+        raise SystemExit(f"{BAYES_MD} missing; run analyses/51_bayesian_rank_correlations.py")
+    for line in BAYES_MD.read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 6 and cells[0].startswith(claim):
+            med = cells[4].strip("*")
+            lo, hi = re.findall(r"[-+]?\d*\.\d+", cells[5])
+            return _r2(med), _r2(lo), _r2(hi)
+    raise SystemExit(f"no row '{claim}' in {BAYES_MD}")
 
 
 def main():
-    counts, coords = mf._load_curated()        # basin 53
+    counts, coords = mf._load_curated()        # canonical drainage basin, 29
     M = counts.to_numpy(float)
     N = M.sum(1, keepdims=True)
     P = M / N                                   # type proportions per assemblage
@@ -59,19 +85,18 @@ def main():
     D = ((P[:, None, :] - P[None, :, :]) ** 2).sum(-1)   # squared Euclidean
     mean_d = D.sum(1) / (D.shape[0] - 1)
     tE = np.array([mf.theta_e(r) for r in M])
-    np.array([mf.theta_f(r) for r in M])
     fin = np.isfinite(tE) & (tE > 0)
     rho_d, p_d = spearmanr(tE[fin], mean_d[fin])
 
     L += ["## B. Neiman interassemblage-distance neutral model", "",
-          f"Squared Euclidean distance d_ij^2 = sum_k (p_ik - p_jk)^2 over {M.shape[1]} "
-          f"decorated types, {M.shape[0]} basin assemblages.", "",
-          f"- **Diversity-distance relationship** (Neiman's convergence-of-two-measures "
+          (f"Squared Euclidean distance d_ij^2 = sum_k (p_ik - p_jk)^2 over {M.shape[1]} "
+          f"decorated types, {M.shape[0]} basin assemblages."), "",
+          (f"- **Diversity-distance relationship** (Neiman's convergence-of-two-measures "
           f"precedent): within-assemblage diversity (t_E) vs mean interassemblage distance, "
           f"Spearman rho = {rho_d:+.2f} (p = {p_d:.3f}). Neiman (1995, Fig. 7) found "
           f"rho = -0.62 under drift+innovation in one interacting population; a negative "
           f"relationship here is consistent with a single drifting field rather than "
-          f"assorted, bounded groups."]
+          f"assorted, bounded groups.")]
 
     # trajectory: mean within-bin pairwise distance along CA
     bins = pd.qcut(pd.Series(rank), N_BINS, labels=False, duplicates="drop").to_numpy()
@@ -108,11 +133,11 @@ def main():
     within = Dh[iu][same].mean()
     between = Dh[iu][~same].mean()
     L += ["",
-          f"- **Between- vs within-cluster distance** (k = {k} spatial clusters): "
+          (f"- **Between- vs within-cluster distance** (k = {k} spatial clusters): "
           f"within-cluster mean d^2 = {within:.3f}, between-cluster = {between:.3f}, "
           f"ratio = {between/within:.2f}. A ratio near 1 means spatial clusters are no more "
           f"internally similar than the basin at large (no bounded ceramic groups); a large "
-          f"ratio would mark bounded groups.", ""]
+          f"ratio would mark bounded groups."), ""]
 
     # --- D. Frequency Increment Test ---
     # type frequencies per CA bin
@@ -122,9 +147,9 @@ def main():
         tot = M[idx].sum()
         freq[b] = M[idx].sum(0) / tot if tot > 0 else np.nan
     L += ["## D. Frequency Increment Test (Feder, Kryazhimskiy & Plotkin 2014)", "",
-          "Per decorated type: rescaled increments Y_i = (v_i - v_{i-1}) / "
+          ("Per decorated type: rescaled increments Y_i = (v_i - v_{i-1}) / "
           "sqrt(2 v_{i-1}(1-v_{i-1}) dt) along the ordered bins (dt = 1); a one-sample "
-          "t-test of mean(Y) = 0 tests neutral drift. Increments at v in {0,1} are dropped.", "",
+          "t-test of mean(Y) = 0 tests neutral drift. Increments at v in {0,1} are dropped."), "",
           "| type | n increments | mean Y | t p-value | departs neutral? |",
           "|---|---|---|---|---|"]
     ndepart = 0
@@ -137,7 +162,7 @@ def main():
             if 0 < vp < 1 and np.isfinite(v[i]):
                 Y.append((v[i] - vp) / np.sqrt(2 * vp * (1 - vp) * 1.0))
         if len(Y) >= 3:
-            t, p = ttest_1samp(Y, 0.0)
+            _t, p = ttest_1samp(Y, 0.0)
             dep = p < 0.05
             ndepart += int(dep)
             ntested += 1
@@ -145,14 +170,16 @@ def main():
         else:
             L.append(f"| {typ} | {len(Y)} | - | - | (too few) |")
     L += ["",
-          f"**{ndepart} of {ntested} testable types depart from neutral drift at p < 0.05.** "
+          (f"**{ndepart} of {ntested} testable types depart from neutral drift at p < 0.05.** "
           "A predominantly neutral result corroborates the static neutrality signature: the "
           "decorated types behave as drifting neutral variants along the sequence, not as "
           "markers under conformist or anti-conformist bias. (With six bins per type the "
-          "per-type test has low power; read the count, not individual p-values.)"]
+          "per-type test has low power; read the count, not individual p-values.)")]
 
     # --- Figure S3: the Neiman interassemblage-distance result ---
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7, 3.3))
+    panel_label(axA, "A")
+    panel_label(axB, "B")
     x, y = tE[fin], mean_d[fin]
     axA.scatter(x, y, s=20, color=OI_BLUE, alpha=0.8, edgecolor="none")
     # No OLS line: the reported statistic is the (rank-based) Spearman rho, which
@@ -167,15 +194,27 @@ def main():
                          xytext=(4, 4), textcoords="offset points")
     axA.set_xlabel(r"within-assemblage diversity ($\theta_E$)")
     axA.set_ylabel("mean interassemblage distance")
-    _ns = "" if p_d < 0.05 else " (n.s.)"
-    axA.text(0.95, 0.95, rf"$\rho$ = {rho_d:+.2f}{_ns}", transform=axA.transAxes,
-             ha="right", va="top", fontsize=9)
+    # Bayesian rank correlation (van der Waerden scores), posterior median and
+    # 95% credible interval, from analysis 51. Placed in the empty band right
+    # of the scatter, below the one high outlier.
+    mA, loA, hiA = _bayes_rank_corr("diversity-distance")
+    axA.text(0.98, 0.72, f"rank correlation\nmedian {mA}\n95% CrI [{loA}, {hiA}]",
+             transform=axA.transAxes, ha="right", va="top", fontsize=7.5)
     axB.plot(bd.index.to_numpy(float), bd.values, "-o", color=OI_BLUE, ms=5, lw=1.3)
-    axB.set_xlabel("CA seriation bin (early to late)")
+    axB.set_xlabel("seriation period (order on CA dimension 1)")
     axB.set_ylabel("mean within-bin distance")
-    axB.text(0.05, 0.95, rf"$\rho$ = {rho_traj:+.2f} (n.s.)", transform=axB.transAxes,
-             ha="left", va="top", fontsize=9)
-    save(fig, "figS2_neiman")
+    # Round ticks only: the default locator picks 0.025 steps on these ranges,
+    # which scripts/check_figure_claims.py reads as statistics the text never
+    # states (its documented "finer ticks slip" limit).
+    from matplotlib.ticker import MultipleLocator
+    axA.yaxis.set_major_locator(MultipleLocator(0.05))
+    axB.yaxis.set_major_locator(MultipleLocator(0.05))
+    # Headroom above the two peaks so the annotation sits clear of the line.
+    axB.set_ylim(0, 0.30)
+    mB, loB, hiB = _bayes_rank_corr("divergence trajectory")
+    axB.text(0.98, 0.98, f"rank correlation\nmedian {mB}\n95% CrI [{loB}, {hiB}]",
+             transform=axB.transAxes, ha="right", va="top", fontsize=7.5)
+    save(fig, "figS1_neiman")
 
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")

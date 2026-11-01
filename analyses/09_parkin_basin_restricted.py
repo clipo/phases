@@ -43,26 +43,28 @@ import re
 import warnings
 from pathlib import Path
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pyproj
 from scipy.stats import spearmanr
 
+from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix
 from mls_emergence.dataio.pfg import load_pfg_counts
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
-from mls_emergence.signatures.neutral import theta_f, theta_e
-from mls_emergence.signatures.variance import cultural_fst
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 from mls_emergence.signatures.assortativity import (
-    boundary_excess,
     _kmeans_labels,
+    boundary_excess,
     geo_distance,
 )
-from mls_emergence.signatures.seriation import seriation_groups
 from mls_emergence.signatures.convergence import convergence_score, time_derivative
+from mls_emergence.signatures.neutral import theta_e, theta_f
+from mls_emergence.signatures.seriation import seriation_groups
+from mls_emergence.signatures.variance import cultural_fst
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -144,7 +146,7 @@ def correspondence_axis(M: np.ndarray):
     Dr_inv = np.diag(1.0 / np.sqrt(r))
     Dc_inv = np.diag(1.0 / np.sqrt(c))
     S = Dr_inv @ (P - np.outer(r, c)) @ Dc_inv
-    U, sig, Vt = np.linalg.svd(S, full_matrices=False)
+    U, sig, _Vt = np.linalg.svd(S, full_matrices=False)
     row_scores = Dr_inv @ U @ np.diag(sig)
     ordinate = row_scores[:, 0]
     inertia = sig ** 2
@@ -265,9 +267,7 @@ def rank_size(area: pd.Series):
 # ---------------------------------------------------------------------------
 def load_curated():
     """Curated decorated counts + lat/long (already in the XY file)."""
-    cur = pd.read_csv(
-        DATA / "raw" / "mainfort-pfg-cpl.csv"
-    ).dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
         "Assemblages"
@@ -276,7 +276,7 @@ def load_curated():
     counts = cur[type_cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
     counts = counts[counts.sum(axis=1) > 0]
 
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index(
         "Assemblages"
@@ -290,10 +290,10 @@ def load_curated():
 def load_broad():
     """Broad PFG/LMV settlement set + lat/long (UTM->geographic via pyproj) +
     LMV-22 binary/quantitative features."""
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
 
@@ -315,7 +315,7 @@ def load_broad():
     bm["lon"] = lon
 
     # LMV-22 features joined by Number.
-    lmv2 = pd.read_csv(DATA / "LMVData-22March2006.csv")
+    lmv2 = pd.read_excel(DATA / "LMVData-22March2006.xls", sheet_name="Sheet1")
     lmv2 = lmv2.dropna(subset=["Number"]).copy()
     lmv2["_k"] = lmv2["Number"].astype(str).map(normalize_grid)
     lmv2 = lmv2.drop_duplicates(subset=["_k"], keep="first").set_index("_k")
@@ -477,8 +477,8 @@ def main() -> None:
     ca = pd.Series(ordinate, index=counts.index, name="ca")
 
     # 14C anchor (basin assemblages only)
-    rc = pd.read_csv(
-        DATA / "raw" / "14CDatesFromMainfort2001.csv"
+    rc = pd.read_excel(
+        DATA / "raw" / "14CDatesFromMainfort2001.xls", sheet_name="Sheet1"
     )
     rc = rc[rc["Provenience"].notna() & (rc["Provenience"] != "Provenience")].copy()
     rc["cal_mid"] = rc["Calibrated Date A.D. (1 Sigma)"].map(parse_cal_midpoint)
@@ -568,7 +568,7 @@ def main() -> None:
     SIGS = ["neutral_departure", "fst", "spatial_boundary"]
     SIG_LABELS = {
         "neutral_departure": "Neutral departure",
-        "fst": "Cultural $F_{ST}$",
+        "fst": "Cultural F_ST",
         "spatial_boundary": "Spatial boundary excess",
     }
 
@@ -600,9 +600,9 @@ def main() -> None:
         v = panel[s].dropna()
         slope = ols_slope(v.index.to_numpy(float), v.values)
         if len(v) >= 3:
-            rho, pval = spearmanr(v.index.to_numpy(float), v.values)
+            rho, _ = spearmanr(v.index.to_numpy(float), v.values)
         else:
-            rho, _pval = np.nan, np.nan
+            rho, _ = np.nan, np.nan
         bslopes = []
         for _ in range(800):
             samp = list(rng.choice(have_ids, size=len(have_ids), replace=True))
@@ -612,7 +612,7 @@ def main() -> None:
             cco_s = cc_c[[have_ids.index(i) for i in samp]]
             try:
                 bb = pd.qcut(ca_s, q=n_bins, labels=False, duplicates="drop")
-            except Exception:
+            except Exception:  # noqa: BLE001, S112  a failed resample is dropped; narrowing would change which draws survive
                 continue
             bvals = []
             for bb_id in sorted(pd.Series(bb).dropna().unique()):
@@ -855,10 +855,10 @@ def main() -> None:
     # =======================================================================
     # whole-LMV rank-size for direct comparison
     wl_area = broad_all["mound_area"].dropna()
-    wl_slope, wl_primacy, wl_largest, wl_sorted = rank_size(wl_area)
+    wl_slope, wl_primacy, wl_largest, _wl_sorted = rank_size(wl_area)
     wl_area_corr = broad_all["mound_area"].copy()
     wl_area_corr.loc[PARKIN_BROAD] = PARKIN_AREA_CORR
-    wl_slope_c, wl_primacy_c, wl_largest_c, wl_sorted_c = rank_size(wl_area_corr.dropna())
+    wl_slope_c, wl_primacy_c, _wl_largest_c, wl_sorted_c = rank_size(wl_area_corr.dropna())
     wl_parkin_rank_c = int((wl_sorted_c.index == PARKIN_BROAD).argmax() + 1)
 
     emit("## 4. Comparison to whole-LMV (NEUTRAL)")
@@ -1015,7 +1015,7 @@ def main() -> None:
     )
     emit()
 
-    (OUTPUT / "parkin_basin_restricted.md").write_text("\n".join(lines).replace("$F_{ST}$", "F_ST"))
+    (OUTPUT / "parkin_basin_restricted.md").write_text("\n".join(lines))
 
     # console: NEUTRAL, no raw coordinates
     print("Parkin-phase / St. Francis basin-restricted re-run complete.")

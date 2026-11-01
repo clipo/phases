@@ -1,4 +1,9 @@
-"""41_hierarchical_convergence_validation.py - validation battery for the
+"""
+DEMOTED 2026-09-02 alongside analyses/40_hierarchical_convergence.py, whose
+convergence probability is no longer reported. This validation battery remains
+valid as software validation of that model and is retained for provenance, but
+it validates a quantity the project has stopped reporting.
+41_hierarchical_convergence_validation.py - validation battery for the
 hierarchical Bayesian convergence model (analysis 40 / mls_emergence.inference
 .convergence_model).
 
@@ -33,12 +38,12 @@ sys.path.insert(0, str(ROOT / "analyses"))
 
 OUT_MD = ROOT / "output" / "hierarchical_convergence_validation.md"
 
-FULL = dict(draws=2000, tune=2000, chains=4, n_boot=800,
-            calib_draws=1000, calib_tune=1000, calib_chains=4,
-            prior_draws=1000, prior_tune=1000, prior_chains=4)
-FAST = dict(draws=300, tune=300, chains=2, n_boot=80,
-            calib_draws=300, calib_tune=300, calib_chains=2,
-            prior_draws=300, prior_tune=300, prior_chains=2)
+FULL = {"draws": 2000, "tune": 2000, "chains": 4, "n_boot": 800,
+            "calib_draws": 1000, "calib_tune": 1000, "calib_chains": 4,
+            "prior_draws": 1000, "prior_tune": 1000, "prior_chains": 4}
+FAST = {"draws": 300, "tune": 300, "chains": 2, "n_boot": 80,
+            "calib_draws": 300, "calib_tune": 300, "calib_chains": 2,
+            "prior_draws": 300, "prior_tune": 300, "prior_chains": 2}
 
 FULL_CASES = [
     {"label": "all_up", "slope_panel": 1.2, "slope_ser": 1.2},
@@ -100,7 +105,7 @@ def pconv_calibration(cases, *, T=6, draws=1000, tune=1000, chains=4, seed=0):
     convergence model, and record P(all four slopes > 0). Validates that
     p_convergence is high when all four true slopes are positive and low when
     they are not."""
-    from mls_emergence.inference import sample_convergence, convergence_summary
+    from mls_emergence.inference import convergence_summary, sample_convergence
 
     out = []
     for i, case in enumerate(cases):
@@ -127,7 +132,7 @@ def prior_sensitivity(y, se, t, b_ser_obs, se_ser, grids, *, draws=1000, tune=10
     """Refit the REAL panel under each prior setting in ``grids`` (dicts of
     mu_sd / tau_sd / sigma_sd overrides); return p_convergence per setting so
     the verdict's stability can be checked."""
-    from mls_emergence.inference import sample_convergence, convergence_summary
+    from mls_emergence.inference import convergence_summary, sample_convergence
 
     out = []
     for i, grid in enumerate(grids):
@@ -212,14 +217,14 @@ def main(fast=False):
     cases = FULL_CASES if not fast else FAST_CASES
 
     L = ["# Hierarchical convergence model: validation battery", "",
-         f"Config: {'FAST' if fast else 'full'} — real-panel fit "
+         (f"Config: {'FAST' if fast else 'full'} — real-panel fit "
          f"{cfg['draws']} draws x {cfg['chains']} chains "
          f"({cfg['n_boot']} bootstrap reps for panel/seriation SEs); "
          f"calibration fits {cfg['calib_draws']} draws x {cfg['calib_chains']} "
          f"chains over {len(cases)} synthetic cases "
          f"({'reduced from 3 to 2 cases under --fast' if fast else '3 cases'}); "
          f"prior-sensitivity refits {cfg['prior_draws']} draws x "
-         f"{cfg['prior_chains']} chains over {len(PRIOR_GRIDS)} prior settings.",
+         f"{cfg['prior_chains']} chains over {len(PRIOR_GRIDS)} prior settings."),
          ""]
 
     # ------------------------------------------------------------------
@@ -257,8 +262,8 @@ def main(fast=False):
 
     L += ["## Real-panel fit (baseline)", "",
           f"- P(all four slopes > 0) = {s_real['p_convergence']:.3f}.",
-          f"- MCMC health: max R-hat = {rhat:.4f}, min ESS = {ess:.0f}, "
-          f"divergences = {ndiv}.", ""]
+          (f"- MCMC health: max R-hat = {rhat:.4f}, min ESS = {ess:.0f}, "
+          f"divergences = {ndiv}."), ""]
 
     # ------------------------------------------------------------------
     # 2. Prior sensitivity on the real panel
@@ -275,26 +280,26 @@ def main(fast=False):
     for r in prior:
         L.append(f"| {r['mu_sd']} | {r['tau_sd']} | {r['sigma_sd']} | "
                  f"{r['p_convergence']:.3f} |")
-    L += ["", f"- Verdict {'STABLE' if stable else 'UNSTABLE'} across priors "
-          f"(range {min(pvals):.3f}-{max(pvals):.3f}).", ""]
+    L += ["", (f"- Verdict {'STABLE' if stable else 'UNSTABLE'} across priors "
+          f"(range {min(pvals):.3f}-{max(pvals):.3f})."), ""]
 
     # ------------------------------------------------------------------
     # 3. Posterior-predictive check
     # ------------------------------------------------------------------
     ppc = posterior_predictive_summary(model, idata_real, y, seed=0)
     L += ["## 3. Posterior-predictive check (real panel)", "",
-          f"- {ppc['n_within']}/{ppc['n_cells']} observed panel cells "
+          (f"- {ppc['n_within']}/{ppc['n_cells']} observed panel cells "
           f"({ppc['frac_within']:.1%}) fall within the model's 95% posterior-"
-          f"predictive interval.", ""]
+          f"predictive interval."), ""]
 
     # ------------------------------------------------------------------
     # 4. Cross-read vs analysis 07
     # ------------------------------------------------------------------
     cross = cross_read_vs_analysis07(inp, a07, s_real, labels, n_bins=6)
-    L += ["## 4. Cross-read vs analysis 07 (recomputed, not parsed from "
-          "output/empirical_refined.md)", "",
-          "| signature | 07 recomputed OLS slope | model posterior mean slope | "
-          "same sign |",
+    L += [("## 4. Cross-read vs analysis 07 (recomputed, not parsed from "
+          "output/empirical_refined.md)"), "",
+          ("| signature | 07 recomputed OLS slope | model posterior mean slope | "
+          "same sign |"),
           "|---|---|---|---|"]
     all_match = True
     for r in cross:
@@ -304,8 +309,8 @@ def main(fast=False):
     ser_sign_match = np.sign(b_ser_obs) == np.sign(s_real["b_mean"][-1])
     L.append(f"| seriation | {b_ser_obs:+.5f} | {s_real['b_mean'][-1]:+.3f} | "
              f"{bool(ser_sign_match)} |")
-    L += ["", f"- All panel-signature signs match between the recomputed "
-          f"07 slopes and the model posterior: {all_match}.", ""]
+    L += ["", (f"- All panel-signature signs match between the recomputed "
+          f"07 slopes and the model posterior: {all_match}."), ""]
 
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

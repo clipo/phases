@@ -33,19 +33,20 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from figstyle import OI_BLUE, OI_VERMIL, OI_GREEN, save  # noqa: E402
+import matplotlib.pyplot as plt
+from figstyle import OI_BLUE, OI_GREEN, OI_VERMIL, save
 
 OUT_MD = ROOT / "output" / "bayesian_fst_validation.md"
 
-FULL = dict(f_grid=(0.02, 0.05, 0.10, 0.20, 0.35, 0.50), reps=40,
-            draws=1000, tune=1000, chains=2, n_sbc=200, sbc_bins=20,
-            small_sizes=(15, 15, 15))
-FAST = dict(f_grid=(0.05, 0.30), reps=4,
-            draws=300, tune=400, chains=2, n_sbc=12, sbc_bins=4,
-            small_sizes=(15, 15, 15))
+FULL = {"f_grid": (0.02, 0.05, 0.10, 0.20, 0.35, 0.50), "reps": 40,
+            "draws": 1000, "tune": 1000, "chains": 2, "n_sbc": 200, "sbc_bins": 20,
+            "small_sizes": (15, 15, 15)}
+FAST = {"f_grid": (0.05, 0.30), "reps": 4,
+            "draws": 300, "tune": 400, "chains": 2, "n_sbc": 12, "sbc_bins": 4,
+            "small_sizes": (15, 15, 15)}
 
 P_ANC = np.array([0.4, 0.35, 0.25])
 SIZES = np.array([200, 200, 200])
@@ -79,7 +80,9 @@ def _cov_one(args):
     """One coverage replicate at fixed true F, index-seeded (parallel-safe)."""
     gi, r, f_true, p_anc, sizes, draws, tune, chains, base = args
     from mls_emergence.inference import (
-        sample_fst, fst_summary, gini_simpson_summary,
+        fst_summary,
+        gini_simpson_summary,
+        sample_fst,
     )
     obs_ss, fit_ss = np.random.SeedSequence([int(base), int(gi), int(r)]).spawn(2)
     rng = np.random.default_rng(obs_ss)
@@ -174,13 +177,14 @@ def sbc_uniformity(ranks, n_bins):
 # --------------------------------------------------------------------------- #
 def real_fit_mcmc_health(*, draws, tune, chains, seed=0):
     import arviz as az
-    from mls_emergence.inference import sample_fst, fst_summary, gini_simpson_summary
+
+    from mls_emergence.inference import fst_summary, gini_simpson_summary, sample_fst
     from mls_emergence.signatures.variance import cultural_fst
 
     a43 = importlib.import_module("43_bayesian_fst")
     a07 = importlib.import_module("07_refined_empirical")
     inp = a07.prepare_inputs()
-    gc, sizes = a43.basin_group_counts(inp)
+    gc, _sizes = a43.basin_group_counts(inp)
 
     idata = sample_fst(gc, draws=draws, tune=tune, chains=chains, random_seed=seed)
     s = fst_summary(idata)
@@ -266,51 +270,51 @@ def main(fast=False, serial=False):
     abs_post = np.mean([r["abs_post_bias"] for r in small_bias])
 
     L = ["# Bayesian F_ST validation battery (Balding-Nichols model)", "",
-         f"Config: {'FAST' if fast else 'FULL'} (f_grid={list(cfg['f_grid'])}, "
+         (f"Config: {'FAST' if fast else 'FULL'} (f_grid={list(cfg['f_grid'])}, "
          f"reps={cfg['reps']}, draws={cfg['draws']} x tune={cfg['tune']} x "
          f"chains={cfg['chains']}; large sizes={SIZES.tolist()}, small sizes="
-         f"{list(cfg['small_sizes'])}; SBC n={cfg['n_sbc']}).", "",
+         f"{list(cfg['small_sizes'])}; SBC n={cfg['n_sbc']})."), "",
          "## 1-2. Coverage (large sizes)", "",
-         "Coverage of the BN F parameter is checked against the generating F; "
+         ("Coverage of the BN F parameter is checked against the generating F; "
          "coverage of the Gini-Simpson readout is checked against the REALIZED "
-         "Gini-Simpson F_ST of each simulated dataset.", "",
+         "Gini-Simpson F_ST of each simulated dataset."), "",
          "| true F_ST | mean realized G-S F_ST | reps | coverage (BN F) | coverage (G-S readout) |",
          "|---|---|---|---|---|"]
     for r in cov_rows:
         L.append(f"| {r['f_true']:.3f} | {r['mean_realized']:.4f} | {r['reps']} | "
                  f"{r['coverage_f']:.3f} | {r['coverage_g']:.3f} |")
-    L += ["", "## 3. Small-sample bias vs the realized Gini-Simpson F_ST "
-          f"(sizes = {list(cfg['small_sizes'])})", "",
+    L += ["", ("## 3. Small-sample bias vs the realized Gini-Simpson F_ST "
+          f"(sizes = {list(cfg['small_sizes'])})"), "",
           "| true F_ST | mean realized | reps | plug-in bias | posterior bias |",
           "|---|---|---|---|---|"]
     for r in small_bias:
         L.append(f"| {r['f_true']:.3f} | {r['mean_realized']:.4f} | {r['reps']} | "
                  f"{r['mean_plugin_bias']:+.4f} | {r['mean_post_bias']:+.4f} |")
-    L += ["", f"Mean absolute bias at small sizes: plug-in = {abs_plugin:.4f}, "
+    L += ["", (f"Mean absolute bias at small sizes: plug-in = {abs_plugin:.4f}, "
           f"posterior median = {abs_post:.4f} "
-          f"({'posterior closer to truth' if abs_post < abs_plugin else 'comparable / plug-in closer'}).",
+          f"({'posterior closer to truth' if abs_post < abs_plugin else 'comparable / plug-in closer'})."),
           "", "## 4. Simulation-based calibration (BN F parameter)", "",
-          f"- {cfg['n_sbc']} datasets drawn from the prior; rank of true F within "
-          f"its posterior binned into {cfg['sbc_bins']} bins.",
-          f"- Chi-square uniformity: chi2 = {unif['chi2']:.2f}, p = "
-          f"{unif['chi2_p']:.3f} (want p > 0.05, i.e. not distinguishable from uniform).",
+          (f"- {cfg['n_sbc']} datasets drawn from the prior; rank of true F within "
+          f"its posterior binned into {cfg['sbc_bins']} bins."),
+          (f"- Chi-square uniformity: chi2 = {unif['chi2']:.2f}, p = "
+          f"{unif['chi2_p']:.3f} (want p > 0.05, i.e. not distinguishable from uniform)."),
           f"- KS uniformity: D = {unif['ks_stat']:.3f}, p = {unif['ks_p']:.3f}.", "",
           "## 5. MCMC health on the real St. Francis basin fit", "",
-          f"- {health['n_groups']} spatial clusters, {health['n_types']} decorated "
-          f"types; default target_accept (no funnel-taming needed).",
-          f"- max R-hat = {health['max_rhat']:.4f} (want < 1.01); min ESS = "
-          f"{health['min_ess']:.0f}; divergences = {health['n_divergences']}.",
-          f"- BN F_ST median = {health['fst_median']:.4f}, 95% CI "
-          f"[{health['fst_hdi95'][0]:.4f}, {health['fst_hdi95'][1]:.4f}].",
-          f"- Gini-Simpson readout median = {health['gst_median']:.4f}, 95% CI "
+          (f"- {health['n_groups']} spatial clusters, {health['n_types']} decorated "
+          f"types; default target_accept (no funnel-taming needed)."),
+          (f"- max R-hat = {health['max_rhat']:.4f} (want < 1.01); min ESS = "
+          f"{health['min_ess']:.0f}; divergences = {health['n_divergences']}."),
+          (f"- BN F_ST median = {health['fst_median']:.4f}, 95% CI "
+          f"[{health['fst_hdi95'][0]:.4f}, {health['fst_hdi95'][1]:.4f}]."),
+          (f"- Gini-Simpson readout median = {health['gst_median']:.4f}, 95% CI "
           f"[{health['gst_hdi95'][0]:.4f}, {health['gst_hdi95'][1]:.4f}]; plug-in = "
           f"{health['plugin_fst']:.4f} "
-          f"({'inside' if health['gst_hdi95'][0] <= health['plugin_fst'] <= health['gst_hdi95'][1] else 'outside'} the interval).",
+          f"({'inside' if health['gst_hdi95'][0] <= health['plugin_fst'] <= health['gst_hdi95'][1] else 'outside'} the interval)."),
           "", "## 6. Bayes-factor sanity", "",
-          f"- Panmixia-generated data: 2 ln BF10 = {bf['panmixia']['two_ln_bf']:.2f} "
-          f"({bf['panmixia']['evidence']}).",
-          f"- Strongly-structured data (F=0.30): 2 ln BF10 = "
-          f"{bf['structure']['two_ln_bf']:.2f} ({bf['structure']['evidence']}).", ""]
+          (f"- Panmixia-generated data: 2 ln BF10 = {bf['panmixia']['two_ln_bf']:.2f} "
+          f"({bf['panmixia']['evidence']})."),
+          (f"- Strongly-structured data (F=0.30): 2 ln BF10 = "
+          f"{bf['structure']['two_ln_bf']:.2f} ({bf['structure']['evidence']})."), ""]
 
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(L), encoding="utf-8")

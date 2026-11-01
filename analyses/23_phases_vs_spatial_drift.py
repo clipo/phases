@@ -35,41 +35,27 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import numpy as np
 import networkx as nx
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
-from mls_emergence.signatures.assortativity import (  # noqa: E402
-    similarity_matrix, mantel,
+import make_figures as mf
+
+from mls_emergence.signatures.assortativity import (
+    mantel,
+    similarity_matrix,
 )
 
 OUT = ROOT / "output" / "phases_vs_spatial_drift.md"
-EARTH_KM_PER_DEG = 111.32
-
-
-# --------------------------------------------------------------------------- #
-# geometry
-# --------------------------------------------------------------------------- #
-def geo_km(coords: np.ndarray) -> np.ndarray:
-    """Pairwise great-circle-ish distance (km) via equirectangular approximation.
-
-    coords columns are [Latitude, Longitude]. At ~35 N over a ~100 km basin the
-    equirectangular error is well under 1 percent, far below what matters here.
-    """
-    lat = coords[:, 0]
-    lon = coords[:, 1]
-    mlat = np.deg2rad(lat.mean())
-    x = np.deg2rad(lon) * np.cos(mlat) * EARTH_KM_PER_DEG / np.deg2rad(1)
-    y = np.deg2rad(lat) * EARTH_KM_PER_DEG / np.deg2rad(1)
-    p = np.column_stack([x, y])
-    d = p[:, None, :] - p[None, :, :]
-    return np.sqrt((d ** 2).sum(-1))
+# geo_km moved, body unchanged, to mls_emergence.dataio.basin on 2026-10-16
+# (one distance function for simulator and models, probe spec row 7).
+from mls_emergence.dataio.basin import EARTH_KM_PER_DEG, geo_km  # noqa: F401
 
 
 # --------------------------------------------------------------------------- #
@@ -100,16 +86,39 @@ def ceramic_communities(counts: np.ndarray, seed: int = 0):
     return labels, float(Q), len(comms)
 
 
+# A distance bin enters the boundary excess only when it holds at least this
+# many within-group pairs AND this many between-group pairs. See the docstring.
+BOUNDARY_EXCESS_MIN_PAIRS = 5
+
+
 def boundary_excess_labeled(counts: np.ndarray, coords_km_dist: np.ndarray,
-                            labels: np.ndarray, n_bins: int = 4) -> float:
+                            labels: np.ndarray, n_bins: int = 4,
+                            min_pairs: int = BOUNDARY_EXCESS_MIN_PAIRS) -> float:
     """Distance-controlled within-minus-between BR similarity for SUPPLIED labels.
 
-    Mirrors signatures.assortativity.boundary_excess but takes an external
-    partition (here, the ceramic communities) instead of clustering coordinates.
-    Within each geographic-distance bin, compares mean BR similarity of
-    within-community pairs to between-community pairs at the SAME distance.
-    Under pure isolation-by-distance the bin-matched gap is ~0.
+    Takes an external partition (the phases, an alternative division, the
+    ceramic communities) instead of clustering coordinates. Within each of
+    `n_bins` equal-width distance bins, it compares the mean BR similarity of
+    within-group pairs to between-group pairs at the SAME distance, and
+    averages the gaps of the bins that hold at least `min_pairs` pairs of each
+    kind. Under pure isolation-by-distance the bin-matched gap is ~0.
+
+    WHY THE MINIMUM (2026-10-02). Until then every bin with one pair of each
+    kind counted, with equal weight. On the basin's river-distance matrix the
+    farthest bin holds a single within-phase pair, so one pair of assemblages
+    carried a quarter of the statistic: moving Cummins to its corrected
+    position changed which pair that was and took the value under the same
+    labels from +15.9 to -12.3. With the minimum the same comparison reads
+    +8.8 and +7.7 (and four equal-count bins give +4.0 and +4.1). Five is a
+    choice, not a derived threshold; `min_pairs=1` reproduces the old
+    definition. `signatures.assortativity.boundary_excess`, which clusters the
+    coordinates itself and is applied to small per-bin subsets, keeps the
+    one-pair rule and is NOT the statistic reported for the phase lines.
+
+    If no bin qualifies, the unbinned gap is returned, as before.
     """
+    if min_pairs < 1:
+        raise ValueError("min_pairs must be at least 1")
     S = similarity_matrix(counts)
     n = S.shape[0]
     iu = np.triu_indices(n, k=1)
@@ -127,7 +136,7 @@ def boundary_excess_labeled(counts: np.ndarray, coords_km_dist: np.ndarray,
         in_bin = (d >= edges[b]) & (d < edges[b + 1])
         w = in_bin & same
         btw = in_bin & ~same
-        if w.sum() == 0 or btw.sum() == 0:
+        if w.sum() < min_pairs or btw.sum() < min_pairs:
             continue
         gaps.append(float(s[w].mean() - s[btw].mean()))
     return float(np.mean(gaps)) if gaps else raw_gap
@@ -248,7 +257,7 @@ def stats_for_matrix(counts, geo_dist, seed=0):
                                     for c in np.unique(labels)
                                     if counts[labels == c].sum() > 0])) \
         if len(np.unique(labels)) >= 2 else np.nan
-    return dict(dd_r=r_dd, Q=Q, ncom=ncom, be=be, fst=float(fst))
+    return {"dd_r": r_dd, "Q": Q, "ncom": ncom, "be": be, "fst": float(fst)}
 
 
 # --------------------------------------------------------------------------- #
@@ -291,15 +300,15 @@ def main():
     parkin_comm = labels[names.index("Parkin")] if "Parkin" in names else None
     comm_sizes = {int(c): int((labels == c).sum()) for c in np.unique(labels)}
     L += ["## Part B. Excess beyond isolation-by-distance",
-          f"- Ceramic communities (greedy modularity on BR graph): {ncom} communities, "
-          f"modularity Q = {Q:.3f}; sizes {comm_sizes}.",
+          (f"- Ceramic communities (greedy modularity on BR graph): {ncom} communities, "
+          f"modularity Q = {Q:.3f}; sizes {comm_sizes}."),
           f"- Raw within-minus-between BR similarity gap: {raw_gap:+.1f} BR units.",
-          f"- Distance-CONTROLLED within-minus-between gap (boundary excess): "
-          f"{be_obs:+.1f} BR units.",
+          (f"- Distance-CONTROLLED within-minus-between gap (boundary excess): "
+          f"{be_obs:+.1f} BR units."),
           "  Under pure isolation-by-distance this collapses to ~0; a genuine",
           "  interaction boundary leaves a positive excess.",
-          f"- Partial Mantel, ceramic distance vs community membership controlling "
-          f"for geography: r = {r_pm:+.3f} (p = {p_pm:.4f}).",
+          (f"- Partial Mantel, ceramic distance vs community membership controlling "
+          f"for geography: r = {r_pm:+.3f} (p = {p_pm:.4f})."),
           f"- Parkin falls in community {parkin_comm}.", ""]
 
     # ---- PART C: generative spatial-drift null --------------------------- #

@@ -1,202 +1,135 @@
-# Are the phases real?
+# What are phases?
 
-Code and data for **"Are the phases real? Distinguishing bounded interaction
-groups from spatially structured drift in lower Mississippi Valley decorated
-ceramics"** by Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
+Code and data for **"What Are Phases? Geographic Structure, Neutral Copying,
+and the Search for Social Boundaries in the Lower Mississippi Valley"** by
+Carl P. Lipo, Beau DiNapoli, and Mark E. Madsen.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/clipo/phases/main)
-
-Everything in the paper is reproducible from this repository: install an
-environment, run one script, and the figures and result tables regenerate. Launch
-a zero-install environment in the browser with Binder (badge above), or build
-locally with conda, the conda-lock lockfile, or Docker (see [Installation](#installation)).
+The repository holds the decorated-ceramic counts, site coordinates, rim
+attribute counts and radiocarbon data the paper uses; every analysis script
+with the findings file it writes; the Stan programs for the spatial field,
+latent-unit and barrier models; the manuscript figures and the scripts that
+draw them; and the manuscript sources with their built Word and PDF files.
+`MANIFEST.md` names the script that produces each result and figure. Every
+number in the paper is traceable to a findings file under `output/findings/`.
 
 ## The question
 
-The *phase* is the foundational unit of Mississippian culture history. It rests
-on a silent premise: that assemblages more similar to one another than to their
-neighbors record a bounded social group whose members interacted preferentially
-among themselves. That premise is rarely tested, and it has a strong
-alternative. Under neutral cultural transmission, potters copy one another's
-decorated styles with no one favoring particular designs; style frequencies
-drift, and when potters interact more with near neighbors than distant ones, the
-drift concentrates similar styles nearby. The result is the same
-within-greater-than-between similarity, produced by geography rather than by a
-social boundary.
+Culture historians built phases to describe continuous spatial and temporal
+variation in artifact classes, yet phases are interpreted as social units and
+treated as communities. The paper asks, in order: what phases are; why culture
+historians saw them in these data; why the Lower Mississippi Valley is the
+classic case; whether the St. Francis basin phases are more than geographic
+clumps, that is, whether there is evidence of social boundaries beyond
+geography; and what it would take to detect such boundaries on a record like
+this one.
 
-This repository tests, for the late pre-contact lower Mississippi Valley,
-whether decorated-ceramic similarity records bounded interaction groups or
-spatially structured drift. It compares two generative processes (neutral
-spatial drift versus bounded groups) on the real geography of the assemblages
-and calibrates the comparison to the record's small sample sizes and
-time-averaging with a signal-recovery experiment. The headline result: within
-regions the structure is reproduced by neutral spatial drift and does not
-require bounded groups, so the phase, at the scale at which it is drawn, is
-largely indistinguishable from drift on geography.
+On 28 time-averaged decorated-ceramic assemblages, clustering on site
+coordinates alone recovers Phillips's phases for all but two, a spatial field
+model places 93 percent of between-site compositional variation on a smooth
+geographic surface, and the phase boundaries run through the least-occupied
+ground between settlement clusters. The difference between the basin's two
+spatial clusters falls within what neutral copying at matched diversity
+produces. Recovery tests on the same site geometry show that no model which
+respects distance decay can separate a step from a gradient when the step
+falls in a gap with no assemblages. The phases are real as a geographic
+pattern, unresolvable as bounded units on this sample, and not demonstrated as
+social units.
+
+## Three levels of reproduction
+
+The pipeline has three levels. Each level reads what the one before it
+committed, so a reader can stop at any of them.
+
+1. **Figures from the committed findings (minutes, Python only).** The seven
+   main-text figures and Figure S1 are drawn from the findings files under
+   `output/findings/` and from the data. No model is refitted and nothing is
+   simulated. Each figure script asserts the values the text quotes before it
+   draws, so a figure cannot silently drift from a changed findings file. This
+   is what `./run_all.sh` does by default.
+2. **The Python analyses that write those findings files (hours).** The phase
+   recovery and settlement analyses, the minimum sample size, the radiocarbon
+   chronology, the Mainfort (2003a) comparison, the neutral copying
+   simulations (the resemblance screen, the per-class tables with regional
+   drift and planted markers, the composition-by-collection analysis), and the
+   Stan data contracts. `./run_all.sh --analyses` runs them.
+3. **The Stan fits (R, rstan, a C++ toolchain; hours to days).** The spatial
+   field model A0 on the basin with its prior defense and recovery runs, the
+   latent-unit model A1 and the barrier model A3 on their own generators, and
+   the prior and range sensitivity refits. `./run_all.sh --stan` runs them
+   after the Python analyses. The fits are cached by content in
+   `output/gp_cache/`, which is not published; the findings files carry every
+   posterior summary together with its sampler diagnostics (R-hat, bulk and
+   tail effective sample size, divergences, treedepth saturation, E-BFMI).
+
+One analysis cannot be rerun from this repository. The rim-attribute analysis
+(`analyses/rims/rim_r1.py`, Figure 6) reads lip-form and paste counts from an
+unpublished tabulation by Robert Mainfort, which we are not yet free to
+release. Its findings file, `output/findings/rim_r1.md`, is committed and
+Figure 6 redraws from it; the counts for beveling and notching that come from
+his published Table 1 are in `data/raw/mainfort2003_rim_table1_counts.csv`.
+See `data/README.md`.
 
 ## Quick start
 
 ```bash
 git clone https://github.com/clipo/phases.git
 cd phases
-conda env create -f environment.yml      # or see the pip path below
+conda env create -f environment.yml      # or the pip path under Installation
 conda activate phases
 pip install -e .                          # makes the mls_emergence package importable
-./run_all.sh                              # regenerate every figure and result table
+./run_all.sh                              # level 1: Figures 1 to 7 and S1 from the committed findings
 ```
 
-The full run takes roughly an hour (Monte Carlo simulations); it caches its
-heavy results, so re-runs are fast. To regenerate just one figure, run its
-script directly (see the [Figures](#figures) table). The manuscript itself is in
-`docs/manuscript/` and rebuilds with pandoc (see [Manuscript](#manuscript)).
+To redraw one figure, run its script (see [Figures and tables](#figures-and-tables)).
+The manuscript is in `docs/manuscript/` and rebuilds with pandoc
+(see [Manuscript](#manuscript)).
 
-## Installation
+## Figures and tables
 
-The pipeline runs on Windows, macOS (Intel and Apple Silicon), and Linux, all
-with Python 3.11 or newer. Pick a path by what you want:
+Each figure script writes `.png`, `.pdf`, `.svg` and a local-only `.tif` with
+one stem under `figures/`. The `.png` is what the manuscript embeds.
 
-| Path | Windows | macOS | Linux | Reproducibility | Effort |
-|---|:-:|:-:|:-:|---|---|
-| **Prebuilt image** (`docker pull`, zero build) | ✅ | ✅ | ✅ | highest, identical on every OS | none — pull and run |
-| **Binder** (browser, zero install) | ✅ | ✅ | ✅ | good | none — click the badge |
-| **Docker** (build locally) | ✅ | ✅ | ✅ | highest, identical on every OS | one build |
-| **Conda / mamba** (recommended local) | ✅ | ✅ | ✅ | high | one command |
-| **conda-lock** (exact per-platform pins) | ✅ | ✅ | ✅ | highest local | one command |
-| **pip + venv** | ⚠️ see notes | ✅ | ✅ | best-effort | needs system GEOS/PROJ |
+| Figure | Script | Output stem | Reads |
+|---|---|---|---|
+| 1 | `analyses/93_phillips1970_phase_map.py` | `fig1_phillips1970_phases` | `data/raw/phillips1970_phase_outlines.csv`, the analysis matrix |
+| 2 | `analyses/102_fig2_two_histories.py` | `fig2_two_histories` | nothing; an illustrative schematic from a fixed seed |
+| 3 | `analyses/103_fig3_phase_recovery_map.py` | `fig3_phase_recovery_map` | `output/findings/phase_recovery.md`, `phase_recovery.csv`, `boundaries_in_settlement_gaps.md` |
+| 4 | `analyses/104_fig4_spatial_field.py` | `fig4_spatial_field` | `output/findings/a0_intercept_prior.md` |
+| 5 | `analyses/105_fig5_per_class_drift.py` | `fig5_per_class_drift` | `output/findings/per_type_drift_sensitivity.md` |
+| 6 | `analyses/106_fig6_rim_attributes.py` | `fig6_rim_attributes` | `output/findings/rim_r1.md` |
+| 7 | `analyses/107_fig7_latent_unit_recovery.py` | `fig7_latent_unit_recovery` | `output/findings/a1_validation.md`, `a3_validation.md` |
+| S1 | `analyses/11_chronology_14c.py` | `figS6_chronology` | `data/raw/14CDatesFromMainfort2001.csv`, `data/raw/intcal20.14c` |
+| S2 | `analyses/make_figures.py` | `fig8_ranksize` | the settlement tables under `data/` |
 
-The geospatial stack (geopandas, cartopy, pyproj, shapely) is what makes the
-choice matter: **conda-forge ships the compiled GEOS/PROJ/GDAL libraries on all
-three operating systems**, so the conda and container paths need no system
-packages and behave identically everywhere. The pip path needs those libraries
-installed separately, which is straightforward on macOS and Linux and awkward on
-native Windows. **On Windows, use conda, Docker, or Binder** (or WSL2 with the
-Linux instructions); the native-Windows pip path is not recommended.
+The two supplement figures keep the file names they had in the earlier version
+of the paper. The tables of the main text and supplement come from these
+findings files:
 
-`run_all.sh` is a Bash script. On macOS and Linux it runs directly. On Windows,
-run it from **Git Bash** (bundled with [Git for Windows](https://git-scm.com/download/win))
-or **WSL2**, from the Docker image, or drive the scripts from PowerShell:
+| Table | Findings file | Produced by |
+|---|---|---|
+| 2 | `output/findings/per_type_drift_sensitivity.md`, `per_type_record_row.md` | `analyses/per_type/drift_sensitivity_figure.py` |
+| S1 | `output/findings/minimum_sample_size.md` | `analyses/82_minimum_sample_size.py` |
+| S2 | `output/findings/phase_recovery.md`, `phases_under_drift.md` | `analyses/76_phase_recovery.py`, `analyses/79_phases_under_drift.py` |
+| S3 | `output/findings/settlement_and_rivers.md` | `analyses/81_settlement_and_rivers.py` |
+| S4 | `output/findings/a0_basin_refit.md` | `analyses/probe_latent_groups/refit_a0_basin.R` |
+| S5 | `output/findings/a3_validation.md`, `a3_pinned_rho6.md`, `a3_pinned_rho12.md` and their `_alphaN0-2` siblings | `validate_a3.R`, `a3_pinned_range.R` |
+| S6 | `output/findings/per_type_drift_sensitivity.md` | `analyses/per_type/drift_sensitivity_figure.py` |
+| S7, S8 | `output/findings/mainfort_replication.md` | `analyses/83_mainfort_replication.py` |
 
-```powershell
-Get-ChildItem analyses\[0-9][0-9]_*.py | Sort-Object Name | ForEach-Object { python $_.FullName }
-python analyses\make_map.py
-python analyses\make_figures.py
-```
+Tables 1 and 3 of the main text are prose tables with no computed cells.
 
-### Zero build — prebuilt image (GHCR)
+`figures/` also carries the figures of the earlier version of this paper
+(`fig1_phases`, `fig9_parkin_pullout`, `fig12_` to `fig18_`, `figS1_` to
+`figS8_` and others) and `analyses/` the numbered scripts that drew them. They
+are retained because several of those scripts still produce findings files the
+current paper reads (76, 79, 80, 81, 82, 83), because `CORRECTIONS.md` and the
+git history refer to them, and because the earlier version is archived at
+Zenodo under this repository's name. No result of the current paper depends on
+a figure outside the two tables above.
 
-A prebuilt image is published to the GitHub Container Registry, so you can run
-the whole pipeline without building anything. It has the pinned conda + pip
-environment (including the Bayesian stack) and pandoc baked in.
+## Reproducing the analyses
 
-```bash
-docker pull ghcr.io/clipo/phases:1.0.0
-
-# macOS / Linux / Git Bash (mount output/ and figures/ back to a repo clone):
-docker run --rm -it \
-  -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" \
-  ghcr.io/clipo/phases:1.0.0 ./run_all.sh
-
-# Windows PowerShell:
-docker run --rm -it -v "${PWD}\output:/repo/output" -v "${PWD}\figures:/repo/figures" ghcr.io/clipo/phases:1.0.0 ./run_all.sh
-```
-
-The image is `linux/amd64`; on Apple Silicon it runs under Docker Desktop's
-emulation. It is rebuilt from the `Dockerfile` by the
-`.github/workflows/publish-image.yml` GitHub Actions workflow (on a version tag
-or a manual run). Until the paper is published the package may be private, in
-which case `docker login ghcr.io` with a GitHub token is required first.
-
-### Zero install — Binder
-
-Click the Binder badge at the top of this README. It builds the conda
-environment in the cloud from `environment.yml` (plus `postBuild`, which runs
-`pip install -e .`) and opens a Jupyter session with the repository ready to run.
-Nothing is installed on your machine. Good for a quick look or a spot check; for
-the full ~1-hour pipeline or exact numbers, use Docker or a local install.
-
-### Maximum reproducibility — Docker (any OS)
-
-A self-contained image with the conda environment and pandoc baked in. Identical
-on Windows, macOS, and Linux because the OS inside the container is fixed.
-Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-(Windows/macOS) or Docker Engine (Linux).
-
-```bash
-docker build -t phases .
-
-# macOS / Linux / Git Bash:
-docker run --rm -it \
-  -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" \
-  phases ./run_all.sh
-
-# Windows PowerShell (mounts written back to the host):
-docker run --rm -it -v "${PWD}\output:/repo/output" -v "${PWD}\figures:/repo/figures" phases ./run_all.sh
-```
-
-The mounts write the regenerated `output/` and `figures/` back to the host so you
-can diff them against the committed baselines. For a bit-for-bit image, pin the
-base to a digest (`FROM condaforge/miniforge3@sha256:...`) and build the
-environment from `conda-lock.yml`, as noted in the `Dockerfile` header.
-
-### Recommended local install — Conda / mamba (any OS)
-
-```bash
-conda env create -f environment.yml      # or: mamba env create -f environment.yml
-conda activate phases
-pip install -e .                          # makes the mls_emergence package importable
-```
-
-Works the same on Windows, macOS (Intel and Apple Silicon), and Linux; no system
-libraries required. On Windows, run these in **Miniforge Prompt** or **Anaconda
-Prompt** (install [Miniforge](https://github.com/conda-forge/miniforge) first).
-
-For an exactly pinned, per-platform build (linux-64, osx-64, osx-arm64, win-64),
-install from the lockfile instead of `environment.yml`:
-
-```bash
-pip install conda-lock                    # once
-conda-lock install --name phases conda-lock.yml
-conda activate phases
-pip install -e .
-```
-
-### pip + venv (macOS / Linux; Windows via WSL2)
-
-This path needs the system GEOS and PROJ libraries first:
-
-```bash
-# macOS:         brew install geos proj
-# Debian/Ubuntu: sudo apt-get install libgeos-dev libproj-dev proj-data proj-bin
-python3 -m venv .venv
-source .venv/bin/activate                 # Windows (Git Bash): source .venv/Scripts/activate
-pip install -r requirements.txt           # core/geo floored, Bayesian stack pinned exactly
-pip install -e .                          # makes the mls_emergence package importable
-```
-
-For a bit-for-bit pip environment (the full transitive closure pinned to the
-tested versions, including the MCMC stack), install from the lock file instead:
-
-```bash
-pip install -r requirements-lock.txt
-pip install -e .
-```
-
-Building the manuscript (optional) also needs pandoc; the conda and Docker paths
-include it, the pip path does not (`brew install pandoc` / `apt-get install pandoc`).
-
-### Checking the install
-
-```bash
-python -c "import mls_emergence, geopandas, cartopy, pymc; print('environment OK')"
-```
-
-If that prints `environment OK`, every analysis script will run (`pymc` covers
-the Bayesian analyses `38`–`44`). The repository is self-contained and has no
-dependency on any sibling repository.
-
-## Reproducing the analysis
-
-Run everything (outputs go to `output/` and `figures/`):
+### Level 1: figures
 
 ```bash
 ./run_all.sh
@@ -204,235 +137,238 @@ Run everything (outputs go to `output/` and `figures/`):
 PYTHON=.venv/bin/python ./run_all.sh
 ```
 
-`run_all.sh` runs the numbered scripts in `analyses/` in ascending order, then
-the two shared figure pipelines (`make_map.py`, `make_figures.py`). It continues
-past any single failure and reports the count at the end. The full run takes
-roughly an hour: several scripts run Monte Carlo simulations with many seeds. The
-heaviest are `33_time_aware_emergence.py` and `35_basin_pullout.py` (500 drift
-realizations each), `34_emergence_robustness.py` (a 432-run factor grid),
-`37_lmv_drift_groups.py` (500 realizations on the wider valley), and
-`19_abc_transmission.py` (40,000 ABC simulations). Each caches its per-run
-results to `output/`, so re-runs are fast.
-
-The Bayesian analyses (`38`–`44`) need PyMC and arviz. `39_abc_smc_validation.py`
-is among the heaviest (a few hundred short MCMC fits, parallelized across cores).
-PyMC/PyTensor numerical output shifts across library versions, so the Bayesian
-stack is pinned to exact versions (`pymc==6.1.0`, `pytensor==3.1.3`,
-`arviz==1.2.0`, `h5netcdf==1.8.1`) in `requirements.txt`, `environment.yml`, and
-`conda-lock.yml` alike. `pytensor` is the pin that fixes the trailing digits;
-conda-forge pairs `pymc` with a newer `pytensor`, so all paths install the
-Bayesian stack from pip to keep them identical. For a fully pinned environment
-(the complete transitive closure at the deposited versions), install from
-`requirements-lock.txt` (pip) or `conda-lock.yml` (conda). Non-Bayesian results
-are seeded and reproduce byte-for-byte on any supported version.
-
-To regenerate a single figure or result, run its script directly. For example:
+### Level 2: the Python analyses
 
 ```bash
-python3 analyses/36_canonical_phase_map.py    # Figure 1 (phase-territory map)
-python3 analyses/21_signal_recovery.py        # Figures 4 and 5 (signal recovery)
-python3 analyses/30_regional_map.py           # Figure 10 (regional map)
+./run_all.sh --analyses
 ```
 
-## Figures
+This runs, in order: `scripts/build_analysis_matrix.py` (the decorated-class
+matrix and its provenance file); `analyses/16_basin_membership.py` (the
+28-assemblage basin set); `analyses/82_minimum_sample_size.py`;
+`analyses/76_phase_recovery.py`, `79_phases_under_drift.py`,
+`80_boundaries_in_settlement_gaps.py` and `81_settlement_and_rivers.py`;
+`analyses/11_chronology_14c.py`; `scripts/build_mainfort2003_sites.py` and
+`analyses/83_mainfort_replication.py`; `analyses/49_write_stan_data.py` (the
+Stan data contracts under `data/stan/`); then the neutral copying
+simulations: `analyses/probe_latent_groups/resemblance_screen.py` (the
+297-cell screen at six seeds for each copying-network family, 2,970 cells in
+all), `resemblance_stage2.py`, `per_class_resemblance.py`,
+`site_fst_decomposition.py`, the per-class tables with regional drift and
+planted markers (`analyses/per_type/per_class_table.py`, generators C3 and M
+at the two operating points, then `drift_sensitivity_figure.py`), and
+`analyses/per_type/composition_by_collection.py`. The simulations are the
+slow part; they use `multiprocessing` and every record is seeded from a
+`SeedSequence` named in the script's header, so reruns reproduce the committed
+findings files. The operating points are registered in
+`analyses/probe_latent_groups/operating_points.json`.
 
-Every manuscript figure is produced by one script and written to `figures/` in
-four formats (`.png`, `.pdf`, `.svg`, and a local-only `.tif`). Run the script in
-the table to regenerate that figure.
+### Level 3: the Stan fits
 
-| Figure | Script | Output (in `figures/`) |
-|---|---|---|
-| Fig 1  | `36_canonical_phase_map.py`   | `fig1_phases` |
-| Fig 2  | `29_concept_figure.py`        | `fig2_concept` |
-| Fig 3  | `make_figures.py`             | `fig3_ca_ordination` |
-| Fig 4  | `21_signal_recovery.py`       | `fig4_recovery` |
-| Fig 5  | `21_signal_recovery.py`       | `fig5_empirical_trajectory` |
-| Fig 6  | `make_figures.py`             | `fig6_idss_structure` |
-| Fig 7  | `make_figures.py`             | `fig7_ranksize` |
-| Fig 8  | `37_lmv_drift_groups.py`      | `fig8_lmv_drift_groups` |
-| Fig 9  | `35_basin_pullout.py`         | `fig9_parkin_pullout` |
-| Fig 10 | `30_regional_map.py`          | `fig10_regional` |
-| Fig 11 | `31_within_region_structure.py` | `fig11_within_region` |
-| Fig S1 | `make_figures.py`             | `figS1_validation` |
-| Fig S2 | `13_neiman_distance_and_fit.py` | `figS2_neiman` |
-| Fig S3 | `25_drift_vs_groups_demo.py`  | `figS3_drift_vs_groups` |
-| Fig S4 | `33_time_aware_emergence.py`  | `figS4_emergent_phases` |
-| Fig S5 | `34_emergence_robustness.py`  | `figS5_emergence_robustness` |
-| Fig S6 | `20_tempo_mode_ews.py`        | `figS6_dynamic` |
-| Fig S7 | `11_chronology_14c.py`        | `figS7_chronology` |
+The models are Stan programs under `stan/spatial/`: `composition_gp_marginal.stan`
+(A0, the spatial field), `composition_gp_groups.stan` (A1, latent units) and
+`composition_gp_barrier.stan` (A3, a barrier), sharing `kernels.stanfunctions`.
+They are fitted through `R/fit_spatial.R`, which attaches the diagnostics to
+every fit and applies the diagnostic gate the paper states (R-hat at most
+1.01, bulk and tail effective sample size at least 400, no divergences,
+E-BFMI at least 0.3).
 
-`make_figures.py` produces Figures 3, 6, 7, and S1 (the house-style validation
-and basin diagnostics). The remaining figures are produced by their own numbered
-scripts. `figures/` also holds earlier-stage and diagnostic images (`05_*`–`09_*`,
-`figX_*`, `fig1_studyarea`, `fig5_idss_network`, `figS9_canonical_phases`) kept
-for provenance; no main-text result depends on them.
-
-## Generated output
-
-Running the analyses populates two directories. Both are regenerated from source
-and can be deleted and rebuilt at any time.
-
-- **`figures/`** — the manuscript figures (above) plus the retained
-  earlier-stage images.
-- **`output/`** — text and data results:
-  - **Result reports** (`*.md`), one per analysis, holding the numbers cited in
-    the paper. Examples: `validation_report.md` (criterion GO/NO-GO),
-    `basin_results.md` (consolidated basin numbers), `signal_recovery.md`
-    (size-controlled recovery), `chronology_14c.md` (radiocarbon),
-    `lmv_drift_groups.md` and `emergence_robustness.md` (drift simulations).
-    These reports are version-controlled as the canonical reproducibility
-    baseline. Every Monte Carlo analysis is seeded, so rerunning the pipeline
-    reproduces them exactly and `git diff output/*.md` stays empty.
-  - **Monte Carlo caches** (`*.csv`, `*.npz`) so repeat runs are fast:
-    `emergence_robustness.csv`, `basin_pullout_runs.csv`, `basin_pullout_prob.csv`,
-    `lmv_drift_groups_runs.csv`, `time_aware_runs.csv`, `abc_posterior.npz`. These
-    are regenerable and are not tracked. Delete them to force a full from-scratch
-    recompute (e.g. `rm output/*.csv output/*.npz`, then `./run_all.sh`); the
-    result reports above must come back identical.
-  - `diag_macro_transect.png` — the between-region (central-vs-lower valley)
-    transect diagnostic, retained for provenance; it is not a manuscript figure
-    (the paper reports the within-region drift result for each phase scheme).
-
-## Repository layout
-
-```
-analyses/         numbered analysis and figure scripts (each has a header docstring)
-src/              the mls_emergence package (transmission models, signatures, I/O)
-data/             source ceramic tables, radiocarbon, and geospatial layers (provenance in data/README.md)
-docs/manuscript/  the manuscript (MAIN_TEXT.md, SUPPLEMENTAL_TEXT.md, references.bib, american-antiquity.csl, built docx/PDF)
-figures/          manuscript figures (committed); run_all.sh regenerates them
-output/           generated result tables and Monte Carlo caches (created by run_all.sh)
-run_all.sh        reproduce every analysis and figure
-environment.yml / conda-lock.yml / requirements.txt / requirements-lock.txt / Dockerfile / postBuild   reproducible environments
-pyproject.toml    package metadata for `pip install -e .`
+```bash
+Rscript analyses/00_setup/00_install_deps.R        # rstan, posterior, bayesplot, jsonlite, here, digest, ggplot2, systemfonts, ragg
+Rscript analyses/00_setup/01_verify_toolchain.R    # compiles and samples a model with a known posterior
+./run_all.sh --stan
 ```
 
-## Script index
+`--stan` runs `analyses/probe_latent_groups/refit_a0_basin.R` (A0 on the basin
+and the prior defense of Table S4), `a0_intercept_prior.R` (the three
+intercept priors of Figure 4), `validate_a1.R` and `validate_a3.R` (the
+recovery tests of Figure 7), `a1_prior_check.R`, `a3_pinned_range.R` at 6 and
+12 km (Table S5), and then the Python summaries that read the fit records,
+`a0_predictive_summaries.py` and `a3_prior_comparison.py`. Each script sets
+`options(mc.cores = 4L)`. The versions the committed findings were produced
+with are recorded in `output/findings/environment_r.md` (R 4.3.3, rstan
+2.32.7, aarch64 Linux) and `output/findings/environment_python.md`.
 
-Every script begins with a docstring describing what it does and what it writes.
-The numbered scripts run in order under `run_all.sh`.
+### Tests
 
-**Basin definition and chronology**
+```bash
+pytest                                                        # Python: the package, the data loaders, the probe, the per-class and rim code, phasecheck
+Rscript -e 'testthat::test_file("tests/testthat/test-fit-layer.R")'   # R: the diagnostics layer on synthetic draws with analytic answers
+Rscript -e 'testthat::test_file("tests/testthat/test-kernels.R")'
+```
 
-| Script | Purpose |
-|---|---|
-| `14_drainage_basin.py`, `16_basin_membership.py`, `09_parkin_basin_restricted.py` | Define the St. Francis basin assemblage set (drainage / watershed rules) |
-| `11_chronology_14c.py` | Calibrate the basin radiocarbon and test the seriation-vs-calendar order (Fig S7) |
+Known issue: `tests/phasecheck/test_copying_model.py::test_model_comparison_tells_a_restricted_record_from_an_unrestricted_one`
+fails on 3 of its 80 records under numpy 2.4.6, scipy 1.18.1 and pandas 3.0.6.
+The code has not changed since the test passed; the difference is in the
+numerical libraries, and it is under investigation. `pyproject.toml` pins numpy
+below 2.5.
 
-**Basin transmission analyses**
+## Use the tests on your own data
 
-| Script | Purpose |
-|---|---|
-| `10_neiman_size_diagnostic.py` | Neiman (1995:17) sample-size / time-averaging diagnostic of the neutrality estimators |
-| `13_neiman_distance_and_fit.py` | Neiman diversity-distance diagnostic (Fig S2) |
-| `15_continuum_test.py` | Clustering-tendency tests on the CA ordination |
-| `17_basin_results.py` | Consolidated basin Results numbers |
-| `18_kandler_shennan_neutrality.py` | Non-equilibrium neutrality test |
-| `19_abc_transmission.py` | Time-averaging-aware ABC inference of the copying bias |
-| `20_tempo_mode_ews.py` | Tempo-and-mode model comparison and early-warning probe (Fig S6) |
-| `12_sensitivity_grid.py` | Forking-paths sensitivity of the basin result |
+`phasecheck` applies the phase tests of the earlier version of this paper to
+any table of assemblages. It needs one row per assemblage: a name, latitude and
+longitude, a phase, and one column of sherd counts per class.
 
-**Bayesian robustness analyses**
+```bash
+pip install -e .
+phasecheck my_assemblages.xlsx --out my_report            # the phase lines against other lines
+phasecheck my_assemblages.xlsx --model --jobs 8 --out my_report   # and the copying model with no groups
+```
 
-| Script | Purpose |
-|---|---|
-| `38_abc_smc_transmission.py` | ABC-SMC (sequential Monte Carlo) posterior of the copying bias, the calibrated upgrade to `19` |
-| `39_abc_smc_validation.py` | Simulation-based calibration, coverage, and cross-check of the ABC-SMC posterior against `19` |
-| `40_hierarchical_convergence.py` | Hierarchical Bayesian posterior of the four-signature convergence: `P(all four slopes rise together)` |
-| `41_hierarchical_convergence_validation.py` | Calibration, prior sensitivity, and posterior-predictive checks for the convergence model |
-| `43_bayesian_fst.py` | Balding-Nichols Bayesian cultural F_ST for the basin: the BN F_ST parameter, a conjugate Gini-Simpson readout, and a structure-vs-panmixia Bayes factor |
-| `44_bayesian_fst_validation.py` | Coverage, simulation-based calibration, small-sample-bias, MCMC-health, and Bayes-factor-sanity checks for the BN F_ST |
+It answers a series of questions in order and writes a report: does location
+alone recover the phases; do the phase boundaries separate the assemblages
+better than other lines; does each assemblage fit its own phase; and, with
+`--model`, does the record differ between phases by more than copying across
+distance produces, and could the comparison detect a boundary on a record like
+yours. The tool implements those tests, not the spatial field, latent-unit and
+barrier models or the diversity-matched neutral comparison of the current main
+text. The paper's own record is the worked example in `examples/phasecheck/`.
+The guide is [docs/PHASECHECK.md](docs/PHASECHECK.md).
 
-These use PyMC and arviz (in `requirements.txt`). They restate the transmission-bias inference and the convergence criterion as calibrated Bayesian posteriors, and reach the same conclusions as the primary analyses: a copying bias tightly constrained near neutral, and no convergence of the four signatures (`P = 0`).
+## Installation
 
-`43`/`44` fit the between-cluster cultural F_ST with the Balding-Nichols model (`F ~ Uniform(0,1)`, `alpha = (1-F)/F`, per-cluster frequencies marginalized inside a Dirichlet-multinomial), the same model the hyperlocality project uses, so the two analyses share one Bayesian approach. The flat prior is on F_ST itself, so the estimate is not pulled toward the drift level, and the marginalized likelihood is well conditioned (no funnel-taming `target_accept` needed). One fit yields two readouts: the BN F_ST parameter (basin median 0.07, 95% CI [0.03, 0.11]) and a conjugate reconstruction of the exact Gini-Simpson estimator the manuscript reports (`p_g | x_g ~ Dirichlet(alpha*pi + x_g)`; basin median 0.033, 95% CI [0.030, 0.035], matching the frequentist plug-in). This is estimation uncertainty conditional on the clustering, distinct from the size-controlled per-bin F_ST that carries the main-text argument. The reported Bayes factor tests structure against *exact* panmixia, a far weaker null than drift; with large samples panmixia is rejected trivially, so it is a model-adequacy and parity check, not the structure test. The operative structure-vs-drift test is the separate stochastic-drift null.
+The Python pipeline (levels 1 and 2) runs on Windows, macOS (Intel and Apple
+Silicon) and Linux with Python 3.11 or newer. The geospatial stack (geopandas,
+cartopy, pyproj, shapely) is what makes the installation path matter:
+conda-forge ships the compiled GEOS, PROJ and GDAL libraries on all three
+operating systems, so the conda path needs no system packages. The pip path
+needs those libraries installed separately, which is straightforward on macOS
+and Linux and awkward on native Windows. On Windows, use conda or WSL2.
 
-**Criterion validation and signal recovery**
+### Conda (recommended)
 
-| Script | Purpose |
-|---|---|
-| `04_validation_report.py` | Blind validation of the convergence criterion on synthetic mechanisms |
-| `21_signal_recovery.py` | Record-matched, size-controlled signal-recovery calibration (Figs 4, 5) |
-| `22_generator_diagnostic.py` | Which signatures are recoverable at the record's resolution |
+```bash
+conda env create -f environment.yml      # or: mamba env create -f environment.yml
+conda activate phases
+pip install -e .
+```
 
-**Drift versus bounded groups (the central test)**
+For an exactly pinned, per-platform build, install from the lockfile instead:
 
-| Script | Purpose |
-|---|---|
-| `23_phases_vs_spatial_drift.py`, `24_phases_drift_robustness.py`, `25_drift_vs_groups_demo.py` | Drift-versus-bounded-groups generative comparison on the real coordinates (Fig S3) |
-| `33_time_aware_emergence.py` | Basin positive control: phase-like structure from neutral drift, sampled time-transgressively (Fig S4) |
-| `34_emergence_robustness.py` | Robustness of the drift result across interaction length, mixing, and innovation (Fig S5) |
-| `35_basin_pullout.py` | Parkin pull-out: does the Parkin phase separate from the other named phases by more than drift (Fig 9) |
-| `37_lmv_drift_groups.py` | Phase-like group counts from neutral drift across the wider lower Mississippi Valley (Fig 8) |
+```bash
+pip install conda-lock
+conda-lock install --name phases conda-lock.yml
+conda activate phases
+pip install -e .
+```
 
-**Regional extension (southeast-Missouri phases)**
+### pip and venv
 
-| Script | Purpose |
-|---|---|
-| `26_cmv_phase_groupness.py`, `27_cmv_lmv_repertoire.py` | Williams (1954) southeast-Missouri repertoire and within-region groupness |
-| `28_macro_boundary.py` | Between-region transect diagnostic (retained for provenance, not a manuscript figure) |
-| `31_within_region_structure.py` | Within-region structure for each phase scheme, lower valley vs central valley (Fig 11) |
+```bash
+# macOS:         brew install geos proj
+# Debian/Ubuntu: sudo apt-get install libgeos-dev libproj-dev proj-data proj-bin
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt           # or requirements-lock.txt for the full pinned closure
+pip install -e .
+```
 
-**Maps and figure pipelines**
+### R and Stan (level 3)
 
-| Script | Purpose |
-|---|---|
-| `29_concept_figure.py` | Conceptual figure: what the test distinguishes (Fig 2) |
-| `30_regional_map.py` | Regional two-scale map (Fig 10) |
-| `36_canonical_phase_map.py` | Canonical phase-territory map (Fig 1) |
-| `make_figures.py` | House-style pipeline for Figures 3, 6, 7, and S1, plus shared plotting helpers |
-| `make_map.py` | Shared map helpers, the river basemap, and river-network distance |
-| `figstyle.py` | Figure house style (fonts, palette, multi-format export) |
+Level 3 needs R (4.3 or newer), a C++ toolchain (`build-essential` on Ubuntu;
+Xcode command line tools on macOS; Rtools on Windows) and the packages that
+`analyses/00_setup/00_install_deps.R` installs. rstan compiles the models on
+first use and caches them under `output/stan_cache/`.
 
-Scripts `05`–`07` are earlier-stage analyses retained for provenance.
+### Container and Binder
+
+`Dockerfile` builds an image with the conda environment and pandoc; it covers
+levels 1 and 2 and the manuscript build, not R. Mount `output/` and `figures/`
+to keep what a run writes:
+
+```bash
+docker build -t phases .
+docker run --rm -it -v "$PWD/output:/repo/output" -v "$PWD/figures:/repo/figures" phases ./run_all.sh
+```
+
+A prebuilt image of the earlier release is at `ghcr.io/clipo/phases:1.0.0`; it
+predates the current scripts and should not be used for this version.
+[Binder](https://mybinder.org/v2/gh/clipo/phases/main) builds the conda
+environment in the browser for a quick look at level 1.
+
+### Checking the install
+
+```bash
+python -c "import mls_emergence, geopandas, cartopy; print('environment OK')"
+```
 
 ## Data
 
-Source data live in `data/`, with full provenance, licensing, and per-file
-descriptions in [`data/README.md`](data/README.md). In brief: the decorated
-sherd counts come from Phillips, Ford & Griffin (1951) as compiled by Lipo
-(2001) and from Williams (1954) for southeast Missouri; the radiocarbon is the
-Mainfort (2001) compilation; the geospatial layers are the project's Lower
-Mississippi Valley Survey shapefiles plus a clip of HydroRIVERS for the regional
-maps. State boundaries and the locator insets are drawn from Natural Earth, which
-cartopy downloads on demand.
+Source data live in `data/`, with per-file descriptions, sources, the matrix
+construction rule and licensing in [`data/README.md`](data/README.md). In
+brief: the decorated sherd counts are the Phillips, Ford and Griffin (1951)
+survey counts (`data/raw/PFGData.xlsx`) and Lipo's (2001) compilation of those
+counts with his 1996 to 1997 collections (`data/raw/mainfort-pfg-cpl.xlsx`),
+one source per assemblage and never summed; Mainfort's (2003a) published table
+is a separate comparison set; the rim attribute counts for beveling and
+notching are Mainfort's (2003b) Table 1; the radiocarbon is the Mainfort
+(2001) compilation calibrated against IntCal20; the settlement tables are the
+regional compilation of Lipo and Dunnell (2007) with the published corrections
+in `data/raw/`; the geospatial layers are the project's Lower Mississippi
+Valley shapefiles and clips of HydroRIVERS. State boundaries and locator insets
+come from Natural Earth, which cartopy downloads on demand.
 
 ## Manuscript
 
 The paper is in `docs/manuscript/`: `MAIN_TEXT.md` and `SUPPLEMENTAL_TEXT.md`
-(sources), `references.bib` (bibliography), and the built `.docx` and `.pdf` for
-each. Rebuild with pandoc:
+(sources), `references.bib`, the American Antiquity citation style
+(`american-antiquity.csl`), the Word styling (`reference.docx`), and the built
+`.docx` and `.pdf` of each. Rebuild from `docs/manuscript/` with pandoc:
 
 ```bash
-pandoc docs/manuscript/MAIN_TEXT.md -o docs/manuscript/MAIN_TEXT.pdf \
-  --citeproc --bibliography=docs/manuscript/references.bib \
-  --csl docs/manuscript/american-antiquity.csl \
-  --pdf-engine=xelatex -H docs/manuscript/_pdf_header.tex \
-  --resource-path=docs/manuscript:.
+pandoc MAIN_TEXT.md --citeproc --bibliography=references.bib \
+  --csl=american-antiquity.csl --reference-doc=reference.docx -o MAIN_TEXT.docx
+pandoc MAIN_TEXT.md --citeproc --bibliography=references.bib \
+  --csl=american-antiquity.csl --include-in-header=_pdf_header.tex -o MAIN_TEXT.pdf
 ```
 
-Build the Supplemental Text the same way, substituting `SUPPLEMENTAL_TEXT` for
-`MAIN_TEXT`, and produce the `.docx` by changing the output extension. The
-American Antiquity citation style (`american-antiquity.csl`) is vendored in
-`docs/manuscript/`, so the build is self-contained.
+Build the Supplemental Text the same way. `docs/manuscript/BUILD.md` has the
+details, and `scripts/check_figure_claims.py` and `scripts/check_signs.py`
+check the figures' printed values and the text's signed values against the
+findings files.
+
+## Repository layout
+
+```
+analyses/                 numbered analysis and figure scripts; per_type/, probe_latent_groups/ and rims/ hold the current paper's simulations and fits
+analyses/00_setup/        R dependency install, toolchain check, environment recording
+src/mls_emergence/        the package: transmission (the copying model), probe (generators, readouts, rivals), per_type, rims, signatures, dataio
+src/phasecheck/           the phase tests as a tool for other data (docs/PHASECHECK.md)
+stan/spatial/             the A0, A1 and A3 Stan programs and shared kernel functions
+R/                        fit_spatial.R (fitting, diagnostics, gate, cache) and diagnostic_plots.R
+scripts/                  matrix and table builders, the manifest builder, the figure-claim and sign checks, the release sync
+tests/                    pytest suites; tests/testthat/ for R
+data/                     source tables and geospatial layers (data/README.md)
+output/findings/          the findings files the manuscript cites, one per analysis
+output/*.md, *.csv        result reports of the earlier version's pipeline, kept as its baseline
+figures/                  manuscript figures; run_all.sh redraws them
+docs/manuscript/          the manuscript and its build files
+examples/phasecheck/      the worked example for phasecheck
+MANIFEST.md               generated: which script writes which output
+CORRECTIONS.md            corrections since the first public release
+run_all.sh                reproduce by level (figures; --analyses; --stan)
+```
 
 ## Licensing
 
-- **Code** (`src/`, `analyses/`): MIT License, see [`LICENSE`](LICENSE).
+- **Code** (`src/`, `analyses/`, `scripts/`, `R/`, `stan/`): MIT License, see [`LICENSE`](LICENSE).
 - **Data** (`data/`): Creative Commons Attribution 4.0 International (CC BY 4.0),
-  see [`LICENSE-data`](LICENSE-data), which also lists data provenance.
+  see [`LICENSE-data`](LICENSE-data) and the provenance in `data/README.md`.
 
 ## Citing
 
 If you use this code or data, please cite the paper (in preparation) and this
 repository:
 
-> Lipo, Carl P., Robert J. DiNapoli, and Mark E. Madsen. Are the phases real?
-> Distinguishing bounded interaction groups from spatially structured drift in
-> lower Mississippi Valley decorated ceramics.
+> Lipo, Carl P., Beau DiNapoli, and Mark E. Madsen. What are phases? Geographic
+> structure, neutral copying, and the search for social boundaries in the Lower
+> Mississippi Valley.
 
-The archived version of the code and data is deposited at Zenodo: https://doi.org/10.5281/zenodo.20796240 (private until the paper is published, so it will not resolve before then).
+`CITATION.cff` carries the metadata. The Zenodo deposit at
+https://doi.org/10.5281/zenodo.20796240 is version 1.0.0 of this repository
+(22 June 2026), the code and data of the earlier version of the paper; a new
+version will be deposited when the current paper is published.
 
 ## Authors
 
-Carl P. Lipo, Robert J. DiNapoli, and Mark E. Madsen.
+Carl P. Lipo, Beau DiNapoli, and Mark E. Madsen.

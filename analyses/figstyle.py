@@ -126,7 +126,7 @@ _FIGURES_DIR = Path(__file__).resolve().parent.parent / "figures"
 _FORMATS = (".png", ".pdf", ".svg", ".tif")
 
 
-def save_all(fig: "plt.Figure", name_or_path, dpi: int = 300,
+def save_all(fig: plt.Figure, name_or_path, dpi: int = 300,
              close: bool = False) -> Path:
     """Write a figure in every distribution format: PNG and TIFF (raster at
     ``dpi``) and PDF and SVG (vector). ``name_or_path`` may be a bare figure
@@ -147,13 +147,25 @@ def save_all(fig: "plt.Figure", name_or_path, dpi: int = 300,
     return Path(f"{stem}.png")
 
 
-def save(fig: "plt.Figure", name: str) -> Path:
+def save(fig: plt.Figure, name: str) -> Path:
     """Write figures/{name} in all formats (PNG, PDF, SVG, TIFF) at 300 dpi,
     tight bounding box, and close the figure. Returns the .png Path."""
     return save_all(fig, name, dpi=300, close=True)
 
 
-def despine(ax: "mpl.axes.Axes") -> None:
+def panel_label(ax: mpl.axes.Axes, text: str, y: float = 1.04) -> None:
+    """Draw a bold panel letter above an axes' top-left corner.
+
+    Lives here rather than in one figure script because captions refer to
+    panels by letter and a figure that omits them leaves the reader unable to
+    tell which panel is which. figS2 and figS6 both shipped that way: their
+    captions said (A), (B), (C) and the figures drew nothing.
+    """
+    ax.text(-0.02, y, text, transform=ax.transAxes, fontsize=9,
+            fontweight="bold", va="bottom", ha="right")
+
+
+def despine(ax: mpl.axes.Axes) -> None:
     """Remove top and right spines (applied globally via rcParams, but
     useful for axes added after the fact)."""
     ax.spines["top"].set_visible(False)

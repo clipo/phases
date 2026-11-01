@@ -1,0 +1,9 @@
+# Signed manuscript values that scripts/check_signs.py flags and that were confirmed against their source by opening it.
+# Columns (tab-separated): manuscript file, token, a phrase from the same line, source and field, date verified.
+SUPPLEMENTAL_TEXT.md	-0.20	observed -0.20; simulated median -0.18	output/revision_2026_09/figure_values.json figS3.dd_r.obs = -0.2045	2026-10-02
+SUPPLEMENTAL_TEXT.md	-0.18	observed -0.20; simulated median -0.18	output/revision_2026_09/baseline.csv basin pooled time_transgressive dd_r median = -0.175	2026-10-02
+SUPPLEMENTAL_TEXT.md	-8.0	12 km (-8.0 to +13.3)	output/revision_2026_09/boundary_grid.csv basin pooled length 12 leak 0.03 be_spatial 2.5/97.5 pct = [-8.01, +13.26]	2026-10-02
+SUPPLEMENTAL_TEXT.md	-0.62	reported at rho = -0.62	literature value, Neiman (1995: Fig. 7), as quoted in output/neiman_distance_and_fit.md	2026-10-02
+SUPPLEMENTAL_TEXT.md	-0.80	against a draw-to-draw spread of -0.80 to +0.40.](../../figures/fig5_recovery.png)	output/revision_recovery.json empirical_fst_trend p_lo = -0.79999..., p_hi = +0.39999... (also output/signal_recovery.md, "-0.80 to +0.40"); flagged after the caption medians went to three decimals and matched closure_strength_posterior.md, which prints no spread	2026-10-02
+MAIN_TEXT.md	-0.53	and -0.39, -0.53 to -0.25) and rise with longitude	output/findings/rim_r1.md, section C table, row "exterior notching", column "rho vs latitude": posterior -0.39 [-0.53, -0.25]; the flagged value is the lower bound of the interval	2026-10-31
+MAIN_TEXT.md	-1.03	runs from -1.03 at Cramor Place to +0.39 at Beck	output/findings/composition_by_collection.md, per-site table, row "Cramor_Place", column "Parkin_Punctated ... log odds ratio at alpha 0.5": -1.03 [-1.38, -0.67], Lipo addition minus the PFG part (file line 26 states the order); Beck in the same column is +0.39	2026-11-01

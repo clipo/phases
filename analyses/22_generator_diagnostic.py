@@ -42,10 +42,14 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 m21 = importlib.import_module("21_signal_recovery")
+from mls_emergence.signatures.sampling import rarefy
+
 res = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "output" / "generator_diagnostic.md"
@@ -93,7 +97,7 @@ def score(profiles, clusters, bins_arr, coords_c, N_arr, nrare, rng):
     M = np.zeros((len(N_arr), profiles.shape[1]))
     for i in range(len(N_arr)):
         M[i] = rng.multinomial(int(N_arr[i]), profiles[i])
-    return m21.sig_rhos(m21.rarefy(M, nrare, rng), clusters, bins_arr, coords_c)
+    return m21.sig_rhos(rarefy(M, nrare, rng), clusters, bins_arr, coords_c)
 
 
 def mean_rhos(gen, s, clusters, bins_arr, coords_c, N_arr, k, K, n, nrare=m21.NRARE):
@@ -141,9 +145,9 @@ def main():
     clusters, bins_arr, coords_c, N_arr, k, K, n = build_config()
 
     L = ["# Generator diagnostic: is 'only F_ST' a record property or a generator artifact?", "",
-         f"Real config: n = {n}, K = {K} types, k = {k} spatial clusters, {N_BINS} bins, "
+         (f"Real config: n = {n}, K = {K} types, k = {k} spatial clusters, {N_BINS} bins, "
          f"rarefied to {m21.NRARE}. {N_SEEDS} seeds. Entries are mean Spearman rho of the "
-         f"signature vs ordinal position (emergence should drive the channel's signature toward +1).",
+         f"signature vs ordinal position (emergence should drive the channel's signature toward +1)."),
          ""]
 
     GEN_DESC = {"A": "spatial divergence+conformity (F_ST channel)",
@@ -170,8 +174,8 @@ def main():
     for nr in (50, 100, 150):
         r = mean_rhos("A", 0.6, clusters, bins_arr, coords_c, N_arr, k, K, n, nrare=nr)
         L.append(f"| {nr} | " + " | ".join(f"{r[sg]:+.2f}" for sg in SIG) + " |")
-    L += ["", "Larger NRARE keeps more rare types; if neutral/seriation climb with depth, their "
-          "weakness at NRARE=50 is partly a rarefaction-floor artifact, not a record property.", ""]
+    L += ["", ("Larger NRARE keeps more rare types; if neutral/seriation climb with depth, their "
+          "weakness at NRARE=50 is partly a rarefaction-floor artifact, not a record property."), ""]
 
     # k-cluster sweep (generator A, s=0.6): does the spatial signature recover at higher k?
     L += ["## Cluster-count sweep (generator A, s = 0.6)", "",
@@ -180,18 +184,18 @@ def main():
         cl2, ba2, cc2, N2, kused, K2, n2 = build_config(k_override=kk)
         r = mean_rhos("A", 0.6, cl2, ba2, cc2, N2, kused, K2, n2)
         L.append(f"| {kused} | " + " | ".join(f"{r[sg]:+.2f}" for sg in SIG) + " |")
-    L += ["", "At k=3 the spatial boundary and F_ST summarize one partition; if the spatial "
-          "signature climbs at k=4,5 its weakness is a low-cluster-count artifact.", ""]
+    L += ["", ("At k=3 the spatial boundary and F_ST summarize one partition; if the spatial "
+          "signature climbs at k=4,5 its weakness is a low-cluster-count artifact."), ""]
 
     # verdict
     L += ["## Verdict", "",
-          "Read the three generator tables together. If each signature shows its largest response "
+          ("Read the three generator tables together. If each signature shows its largest response "
           "to the generator whose channel it measures (A->F_ST, B->neutral, C->seriation), the "
           "four signatures are each empirically sufficient for a distinct emergence channel, and "
           "the four-signature criterion is vindicated in principle even though, for the spatial "
           "bounded-group emergence the Parkin hypothesis predicts, F_ST is the cleanest at this "
           "resolution. If B and C fail to light any signature, the signatures genuinely fail at "
-          "this resolution regardless of channel, and the F_ST-led reading is a record property."]
+          "this resolution regardless of channel, and the F_ST-led reading is a record property.")]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")
     print("\n".join(L))

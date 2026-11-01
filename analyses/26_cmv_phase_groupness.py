@@ -27,19 +27,21 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
-from mls_emergence.signatures.assortativity import similarity_matrix  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+
+from mls_emergence.signatures.assortativity import similarity_matrix
 
 TSV = ROOT / "data" / "raw" / "williams1954_cmv_counts.tsv"
 OUT_MD = ROOT / "output" / "cmv_phase_groupness.md"
@@ -165,8 +167,8 @@ def main():
 
     L = ["# Do the CMV (SE Missouri) phases form real groups? (Williams 1954)",
          "",
-         f"{n} assemblages with >= {MIN_TOTAL} sherds, {len(set(reg))} physiographic "
-         "regions (proxy for Williams's phases). Frequency-level test, the CMV-scale",
+         (f"{n} assemblages with >= {MIN_TOTAL} sherds, {len(set(reg))} physiographic "
+         "regions (proxy for Williams's phases). Frequency-level test, the CMV-scale"),
          "analog of the LMV within-basin analysis.", ""]
 
     # 1. region coherence
@@ -178,10 +180,10 @@ def main():
     fst_region = mf.cultural_fst(region_pools)
     lab, Q, ncom = communities(counts)
     L += ["## 1. Region/phase coherence",
-          f"- Within-region minus between-region BR similarity: {obs:+.1f} BR units "
-          f"(permutation p = {p:.4f}).",
-          f"- Cultural F_ST by region: {fst_region:+.3f}  "
-          f"(LMV within-basin F_ST ~ +0.04 for comparison).",
+          (f"- Within-region minus between-region BR similarity: {obs:+.1f} BR units "
+          f"(permutation p = {p:.4f})."),
+          (f"- Cultural F_ST by region: {fst_region:+.3f}  "
+          f"(LMV within-basin F_ST ~ +0.04 for comparison)."),
           f"- Data-driven communities (greedy modularity): {ncom}, Q = {Q:.3f}.",
           "  Do detected communities line up with regions? cross-tab below.", ""]
     ct = pd.crosstab(pd.Series(reg, name="region"),
@@ -189,12 +191,12 @@ def main():
     L += ["```", ct.to_string(), "```", ""]
 
     # 2. seriation coherence
-    ca1, _, _ = mf.correspondence_axis(counts)
+    _ca1, _, _ = mf.correspondence_axis(counts)
     sg = mf.seriation_groups(counts, cont=0.10)
     nbridge = sum(1 for i in range(n) if len(sg["membership"].get(i, [])) > 1)
     L += ["## 2. Seriation coherence (IDSS, cont=0.10)",
-          f"- n_groups = {sg['n_groups']}, bridges = {nbridge}/{n}. "
-          "Many groups / few bridges = fragments rather than one coherent order.", ""]
+          (f"- n_groups = {sg['n_groups']}, bridges = {nbridge}/{n}. "
+          "Many groups / few bridges = fragments rather than one coherent order."), ""]
 
     # 3. decoration contrast
     cats = {"Woodland": WOODLAND, "plain shell": PLAIN_SHELL,
@@ -207,19 +209,19 @@ def main():
         sub = M[region.to_numpy() == rg]
         tot = sub.sum().sum()
         row = [rg, str((region.to_numpy() == rg).sum())]
-        for cat, ts in cats.items():
+        for ts in cats.values():
             cols = [c for c in sub.columns if c in ts]
             row.append(f"{(sub[cols].sum().sum()/tot):.3f}" if cols else "0.000")
         L += ["| " + " | ".join(row) + " |"]
     # overall CMV
     tot_all = M.sum().sum()
     over = ["**CMV overall**", str(n)]
-    for cat, ts in cats.items():
+    for ts in cats.values():
         cols = [c for c in M.columns if c in ts]
         over.append(f"{(M[cols].sum().sum()/tot_all):.3f}" if cols else "0.000")
     L += ["| " + " | ".join(over) + " |", "",
-          "Note: 'northern decorated' (Wickliffe/O'Byam/Matthews/Kimmswick) are "
-          "the CMV-diagnostic types largely absent from the LMV St. Francis basin.", ""]
+          ("Note: 'northern decorated' (Wickliffe/O'Byam/Matthews/Kimmswick) are "
+          "the CMV-diagnostic types largely absent from the LMV St. Francis basin."), ""]
 
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
 

@@ -1,4 +1,21 @@
-"""18_kandler_shennan_neutrality.py — non-equilibrium neutral-drift test.
+"""
+SUPERSEDED 2026-09-02 by analyses/56_neutrality_ppc.py.
+
+This script sweeps FIXED effective population sizes, takes the 2.5th and 97.5th
+percentiles of the simulated trajectories as a "neutral envelope", and reads the
+result as "the test cannot reject neutral transmission". Under rule 18 that
+framing is removed: the band is a sensitivity envelope read as an acceptance
+region, not a posterior predictive check.
+
+56_neutrality_ppc.py draws the effective size and innovation rate from the
+ABC-SMC posterior instead, which makes it a genuine posterior predictive check,
+and pools across ABC seeds because the posterior median of N moves from 98 to
+263 between them. Pooled result: 6/6 bins inside the 95 percent predictive
+interval, Bayesian predictive p = 0.489.
+
+Kept for provenance and not deleted, because the manuscript cited its result
+until 2026-09-02. Do not regenerate the manuscript from it.
+18_kandler_shennan_neutrality.py — non-equilibrium neutral-drift test.
 
 A time-aware, model-based neutrality test in the spirit of Kandler & Shennan
 (2013): rather than a stationary Ewens-Watterson statistic, it asks whether the
@@ -34,9 +51,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 res = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "output" / "kandler_shennan_neutrality.md"
@@ -53,7 +72,7 @@ def gini(p):
 
 
 def main():
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)               # CA oriented increasing = later
     M = counts.to_numpy(float)
     rank = ca.rank().to_numpy()
@@ -70,12 +89,12 @@ def main():
     surv_last = int(((binmat[0] > 0) & (binmat[-1] > 0)).sum())
 
     L = ["# Non-equilibrium neutral-drift test (Kandler & Shennan 2013, adapted)", "",
-         f"Basin curated set (n = {M.shape[0]}), {M.shape[1]} decorated types, {N_BINS} "
-         "ordinal bins along the oriented CA axis.", "",
-         f"- Variant-survival statistic K(t): {surv_last} of {n_types0} types present in the "
+         (f"Basin curated set (n = {M.shape[0]}), {M.shape[1]} decorated types, {N_BINS} "
+         "ordinal bins along the oriented CA axis."), "",
+         (f"- Variant-survival statistic K(t): {surv_last} of {n_types0} types present in the "
          "first bin are still present in the last. At this coarse type resolution K(t) is "
          "near-saturated and uninformative (as expected); we test the diversity trajectory "
-         "instead.", "",
+         "instead."), "",
          "## Neutral-drift envelope for the diversity trajectory", "",
          "| Ne | obs within neutral 95% envelope? | obs diversity trend (Spearman) |",
          "|---|---|---|"]
@@ -100,7 +119,7 @@ def main():
     L += ["",
           "Observed per-bin diversity: " + ", ".join(f"{d:.2f}" for d in obs_div) + ".",
           "",
-          "**Reading.** The observed diversity trajectory neither collapses (the conformist "
+          ("**Reading.** The observed diversity trajectory neither collapses (the conformist "
           "signature of diversity lost faster than drift) nor inflates beyond the neutral "
           "envelope (the anti-conformist signature of diversity maintained beyond drift); it "
           "stays within the neutral-drift envelope across the plausible range of effective "
@@ -109,7 +128,7 @@ def main():
           "signature. With an ordinal axis and unknown effective size the neutral interval is "
           "wide (Kandler & Shennan 2013), so this is concordant but weak evidence; a sharper "
           "test would require the raw motif-level (variant) data rather than the ten "
-          "aggregated types."]
+          "aggregated types.")]
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")
     print("\n".join(L))
