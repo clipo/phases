@@ -31,4 +31,4 @@ Proveniences matching curated basin assemblages: 4 (pooling 26 dates).
 
 **CA1 vs pooled median calendar age: Spearman rho = +0.40, p = 0.600** (n = 4 anchors). Compare the manuscript's prior 5-anchor single-date orientation (rho +0.50, p 0.39).
 
-Figure: figures/figS6_chronology.png (basin + Parkin SPD with contact line; CA1 vs pooled median calendar age, point size ~ n dates).
+Figure: figures/figS1_chronology.png (CA1 vs pooled median calendar age, point size ~ n dates; the SPD panel was removed 2026-11-03).

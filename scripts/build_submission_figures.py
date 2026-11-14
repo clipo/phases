@@ -47,19 +47,21 @@ FIGURES = [
      "Study area and the late pre-contact phases as Phillips (1970) defined them"),
     ("Fig2", "fig2_two_histories", "analyses/102_fig2_two_histories.py", "Main text",
      "Two histories, one record (illustrative schematic)"),
-    ("Fig3", "fig3_phase_recovery_map", "analyses/103_fig3_phase_recovery_map.py", "Main text",
+    ("Fig3", "fig3_model_schematic", "analyses/103_fig3_model_schematic.py", "Main text",
+     "The three models on the site locations (schematic)"),
+    ("Fig4", "fig4_phase_recovery_map", "analyses/104_fig4_phase_recovery_map.py", "Main text",
      "What recovers the phases"),
-    ("Fig4", "fig4_spatial_field", "analyses/104_fig4_spatial_field.py", "Main text",
+    ("Fig5", "fig5_spatial_field", "analyses/105_fig5_spatial_field.py", "Main text",
      "The spatial field"),
-    ("Fig5", "fig5_per_class_drift", "analyses/105_fig5_per_class_drift.py", "Main text",
+    ("Fig6", "fig6_per_class_drift", "analyses/106_fig6_per_class_drift.py", "Main text",
      "Common decorated classes against neutral copying with regional drift"),
-    ("Fig6", "fig6_rim_attributes", "analyses/106_fig6_rim_attributes.py", "Main text",
+    ("Fig7", "fig7_rim_attributes", "analyses/107_fig7_rim_attributes.py", "Main text",
      "Rim attributes beside decoration on the 19 sites with rim tabulations"),
-    ("Fig7", "fig7_latent_unit_recovery", "analyses/107_fig7_latent_unit_recovery.py", "Main text",
+    ("Fig8", "fig8_latent_unit_recovery", "analyses/108_fig8_latent_unit_recovery.py", "Main text",
      "Recovery of known structure on this site geometry"),
-    ("FigS1", "figS6_chronology", "analyses/11_chronology_14c.py", "Supplemental Text",
+    ("FigS1", "figS1_chronology", "analyses/11_chronology_14c.py", "Supplemental Text",
      "Radiocarbon chronology of the St. Francis basin"),
-    ("FigS2", "fig8_ranksize", "analyses/make_figures.py", "Supplemental Text",
+    ("FigS2", "figS2_ranksize", "analyses/make_figures.py", "Supplemental Text",
      "Settlement cross-check (mound height, hoe exchange)"),
 ]
 
@@ -110,6 +112,7 @@ def main() -> None:
         mtime = datetime.fromtimestamp(png.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
         rows.append((label, where, title, stem, script, mtime, w, h, tif, pdf, pdf_src))
 
+    n_main = sum(1 for row in FIGURES if row[3] == "Main text")
     lines = [
         "# Submission figures",
         "",
@@ -123,7 +126,7 @@ def main() -> None:
         "the press because a numerical conversion shifts the Okabe-Ito palette. Captions are in "
         "the manuscript text, not in the files.",
         "",
-        "Main-text figures: 7 (journal maximum 10). Supplemental figures S1 and S2 are embedded "
+        f"Main-text figures: {n_main} (journal maximum 10). Supplemental figures S1 and S2 are embedded "
         "in SUPPLEMENTAL_TEXT.docx, which the journal posts as supplied; the files here are for "
         "the record.",
         "",

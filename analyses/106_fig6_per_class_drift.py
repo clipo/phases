@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figure 5: the decorated classes against neutral copying with regional drift.
+"""Figure 6 (file stem fig5): the decorated classes against neutral copying with regional drift.
 
 Drawn from the committed tables in `output/findings/per_type_drift_sensitivity.md`
 (primary operating point; produced by `analyses/per_type/drift_sensitivity_figure.py`
@@ -17,7 +17,7 @@ amplitude, beside the neutral cells' own fraction outside their band.
 band, the record, and the planted Walls Engraved occupancy at a multiplier of 3.
 
 Usage:
-    .venv/bin/python analyses/105_fig5_per_class_drift.py
+    .venv/bin/python analyses/106_fig6_per_class_drift.py
 """
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ fs = importlib.import_module("figstyle")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 
-FIG = "fig5_per_class_drift"
+FIG = "fig6_per_class_drift"
 SRC = ROOT / "output" / "findings" / "per_type_drift_sensitivity.md"
 FW = ["0", "0.01", "0.03", "0.1", "0.3"]
 COMMON = ["Parkin_Punctated", "Barton/Kent/MPI", "Painted"]

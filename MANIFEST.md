@@ -9,7 +9,7 @@ Which script produces which artifact, and the order they run in.
     .venv/bin/python scripts/build_manifest.py --check   # in CI
 ```
 
-152 scripts produce 275 tracked artifacts.
+153 scripts produce 276 tracked artifacts.
 
 Writes are detected from the call that performs them (`write_text`, `to_csv`, `savefig`, `save_all`, `savez`, `writeLines`, `saveRDS`, `write_json`), with paths resolved through each script's own module-level constants. A script whose output names come from its arguments declares its artifact families in a `MANIFEST_OUTPUTS` list of templates, listed here with their `{placeholders}`; the commands that fill them are in that script's docstring and in each findings file's header. Reads are deliberately NOT counted: an earlier regex version credited `21_signal_recovery.py` with producing `output/closure_posterior.npz`, which it only consumes and `53` writes.
 
@@ -39,12 +39,12 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 12 | `analyses/08_coupling_robustness.py` | `figures/08_coupling_robustness.png`<br>`output/coupling_robustness.md` |
 | 13 | `analyses/09_parkin_basin_restricted.py` | `figures/09_basin_rank_size.png`<br>`figures/09_basin_signature_trajectory.png`<br>`output/parkin_basin_restricted.md` |
 | 14 | `analyses/102_fig2_two_histories.py` | `figures/fig2_two_histories.svg` |
-| 15 | `analyses/104_fig4_spatial_field.py` | `figures/fig4_spatial_field.svg` |
-| 16 | `analyses/105_fig5_per_class_drift.py` | `figures/fig5_per_class_drift.svg` |
-| 17 | `analyses/106_fig6_rim_attributes.py` | `figures/fig6_rim_attributes.svg` |
-| 18 | `analyses/107_fig7_latent_unit_recovery.py` | `figures/fig7_latent_unit_recovery.svg` |
+| 15 | `analyses/105_fig5_spatial_field.py` | `figures/fig5_spatial_field.svg` |
+| 16 | `analyses/106_fig6_per_class_drift.py` | `figures/fig6_per_class_drift.svg` |
+| 17 | `analyses/107_fig7_rim_attributes.py` | `figures/fig7_rim_attributes.svg` |
+| 18 | `analyses/108_fig8_latent_unit_recovery.py` | `figures/fig8_latent_unit_recovery.svg` |
 | 19 | `analyses/10_neiman_power_diagnostics.py` | `output/neiman_power_diagnostics.md` |
-| 20 | `analyses/11_chronology_14c.py` | `figures/figS6_chronology.svg`<br>`output/chronology_14c.md` |
+| 20 | `analyses/11_chronology_14c.py` | `figures/figS1_chronology.svg`<br>`output/chronology_14c.md` |
 | 21 | `analyses/12_sensitivity_grid.py` | `output/sensitivity_grid.md` |
 | 22 | `analyses/13_neiman_distance_and_fit.py` | `figures/figS1_neiman.svg`<br>`output/neiman_distance_and_fit.md` |
 | 23 | `analyses/15_continuum_test.py` | `output/continuum_test.md` |
@@ -114,69 +114,70 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 87 | `analyses/56_neutrality_ppc.py` | `figures/fig_neutrality_ppc.svg`<br>`output/findings/neutrality_ppc.md` |
 | 88 | `analyses/57_fst_prior_predictive.py` | `figures/fig_fst_prior_predictive.svg`<br>`output/findings/fst_prior_justification.md` |
 | 89 | `analyses/60_partition_ensemble.py` | `figures/fig_partition_ensemble.svg`<br>`output/findings/partition_ensemble.md` |
-| 90 | `analyses/make_figures.py` | `figures/fig2_validation.svg`<br>`figures/fig4_ca_ordination.svg`<br>`figures/fig5_idss_network.svg`<br>`figures/fig6_empirical_trajectory.svg`<br>`figures/fig7_idss_structure.svg`<br>`figures/fig8_ranksize.svg` |
+| 90 | `analyses/make_figures.py` | `figures/fig2_validation.svg`<br>`figures/fig4_ca_ordination.svg`<br>`figures/fig5_idss_network.svg`<br>`figures/fig6_empirical_trajectory.svg`<br>`figures/fig7_idss_structure.svg`<br>`figures/figS2_ranksize.svg` |
 | 91 | `analyses/34_emergence_robustness.py` | `figures/34_emergence_robustness.png`<br>`output/emergence_robustness.csv`<br>`output/emergence_robustness.md` |
 | 92 | `analyses/38_abc_smc_transmission.py` | `output/abc_smc_posterior.npz`<br>`output/abc_smc_transmission.md` |
 | 93 | `analyses/39_abc_smc_validation.py` | `figures/abc_smc_crosscheck.svg`<br>`figures/abc_smc_sbc.svg`<br>`output/abc_smc_sbc_ranks.npz`<br>`output/abc_smc_validation.md` |
 | 94 | `analyses/55_abc_stability.py` | `output/abc_pooled_posterior.npz`<br>`output/findings/abc_stability.md` |
 | 95 | `analyses/100_rim_attributes.py` | `output/findings/rim_attributes.md` |
-| 96 | `analyses/103_fig3_phase_recovery_map.py` | `figures/fig3_phase_recovery_map.svg` |
-| 97 | `analyses/16_basin_membership.py` | `data/processed/basin_members_broad.txt`<br>`data/processed/basin_members_curated.txt`<br>`data/processed/basin_members_watershed.txt` |
-| 98 | `analyses/21_signal_recovery.py` | `figures/fig5_recovery.svg`<br>`figures/fig6_empirical_trajectory.svg`<br>`output/revision_recovery.json`<br>`output/signal_recovery.md` |
-| 99 | `analyses/22_generator_diagnostic.py` | `output/generator_diagnostic.md` |
-| 100 | `analyses/53_closure_strength_posterior.py` | `figures/fig_closure_strength_posterior.svg`<br>`output/closure_posterior.npz`<br>`output/findings/closure_strength_posterior.md` |
-| 101 | `analyses/62_gini_simpson_bias.py` | `output/findings/gini_simpson_bias.md` |
-| 102 | `analyses/29_concept_figure.py` | `figures/fig3_concept.png` |
-| 103 | `analyses/35_basin_pullout.py` | `figures/35_basin_pullout.png`<br>`output/basin_pullout.md`<br>`output/basin_pullout_prob.csv`<br>`output/basin_pullout_runs.csv` |
-| 104 | `analyses/36_canonical_phase_map.py` | `figures/fig1_phases.png` |
-| 105 | `analyses/37_lmv_drift_groups.py` | `figures/37_lmv_drift_groups.png`<br>`output/lmv_drift_groups.md`<br>`output/lmv_drift_groups_example.csv`<br>`output/lmv_drift_groups_runs.csv` |
-| 106 | `analyses/47_revision_analysis.py` | `output/revision_2026_09/baseline.csv`<br>`output/revision_2026_09/boundary_grid.csv`<br>`output/revision_2026_09/calibrated_rates.csv`<br>`output/revision_2026_09/calibration.csv`<br>`output/revision_2026_09/co_membership.csv`<br>`output/revision_2026_09/initialization_sensitivity.csv`<br>`output/revision_2026_09/leave_one_out.csv`<br>`output/revision_2026_09/manifest.json`<br>`output/revision_2026_09/report.md`<br>`output/revision_2026_09/summary.json` |
-| 107 | `analyses/61_river_network_geometry.py` | `output/findings/river_network_geometry.md` |
-| 108 | `analyses/87_axis_geography.py` | `output/findings/axis_geography.md` |
-| 109 | `analyses/93_phillips1970_phase_map.py` | `figures/fig1_phillips1970_phases.png`<br>`output/findings/phillips1970_outline_membership.md` |
-| 110 | `analyses/98_small_collections.py` | `output/findings/small_collections.csv`<br>`output/findings/small_collections.md` |
-| 111 | `analyses/probe_latent_groups/a1_contracts.py` | `data/stan/a1_truth.json`<br>`data/stan/basin_composition_a1.json` |
-| 112 | `analyses/probe_latent_groups/a3_contracts.py` | `data/stan/a3_placements.json`<br>`data/stan/a3_truth.json` |
-| 113 | `analyses/probe_latent_groups/area_logits.py` | `output/findings/area_logits.md` |
-| 114 | `analyses/probe_latent_groups/time_scales.py` | `output/findings/simulator_time_scales.md`<br>`output/probe_latent_groups/time_scales.json` |
-| 115 | `analyses/50_revision_figures.py` | `figures/fig8_lmv_drift_groups.svg`<br>`figures/fig9_parkin_pullout.svg`<br>`figures/figS2_drift_vs_groups.svg`<br>`figures/figS3_emergent_phases.svg`<br>`figures/figS4_emergence_robustness.svg`<br>`figures/figS8_within_region.svg` |
-| 116 | `analyses/64_unequal_populations.py` | `output/findings/unequal_populations.md`<br>`output/unequal_populations.json` |
-| 117 | `analyses/65_other_departures.py` | `output/findings/other_departures.md`<br>`output/other_departures.json` |
-| 118 | `analyses/66_cmv_class_composition.py` | `output/findings/cmv_class_composition.md` |
-| 119 | `analyses/72_excess_locality.py` | `output/findings/excess_locality.csv`<br>`output/findings/excess_locality.md` |
-| 120 | `analyses/74_phase_partition_test.py` | `figures/fig12_phase_partition.svg`<br>`output/findings/phase_partition_ensembles.csv`<br>`output/findings/phase_partition_test.md` |
-| 121 | `analyses/78_source_effect.py` | `output/findings/source_effect.md` |
-| 122 | `analyses/82_minimum_sample_size.py` | `output/findings/minimum_sample_size.md` |
-| 123 | `analyses/88_cell_sensitivity.py` | `output/findings/cell_sensitivity.md` |
-| 124 | `analyses/per_type/drift_extension.py` | `output/findings/drift_extension.md`<br>`output/findings/drift_extension_cells.csv`<br>`output/probe_latent_groups/drift_extension_{point}.csv` |
-| 125 | `analyses/per_type/drift_sensitivity_figure.py` | `figures/per_type_drift_sensitivity.png`<br>`output/findings/per_type_drift_sensitivity.md`<br>`output/findings/per_type_record_row.md` |
-| 126 | `analyses/per_type/per_class_table.py` | `output/findings/per_type_generators_C3_{point}.md`<br>`output/findings/per_type_generators_M_{point}_{class}_{cluster}.md`<br>`output/findings/per_type_generators_{generator}.md`<br>`output/probe_latent_groups/per_type_table_C3_{point}.csv`<br>`output/probe_latent_groups/per_type_table_M_{point}_{class}_{cluster}.csv`<br>`output/probe_latent_groups/per_type_table_{generator}.csv` |
-| 127 | `analyses/probe_latent_groups/a0_predictive_summaries.py` | `output/findings/a0_predictive_summaries.md`<br>`output/probe_latent_groups/a0_predictive_summaries.csv`<br>`output/probe_latent_groups/spatial_clusters.json` |
-| 128 | `analyses/probe_latent_groups/per_class_resemblance.py` | `output/findings/per_class_resemblance.md`<br>`output/probe_latent_groups/per_class_resemblance.csv`<br>`output/probe_latent_groups/screen_site_fst.csv` |
-| 129 | `analyses/probe_latent_groups/resemblance_screen.py` | `output/findings/resemblance_screen.md`<br>`output/probe_latent_groups/resemblance_screen.csv`<br>`output/probe_latent_groups/resemblance_screen_summary.json` |
-| 130 | `analyses/probe_latent_groups/resemblance_stage2.py` | `output/findings/resemblance_stage2.md`<br>`output/probe_latent_groups/resemblance_stage2.csv` |
-| 131 | `analyses/probe_latent_groups/resemblance_variants.py` | `output/findings/resemblance_variants.md`<br>`output/probe_latent_groups/resemblance_variants.csv` |
-| 132 | `analyses/probe_latent_groups/screen_fst_unselected.py` | `output/findings/screen_fst_unselected.md` |
-| 133 | `analyses/probe_latent_groups/stress_cell.py` | `output/findings/stress_cell.md` |
-| 134 | `analyses/71_scale_sweep.py` | `output/findings/scale_sweep.csv`<br>`output/findings/scale_sweep.md` |
-| 135 | `analyses/73_connectivity_mixing.py` | `output/findings/connectivity_mixing.md` |
-| 136 | `analyses/75_groupness_surface.py` | `figures/fig13_groupness_surface.svg`<br>`output/findings/groupness_surface.md` |
-| 137 | `analyses/76_phase_recovery.py` | `figures/fig14_phase_recovery.svg`<br>`output/findings/phase_recovery.csv`<br>`output/findings/phase_recovery.md` |
-| 138 | `analyses/77_edge_effect.py` | `output/findings/edge_effect.md` |
-| 139 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
-| 140 | `analyses/84_phases_as_groups.py` | `output/findings/phases_as_groups.md`<br>`output/phases_as_groups_runs.csv` |
-| 141 | `analyses/85_excess_robustness.py` | `output/findings/excess_robustness.md` |
-| 142 | `analyses/92_relaxations_by_scale.py` | `output/findings/relaxations_by_scale.md` |
-| 143 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
-| 144 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
-| 145 | `analyses/89_partition_power.py` | `figures/figS12_partition_power.svg`<br>`output/findings/partition_power.md`<br>`output/findings/partition_power_records.csv` |
-| 146 | `analyses/91_turnover_sensitivity.py` | `output/findings/turnover_sensitivity.md` |
-| 147 | `analyses/97_design_to_separate.py` | `output/design_to_separate_runs.csv`<br>`output/findings/design_to_separate.md` |
-| 148 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
-| 149 | `analyses/94_mainfort2003_phase_map.py` | `figures/fig18_mainfort2003_phases.png` |
-| 150 | `analyses/95_phillips_assignment_impact.py` | `output/findings/phillips_assignment_impact.md` |
-| 151 | `analyses/96_assemblage_phase_fit.py` | `output/findings/assemblage_phase_fit.md` |
-| 152 | `analyses/99_phase_profiles.py` | `output/findings/phase_profiles.md` |
+| 96 | `analyses/103_fig3_model_schematic.py` | `figures/fig3_model_schematic.svg` |
+| 97 | `analyses/104_fig4_phase_recovery_map.py` | `figures/fig4_phase_recovery_map.svg` |
+| 98 | `analyses/16_basin_membership.py` | `data/processed/basin_members_broad.txt`<br>`data/processed/basin_members_curated.txt`<br>`data/processed/basin_members_watershed.txt` |
+| 99 | `analyses/21_signal_recovery.py` | `figures/fig5_recovery.svg`<br>`figures/fig6_empirical_trajectory.svg`<br>`output/revision_recovery.json`<br>`output/signal_recovery.md` |
+| 100 | `analyses/22_generator_diagnostic.py` | `output/generator_diagnostic.md` |
+| 101 | `analyses/53_closure_strength_posterior.py` | `figures/fig_closure_strength_posterior.svg`<br>`output/closure_posterior.npz`<br>`output/findings/closure_strength_posterior.md` |
+| 102 | `analyses/62_gini_simpson_bias.py` | `output/findings/gini_simpson_bias.md` |
+| 103 | `analyses/29_concept_figure.py` | `figures/fig3_concept.png` |
+| 104 | `analyses/35_basin_pullout.py` | `figures/35_basin_pullout.png`<br>`output/basin_pullout.md`<br>`output/basin_pullout_prob.csv`<br>`output/basin_pullout_runs.csv` |
+| 105 | `analyses/36_canonical_phase_map.py` | `figures/fig1_phases.png` |
+| 106 | `analyses/37_lmv_drift_groups.py` | `figures/37_lmv_drift_groups.png`<br>`output/lmv_drift_groups.md`<br>`output/lmv_drift_groups_example.csv`<br>`output/lmv_drift_groups_runs.csv` |
+| 107 | `analyses/47_revision_analysis.py` | `output/revision_2026_09/baseline.csv`<br>`output/revision_2026_09/boundary_grid.csv`<br>`output/revision_2026_09/calibrated_rates.csv`<br>`output/revision_2026_09/calibration.csv`<br>`output/revision_2026_09/co_membership.csv`<br>`output/revision_2026_09/initialization_sensitivity.csv`<br>`output/revision_2026_09/leave_one_out.csv`<br>`output/revision_2026_09/manifest.json`<br>`output/revision_2026_09/report.md`<br>`output/revision_2026_09/summary.json` |
+| 108 | `analyses/61_river_network_geometry.py` | `output/findings/river_network_geometry.md` |
+| 109 | `analyses/87_axis_geography.py` | `output/findings/axis_geography.md` |
+| 110 | `analyses/93_phillips1970_phase_map.py` | `figures/fig1_phillips1970_phases.png`<br>`output/findings/phillips1970_outline_membership.md` |
+| 111 | `analyses/98_small_collections.py` | `output/findings/small_collections.csv`<br>`output/findings/small_collections.md` |
+| 112 | `analyses/probe_latent_groups/a1_contracts.py` | `data/stan/a1_truth.json`<br>`data/stan/basin_composition_a1.json` |
+| 113 | `analyses/probe_latent_groups/a3_contracts.py` | `data/stan/a3_placements.json`<br>`data/stan/a3_truth.json` |
+| 114 | `analyses/probe_latent_groups/area_logits.py` | `output/findings/area_logits.md` |
+| 115 | `analyses/probe_latent_groups/time_scales.py` | `output/findings/simulator_time_scales.md`<br>`output/probe_latent_groups/time_scales.json` |
+| 116 | `analyses/50_revision_figures.py` | `figures/fig8_lmv_drift_groups.svg`<br>`figures/fig9_parkin_pullout.svg`<br>`figures/figS2_drift_vs_groups.svg`<br>`figures/figS3_emergent_phases.svg`<br>`figures/figS4_emergence_robustness.svg`<br>`figures/figS8_within_region.svg` |
+| 117 | `analyses/64_unequal_populations.py` | `output/findings/unequal_populations.md`<br>`output/unequal_populations.json` |
+| 118 | `analyses/65_other_departures.py` | `output/findings/other_departures.md`<br>`output/other_departures.json` |
+| 119 | `analyses/66_cmv_class_composition.py` | `output/findings/cmv_class_composition.md` |
+| 120 | `analyses/72_excess_locality.py` | `output/findings/excess_locality.csv`<br>`output/findings/excess_locality.md` |
+| 121 | `analyses/74_phase_partition_test.py` | `figures/fig12_phase_partition.svg`<br>`output/findings/phase_partition_ensembles.csv`<br>`output/findings/phase_partition_test.md` |
+| 122 | `analyses/78_source_effect.py` | `output/findings/source_effect.md` |
+| 123 | `analyses/82_minimum_sample_size.py` | `output/findings/minimum_sample_size.md` |
+| 124 | `analyses/88_cell_sensitivity.py` | `output/findings/cell_sensitivity.md` |
+| 125 | `analyses/per_type/drift_extension.py` | `output/findings/drift_extension.md`<br>`output/findings/drift_extension_cells.csv`<br>`output/probe_latent_groups/drift_extension_{point}.csv` |
+| 126 | `analyses/per_type/drift_sensitivity_figure.py` | `figures/per_type_drift_sensitivity.png`<br>`output/findings/per_type_drift_sensitivity.md`<br>`output/findings/per_type_record_row.md` |
+| 127 | `analyses/per_type/per_class_table.py` | `output/findings/per_type_generators_C3_{point}.md`<br>`output/findings/per_type_generators_M_{point}_{class}_{cluster}.md`<br>`output/findings/per_type_generators_{generator}.md`<br>`output/probe_latent_groups/per_type_table_C3_{point}.csv`<br>`output/probe_latent_groups/per_type_table_M_{point}_{class}_{cluster}.csv`<br>`output/probe_latent_groups/per_type_table_{generator}.csv` |
+| 128 | `analyses/probe_latent_groups/a0_predictive_summaries.py` | `output/findings/a0_predictive_summaries.md`<br>`output/probe_latent_groups/a0_predictive_summaries.csv`<br>`output/probe_latent_groups/spatial_clusters.json` |
+| 129 | `analyses/probe_latent_groups/per_class_resemblance.py` | `output/findings/per_class_resemblance.md`<br>`output/probe_latent_groups/per_class_resemblance.csv`<br>`output/probe_latent_groups/screen_site_fst.csv` |
+| 130 | `analyses/probe_latent_groups/resemblance_screen.py` | `output/findings/resemblance_screen.md`<br>`output/probe_latent_groups/resemblance_screen.csv`<br>`output/probe_latent_groups/resemblance_screen_summary.json` |
+| 131 | `analyses/probe_latent_groups/resemblance_stage2.py` | `output/findings/resemblance_stage2.md`<br>`output/probe_latent_groups/resemblance_stage2.csv` |
+| 132 | `analyses/probe_latent_groups/resemblance_variants.py` | `output/findings/resemblance_variants.md`<br>`output/probe_latent_groups/resemblance_variants.csv` |
+| 133 | `analyses/probe_latent_groups/screen_fst_unselected.py` | `output/findings/screen_fst_unselected.md` |
+| 134 | `analyses/probe_latent_groups/stress_cell.py` | `output/findings/stress_cell.md` |
+| 135 | `analyses/71_scale_sweep.py` | `output/findings/scale_sweep.csv`<br>`output/findings/scale_sweep.md` |
+| 136 | `analyses/73_connectivity_mixing.py` | `output/findings/connectivity_mixing.md` |
+| 137 | `analyses/75_groupness_surface.py` | `figures/fig13_groupness_surface.svg`<br>`output/findings/groupness_surface.md` |
+| 138 | `analyses/76_phase_recovery.py` | `figures/fig14_phase_recovery.svg`<br>`output/findings/phase_recovery.csv`<br>`output/findings/phase_recovery.md` |
+| 139 | `analyses/77_edge_effect.py` | `output/findings/edge_effect.md` |
+| 140 | `analyses/80_boundaries_in_settlement_gaps.py` | `figures/fig16_settlement_gaps.svg`<br>`output/findings/boundaries_in_settlement_gaps.md` |
+| 141 | `analyses/84_phases_as_groups.py` | `output/findings/phases_as_groups.md`<br>`output/phases_as_groups_runs.csv` |
+| 142 | `analyses/85_excess_robustness.py` | `output/findings/excess_robustness.md` |
+| 143 | `analyses/92_relaxations_by_scale.py` | `output/findings/relaxations_by_scale.md` |
+| 144 | `analyses/79_phases_under_drift.py` | `figures/fig15_phases_under_drift.svg`<br>`output/findings/phases_under_drift.csv`<br>`output/findings/phases_under_drift.md` |
+| 145 | `analyses/83_mainfort_replication.py` | `figures/fig17_mainfort_replication.svg`<br>`output/findings/mainfort_replication.md` |
+| 146 | `analyses/89_partition_power.py` | `figures/figS12_partition_power.svg`<br>`output/findings/partition_power.md`<br>`output/findings/partition_power_records.csv` |
+| 147 | `analyses/91_turnover_sensitivity.py` | `output/findings/turnover_sensitivity.md` |
+| 148 | `analyses/97_design_to_separate.py` | `output/design_to_separate_runs.csv`<br>`output/findings/design_to_separate.md` |
+| 149 | `analyses/86_partition_posterior.py` | `output/findings/partition_posterior.md` |
+| 150 | `analyses/94_mainfort2003_phase_map.py` | `figures/fig18_mainfort2003_phases.png` |
+| 151 | `analyses/95_phillips_assignment_impact.py` | `output/findings/phillips_assignment_impact.md` |
+| 152 | `analyses/96_assemblage_phase_fit.py` | `output/findings/assemblage_phase_fit.md` |
+| 153 | `analyses/99_phase_profiles.py` | `output/findings/phase_profiles.md` |
 
 ## Artifacts, by path
 
@@ -228,26 +229,27 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `figures/fig2_two_histories.svg` | `102_fig2_two_histories.py` |
 | `figures/fig2_validation.svg` | `make_figures.py` |
 | `figures/fig3_concept.png` | `29_concept_figure.py` |
-| `figures/fig3_phase_recovery_map.svg` | `103_fig3_phase_recovery_map.py` |
+| `figures/fig3_model_schematic.svg` | `103_fig3_model_schematic.py` |
 | `figures/fig4_ca_ordination.svg` | `make_figures.py` |
-| `figures/fig4_spatial_field.svg` | `104_fig4_spatial_field.py` |
+| `figures/fig4_phase_recovery_map.svg` | `104_fig4_phase_recovery_map.py` |
 | `figures/fig5_idss_network.svg` | `make_figures.py` |
-| `figures/fig5_per_class_drift.svg` | `105_fig5_per_class_drift.py` |
 | `figures/fig5_recovery.svg` | `21_signal_recovery.py` |
+| `figures/fig5_spatial_field.svg` | `105_fig5_spatial_field.py` |
 | `figures/fig6_empirical_trajectory.svg` | `21_signal_recovery.py`, `make_figures.py` |
-| `figures/fig6_rim_attributes.svg` | `106_fig6_rim_attributes.py` |
+| `figures/fig6_per_class_drift.svg` | `106_fig6_per_class_drift.py` |
 | `figures/fig7_idss_structure.svg` | `make_figures.py` |
-| `figures/fig7_latent_unit_recovery.svg` | `107_fig7_latent_unit_recovery.py` |
+| `figures/fig7_rim_attributes.svg` | `107_fig7_rim_attributes.py` |
+| `figures/fig8_latent_unit_recovery.svg` | `108_fig8_latent_unit_recovery.py` |
 | `figures/fig8_lmv_drift_groups.svg` | `50_revision_figures.py` |
-| `figures/fig8_ranksize.svg` | `make_figures.py` |
 | `figures/fig9_parkin_pullout.svg` | `50_revision_figures.py` |
 | `figures/figS12_partition_power.svg` | `89_partition_power.py` |
+| `figures/figS1_chronology.svg` | `11_chronology_14c.py` |
 | `figures/figS1_neiman.svg` | `13_neiman_distance_and_fit.py` |
 | `figures/figS2_drift_vs_groups.svg` | `50_revision_figures.py` |
+| `figures/figS2_ranksize.svg` | `make_figures.py` |
 | `figures/figS3_emergent_phases.svg` | `50_revision_figures.py` |
 | `figures/figS4_emergence_robustness.svg` | `50_revision_figures.py` |
 | `figures/figS5_dynamic.svg` | `42_figS6_dynamic.py` |
-| `figures/figS6_chronology.svg` | `11_chronology_14c.py` |
 | `figures/figS7_regional.png` | `30_regional_map.py` |
 | `figures/figS8_within_region.svg` | `50_revision_figures.py` |
 | `figures/figX_cmv_lmv_repertoire.png` | `27_cmv_lmv_repertoire.py` |

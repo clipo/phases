@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figure 3: what recovers the phases.
+"""Figure 4 (file stem fig3, numbered before the model schematic became Figure 3): what recovers the phases.
 
 (A) The 28 analyzed assemblages on the map with Phillips's (1970) phase areas,
 marked by the phase each takes, with the assemblages that Ward linkage on site
@@ -18,7 +18,7 @@ per-division densities behind the medians and shares are not committed, so the
 panel shows the table's medians and shares, which is what the text quotes.
 
 Usage:
-    .venv/bin/python analyses/103_fig3_phase_recovery_map.py
+    .venv/bin/python analyses/104_fig4_phase_recovery_map.py
 """
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 from matplotlib.patches import Patch  # noqa: E402
 
-FIG = "fig3_phase_recovery_map"
+FIG = "fig4_phase_recovery_map"
 SRC_MD = ROOT / "output" / "findings" / "phase_recovery.md"
 SRC_CSV = ROOT / "output" / "findings" / "phase_recovery.csv"
 SRC_GAPS = ROOT / "output" / "findings" / "boundaries_in_settlement_gaps.md"

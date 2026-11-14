@@ -18,7 +18,7 @@
 # any single failure and reports the count at the end. MANIFEST.md names the
 # script that writes every output.
 #
-# Not rerunnable here: analyses/rims/rim_r1.py (Figure 6's findings file,
+# Not rerunnable here: analyses/rims/rim_r1.py (Figure 7's findings file,
 # output/findings/rim_r1.md) reads an unpublished rim tabulation that is not
 # in the release; see data/README.md. The figure is redrawn from the committed
 # findings file in level 1.
@@ -56,17 +56,17 @@ if [ "$LEVEL" -ge 2 ]; then
   py scripts/build_analysis_matrix.py
   py analyses/16_basin_membership.py
   py analyses/82_minimum_sample_size.py                       # Table S1
-  py analyses/76_phase_recovery.py                            # Figure 3A, Table S2
+  py analyses/76_phase_recovery.py                            # Figure 4A, Table S2
   py analyses/79_phases_under_drift.py                        # Table S2
-  py analyses/80_boundaries_in_settlement_gaps.py             # Figure 3B
+  py analyses/80_boundaries_in_settlement_gaps.py             # Figure 4B
   py analyses/81_settlement_and_rivers.py                     # Table S3
   py analyses/11_chronology_14c.py                            # Figure S1
   py scripts/build_mainfort2003_sites.py
-  py analyses/83_mainfort_replication.py                      # Tables S7, S8
+  py analyses/83_mainfort_replication.py                      # Tables S9, S10
   py analyses/49_write_stan_data.py                           # data/stan/*.json
   # The neutral copying model: the screen, its second stage and the per-class
   # comparison (Table 1's neutral comparisons), then regional drift and the
-  # planted markers (Figure 5, Tables 2 and S6), then composition by collection.
+  # planted markers (Figure 6, Tables 2 and S6), then composition by collection.
   py analyses/probe_latent_groups/resemblance_screen.py
   py analyses/probe_latent_groups/resemblance_stage2.py
   py analyses/probe_latent_groups/per_class_resemblance.py
@@ -86,9 +86,9 @@ fi
 if [ "$LEVEL" -ge 3 ]; then
   echo "=== level 3: the Stan fits (every fit passes through R/fit_spatial.R) ==="
   run Rscript analyses/probe_latent_groups/refit_a0_basin.R           # A0 on the basin; Table S4
-  run Rscript analyses/probe_latent_groups/a0_intercept_prior.R       # Figure 4
-  run Rscript analyses/probe_latent_groups/validate_a1.R              # Figure 7A
-  run Rscript analyses/probe_latent_groups/validate_a3.R              # Figure 7B
+  run Rscript analyses/probe_latent_groups/a0_intercept_prior.R       # Figure 5
+  run Rscript analyses/probe_latent_groups/validate_a1.R              # Figure 8A
+  run Rscript analyses/probe_latent_groups/validate_a3.R              # Figure 8B
   run Rscript analyses/probe_latent_groups/a1_prior_check.R
   run Rscript analyses/probe_latent_groups/a3_pinned_range.R 6        # Table S5
   run Rscript analyses/probe_latent_groups/a3_pinned_range.R 12       # Table S5
@@ -99,13 +99,14 @@ fi
 echo "=== level 1: the figures, from the committed findings files ==="
 py analyses/93_phillips1970_phase_map.py           # Figure 1
 py analyses/102_fig2_two_histories.py              # Figure 2
-py analyses/103_fig3_phase_recovery_map.py         # Figure 3
-py analyses/104_fig4_spatial_field.py              # Figure 4
-py analyses/105_fig5_per_class_drift.py            # Figure 5
-py analyses/106_fig6_rim_attributes.py             # Figure 6
-py analyses/107_fig7_latent_unit_recovery.py       # Figure 7
-py analyses/11_chronology_14c.py                   # Figure S1 (figures/figS6_chronology)
-# Figure S2 (figures/fig8_ranksize) is drawn by analyses/make_figures.py,
+py analyses/103_fig3_model_schematic.py            # Figure 3
+py analyses/104_fig4_phase_recovery_map.py         # Figure 4
+py analyses/105_fig5_spatial_field.py              # Figure 5
+py analyses/106_fig6_per_class_drift.py            # Figure 6
+py analyses/107_fig7_rim_attributes.py             # Figure 7
+py analyses/108_fig8_latent_unit_recovery.py       # Figure 8
+py analyses/11_chronology_14c.py                   # Figure S1 (figures/figS1_chronology)
+# Figure S2 (figures/figS2_ranksize) is drawn by analyses/make_figures.py,
 # which also redraws the earlier version's house-style figures:
 #   $PY analyses/make_figures.py
 

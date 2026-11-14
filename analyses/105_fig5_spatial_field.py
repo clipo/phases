@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figure 4: the spatial field (A0), drawn from committed posterior summaries.
+"""Figure 5 (file stem fig4): the spatial field model, drawn from committed posterior summaries.
 
 Reads `output/findings/a0_intercept_prior.md`, the summary table of the three
 A0 fits that differ only in the class-intercept prior (Normal(0, 2) inherited;
@@ -12,7 +12,7 @@ are gitignored and absent, so medians and 90 percent intervals are plotted,
 not draws, and the caption says so. No model is refitted.
 
 Usage:
-    .venv/bin/python analyses/104_fig4_spatial_field.py
+    .venv/bin/python analyses/105_fig5_spatial_field.py
 """
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT / "analyses"))
 fs = importlib.import_module("figstyle")
 import matplotlib.pyplot as plt  # noqa: E402
 
-FIG = "fig4_spatial_field"
+FIG = "fig5_spatial_field"
 SRC = ROOT / "output" / "findings" / "a0_intercept_prior.md"
 CELL = re.compile(r"([-0-9.]+) \[([-0-9.]+), ([-0-9.]+)\]")
 PRIORS = [("P10", "Normal(0, 10), default", "o", "black"),

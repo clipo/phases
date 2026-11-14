@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figure 6: rim attributes beside decoration on the 19 sites with rim tabulations.
+"""Figure 7 (file stem fig6): rim attributes beside decoration on the 19 sites with rim tabulations.
 
 Drawn from the committed tables in `output/findings/rim_r1.md` (produced by
 `analyses/rims/rim_r1.py --readings`; the per-cell CSVs it read are gitignored
@@ -14,7 +14,7 @@ after linear adjustment on ranks for distance (panel C). The values the text
 quotes are asserted before drawing.
 
 Usage:
-    .venv/bin/python analyses/106_fig6_rim_attributes.py
+    .venv/bin/python analyses/107_fig7_rim_attributes.py
 """
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ fs = importlib.import_module("figstyle")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 
-FIG = "fig6_rim_attributes"
+FIG = "fig7_rim_attributes"
 SRC = ROOT / "output" / "findings" / "rim_r1.md"
 RIMS = [("interior bevel", "interior beveling"), ("exterior notching", "exterior notching"),
         ("lip flat", "lip form (flat)"), ("paste Bell (of N)", "Bell paste")]

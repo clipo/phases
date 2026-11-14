@@ -741,7 +741,7 @@ def fig6_empirical_trajectory() -> None:
 # ---------------------------------------------------------------------------
 # F7: Settlement mound-height ranking (basin set, like-for-like field) + bar inset
 # ---------------------------------------------------------------------------
-def fig8_ranksize() -> None:
+def figS2_ranksize() -> None:
     broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
@@ -784,7 +784,7 @@ def fig8_ranksize() -> None:
     corr = load_height_corrections(DATA / "raw" / "mound_height_corrections.csv")
     mound_ht, ht_changed = apply_height_corrections(mound_ht, corr)
     for sid, was, now in ht_changed:
-        print(f"fig8_ranksize: {sid} mound height {was:g} -> {now:g} ft "
+        print(f"figS2_ranksize: {sid} mound height {was:g} -> {now:g} ft "
               f"({corr.loc[normalize_grid(sid), 'source_key']})")
     if PARKIN_BROAD in bmatched.index:
         mound.loc[PARKIN_BROAD] = True
@@ -839,8 +839,8 @@ def fig8_ranksize() -> None:
     ax_bar.spines["right"].set_visible(False)
     ax_bar.axhline(0, color="0.8", linewidth=0.5)
 
-    save(fig, "fig8_ranksize")
-    print("fig8_ranksize.png written")
+    save(fig, "figS2_ranksize")
+    print("figS2_ranksize.png written")
 
 
 # ---------------------------------------------------------------------------
@@ -862,7 +862,7 @@ def main() -> None:
     fig7_idss_structure()
 
     print("Generating F7 (rank-size + inset)...")
-    fig8_ranksize()
+    figS2_ranksize()
 
 
     print("\nAll figures written to figures/.")

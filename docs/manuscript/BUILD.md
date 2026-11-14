@@ -1,12 +1,12 @@
 # Building the manuscript
 
 `MAIN_TEXT.md` and `SUPPLEMENTAL_TEXT.md` are edited directly (the template
-assembly used on 2026-09-09 was retired). The seven main-text figures are
+assembly used on 2026-09-09 was retired). The eight main-text figures are
 drawn by `analyses/93_phillips1970_phase_map.py` (Figure 1) and
-`analyses/102_fig2_two_histories.py` to `analyses/107_fig7_latent_unit_recovery.py`
-(Figures 2 to 7) from the committed findings files; Figure S1 is
-`figures/figS6_chronology.png` from `analyses/11_chronology_14c.py` and
-Figure S2 is `figures/fig8_ranksize.png` from `analyses/make_figures.py`.
+`analyses/102_fig2_two_histories.py` to `analyses/108_fig8_latent_unit_recovery.py`
+(Figures 2 to 8) from the committed findings files; Figure S1 is
+`figures/figS1_chronology.png` from `analyses/11_chronology_14c.py` and
+Figure S2 is `figures/figS2_ranksize.png` from `analyses/make_figures.py`.
 Regenerate any that are stale before building (the `.png` renderings are
 what pandoc embeds); then use the pandoc commands below.
 

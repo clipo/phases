@@ -12,7 +12,7 @@ Uses the Mainfort (2001) determinations in data/raw/14CDatesFromMainfort2001.xls
    median calendar age and correlate with CA1 seriation position. This converts
    the manuscript's weakest assumption (5 anchors, p=0.39) into a corpus-based test.
 
-Writes output/chronology_14c.md and figures/figS6_chronology.png. Read-only on
+Writes output/chronology_14c.md and figures/figS1_chronology.png. Read-only on
 the manuscript.
 
 Usage: .venv/bin/python analyses/11_chronology_14c.py
@@ -250,8 +250,8 @@ def main() -> None:
                          fontsize=6, xytext=(4, 3), textcoords="offset points")
         axR.set_xlabel("CA1 seriation position")
         axR.set_ylabel("Pooled median cal AD")
-    save(fig, "figS6_chronology")
-    L.append("Figure: figures/figS6_chronology.png (CA1 vs pooled median calendar age, "
+    save(fig, "figS1_chronology")
+    L.append("Figure: figures/figS1_chronology.png (CA1 vs pooled median calendar age, "
              "point size ~ n dates; the SPD panel was removed 2026-11-03).")
 
     OUT.write_text("\n".join(L), encoding="utf-8")

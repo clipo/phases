@@ -40,7 +40,7 @@ social units.
 The pipeline has three levels. Each level reads what the one before it
 committed, so a reader can stop at any of them.
 
-1. **Figures from the committed findings (minutes, Python only).** The seven
+1. **Figures from the committed findings (minutes, Python only).** The eight
    main-text figures and Figure S1 are drawn from the findings files under
    `output/findings/` and from the data. No model is refitted and nothing is
    simulated. Each figure script asserts the values the text quotes before it
@@ -62,10 +62,10 @@ committed, so a reader can stop at any of them.
    tail effective sample size, divergences, treedepth saturation, E-BFMI).
 
 One analysis cannot be rerun from this repository. The rim-attribute analysis
-(`analyses/rims/rim_r1.py`, Figure 6) reads lip-form and paste counts from an
+(`analyses/rims/rim_r1.py`, Figure 7) reads lip-form and paste counts from an
 unpublished tabulation by Robert Mainfort, which we are not yet free to
 release. Its findings file, `output/findings/rim_r1.md`, is committed and
-Figure 6 redraws from it; the counts for beveling and notching that come from
+Figure 7 redraws from it; the counts for beveling and notching that come from
 his published Table 1 are in `data/raw/mainfort2003_rim_table1_counts.csv`.
 See `data/README.md`.
 
@@ -93,16 +93,16 @@ one stem under `figures/`. The `.png` is what the manuscript embeds.
 |---|---|---|---|
 | 1 | `analyses/93_phillips1970_phase_map.py` | `fig1_phillips1970_phases` | `data/raw/phillips1970_phase_outlines.csv`, the analysis matrix |
 | 2 | `analyses/102_fig2_two_histories.py` | `fig2_two_histories` | nothing; an illustrative schematic from a fixed seed |
-| 3 | `analyses/103_fig3_phase_recovery_map.py` | `fig3_phase_recovery_map` | `output/findings/phase_recovery.md`, `phase_recovery.csv`, `boundaries_in_settlement_gaps.md` |
-| 4 | `analyses/104_fig4_spatial_field.py` | `fig4_spatial_field` | `output/findings/a0_intercept_prior.md` |
-| 5 | `analyses/105_fig5_per_class_drift.py` | `fig5_per_class_drift` | `output/findings/per_type_drift_sensitivity.md` |
-| 6 | `analyses/106_fig6_rim_attributes.py` | `fig6_rim_attributes` | `output/findings/rim_r1.md` |
-| 7 | `analyses/107_fig7_latent_unit_recovery.py` | `fig7_latent_unit_recovery` | `output/findings/a1_validation.md`, `a3_validation.md` |
-| S1 | `analyses/11_chronology_14c.py` | `figS6_chronology` | `data/raw/14CDatesFromMainfort2001.csv`, `data/raw/intcal20.14c` |
-| S2 | `analyses/make_figures.py` | `fig8_ranksize` | the settlement tables under `data/` |
+| 3 | `analyses/103_fig3_model_schematic.py` | `fig3_model_schematic` | the analysis matrix (site coordinates); a schematic from a fixed seed |
+| 4 | `analyses/104_fig4_phase_recovery_map.py` | `fig4_phase_recovery_map` | `output/findings/phase_recovery.md`, `phase_recovery.csv`, `boundaries_in_settlement_gaps.md` |
+| 5 | `analyses/105_fig5_spatial_field.py` | `fig5_spatial_field` | `output/findings/a0_intercept_prior.md` |
+| 6 | `analyses/106_fig6_per_class_drift.py` | `fig6_per_class_drift` | `output/findings/per_type_drift_sensitivity.md` |
+| 7 | `analyses/107_fig7_rim_attributes.py` | `fig7_rim_attributes` | `output/findings/rim_r1.md` |
+| 8 | `analyses/108_fig8_latent_unit_recovery.py` | `fig8_latent_unit_recovery` | `output/findings/a1_validation.md`, `a3_validation.md` |
+| S1 | `analyses/11_chronology_14c.py` | `figS1_chronology` | `data/raw/14CDatesFromMainfort2001.csv`, `data/raw/intcal20.14c` |
+| S2 | `analyses/make_figures.py` | `figS2_ranksize` | the settlement tables under `data/` |
 
-The two supplement figures keep the file names they had in the earlier version
-of the paper. The tables of the main text and supplement come from these
+The tables of the main text and supplement come from these
 findings files:
 
 | Table | Findings file | Produced by |
@@ -114,7 +114,9 @@ findings files:
 | S4 | `output/findings/a0_basin_refit.md` | `analyses/probe_latent_groups/refit_a0_basin.R` |
 | S5 | `output/findings/a3_validation.md`, `a3_pinned_rho6.md`, `a3_pinned_rho12.md` and their `_alphaN0-2` siblings | `validate_a3.R`, `a3_pinned_range.R` |
 | S6 | `output/findings/per_type_drift_sensitivity.md` | `analyses/per_type/drift_sensitivity_figure.py` |
-| S7, S8 | `output/findings/mainfort_replication.md` | `analyses/83_mainfort_replication.py` |
+| S7 | `output/findings/type_origination.md` | `analyses/per_type/type_origination.py` |
+| S8 | `output/findings/type_origination_calibration.md` | `analyses/per_type/type_origination_calibration.py` |
+| S9, S10 | `output/findings/mainfort_replication.md` | `analyses/83_mainfort_replication.py` |
 
 Tables 1 and 3 of the main text are prose tables with no computed cells.
 
@@ -181,8 +183,8 @@ Rscript analyses/00_setup/01_verify_toolchain.R    # compiles and samples a mode
 
 `--stan` runs `analyses/probe_latent_groups/refit_a0_basin.R` (A0 on the basin
 and the prior defense of Table S4), `a0_intercept_prior.R` (the three
-intercept priors of Figure 4), `validate_a1.R` and `validate_a3.R` (the
-recovery tests of Figure 7), `a1_prior_check.R`, `a3_pinned_range.R` at 6 and
+intercept priors of Figure 5), `validate_a1.R` and `validate_a3.R` (the
+recovery tests of Figure 8), `a1_prior_check.R`, `a3_pinned_range.R` at 6 and
 12 km (Table S5), and then the Python summaries that read the fit records,
 `a0_predictive_summaries.py` and `a3_prior_comparison.py`. Each script sets
 `options(mc.cores = 4L)`. The versions the committed findings were produced

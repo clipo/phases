@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Figure 7: recovery of known structure on this site geometry (A1 and A3).
+"""Figure 8 (file stem fig7): recovery of known structure on this site geometry (latent-unit and barrier models).
 
 Drawn from the committed recovery tables; no model is refitted.
 
@@ -19,7 +19,7 @@ combinations are tabulated in `a3_prior_comparison.md` and the supplement; this
 panel shows the one named in the caption.
 
 Usage:
-    .venv/bin/python analyses/107_fig7_latent_unit_recovery.py
+    .venv/bin/python analyses/108_fig8_latent_unit_recovery.py
 """
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ fs = importlib.import_module("figstyle")
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 
-FIG = "fig7_latent_unit_recovery"
+FIG = "fig8_latent_unit_recovery"
 SRC_A1 = ROOT / "output" / "findings" / "a1_validation.md"
 SRC_A3 = ROOT / "output" / "findings" / "a3_validation.md"
 POST = re.compile(r"([-0-9.]+) \[([-0-9.]+), ([-0-9.]+)\]")
