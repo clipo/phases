@@ -101,7 +101,11 @@ def test_model_comparison_tells_a_restricted_record_from_an_unrestricted_one(tmp
     stand above it. A comparison that always found an excess, or never did, fails one half."""
     free = cp.compare_with_model(_made_by_the_model(tmp_path, 1.0), RATES, reps=80, seed=500)["rows"][0]
     cut = cp.compare_with_model(_made_by_the_model(tmp_path, 0.03), RATES, reps=80, seed=500)["rows"][0]
-    assert free["reaching"] / free["runs"] > 0.05
+    # "Inside the model's own range" is the 95 percent range the table reports (2.5th to 97.5th
+    # percentile of the runs), so the unrestricted record must not sit above its 97.5th percentile:
+    # more than 2.5 percent of runs reach it. A threshold of 0.05 (one-sided) was tighter than the
+    # range the tool reports and flipped with the NumPy multinomial change (3 of 80 under 2.4.6).
+    assert free["reaching"] / free["runs"] > 0.025
     assert cut["reaching"] / cut["runs"] < 0.05 and cut["observed"] > 3 * free["observed"]
 
 

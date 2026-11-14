@@ -68,3 +68,7 @@ the Drive copy first, edit that, and write both.
 On 2026-09-21 the Drive `figures/` folder was four days stale and did not hold
 Figure 12 at all, while the `.md` files were current: the manuscript on Drive
 referenced a figure that was not there. That is what this script exists to stop.
+
+## Submission figure package
+
+`.venv/bin/python scripts/build_submission_figures.py` writes `docs/manuscript/submission/figures/`: one LZW TIFF (RGB, 300 dpi, the manuscript's render flattened onto white) and one vector PDF per figure, named `LipoFig1` to `LipoFig7`, `LipoFigS1` and `LipoFigS2` as the Cambridge Journals Artwork Guide asks, with `MANIFEST.md` recording source file, producing script, pixel size, printed width and SHA-256. The binaries are gitignored and the package is excluded from the public sync; rebuild after any figure script runs. The cover letter is `COVER_LETTER.md`, built to docx with the same reference document as the main text.

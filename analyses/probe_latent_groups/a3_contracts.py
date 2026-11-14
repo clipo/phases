@@ -73,6 +73,11 @@ def between_fst(y, reg):
     return float(cultural_fst(np.array([y[reg == g].sum(0) for g in np.unique(reg)])))
 
 
+def choose_line(labels, cands) -> dict:
+    """Placement L: the candidate line that best agrees with Phillips's Parkin-versus-rest labels."""
+    return pl.best_line_for(np.where(np.asarray(labels) == "Parkin", 1, 2), cands)
+
+
 def main() -> int:
     counts, coords = load_curated(); fp = data_fingerprint(counts, coords)
     y_real = counts.to_numpy(int); totals = y_real.sum(1); xy = coords.to_numpy(float); D = geo_km(xy)
@@ -83,8 +88,7 @@ def main() -> int:
     names = sorted(set(labels)); phillips = np.array([names.index(v) + 1 for v in labels])
     g1 = pl.kmeans2_regions(xy)
     cands = pl.candidate_lines(xy)
-    parkin = np.where(labels == "Parkin", 1, 2)
-    line = pl.best_line_for(parkin, cands)
+    line = choose_line(labels, cands)
     placements = {"G1": g1, "L": line["regions"]}
     base = json.loads((OUT / "basin_composition.json").read_text())
     a0_fields = {k: v for k, v in base.items() if not k.startswith("_") and k != "y"}

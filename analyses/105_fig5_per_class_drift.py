@@ -158,15 +158,15 @@ def main() -> int:
     handles = [Line2D([0], [0], color="0.35", lw=1.3, label="neutral median (band: 10th to 90th percentile)"),
                Line2D([0], [0], color="black", ls="--", lw=1.2, label="the record"),
                Line2D([0], [0], color="0.35", ls="-.", lw=1.0, label="neutral records outside their own band (B)"),
-               Line2D([0], [0], color="0.0", ls="-", lw=0.9, marker="o", ms=2.6, label="planted, larger cluster (17 sites)"),
-               Line2D([0], [0], color="0.0", ls=":", lw=0.9, marker="o", ms=2.6, label="planted, smaller cluster (11 sites)"),
+               Line2D([0], [0], color="0.0", ls="-", lw=0.9, marker="o", ms=2.6, label="marker added, larger cluster (17 sites)"),
+               Line2D([0], [0], color="0.0", ls=":", lw=0.9, marker="o", ms=2.6, label="marker added, smaller cluster (11 sites)"),
                Line2D([0], [0], color="0.72", lw=2, label="multiplier 1.5"),
                Line2D([0], [0], color="0.45", lw=2, label="multiplier 2"),
                Line2D([0], [0], color="0.0", lw=2, label="multiplier 3"),
                Line2D([0], [0], marker="D", color="none", markerfacecolor="black", markeredgecolor="white", ms=6,
                       label="the record (C)"),
                Line2D([0], [0], marker="^", color="none", markerfacecolor="white", markeredgecolor="black", ms=6,
-                      label="planted Walls Engraved, multiplier 3, larger / smaller cluster (C)")]
+                      label="Walls Engraved with a marker, multiplier 3, larger / smaller cluster (C)")]
     fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=6.4, frameon=False, bbox_to_anchor=(0.5, -0.01))
     fig.subplots_adjust(bottom=0.12, top=0.96, left=0.09, right=0.98)
     png = fs.save_all(fig, FIG, close=True)

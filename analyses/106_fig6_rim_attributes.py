@@ -7,7 +7,8 @@ and absent here). Nothing is recomputed. Section A of that file supplies the
 site-weighted moment F of each attribute and of the three common decorated
 classes on the same 19 sites, with the neutral band at the primary operating
 point, window T1 (panel A); section B the posterior rank correlation of each
-site frequency with latitude under a Beta(1/2, 1/2) prior per site (panel B);
+frequency with latitude, under a Beta(1/2, 1/2) prior per site for the rim
+attributes and a Dirichlet(1/2) composition for the decorated classes (panel B);
 section C the rank correlation between rim and decoration pairwise differences
 after linear adjustment on ranks for distance (panel C). The values the text
 quotes are asserted before drawing.

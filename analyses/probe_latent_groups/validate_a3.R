@@ -58,7 +58,7 @@ L <- c("# A3 identification test with the placement supplied (step 6b; design se
        sprintf("A0 against A3 with omega fixed at 0 on `a3_own_G1_om0_r1`: largest |z| over %d shared posterior means %.2f at `%s` (threshold 3).", length(zsc), max(abs(zsc)), p0$variable[which.max(abs(zsc))]),
        diag_line(r0$diag, "A0"), diag_line(r3f$diag, "A3 fixed 0"), "",
        "## omega against the truth, placement supplied", "",
-       "Prior half-Normal(0, 2): median 1.35, 90 percent below 3.3. A posterior that stays near that is the prior, not a detection.", "",
+       "Prior half-Normal(0, 2): median 1.35, 90 percent below 3.3. A posterior that stays near that, whatever the planted value, has learned little about omega.", "",
        "| record | kind | placement | truth omega / leak / rho | between-region F_ST | omega post | sigma | rho | tau | share | gate | rung | s |",
        "|---|---|---|---|---|---|---|---|---|---|---|---|---|")
 for (x in rows) {

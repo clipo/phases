@@ -14,6 +14,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.stats import betabinom
 
 ROOT = Path(__file__).resolve().parents[2]
 for _p in (ROOT, ROOT / "analyses" / "per_type"):
@@ -23,6 +24,7 @@ for _p in (ROOT, ROOT / "analyses" / "per_type"):
 import readings as rd
 
 from mls_emergence.rims import stats as st
+from mls_emergence.signatures.variance import moment_f
 
 OUTD = ROOT / "output" / "probe_latent_groups"
 FINDINGS = ROOT / "output" / "findings" / "rim_r1.md"
@@ -231,7 +233,10 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
           (f"Paste is a type-level distinction of the 1951 typology (Bell Plain against Neeley's Ferry Plain) and is not independent of how the "
            f"phases were drawn; the file's paste percentages leave {pf['unresolved_rims']} of {int(rims['N'].sum())} rims unresolved, which are not "
            "negative Bell observations. The tables above read Bell of N; here Bell is also given with the named pastes as denominator (two "
-           f"denominators). Bell of N: mean site frequency {np.nanmean(pf['bell_of_N']):.3f}; Bell of named: {np.nanmean(pf['bell_of_named']):.3f}{named_note}."), ""]
+           f"denominators). Bell of N: mean site frequency {np.nanmean(pf['bell_of_N']):.3f}; Bell of named: {np.nanmean(pf['bell_of_named']):.3f}{named_note}. "
+           f"Moment F of Bell: {moment_f(np.column_stack([rims['paste_bell'], rims['N'] - rims['paste_bell']]))[0]:.4f} of N; "
+           f"{moment_f(np.column_stack([rims['paste_bell'], rims['paste_nf']]))[0]:.4f} of the named pastes, for which no neutral band was computed. "
+           f"Rims in neither named paste run from {100 * (rims['paste_other'] / rims['N']).min():.0f} to {100 * (rims['paste_other'] / rims['N']).max():.0f} percent by site; what they are is not established."), ""]
     # ---- E. not read
     L += ["## E. Published attributes reported but not read", "", "| attribute | rims | sites with any (of 19) | pooled frequency |", "|---|---|---|---|"]
     for a in NOT_READ:
@@ -243,21 +248,22 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
     L += ["## F. The priors (rule 20)", "",
           (f"Beta(1/2, 1/2) on each site frequency: one pseudo-observation in total, weight 1/(N + 1) on the posterior mean ({1/(N.min()+1):.3f} at "
            f"{N.min()} rims, {1/(N.max()+1):.4f} at {N.max()}); direction toward 1/2. Observable prior predictive, Beta-Binomial(N, 1/2, 1/2) at each "
-           "site's N: 5th, 50th and 95th percentiles of the predicted count against the observed count for the three read attributes:"), "",
-          "| site | N | prior predictive count (5%, 50%, 95%) | bevel | notching | lip flat |", "|---|---|---|---|---|---|"]
+           "site's N: 5th, 50th and 95th percentiles of the predicted count against the observed count (bevel and notching are published counts; per-site lip-form counts come from Mainfort's unpublished file and are not printed):"), "",
+          "| site | N | prior predictive count (5%, 50%, 95%) | bevel | notching |", "|---|---|---|---|---|"]
     for i, s in enumerate(sites):
-        L.append(f"| {s} | {N[i]} | {int(pp[i,0])}, {int(pp[i,1])}, {int(pp[i,2])} | {int(rims.loc[s, 'beveled'])} | {int(rims.loc[s, 'notched_exterior'])} | {int(rims.loc[s, 'lip_flat'])} |")
+        L.append(f"| {s} | {N[i]} | {int(pp[i,0])}, {int(pp[i,1])}, {int(pp[i,2])} | {int(rims.loc[s, 'beveled'])} | {int(rims.loc[s, 'notched_exterior'])} |")
     obs_counts = rims[list(READ_BY_F)].to_numpy(int); inside = int(((obs_counts >= pp[:, [0]]) & (obs_counts <= pp[:, [2]])).sum())
     span = (pp[:, 2] - pp[:, 0]) / N
     L += ["", (f"The 5th to 95th percentile interval of the predicted count spans {100 * span.min():.0f} to {100 * span.max():.0f} percent of N across the "
-               f"sites and contains {inside} of the {obs_counts.size} observed counts: the prior concentrates the predicted count nowhere, so it does not "
+               f"sites and contains {inside} of the {obs_counts.size} observed counts. The width reflects the prior's shape: Beta(1/2, 1/2) favors frequencies near 0 and 1, and at N = 27 it puts probability "
+               f"{2 * betabinom.pmf(0, 27, 0.5, 0.5):.3f} on the two endpoint counts against {2 / 28:.3f} under Beta(1, 1). It does not "
                "already resemble the data. The Beta(1, 1) sensitivity medians are in the last columns of sections B and C."), ""]
     if recovery:
         reps, rec_draws = 20, 1000; rec = st.recovery_program(D, lat, lon, N, replicates=reps, draws=rec_draws, seed=7)
         L += [(f"Recovery program: {reps} replicates at three true configurations on these {len(N)} sites' totals, {rec_draws:,} draws per fit, 90 percent "
                f"intervals; a coverage proportion at {reps} replicates has binomial standard deviation {np.sqrt(0.9 * 0.1 / reps):.3f} at a true rate of 0.9, "
                "so the table resolves gross failure, not the nominal rate."), "",
-              "| configuration | true rho latitude | coverage of rho latitude | coverage of rho pair distance | sign recovered |", "|---|---|---|---|---|"]
+              "| configuration | true rho latitude | coverage of rho latitude | coverage of rho pair distance | sign of rho latitude recovered |", "|---|---|---|---|---|"]
         for name, r in rec.items():
             L.append(f"| {name} | {r['truth_rho_latitude']:+.2f} | {r['coverage']:.2f} | {r['coverage_pair_distance']:.2f} | {r['sign_recovered']:.2f} |")
         L.append("")

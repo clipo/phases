@@ -96,14 +96,14 @@ is the run from seed 0 (the seed range in the first table shows whether the star
 
 ## Reading
 
-Partitions carrying the phases' own group sizes with boundaries placed at random agree with the phases at a median ARI of 0.485 (400 draws), which is what
-the group sizes manufacture on their own.
+Partitions carrying the phases' own group sizes, allocated around random centers on the map, agree with the phases at a median ARI of 0.485 (400 draws), which is what
+the group sizes plus geographic allocation produce.
 
 Under the chi-square transform, which carries no free parameter, k-means, on the 26 assemblages
 assigned directly: the site map alone, 0.480; the best agreement, 0.740, at a composition weight of 0.25; the pottery alone, 0.358.
 
 How to read the three values. A scheme that divides the map would be recovered by
-the map alone, well above what the group sizes manufacture, and adding the pottery
+the map alone, well above that reference, and adding the pottery
 would not help. A scheme that reads the pottery would be recovered better as the
 pottery enters. This file states the values and draws no conclusion from them.
 

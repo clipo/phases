@@ -55,7 +55,7 @@ def committed_values() -> dict:
                                          and float(r["w"]) == w and r["algorithm"] == alg)["ari_mapped"])
     md = SRC_MD.read_text()
     m = re.search(r"\| chisq \| pottery alone \| [0-9.]+ \| \*\*([0-9.]+)\*\* \|", md)
-    rnd = re.search(r"boundaries placed at random agree with the phases at a median ARI of ([0-9.]+)", md)
+    rnd = re.search(r"around random centers on\s+the map, agree with the phases at a median ARI of ([0-9.]+)", md)
     assert m and rnd, "phase_recovery.md no longer carries the rows this figure reads"
     return {"ward_map": pick("raw", 0.0, "ward"), "kmeans_map": pick("raw", 0.0, "kmeans"),
             "composition": float(m.group(1)), "random": float(rnd.group(1))}

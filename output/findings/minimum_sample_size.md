@@ -19,4 +19,4 @@ Observed between-cluster F_ST at five clusters, 28 assemblages: **0.0307**.
 At 75 sherds the artifact's median is 14 percent of the observed differentiation and its 95th
 percentile (0.0195) falls below it; above that the bias shrinks slowly. Mainfort (2003) kept sites with 800
 or more sherds in all, and decorated sherds are 13 percent of his table, so his rule is about 100
-decorated sherds. The analytic expectation for two equal samples from one profile is close to 1/n.
+decorated sherds. To leading order the expected plug-in F_ST for two equal samples from one profile is 1/(2n); the table reports medians, which lie below it.

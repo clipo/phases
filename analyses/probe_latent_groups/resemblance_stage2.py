@@ -6,7 +6,7 @@ and the inherited operating point moved across the 10 percent richness
 tolerance between two seed draws (0.034 against 0.106), so 6 seeds are too
 few to decide an operating point. This script re-runs, with 50 fresh seeds
 each, every cell that was matched on the three diversity summaries and whose
-two-cluster F_ST median lay within 25 percent of the observed value, plus the
+two-cluster F_ST median lay within 50 percent of the observed value, plus the
 inherited operating point, and reports means with their across-seed standard
 errors, the F_ST distribution, and the four-summary loss (three diversity
 relative errors plus the F_ST relative error, squared and summed). It makes

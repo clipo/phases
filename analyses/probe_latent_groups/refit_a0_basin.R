@@ -133,7 +133,10 @@ recovery <- list()
 for (f in rec_files) {
   tag <- sub("^a0_recovery_(.*)\\.json$", "\\1", basename(f))
   d <- read_stan_data(f); truth <- attr(d, "provenance")$`_truth`
-  r <- fit_cached(paste0("a0_recovery_", tag), MODEL, d, gated = GATED, chains = 4L, seed = SEED, sm = sm)
+  # Third rung added 2026-11-03: under the Normal(0, 10) intercept prior the share 0.9, rho 5 km
+  # record stopped at rung 2 with 11 divergences and tail ESS 205 on rho (rule 17: fix, not report).
+  r <- fit_cached(paste0("a0_recovery_", tag), MODEL, d, gated = GATED, chains = 4L, seed = SEED, sm = sm,
+                  ladder = c(GP_LADDER, list(list(iter = 12000L, warmup = 6000L, adapt_delta = 0.999, max_treedepth = 14L))))
   note(paste0("a0_recovery_", tag), r); cat(diag_line(r$diag, tag), "\n")
   pt <- post_table(r$fit, c("spatial_share", "rho", "sigma", "tau[1]"))
   tv <- c(spatial_share = truth$spatial_share, rho = truth$rho, sigma = truth$sigma, `tau[1]` = truth$tau)
@@ -161,8 +164,9 @@ L <- c(
   sprintf("Geometry (recomputed by the fingerprint): maximum pairwise %.2f km, median pairwise %.2f km, nearest-neighbor min %.2f, median %.2f, max %.2f km. Provisional coordinates: %s.",
           prov$max_pairwise_km, prov$median_pairwise_km, prov$nearest_neighbor_min_km, prov$nearest_neighbor_median_km,
           prov$nearest_neighbor_max_km, paste(unlist(prov$provisional_coordinates), collapse = ", ")),
-  sprintf("Prior in the contract: `prior_rho_type = %d` (1 inverse-gamma, 2 proportional to 1/rho, 3 uniform), rho on [%.1f, %.0f] km, half-Normal(0, %.1f) on sigma and tau, kernel %d. This settles the lineage question of inventory row 14: the contract Carl's basin fit read carries the 1/rho prior; only the two repair scripts switched to the inverse-gamma.",
-          dat$prior_rho_type, dat$rho_lo, dat$rho_hi, dat$prior_scale_sd, dat$kernel),
+  sprintf("Prior in the contract: `prior_rho_type = %d` (1 inverse-gamma, 2 proportional to 1/rho, 3 uniform), rho on [%.1f, %.0f] km, half-Normal(0, %.1f) on sigma and tau, Normal(%s, %.0f) on the class intercepts (`prior_alpha_mean`, `prior_alpha_sd`; D25 made the intercept prior data on 2026-10-18, default Normal(0, 10); the 2026-10-16 run of this script used the hard-coded Normal(0, 2) and is kept as `a0_basin_refit_alphaN0-2.md`), kernel %d. This settles the lineage question of inventory row 14: the contract Carl's basin fit read carries the 1/rho prior; only the two repair scripts switched to the inverse-gamma.",
+          dat$prior_rho_type, dat$rho_lo, dat$rho_hi, dat$prior_scale_sd,
+          if (all(dat$prior_alpha_mean == 0)) "0" else "pooled log-odds", dat$prior_alpha_sd, dat$kernel),
   sprintf("Software: %s; rstan %s; StanHeaders %s; posterior %s; loo %s; bayesplot %s. Stan source sha256 `%s`; fit layer sha256 `%s`.",
           ver$R, ver$rstan, ver$StanHeaders, ver$posterior, ver$loo, ver$bayesplot, stan_source_hash(MODEL)$sha256, layer_hash()),
   "",

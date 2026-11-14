@@ -5,9 +5,10 @@ The St. Francis basin assemblages sit in clusters separated by stretches with
 few or no collected assemblages. This figure shows why that geometry limits
 what the record can say (register D24; recovery tests of A1 and A3 in
 `a1_validation.md` and `a3_validation.md`): the SAME sixteen sampled values
-are consistent with a gradient in a class's share across the basin (A) and
-with a step at the gap between the clusters (B). The two histories differ only
-where no assemblage was collected. Everything drawn here is synthetic, from a
+are drawn beside a gradient in a class's share across the basin (A) and a step
+at the gap between the clusters (B). The curves differ at the sampled positions
+as well as in the gap (largest difference asserted below), so this shows what
+the gap leaves unobserved, not that the two are identical. Everything drawn here is synthetic, from a
 fixed seed; the caption labels it illustrative and scopes the point to this
 sample.
 
@@ -42,6 +43,9 @@ def main() -> int:
     gradient = lambda t: -1.4 + slope * t  # noqa: E731
     y = gradient(x) + rng.normal(0.0, 0.22, x.size)
     m_a, m_b = y[:N_PER_CLUSTER].mean(), y[N_PER_CLUSTER:].mean()
+    step_at_sites = np.r_[np.full(N_PER_CLUSTER, m_a), np.full(N_PER_CLUSTER, m_b)]
+    largest = float(np.abs(gradient(x) - step_at_sites).max())
+    assert round(largest, 2) == 0.52, largest  # the caption quotes this value
 
     t = np.linspace(0, 100, 400)
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.9), sharey=True)

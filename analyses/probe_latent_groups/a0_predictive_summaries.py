@@ -47,7 +47,13 @@ def spatial_clusters(coords: np.ndarray) -> np.ndarray:
 
 def summaries(m: np.ndarray, labels: np.ndarray, diversity) -> dict:
     d = diversity(m)
-    d["fst_clusters"] = float(cultural_fst(np.array([m[labels == g].sum(0) for g in np.unique(labels)])))
+    pooled = np.array([m[labels == g].sum(0) for g in np.unique(labels)])
+    if (pooled.sum(0) > 0).sum() < 2:
+        # The pooled record holds one class, so there is no diversity to partition (cultural_fst raises).
+        # Under a wide intercept prior the prior predictive produces such records; they are counted, not dropped silently.
+        d["fst_clusters"] = float("nan")
+    else:
+        d["fst_clusters"] = float(cultural_fst(pooled))
     return d
 
 
@@ -84,8 +90,8 @@ def main() -> int:
             for s in SUMMARIES:
                 vals[s].append(sm[s])
         for s in SUMMARIES:
-            v = np.asarray(vals[s], float); v = v[np.isfinite(v)]
-            rows.append({"kind": kind, "summary": s, "n_draws": int(len(v)), "median": float(np.median(v)),
+            v = np.asarray(vals[s], float); n_all = len(v); v = v[np.isfinite(v)]
+            rows.append({"kind": kind, "summary": s, "n_draws": int(len(v)), "n_undefined": int(n_all - len(v)), "median": float(np.median(v)),
                          "q5": float(np.quantile(v, .05)), "q95": float(np.quantile(v, .95)),
                          "observed": obs[s], "frac_below_obs": float(np.mean(v < obs[s]))})
     tab = pd.DataFrame(rows)
@@ -105,6 +111,11 @@ def main() -> int:
         p = tab[(tab.kind == "prior") & (tab.summary == s)].iloc[0]; q = tab[(tab.kind == "posterior") & (tab.summary == s)].iloc[0]
         cell = lambda r: f"{r['median']:.4f} [{r['q5']:.4f}, {r['q95']:.4f}] | {r['frac_below_obs']:.2f}"
         L.append(f"| {LABEL[s]} | {obs[s]:.4f} | {cell(p)} | {cell(q)} |")
+    undef = tab[tab.n_undefined > 0]
+    if len(undef):
+        L += ["", "Undefined draws, excluded from the medians and intervals above: " + "; ".join(
+            f"{int(r.n_undefined)} of {int(r.n_draws + r.n_undefined)} {r.kind}-predictive draws for {LABEL[r.summary]} "
+            "(the pooled record holds a single class, so there is no diversity to partition)" for r in undef.itertuples()) + "."]
     reading = ("Reading: the prior-predictive column says what the priors alone generate on this geometry and these sherd totals; "
                "a fraction near 0 or 1 means the observed value sits in a tail of the prior predictive. The posterior-predictive "
                "column is the ordinary predictive check of the fitted model on the same four summaries.")

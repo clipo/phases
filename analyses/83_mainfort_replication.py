@@ -174,7 +174,7 @@ def main() -> int:
     x = np.arange(len(WEIGHTS))
     ax.plot(x, [r[1] for r in rec], color="0.1", marker="o", ms=3.5, lw=1.4, label="Mainfort's scheme")
     ax.fill_between(x, [r[2] for r in rec], [r[3] for r in rec], color="0.85", label="range over seeds")
-    ax.axhline(np.median(rnd_ari), color="0.55", ls="-.", lw=1, label="same sizes, boundaries at random")
+    ax.axhline(np.median(rnd_ari), color="0.55", ls="-.", lw=1, label="same sizes, around random centers")
     ax.set_xticks(x)
     ax.set_xticklabels(["map\nalone" if w == 0 else ("pottery\nalone" if not np.isfinite(w) else f"{w:g}")
                         for w in WEIGHTS], fontsize=6)

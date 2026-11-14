@@ -62,15 +62,15 @@ EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh",
                  "SIMULATED_REVIEWS.md", "COVER_LETTER.md", "FIGURE_PLAN.md",
                  "references-citation-audit.md"}
 # Tracked prefixes inside a managed prefix that are not published.
-EXCLUDE_PREFIXES = ["docs/manuscript/revisions/"]   # the September 2026 revision archive
+EXCLUDE_PREFIXES = ["docs/manuscript/revisions/",   # the September 2026 revision archive
+                    "docs/manuscript/submission/"]   # journal submission package (figures renamed for upload)
 # Data files the code reads that are NOT published, with the reason. The sync
-# removes them from the release if present. Mainfort's rim-attribute file is
-# unpublished data he shared with the authors; publishing it, and the counts
-# derived from it, needs his consent (STATUS.md, 2026-10-31 and 2026-11-01).
-WITHHELD = {
-    "data/raw/mainfort_miss_rims.xls": "Mainfort's unpublished rim file; consent pending",
-    "data/processed/mainfort_rim_counts.csv": "derived from mainfort_miss_rims.xls; consent pending",
-}
+# removes them from the release if present. Empty since 2026-11-14: Mainfort's
+# unpublished rim file (data/raw/mainfort_miss_rims.xls), the counts derived
+# from it (data/processed/mainfort_rim_counts.csv) and
+# output/findings/rim_table_structure.md were withheld from 2026-10-31 pending
+# his consent, and the author (Lipo) ruled on 2026-11-14 that they are shared.
+WITHHELD: dict[str, str] = {}
 # Built manuscript PDFs: gitignored here, published when present on disk so a
 # reader has the rendered paper beside the sources and the docx.
 BUILT_PDFS = ["docs/manuscript/MAIN_TEXT.pdf", "docs/manuscript/SUPPLEMENTAL_TEXT.pdf"]

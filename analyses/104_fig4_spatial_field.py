@@ -5,7 +5,7 @@ Reads `output/findings/a0_intercept_prior.md`, the summary table of the three
 A0 fits that differ only in the class-intercept prior (Normal(0, 2) inherited;
 Normal(0, 10), the default; Normal centered on the pooled log-odds), and plots
 the identified quantities: the standard deviation of the between-site contrast
-in a class's logit share at the median nearest-neighbor spacing (4.3 km), the
+in a class's log-ratio to the reference class at the median nearest-neighbor spacing (4.3 km), the
 median pair distance (36.6 km) and the largest pair distance (79.1 km), and,
 inset, the contrast-based spatial share. The fit records (`output/gp_cache/`)
 are gitignored and absent, so medians and 90 percent intervals are plotted,
@@ -71,7 +71,7 @@ def main() -> int:
     for d, txt in zip(ds, ["median nearest-\nneighbor spacing", "median pair\ndistance", "largest pair\ndistance"]):
         ax.text(d, 0.12, txt, ha="center", va="bottom", fontsize=6.5, color="0.35")
     ax.set_xlabel("distance between two sites (km)")
-    ax.set_ylabel("SD of the between-site contrast\nin a class's logit share")
+    ax.set_ylabel("SD of the between-site contrast\nin a class's log-ratio to the reference")
     ax.set_xlim(-4, 92)
     ax.set_ylim(0, 5.6)
     ax.legend(title="class-intercept prior", fontsize=7, title_fontsize=7, loc="upper left", frameon=False, bbox_to_anchor=(0.0, 0.98))

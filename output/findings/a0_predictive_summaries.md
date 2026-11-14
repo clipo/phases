@@ -6,9 +6,11 @@ Observed counts: 28 assemblages, 14101 sherds, counts sha256 `41bd753fe1c75396b0
 
 | summary | observed | prior predictive median [5%, 95%] | fraction of prior draws below observed | posterior predictive median [5%, 95%] | fraction of posterior draws below observed |
 |---|---|---|---|---|---|
-| mean within-assemblage Gini-Simpson | 0.5633 | 0.4098 [0.2221, 0.6686] | 0.83 | 0.5651 [0.5547, 0.5748] | 0.38 |
-| mean class richness | 6.2500 | 6.2143 [3.9286, 8.9286] | 0.51 | 6.5000 [6.2500, 6.8571] | 0.04 |
-| pooled Gini-Simpson | 0.5916 | 0.7503 [0.3456, 0.8449] | 0.16 | 0.5921 [0.5858, 0.5979] | 0.46 |
-| plug-in F_ST between the spatial clusters | 0.0062 | 0.0280 [0.0019, 0.1756] | 0.16 | 0.0064 [0.0049, 0.0078] | 0.43 |
+| mean within-assemblage Gini-Simpson | 0.5633 | 0.1309 [0.0000, 0.4328] | 1.00 | 0.5637 [0.5532, 0.5733] | 0.47 |
+| mean class richness | 6.2500 | 2.1786 [1.0000, 3.9714] | 1.00 | 6.4286 [6.1768, 6.7500] | 0.15 |
+| pooled Gini-Simpson | 0.5916 | 0.2693 [0.0000, 0.6643] | 0.85 | 0.5911 [0.5861, 0.5983] | 0.56 |
+| plug-in F_ST between the spatial clusters | 0.0062 | 0.0135 [0.0001, 0.2110] | 0.38 | 0.0063 [0.0051, 0.0077] | 0.47 |
+
+Undefined draws, excluded from the medians and intervals above: 13 of 200 prior-predictive draws for plug-in F_ST between the spatial clusters (the pooled record holds a single class, so there is no diversity to partition).
 
 Reading: the prior-predictive column says what the priors alone generate on this geometry and these sherd totals; a fraction near 0 or 1 means the observed value sits in a tail of the prior predictive. The posterior-predictive column is the ordinary predictive check of the fitted model on the same four summaries.

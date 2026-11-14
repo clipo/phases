@@ -30,7 +30,7 @@ DATED = {  # assemblage: dating as reported, for the table only
     "Hollywood": "two calibrated 1-sigma ranges, AD 1285-1420 and AD 1300-1435 (Haley 2014, citing Johnson et al. 2000:48-49)",
     "Parkin": "pooled 14C median AD 1483 (19 dates)",
     "Neeleys_Ferry": "pooled 14C median AD 1513 (2 dates)",
-    "Clay_Hill": "pooled 14C median AD 1597 (3 dates)",
+    "Clay_Hill": "pooled 14C median AD 1596 (3 dates)",
 }
 
 

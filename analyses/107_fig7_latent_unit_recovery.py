@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Figure 7: recovery of planted structure on this site geometry (A1 and A3).
+"""Figure 7: recovery of known structure on this site geometry (A1 and A3).
 
 Drawn from the committed recovery tables; no model is refitted.
 
 (A) Latent-unit model A1 (`output/findings/a1_validation.md`, produced by
 `analyses/probe_latent_groups/validate_a1.R`): posterior median and 90 percent
-interval of the between-unit scale sigma_g against the planted value on records
+interval of the between-unit scale sigma_g against the true value on records
 simulated from the model's own generator at the 28 sites, plus the fit to a
 record with no units. Fits that fail the sampler diagnostics are drawn open; they are
 failed validation attempts, not estimates, and are shown so the denominator is
@@ -13,7 +13,7 @@ visible (12 of 14 recovery fits fail; the no-unit fit fails).
 
 (B) Barrier model A3 (`output/findings/a3_validation.md`, from `validate_a3.R`;
 free range, class-intercept prior Normal(0, 10)): posterior median and 90
-percent interval of the barrier parameter omega against the planted value, for
+percent interval of the barrier parameter omega against the true value, for
 the two edge placements, with the prior median marked. The six prior-by-range
 combinations are tabulated in `a3_prior_comparison.md` and the supplement; this
 panel shows the one named in the caption.
@@ -97,7 +97,7 @@ def main() -> int:
     lim = (-0.1, 2.2)
     axA.plot(lim, lim, color="0.6", lw=0.8, ls="-", zorder=1)
     axA.axhline(PRIOR_MEDIAN, color="0.3", lw=0.9, ls="--", zorder=1)
-    axA.set_xlabel("planted between-unit scale $\\sigma_g$ (logits)")
+    axA.set_xlabel("true between-unit scale $\\sigma_g$ (logits)")
     axA.set_ylabel("posterior median, 90% interval")
     axA.set_xlim(*lim)
     axA.set_ylim(0, 4.0)
@@ -107,7 +107,7 @@ def main() -> int:
                         Line2D([0], [0], marker="o", color="none", markerfacecolor="white", markeredgecolor="black",
                                ms=5, label="fails the sampler diagnostics"),
                         Line2D([0], [0], color="0.3", ls="--", lw=0.9, label="prior median"),
-                        Line2D([0], [0], color="0.6", lw=0.8, label="recovery (planted = posterior)")],
+                        Line2D([0], [0], color="0.6", lw=0.8, label="recovery (true value = posterior)")],
                fontsize=6.2, loc="upper left", frameon=False)
     fs.despine(axA)
     fs.panel_label(axA, "A")
@@ -121,7 +121,7 @@ def main() -> int:
     lim = (-0.1, 1.15)
     axB.plot(lim, lim, color="0.6", lw=0.8, zorder=1)
     axB.axhline(PRIOR_MEDIAN, color="0.3", lw=0.9, ls="--", zorder=1)
-    axB.set_xlabel("planted barrier $\\omega$")
+    axB.set_xlabel("true barrier $\\omega$")
     axB.text(0.60, 0.98, "free range\nintercept prior Normal(0, 10)", transform=axB.transAxes, ha="center", va="top",
              fontsize=6.5, color="0.3")  # centered over omega 0.6, clear of the bars at 0.5 and 1.0
     axB.set_xlim(*lim)

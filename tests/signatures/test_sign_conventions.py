@@ -154,3 +154,38 @@ def test_collection_log_odds_ratio_sign():
     cbc = importlib.import_module("composition_by_collection")
     r = cbc.log_odds_ratio(np.array([80, 20]), np.array([20, 80]), np.random.default_rng(1), draws=4000)
     assert r.loc[0, "median"] > 0 and r.loc[1, "median"] < 0
+
+
+# --- Drift-extension spatial readouts (spec 2026-11-14, draft 3, section 4) -------------------
+
+def test_lat_rank_is_positive_when_the_share_is_higher_to_the_north():
+    """lat_rank: positive means the class's share is higher to the north.
+
+    The opposite sign would mean the share is higher to the south. A function
+    returning the absolute value passes the first assertion and fails the second.
+    """
+    from mls_emergence.signatures import spatial_readouts as sr
+    lat = np.array([34.0, 34.5, 35.0, 35.5, 36.0])
+    north = np.array([[1, 9], [2, 8], [4, 6], [6, 4], [9, 1]])     # class 0 rises northward
+    val, _ = sr.lat_rank(north, lat)
+    assert val[0] == pytest.approx(1.0)
+    assert val[1] == pytest.approx(-1.0)                             # its complement falls northward
+    val_s, _ = sr.lat_rank(north[::-1], lat)                         # the same shares reversed
+    assert val_s[0] == pytest.approx(-1.0)
+
+
+def test_distance_decay_rank_is_positive_when_distant_sites_differ_more():
+    """D_dist: positive means sites farther apart differ more in composition.
+
+    The opposite sign would mean nearby sites differ more than distant ones.
+    """
+    from mls_emergence.signatures import spatial_readouts as sr
+    counts, _coords, D = _gradient_record()
+    val, reason = sr.distance_decay_rank(counts, D)
+    assert reason == "" and val > 0.9
+    # Four sites on a line at 0, 1, 2, 3. The two ends match and the two middle sites match, so
+    # the most distant pair is identical and three of the four nearer pairs differ: negative.
+    y = np.array([[10, 0], [0, 10], [0, 10], [10, 0]])
+    x = np.arange(4.0); Dn = np.abs(x[:, None] - x[None, :])
+    val_n, _ = sr.distance_decay_rank(y, Dn)
+    assert val_n < 0

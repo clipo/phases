@@ -2,7 +2,7 @@
 """Extract the Word comments of a .docx, with the text each comment anchors to.
 
 Written 2026-10-31 to read Beau DiNapoli's annotated v4 main text
-(``MAIN_TEXT_beaueditscomments.docx`` at the repository root) into a
+(``docs/archive/MAIN_TEXT_beaueditscomments.docx``) into a
 markdown file an auditor can read without Word. The extraction is
 mechanical: the comment text is reproduced verbatim from
 ``word/comments.xml``; the anchor is the document text inside the comment's
@@ -12,7 +12,7 @@ be produced by a committed script, which is why this is here rather than in
 a scratchpad.
 
 Usage:
-    python3 scripts/extract_docx_comments.py MAIN_TEXT_beaueditscomments.docx \
+    python3 scripts/extract_docx_comments.py docs/archive/MAIN_TEXT_beaueditscomments.docx \
         > docs/working/2026-10-31-beau-v4-comments-extracted.md
 
 Only the standard library is used.

@@ -239,23 +239,9 @@ def main() -> None:
               f"5-anchor single-date orientation (rho +0.50, p 0.39).")]
     L.append("")
 
-    # --- Figure: basin SPD + anchor scatter ---
-    fig, (axL, axR) = plt.subplots(1, 2, figsize=(7, 3.4), gridspec_kw={"wspace": 0.34})
-    axL.fill_between(grid_ad, spd_basin, color=OI_BLUE, alpha=0.5, lw=0, label="basin")
-    axL.plot(grid_ad, spd_parkin / spd_parkin.max() * spd_basin.max(),
-             color=OI_VERMIL, lw=1.3, label="Parkin (scaled)")
-    axL.axvline(CONTACT_AD, color="0.3", ls="--", lw=1.0)
-    # Headroom above both curves (the scaled Parkin curve peaks at the basin
-    # maximum), so the contact label sits above the data rather than on it.
-    _top = spd_basin.max()
-    axL.set_ylim(0, _top * 1.22)
-    axL.text(CONTACT_AD - 8, _top * 1.17, "De Soto AD 1541",
-             fontsize=6.5, color="0.3", ha="right", va="top")
-    axL.set_xlabel("Calendar age (AD)")
-    axL.set_ylabel("Summed probability")
-    axL.set_yticks([])
-    # Upper left: the early centuries are empty above the low basin plateau.
-    axL.legend(frameon=False, fontsize=7, loc="upper left")
+    # --- Figure: anchor scatter only (the SPD panel was removed 2026-11-03 by author
+    # ruling of 2026-10-14, "no SPD"; the SPD summaries above stay in the findings file) ---
+    fig, axR = plt.subplots(1, 1, figsize=(3.5, 3.2))
     if len(A) >= 3:
         axR.scatter(A["ca1"], A["median_ad"], s=A["n"] * 6 + 15, color=OI_ORANGE,
                     edgecolors="white", linewidths=0.5, zorder=3)
@@ -265,8 +251,8 @@ def main() -> None:
         axR.set_xlabel("CA1 seriation position")
         axR.set_ylabel("Pooled median cal AD")
     save(fig, "figS6_chronology")
-    L.append("Figure: figures/figS6_chronology.png (basin + Parkin SPD with contact "
-             "line; CA1 vs pooled median calendar age, point size ~ n dates).")
+    L.append("Figure: figures/figS6_chronology.png (CA1 vs pooled median calendar age, "
+             "point size ~ n dates; the SPD panel was removed 2026-11-03).")
 
     OUT.write_text("\n".join(L), encoding="utf-8")
     print(f"wrote {OUT}")

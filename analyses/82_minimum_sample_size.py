@@ -78,8 +78,8 @@ def main() -> int:
           "kept sites with 800"),
           ("or more sherds in all, and decorated sherds are 13 percent of his table, so his "
           "rule is about 100"),
-          ("decorated sherds. The analytic expectation for two equal samples from one "
-          "profile is close to 1/n."), ""]
+          ("decorated sherds. To leading order the expected plug-in F_ST for two equal samples from one "
+          "profile is 1/(2n); the table reports medians, which lie below it."), ""]
     OUT_MD.write_text("\n".join(L), encoding="utf-8")
     print("\n".join(L[6:]))
     return 0

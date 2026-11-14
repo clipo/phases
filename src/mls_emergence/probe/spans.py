@@ -121,3 +121,92 @@ def sample_spans(record: np.ndarray, ends: np.ndarray, lengths: np.ndarray, tota
     if not np.array_equal(realized, np.asarray(ends, int)):
         raise AssertionError("realized span ends differ from the drawn ends")
     return sample_record(record, ranks, totals, rng, window=lengths)
+
+
+# --- Drift-extension timing (spec 2026-11-14, draft 3, sections 3.3 and 5) --------------------
+# Three deterministic functions of their arguments. None holds or receives a random generator:
+# the caller draws the base uniforms once per record, so every observation design of a record
+# reads the same uniforms whatever the order in which designs are generated.
+
+def _unit_uniforms(x, name: str) -> np.ndarray:
+    """A 1-D array of finite values on [0, 1), or a ValueError naming the argument."""
+    a = np.asarray(x, float)
+    if a.ndim != 1 or a.size == 0 or not np.isfinite(a).all() or (a < 0).any() or (a >= 1).any():
+        raise ValueError(f"{name} must be a non-empty 1-D array of finite values on [0, 1)")
+    return a
+
+
+def _is_int(x) -> bool:
+    return isinstance(x, (int, np.integer)) and not isinstance(x, (bool, np.bool_))
+
+
+def lengths_from_uniforms(v, L: int) -> np.ndarray:
+    """Span lengths 1 + floor(v L): uniform integers on 1..L when v is uniform on [0, 1).
+
+    The same v under two limits gives lengths in the same order, which is how
+    the three span-length limits of a record are paired.
+    """
+    v = _unit_uniforms(v, "v")
+    if not _is_int(L) or L < 1:
+        raise ValueError("the span-length limit L must be an integer of at least 1")
+    return 1 + np.floor(v * int(L)).astype(int)
+
+
+def ends_coupled(ends, latitude, c: float, north_late: bool, u) -> np.ndarray:
+    """Reassign a record's span ends to sites along latitude with coupling c.
+
+    r is the latitude rank (1 = southernmost, n = northernmost), q = (r - 0.5) / n
+    for a north-late design and 1 - (r - 0.5) / n for a south-late one, and the
+    score is z = c q + (1 - c) u. The end values, sorted ascending, are assigned
+    to the sites in ascending z (stable sort: equal scores keep site order).
+    The multiset of ends is unchanged. Sign: under north_late the later ends go
+    to the northern sites, so the rank correlation of latitude with the score
+    is positive (+0.700 in expectation at c = 0.5 and 28 sites); under
+    south-late it is negative. c = 0 orders by u alone, c = 1 by latitude alone.
+    """
+    ends = np.asarray(ends); lat = np.asarray(latitude, float)
+    if ends.ndim != 1 or not np.issubdtype(ends.dtype, np.integer):
+        raise ValueError("ends must be a 1-D integer array")
+    u = _unit_uniforms(u, "u"); n = len(ends)
+    if lat.shape != (n,) or u.shape != (n,):
+        raise ValueError("ends, latitude and u must have one entry per site")
+    if not np.isfinite(lat).all() or len(np.unique(lat)) != n:
+        raise ValueError("latitudes must be finite and distinct: the latitude rank is undefined under ties")
+    if not isinstance(north_late, (bool, np.bool_)):
+        raise ValueError("north_late must be True (later in the north) or False (later in the south)")
+    if isinstance(c, (bool, np.bool_)) or not np.isfinite(c) or c < 0 or c > 1:
+        raise ValueError("the coupling c must lie in [0, 1]")
+    r = np.empty(n); r[np.argsort(lat, kind="stable")] = np.arange(1, n + 1)
+    q = (r - 0.5) / n
+    if not north_late:
+        q = 1.0 - q
+    z = float(c) * q + (1.0 - float(c)) * u
+    out = np.empty(n, dtype=ends.dtype)
+    out[np.argsort(z, kind="stable")] = np.sort(ends, kind="stable")
+    return out
+
+
+def ends_step(w, labels, late_label, S: int, W: int) -> np.ndarray:
+    """Span ends for two clusters that occupy disjoint halves of the window.
+
+    The window is the last W stored steps, S - W .. S - 1. Its early half is
+    the first floor(W / 2) of them and its late half the remaining
+    W - floor(W / 2). A site's end is h0 + floor(w h), with h0 the first step
+    of its cluster's half and h that half's length, so every end of the late
+    cluster is later than every end of the early one.
+    """
+    w = _unit_uniforms(w, "w"); labels = np.asarray(labels)
+    if labels.shape != w.shape:
+        raise ValueError("w and labels must have one entry per site")
+    uniq = np.unique(labels)
+    if len(uniq) != 2:
+        raise ValueError(f"a step design needs exactly two cluster labels, got {len(uniq)}")
+    if late_label not in uniq.tolist():
+        raise ValueError(f"late_label {late_label!r} is not one of the two cluster labels {uniq.tolist()}")
+    if not _is_int(S) or not _is_int(W) or W < 2 or W > S:
+        raise ValueError("W must be an integer from 2 (each half needs a step) to the stored length S")
+    early = int(W) // 2; start = int(S) - int(W)
+    late = labels == late_label
+    h0 = np.where(late, start + early, start)
+    h = np.where(late, int(W) - early, early)
+    return (h0 + np.floor(w * h)).astype(int)

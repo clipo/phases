@@ -51,8 +51,8 @@ is not a result.
 WHAT A REFERENCE LEVEL LOOKS LIKE HERE. An adjusted Rand index is already
 chance-corrected, so zero is the no-relationship level and no null is needed to
 establish it. For scale, the index is also computed for partitions carrying the
-phases' own group sizes with their boundaries placed at random, which describes
-what this design manufactures from the group sizes alone (rule 18: descriptive,
+phases' own group sizes, allocating sites to random centers on the map, which
+describes what the group sizes plus geographic allocation produce (rule 18: descriptive,
 not an inferential test).
 
 Usage:
@@ -253,7 +253,7 @@ def main() -> int:
              for sd in range(args.seeds)]
         zero_rows.append((label, float(np.median(a))))
 
-    # Descriptive scale: what the group sizes alone manufacture.
+    # Descriptive scale: group sizes plus allocation to random geographic centers.
     rng = np.random.default_rng(76)
     sizes = np.bincount(pidx)
     slot = np.repeat(np.arange(k), sizes)
@@ -378,16 +378,16 @@ def main() -> int:
           *_misplaced_rows,
           "",
           "## Reading", "",
-          (f"Partitions carrying the phases' own group sizes with boundaries placed at "
-          f"random agree with the phases at a median ARI of {np.median(rnd):.3f} "
+          (f"Partitions carrying the phases' own group sizes, allocated around random centers on "
+          f"the map, agree with the phases at a median ARI of {np.median(rnd):.3f} "
           f"({args.random} draws), which is what"),
-          "the group sizes manufacture on their own.", "",
+          "the group sizes plus geographic allocation produce.", "",
           (f"Under the chi-square transform, which carries no free parameter, k-means, on the "
           f"{int(mapped.sum())} assemblages"),
           (f"assigned directly: the site map alone, {_a0:.3f}; the best agreement, {_best:.3f}, at a "
           f"composition weight of {_wbest}; the pottery alone, {_ainf:.3f}."), "",
           "How to read the three values. A scheme that divides the map would be recovered by",
-          "the map alone, well above what the group sizes manufacture, and adding the pottery",
+          "the map alone, well above that reference, and adding the pottery",
           "would not help. A scheme that reads the pottery would be recovered better as the",
           "pottery enters. This file states the values and draws no conclusion from them.", "",
           "**What this does not show.** Agreement with a published scheme says how the scheme",

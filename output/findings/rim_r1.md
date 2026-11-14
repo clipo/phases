@@ -1,6 +1,6 @@
 # Rim attributes R1: readings beside decoration on the 19 rim sites
 
-Produced by `analyses/rims/rim_r1.py --readings` (git 31b41830fcb9) from the cell CSVs and the rim and decorated tables. Three kinds of number appear and are named: the observed count-based moment F (binomial sampling variance removed; `mls_emergence.signatures.variance.moment_f`); the generator band of the same statistic (10th to 90th percentile of 50 records, NumPy linear rule, endpoints inclusive, eligible at 45 finite values), with status below, inside, above or unavailable, of which only 'above' is read as more variation than the baseline; and posterior summaries of latent site frequencies under Beta(k + 1/2, N - k + 1/2) per site and Dirichlet(counts + 1/2) per composition (4,000 direct draws, two seeds, the Monte Carlo error of each median shown), with Beta(1, 1) and Dirichlet(1) sensitivities. The yardstick is the fixed-target copying simulator with all 28 populations transmitting and the 19 rim sites observed, at the frozen step 0 time scales, two windows (T1: ends over the last L_d; 8LR: the last 8 L_R). Everything is conditional on the 19-site sample (absent: Commerce, Cramor_Place, Cummins, Grant, Holden_Lake, Hollywood, Lake_Cormorant, Nickel, Turnbow), on that yardstick and on that population model; Woodlyn (27 rims) is below Mainfort's 45-rim minimum and Mound Place (48) just above it, so every statistic is also given on the 18 sites without Woodlyn. Nothing here is phrased as a choice among causes (spec section 1). Descriptive summaries under rule 18.
+Produced by `analyses/rims/rim_r1.py --readings` (git 32142d4acb3d) from the cell CSVs and the rim and decorated tables. Three kinds of number appear and are named: the observed count-based moment F (binomial sampling variance removed; `mls_emergence.signatures.variance.moment_f`); the generator band of the same statistic (10th to 90th percentile of 50 records, NumPy linear rule, endpoints inclusive, eligible at 45 finite values), with status below, inside, above or unavailable, of which only 'above' is read as more variation than the baseline; and posterior summaries of latent site frequencies under Beta(k + 1/2, N - k + 1/2) per site and Dirichlet(counts + 1/2) per composition (4,000 direct draws, two seeds, the Monte Carlo error of each median shown), with Beta(1, 1) and Dirichlet(1) sensitivities. The yardstick is the fixed-target copying simulator with all 28 populations transmitting and the 19 rim sites observed, at the frozen step 0 time scales, two windows (T1: ends over the last L_d; 8LR: the last 8 L_R). Everything is conditional on the 19-site sample (absent: Commerce, Cramor_Place, Cummins, Grant, Holden_Lake, Hollywood, Lake_Cormorant, Nickel, Turnbow), on that yardstick and on that population model; Woodlyn (27 rims) is below Mainfort's 45-rim minimum and Mound Place (48) just above it, so every statistic is also given on the 18 sites without Woodlyn. Nothing here is phrased as a choice among causes (spec section 1). Descriptive summaries under rule 18.
 
 ## A. Per-attribute F against the band, beside the common decorated classes on the same sites
 
@@ -107,7 +107,7 @@ Rim difference |p_i - p_j|; decoration difference the total variation 0.5 sum_c 
 
 ## D. Paste, separately
 
-Paste is a type-level distinction of the 1951 typology (Bell Plain against Neeley's Ferry Plain) and is not independent of how the phases were drawn; the file's paste percentages leave 550 of 2065 rims unresolved, which are not negative Bell observations. The tables above read Bell of N; here Bell is also given with the named pastes as denominator (two denominators). Bell of N: mean site frequency 0.283; Bell of named: 0.371.
+Paste is a type-level distinction of the 1951 typology (Bell Plain against Neeley's Ferry Plain) and is not independent of how the phases were drawn; the file's paste percentages leave 550 of 2065 rims unresolved, which are not negative Bell observations. The tables above read Bell of N; here Bell is also given with the named pastes as denominator (two denominators). Bell of N: mean site frequency 0.283; Bell of named: 0.371. Moment F of Bell: 0.2663 of N; 0.2205 of the named pastes, for which no neutral band was computed. Rims in neither named paste run from 0 to 81 percent by site; what they are is not established.
 
 ## E. Published attributes reported but not read
 
@@ -122,35 +122,35 @@ A recorded scope choice (at least 100 rims and 12 sites with any), not a demonst
 
 ## F. The priors (rule 20)
 
-Beta(1/2, 1/2) on each site frequency: one pseudo-observation in total, weight 1/(N + 1) on the posterior mean (0.036 at 27 rims, 0.0036 at 277); direction toward 1/2. Observable prior predictive, Beta-Binomial(N, 1/2, 1/2) at each site's N: 5th, 50th and 95th percentiles of the predicted count against the observed count for the three read attributes:
+Beta(1/2, 1/2) on each site frequency: one pseudo-observation in total, weight 1/(N + 1) on the posterior mean (0.036 at 27 rims, 0.0036 at 277); direction toward 1/2. Observable prior predictive, Beta-Binomial(N, 1/2, 1/2) at each site's N: 5th, 50th and 95th percentiles of the predicted count against the observed count (bevel and notching are published counts; per-site lip-form counts come from Mainfort's unpublished file and are not printed):
 
-| site | N | prior predictive count (5%, 50%, 95%) | bevel | notching | lip flat |
-|---|---|---|---|---|---|
-| Barton_Ranch | 102 | 0, 51, 102 | 2 | 6 | 35 |
-| Beck | 183 | 1, 92, 182 | 42 | 22 | 79 |
-| Belle_Meade | 143 | 1, 72, 142 | 44 | 29 | 74 |
-| Big_Eddy | 88 | 0, 44, 88 | 14 | 1 | 20 |
-| Castile_Landing | 72 | 0, 36, 72 | 1 | 0 | 12 |
-| Clay_Hill | 159 | 1, 79, 158 | 19 | 10 | 59 |
-| Davis | 96 | 0, 48, 96 | 2 | 2 | 31 |
-| Fortune | 84 | 0, 42, 84 | 0 | 0 | 16 |
-| Irby | 277 | 1, 139, 276 | 48 | 57 | 101 |
-| Kent_Place | 153 | 1, 77, 152 | 14 | 4 | 54 |
-| Mound_Place | 48 | 0, 24, 48 | 4 | 0 | 17 |
-| Neeleys_Ferry | 108 | 0, 54, 108 | 1 | 1 | 23 |
-| Parkin | 67 | 0, 33, 67 | 5 | 4 | 30 |
-| Rose_Mound | 76 | 0, 38, 76 | 2 | 0 | 24 |
-| Starkley | 108 | 0, 54, 108 | 21 | 7 | 26 |
-| Vernon_Paul | 99 | 0, 50, 99 | 3 | 5 | 37 |
-| Walls | 107 | 0, 53, 107 | 14 | 8 | 45 |
-| Williamson | 68 | 0, 34, 68 | 2 | 0 | 19 |
-| Woodlyn | 27 | 0, 13, 27 | 10 | 4 | 6 |
+| site | N | prior predictive count (5%, 50%, 95%) | bevel | notching |
+|---|---|---|---|---|
+| Barton_Ranch | 102 | 0, 51, 102 | 2 | 6 |
+| Beck | 183 | 1, 92, 182 | 42 | 22 |
+| Belle_Meade | 143 | 1, 72, 142 | 44 | 29 |
+| Big_Eddy | 88 | 0, 44, 88 | 14 | 1 |
+| Castile_Landing | 72 | 0, 36, 72 | 1 | 0 |
+| Clay_Hill | 159 | 1, 79, 158 | 19 | 10 |
+| Davis | 96 | 0, 48, 96 | 2 | 2 |
+| Fortune | 84 | 0, 42, 84 | 0 | 0 |
+| Irby | 277 | 1, 139, 276 | 48 | 57 |
+| Kent_Place | 153 | 1, 77, 152 | 14 | 4 |
+| Mound_Place | 48 | 0, 24, 48 | 4 | 0 |
+| Neeleys_Ferry | 108 | 0, 54, 108 | 1 | 1 |
+| Parkin | 67 | 0, 33, 67 | 5 | 4 |
+| Rose_Mound | 76 | 0, 38, 76 | 2 | 0 |
+| Starkley | 108 | 0, 54, 108 | 21 | 7 |
+| Vernon_Paul | 99 | 0, 50, 99 | 3 | 5 |
+| Walls | 107 | 0, 53, 107 | 14 | 8 |
+| Williamson | 68 | 0, 34, 68 | 2 | 0 |
+| Woodlyn | 27 | 0, 13, 27 | 10 | 4 |
 
-The 5th to 95th percentile interval of the predicted count spans 99 to 100 percent of N across the sites and contains 57 of the 57 observed counts: the prior concentrates the predicted count nowhere, so it does not already resemble the data. The Beta(1, 1) sensitivity medians are in the last columns of sections B and C.
+The 5th to 95th percentile interval of the predicted count spans 99 to 100 percent of N across the sites and contains 57 of the 57 observed counts. The width reflects the prior's shape: Beta(1/2, 1/2) favors frequencies near 0 and 1, and at N = 27 it puts probability 0.216 on the two endpoint counts against 0.071 under Beta(1, 1). It does not already resemble the data. The Beta(1, 1) sensitivity medians are in the last columns of sections B and C.
 
 Recovery program: 20 replicates at three true configurations on these 19 sites' totals, 1,000 draws per fit, 90 percent intervals; a coverage proportion at 20 replicates has binomial standard deviation 0.067 at a true rate of 0.9, so the table resolves gross failure, not the nominal rate.
 
-| configuration | true rho latitude | coverage of rho latitude | coverage of rho pair distance | sign recovered |
+| configuration | true rho latitude | coverage of rho latitude | coverage of rho pair distance | sign of rho latitude recovered |
 |---|---|---|---|---|
 | positive | +0.75 | 0.85 | 0.90 | 1.00 |
 | opposite | -0.69 | 0.85 | 0.95 | 1.00 |
