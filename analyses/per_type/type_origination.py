@@ -309,7 +309,8 @@ def main() -> int:
          ("Generator C4 is the neutral copying model of C3 with the regional innovation target given by a finite pool, resampled at every "
           "stored step, in which each draw is a new type with probability theta / (2 N_R). theta = 0 has no origination. The Ewens "
           "estimate from the record's richness (ten classes in 14,101 sherds) is theta = 0.98, a reference point only, since "
-          f"archaeological types are not neutral variants. Grid per point: {len(SPANS)} span limits x {len(WINDOWS)} windows x "
+          "the ten classes are analyst-defined units, some of which combine several types, and so are not a count of distinct "
+          f"variants. Grid per point: {len(SPANS)} span limits x {len(WINDOWS)} windows x "
           f"{len(COUPLINGS)} date arrangements x {len(AMPLITUDES)} amplitudes x {len(THETAS)} values of theta = {N_CELLS} cells."), "",
          ("Readouts are by rank of pooled count, because a simulated new type has no counterpart among the record's named classes. "
           "Every comparison places the record's value beside the 10th to 90th percentile band of the cell's simulated records. These "
