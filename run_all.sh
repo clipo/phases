@@ -18,10 +18,11 @@
 # any single failure and reports the count at the end. MANIFEST.md names the
 # script that writes every output.
 #
-# Not rerunnable here: analyses/rims/rim_r1.py (Figure 7's findings file,
-# output/findings/rim_r1.md) reads an unpublished rim tabulation that is not
-# in the release; see data/README.md. The figure is redrawn from the committed
-# findings file in level 1.
+# Not run here: analyses/rims/rim_r1.py (Figure 7's findings file,
+# output/findings/rim_r1.md). Its rim counts are in the release (see
+# data/README.md); it also needs the simulator time scales written by
+# analyses/probe_latent_groups/time_scales.py, which this script does not
+# run. The figure is redrawn from the committed findings file in level 1.
 
 set -u
 cd "$(dirname "$0")"

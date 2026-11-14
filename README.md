@@ -61,13 +61,19 @@ committed, so a reader can stop at any of them.
    posterior summary together with its sampler diagnostics (R-hat, bulk and
    tail effective sample size, divergences, treedepth saturation, E-BFMI).
 
-One analysis cannot be rerun from this repository. The rim-attribute analysis
-(`analyses/rims/rim_r1.py`, Figure 7) reads lip-form and paste counts from an
-unpublished tabulation by Robert Mainfort, which we are not yet free to
-release. Its findings file, `output/findings/rim_r1.md`, is committed and
-Figure 7 redraws from it; the counts for beveling and notching that come from
-his published Table 1 are in `data/raw/mainfort2003_rim_table1_counts.csv`.
-See `data/README.md`.
+`run_all.sh` does not run the rim-attribute analysis
+(`analyses/rims/rim_r1.py`, Figure 7). Its data are in the release: the
+lip-form and paste counts come from an unpublished tabulation by Robert
+Mainfort (`data/raw/mainfort_miss_rims.xls`), the counts for beveling and
+notching come from his published Table 1
+(`data/raw/mainfort2003_rim_table1_counts.csv`), and
+`scripts/build_mainfort_rim_counts.py` combines the two into
+`data/processed/mainfort_rim_counts.csv`. The script also reads the simulator
+time scales that `analyses/probe_latent_groups/time_scales.py` writes to
+`output/probe_latent_groups/`, which are not published and must be generated
+first. Its findings file, `output/findings/rim_r1.md`, is committed and
+Figure 7 redraws from it. We have not rerun this analysis from a clean copy of
+the release. See `data/README.md`.
 
 ## Quick start
 

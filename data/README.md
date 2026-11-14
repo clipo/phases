@@ -8,8 +8,7 @@ regenerated. `stan/` holds the data contracts the Stan models read. The
 shapefiles and the top-level settlement tables are base geographic and
 settlement data for the Lower Mississippi Valley (LMV). Full bibliographic
 entries for every source cited below are in `docs/manuscript/references.bib`.
-All data are released under CC BY 4.0 (`LICENSE-data`) except where a file is
-noted as withheld.
+All data are released under CC BY 4.0 (`LICENSE-data`).
 
 ## `raw/` — primary data and documented corrections
 
@@ -31,14 +30,14 @@ noted as withheld.
 | `pfg-cpl-frequency.xlsx` | Seriation-ordered decorated-class frequency matrix of the earlier version's analyses. | Lipo (2001). |
 | `williams1954_cmv_counts.tsv` | Southeast-Missouri type counts by site, used by the earlier version's regional extension. | Williams (1954). |
 
-**Withheld.** `raw/mainfort_miss_rims.xls`, Robert Mainfort's unpublished
-tabulation of rim attributes by site, and `processed/mainfort_rim_counts.csv`,
-the counts `scripts/build_mainfort_rim_counts.py` derives from it together
-with his published Table 1, are not in this release. The current rim analysis
-(`analyses/rims/rim_r1.py`) reads lip form and Bell paste from the derived
-file, so it cannot be rerun here until he agrees to their release. Its
-findings file, `output/findings/rim_r1.md`, and the figure drawn from it are
-committed.
+**Rim tabulation.** `raw/mainfort_miss_rims.xls` is Robert Mainfort's
+unpublished tabulation of rim attributes by site. It was withheld from earlier
+versions of this release and is included from 2026-11-14.
+`processed/mainfort_rim_counts.csv` holds the counts
+`scripts/build_mainfort_rim_counts.py` derives from it together with his
+published Table 1. The current rim analysis (`analyses/rims/rim_r1.py`) reads
+lip form and Bell paste from the derived file. Its findings file,
+`output/findings/rim_r1.md`, and the figure drawn from it are committed.
 
 ## How the analysis matrix is built
 

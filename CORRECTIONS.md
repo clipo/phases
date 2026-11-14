@@ -17,10 +17,10 @@ are the spatial field, latent-unit and barrier Stan models under
 diversity-matched comparisons under `analyses/probe_latent_groups/` and
 `analyses/per_type/`, the rim analysis under `analyses/rims/`, and the phase
 recovery and settlement analyses 76 to 83. The figures are drawn by
-`analyses/93_phillips1970_phase_map.py` and `102_` to `107_` from the committed
+`analyses/93_phillips1970_phase_map.py` and `102_` to `108_` from the committed
 findings files. The earlier version's scripts, figures and result reports
 remain in the repository; `README.md` says which files the current paper
-depends on. Two data files are withheld pending consent (`data/README.md`).
+depends on. The two rim data files that were withheld are included from 2026-11-14 (`data/README.md`).
 
 ---
 
