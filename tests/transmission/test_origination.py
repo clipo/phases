@@ -8,7 +8,8 @@ from mls_emergence.transmission import origination as og
 
 def test_largest_remainder_by_hand():
     # shares 0.5, 0.3, 0.15, 0.05 at 7 draws: 3.5, 2.1, 1.05, 0.35 -> floors 3, 2, 1, 0 (sum 6); the largest remainder
-    # is 0.5 (class 0) -> 4, 2, 1, 0. A class below half a draw is absent.
+    # is 0.5 (class 0) -> 4, 2, 1, 0. Class 3 (0.35 of a draw) gets none here. The cut is not half a draw
+    # in general: it depends on the other classes' remainders (Codex repair check 2026-11-14, RC-F1).
     assert og.largest_remainder([0.5, 0.3, 0.15, 0.05], 7).tolist() == [4, 2, 1, 0]
     assert og.largest_remainder([1, 1], 3).tolist() == [2, 1]        # tie to the lower index
     with pytest.raises(ValueError):
@@ -67,6 +68,19 @@ def _small(theta, trace=True, seed=11, pool_seed=12, max_slots=4096):
     spans = {"a": (np.array([29, 20, 12, 29]), np.array([5, 1, 13, 30])), "b": (np.array([4, 29, 15, 9]), np.array([5, 3, 1, 10]))}
     return og.origination_profiles(w, n_ind=60, mixing=0.3, innovation=0.2, steps=30, burnin=20, seed=seed, pool_seed=pool_seed,
                                    target=[0.6, 0.3, 0.1], pool_size=20, theta=theta, spans=spans, trace=trace, max_slots=max_slots), spans
+
+
+def test_theta_reaches_the_pool_as_mu_equal_to_theta_over_twice_the_pool_size():
+    # The Ewens test above calls pool_step with mu computed in the test, so it does not exercise the
+    # conversion inside origination_profiles (Codex build audit 2026-11-14, F5). Here theta = 6 and
+    # N = 20 give mu = 6 / 40 = 0.15. New types per stored step are Binomial(20, 0.15), so over 30
+    # stored steps the count is Binomial(600, 0.15): mean 90, SD sqrt(600 * 0.15 * 0.85) = 8.75.
+    # Rival rejected: mu = theta / N = 0.3, mean 180, SD 11.2. The window 55 to 125 is +/- 4 SD
+    # around 90 and lies 4.9 SD below 180. No origination happens in burn-in (the pool is fixed).
+    for seed in (12, 13, 14):
+        out, _ = _small(theta=6.0, trace=False, pool_seed=seed)
+        assert out["info"]["mu"] == pytest.approx(0.15, abs=1e-15)
+        assert 55 < out["info"]["originated"] < 125, out["info"]["originated"]
 
 
 def test_profiles_equal_the_brute_force_average_over_each_span():

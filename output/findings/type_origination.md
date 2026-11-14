@@ -1,6 +1,6 @@
 # Type origination during the occupation (generator C4): exploratory
 
-Produced by `.venv-np254/bin/python analyses/per_type/type_origination.py` at commit 380d0a5e104d; NumPy 2.5.4; data hash 3b5e1cfabcad47f4; run time primary point 185 s, secondary point 46 s. Design: `docs/superpowers/specs/2026-11-14-type-origination-generator-design.md`, draft 1. Exploratory by the author's decision of 2026-11-14: neither the spec nor the build was audited, and each cell is 50 records from one seed set.
+Produced by `.venv-np254/bin/python analyses/per_type/type_origination.py` at commit 3db81f4f9947; NumPy 2.5.4; data hash 3b5e1cfabcad47f4; run time primary point 189 s, secondary point 48 s. Design: `docs/superpowers/specs/2026-11-14-type-origination-generator-design.md`, draft 1. Exploratory by the author's decision of 2026-11-14. The spec was not audited. The build and the first run were audited by Codex on 2026-11-14, after the run (`docs/audits/codex_audit_2026-11-14_build_ledger.md`). Each cell is 50 records from one seed set.
 
 Generator C4 is the neutral copying model of C3 with the regional innovation target given by a finite pool, resampled at every stored step, in which each draw is a new type with probability theta / (2 N_R). theta = 0 has no origination. The Ewens estimate from the record's richness (ten classes in 14,101 sherds) is theta = 0.98, a reference point only, since archaeological types are not neutral variants. Grid per point: 2 span limits x 2 windows x 3 date arrangements x 5 amplitudes x 5 values of theta = 300 cells.
 
@@ -14,19 +14,38 @@ F of ranks 1 to 3: 0.165, 0.117, 0.199. Sites present for ranks 4 to 10: 22, 15,
 
 Pool sizes N_R (realized F over the window in parentheses): 8LR F_W 0.1: 22172 (0.100), F_W 0.3: 6550 (0.300), F_W 0.5: 3371 (0.500), F_W 0.7: 1941 (0.700), F_W 0.9: 1015 (0.900); 32LR F_W 0.1: 88686 (0.100), F_W 0.3: 26198 (0.300), F_W 0.5: 13481 (0.500), F_W 0.7: 7761 (0.700), F_W 0.9: 4059 (0.900).
 
+### Starting classes in the pool
+
+The pool starts from the record's pooled shares rounded to N_R draws by largest remainder. A class allocated zero draws is absent from the start and, since a lost type cannot return, is absent from every record of that cell at every theta. This is absence from the start, distinct from loss by drift during the window. Where a class is listed, a theta = 0 record has at most the stated number of classes, so the occupancy of the lowest ranks is zero by construction.
+
+| window | F_W | N_R | starting classes present | classes rounded to zero draws |
+|---|---|---|---|---|
+| 8LR | 0.1 | 22172 | 10 | none |
+| 8LR | 0.3 | 6550 | 10 | none |
+| 8LR | 0.5 | 3371 | 10 | none |
+| 8LR | 0.7 | 1941 | 10 | none |
+| 8LR | 0.9 | 1015 | 10 | none |
+| 32LR | 0.1 | 88686 | 10 | none |
+| 32LR | 0.3 | 26198 | 10 | none |
+| 32LR | 0.5 | 13481 | 10 | none |
+| 32LR | 0.7 | 7761 | 10 | none |
+| 32LR | 0.9 | 4059 | 10 | none |
+
 ### Sets by origination intensity
 
 Cells of 60 per theta at which the record's summaries each lie inside their own band. L: F of ranks 1 to 3. R: sites present for all of ranks 4 to 10. R5: at least five of those seven (a threshold chosen after the drift-extension run). K: richness and the share beyond rank 10. S3: D_dist and the latitude trends of ranks 1 and 3.
 
-| theta | L | R | R5 | K | S3 | L and R | L and R5 | L and R5 and K | L and R5 and S3 | all of L, R5, K, S3 | histories behind L and R5 |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| 0 | 10 | 0 | 0 | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0.3 | 17 | 0 | 1 | 33 | 26 | 0 | 1 | 0 | 0 | 0 | 50 |
-| 1 | 22 | 20 | 30 | 0 | 17 | 3 | 8 | 0 | 0 | 0 | 100 |
-| 3 | 22 | 29 | 60 | 0 | 10 | 4 | 22 | 0 | 0 | 0 | 250 |
-| 10 | 8 | 3 | 45 | 0 | 1 | 1 | 5 | 0 | 0 | 0 | 100 |
+| theta | L | R | R5 | K | S3 | L and R | all of L, R, K, S3 | L and R5 | L and R5 and K | L and R5 and S3 | all of L, R5, K, S3 | histories behind L and R5 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | 10 | 0 | 0 | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0.3 | 17 | 0 | 1 | 33 | 26 | 0 | 0 | 1 | 0 | 0 | 0 | 50 |
+| 1 | 22 | 20 | 30 | 0 | 17 | 3 | 0 | 8 | 0 | 0 | 0 | 100 |
+| 3 | 22 | 29 | 60 | 0 | 10 | 4 | 0 | 22 | 0 | 0 | 0 | 250 |
+| 10 | 8 | 3 | 45 | 0 | 1 | 1 | 0 | 5 | 0 | 0 | 0 | 100 |
 
-**Statement (form b).** The level of variation and the occupancy of at least five of the seven rare ranks both lie inside their bands at 36 cells (all seven at 8), listed below. None of those cells also has richness and the three spatial readouts inside their bands.
+**Statement (form b).** The level of variation and the occupancy of all seven rare ranks both lie inside their bands at 8 cells. None of those cells also has richness and the three spatial readouts inside their bands: richness is outside at 8 of them and space at 8.
+
+With the threshold relaxed to at least five of the seven rare ranks (chosen after the drift-extension run, so not part of the statement form): level and rare ranks together at 36 cells, of which 0 also have richness inside, 0 also have the three spatial readouts inside, and 0 have both. The cells are listed below.
 
 Counts are of grid cells from one seed set. The six designs of a window, amplitude and theta share simulated histories, and a band excludes about one record in five by construction, so a small count can arise from the bands' own sampling.
 
@@ -117,33 +136,44 @@ Cells: median [10th, 90th percentile] status. Rare ranks: number of ranks 4 to 1
 
 ### Calibration: theta = 0 beside generator C3
 
-Median F at the baseline design: C4 at theta = 0 by rank, beside the drift-extension run of C3 by named class (`output/findings/drift_extension_cells.csv`). Ranks and named classes coincide only when the three common classes keep their order, the seed streams differ, and C4 starts from pooled shares rounded to the pool size, so agreement is expected to be approximate.
-
-| F_W | C4 theta 0: ranks 1, 2, 3 | C3: classes 1, 2, 3 |
-|---|---|---|
-| 0.1 | 0.020, 0.024, 0.020 | 0.021, 0.022, 0.024 |
-| 0.3 | 0.046, 0.030, 0.036 | 0.036, 0.037, 0.030 |
-| 0.5 | 0.058, 0.072, 0.044 | 0.059, 0.062, 0.040 |
-| 0.7 | 0.137, 0.078, 0.046 | 0.110, 0.089, 0.046 |
-| 0.9 | 0.194, 0.149, 0.041 | 0.152, 0.110, 0.044 |
+The comparison of C4 at theta = 0 with C3 on identical ranked readouts, with medians and bands for every statistic, is in `output/findings/type_origination_calibration.md` (`analyses/per_type/type_origination_calibration.py`).
 
 ## Secondary point
 
 Pool sizes N_R (realized F over the window in parentheses): 8LR F_W 0.1: 3038 (0.100), F_W 0.3: 898 (0.300), F_W 0.5: 462 (0.500), F_W 0.7: 266 (0.700), F_W 0.9: 139 (0.901); 32LR F_W 0.1: 12149 (0.100), F_W 0.3: 3589 (0.300), F_W 0.5: 1847 (0.500), F_W 0.7: 1064 (0.700), F_W 0.9: 556 (0.900).
 
+### Starting classes in the pool
+
+The pool starts from the record's pooled shares rounded to N_R draws by largest remainder. A class allocated zero draws is absent from the start and, since a lost type cannot return, is absent from every record of that cell at every theta. This is absence from the start, distinct from loss by drift during the window. Where a class is listed, a theta = 0 record has at most the stated number of classes, so the occupancy of the lowest ranks is zero by construction.
+
+| window | F_W | N_R | starting classes present | classes rounded to zero draws |
+|---|---|---|---|---|
+| 8LR | 0.1 | 3038 | 10 | none |
+| 8LR | 0.3 | 898 | 10 | none |
+| 8LR | 0.5 | 462 | 10 | none |
+| 8LR | 0.7 | 266 | 9 | Hull_Engraved |
+| 8LR | 0.9 | 139 | 8 | Vernon_Paul_Applique, Hull_Engraved |
+| 32LR | 0.1 | 12149 | 10 | none |
+| 32LR | 0.3 | 3589 | 10 | none |
+| 32LR | 0.5 | 1847 | 10 | none |
+| 32LR | 0.7 | 1064 | 10 | none |
+| 32LR | 0.9 | 556 | 10 | none |
+
 ### Sets by origination intensity
 
 Cells of 60 per theta at which the record's summaries each lie inside their own band. L: F of ranks 1 to 3. R: sites present for all of ranks 4 to 10. R5: at least five of those seven (a threshold chosen after the drift-extension run). K: richness and the share beyond rank 10. S3: D_dist and the latitude trends of ranks 1 and 3.
 
-| theta | L | R | R5 | K | S3 | L and R | L and R5 | L and R5 and K | L and R5 and S3 | all of L, R5, K, S3 | histories behind L and R5 |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| 0 | 11 | 0 | 0 | 0 | 33 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0.3 | 24 | 0 | 0 | 48 | 37 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 1 | 23 | 3 | 18 | 4 | 25 | 3 | 9 | 0 | 2 | 0 | 100 |
-| 3 | 24 | 27 | 57 | 0 | 8 | 2 | 22 | 0 | 0 | 0 | 250 |
-| 10 | 7 | 14 | 49 | 0 | 3 | 0 | 4 | 0 | 0 | 0 | 100 |
+| theta | L | R | R5 | K | S3 | L and R | all of L, R, K, S3 | L and R5 | L and R5 and K | L and R5 and S3 | all of L, R5, K, S3 | histories behind L and R5 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | 11 | 0 | 0 | 0 | 33 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0.3 | 24 | 0 | 0 | 48 | 37 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1 | 23 | 3 | 18 | 4 | 25 | 3 | 0 | 9 | 0 | 2 | 0 | 100 |
+| 3 | 24 | 27 | 57 | 0 | 8 | 2 | 0 | 22 | 0 | 0 | 0 | 250 |
+| 10 | 7 | 14 | 49 | 0 | 3 | 0 | 0 | 4 | 0 | 0 | 0 | 100 |
 
-**Statement (form b).** The level of variation and the occupancy of at least five of the seven rare ranks both lie inside their bands at 35 cells (all seven at 5), listed below. None of those cells also has richness and the three spatial readouts inside their bands.
+**Statement (form b).** The level of variation and the occupancy of all seven rare ranks both lie inside their bands at 5 cells. None of those cells also has richness and the three spatial readouts inside their bands: richness is outside at 5 of them and space at 4.
+
+With the threshold relaxed to at least five of the seven rare ranks (chosen after the drift-extension run, so not part of the statement form): level and rare ranks together at 35 cells, of which 0 also have richness inside, 2 also have the three spatial readouts inside, and 0 have both. The cells are listed below.
 
 Counts are of grid cells from one seed set. The six designs of a window, amplitude and theta share simulated histories, and a band excludes about one record in five by construction, so a small count can arise from the bands' own sampling.
 
@@ -248,12 +278,4 @@ Cells: median [10th, 90th percentile] status. Rare ranks: number of ranks 4 to 1
 
 ### Calibration: theta = 0 beside generator C3
 
-Median F at the baseline design: C4 at theta = 0 by rank, beside the drift-extension run of C3 by named class (`output/findings/drift_extension_cells.csv`). Ranks and named classes coincide only when the three common classes keep their order, the seed streams differ, and C4 starts from pooled shares rounded to the pool size, so agreement is expected to be approximate.
-
-| F_W | C4 theta 0: ranks 1, 2, 3 | C3: classes 1, 2, 3 |
-|---|---|---|
-| 0.1 | 0.027, 0.025, 0.026 | 0.023, 0.024, 0.023 |
-| 0.3 | 0.036, 0.036, 0.041 | 0.050, 0.046, 0.035 |
-| 0.5 | 0.083, 0.069, 0.061 | 0.080, 0.106, 0.042 |
-| 0.7 | 0.127, 0.094, 0.056 | 0.156, 0.120, 0.053 |
-| 0.9 | 0.206, 0.163, 0.057 | 0.185, 0.141, 0.072 |
+The comparison of C4 at theta = 0 with C3 on identical ranked readouts, with medians and bands for every statistic, is in `output/findings/type_origination_calibration.md` (`analyses/per_type/type_origination_calibration.py`).

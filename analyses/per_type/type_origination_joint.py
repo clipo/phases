@@ -50,7 +50,7 @@ def main() -> int:
     t = pd.read_csv(CELLS)
     L = ["# Type origination: joint tabulations (exploratory)", "",
          ("Produced by `.venv-np254/bin/python analyses/per_type/type_origination_joint.py` from "
-          "`output/findings/type_origination_cells.csv`. Exploratory: unaudited, one seed set of 50 records per cell, tabulations "
+          "`output/findings/type_origination_cells.csv`. Exploratory: audited by Codex only after the run (`docs/audits/codex_audit_2026-11-14_build_ledger.md`), one seed set of 50 records per cell, tabulations "
           "chosen after the run was seen. Every count is a count of grid cells at which each named summary of the record lies inside "
           "its own 10th to 90th percentile band. Cells that share a window, amplitude and theta share simulated histories."), ""]
     for point in ("primary", "secondary"):

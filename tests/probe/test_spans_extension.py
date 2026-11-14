@@ -55,6 +55,21 @@ def test_ends_coupled_interior_c_south_late_by_hand():
     got = spans.ends_coupled(ENDS5, LAT5, 0.5, False, U5)
     assert got.tolist() == [7, 7, 1, 3, 3]
     # Rival rejected: a south-late design that applies the north-late assignment ([7, 3, 7, 1, 3]).
+    # This fixture does NOT reject ordering by u alone, which also gives [7, 7, 1, 3, 3] (Codex build
+    # audit 2026-11-14, F5). The next test does.
+
+
+def test_ends_coupled_interior_c_south_late_separates_the_score_from_u_and_from_latitude():
+    # A second set of uniforms, chosen so the three orderings differ. South-late
+    # q = [0.5, 0.9, 0.1, 0.7, 0.3]; u = [0.3, 0.1, 0.8, 0.4, 0.9]; z = 0.5 q + 0.5 u =
+    # [0.40, 0.50, 0.45, 0.55, 0.60]. Ascending z: sites 0, 2, 1, 3, 4. Sorted ends [1, 3, 3, 7, 7]:
+    # site0 <- 1, site2 <- 3, site1 <- 3, site3 <- 7, site4 <- 7.
+    u = np.array([0.3, 0.1, 0.8, 0.4, 0.9])
+    got = spans.ends_coupled(ENDS5, LAT5, 0.5, False, u)
+    assert got.tolist() == [1, 3, 3, 7, 7]
+    # Rivals rejected: u alone (ascending u: sites 1, 0, 3, 2, 4) gives [3, 1, 7, 3, 7]; latitude
+    # alone, south-late (ascending q: sites 2, 4, 0, 3, 1) gives [3, 7, 1, 7, 3]; the north-late
+    # score z = [0.40, 0.10, 0.85, 0.35, 0.80] gives [3, 1, 7, 3, 7].
 
 
 # Not testable, and recorded so that it is not mistaken for a gap: the offset in q = (r - 0.5) / n cannot be
@@ -78,6 +93,18 @@ def test_ends_coupled_zero_coupling_uses_u_and_breaks_ties_by_site_order():
     # first. Ascending: site 2, site 4, site 3, site 1, site 0.
     got = spans.ends_coupled(ENDS5, LAT5, 0.0, True, U5)
     assert got.tolist() == [7, 7, 1, 3, 3]
+
+
+def test_ends_coupled_equal_scores_keep_site_order_at_forty_sites():
+    # All forty scores are equal at c = 0 with constant u, so a stable sort leaves the sites in
+    # order and site i receives the i-th smallest end. The five-site tie above is too small to
+    # reject an unstable sort: NumPy's heapsort returns five and twelve tied elements in order and
+    # reorders forty (checked 2026-11-14, NumPy 2.5.4; Codex build audit F5).
+    n = 40
+    lat = 30.0 + np.arange(n)[::-1] * 0.1                 # distinct, north to south, irrelevant at c = 0
+    ends = (np.arange(n) * 7) % n                         # a permutation of 0..39 (7 and 40 are coprime)
+    got = spans.ends_coupled(ends, lat, 0.0, True, np.full(n, 0.25))
+    assert got.tolist() == list(range(n))
 
 
 @pytest.mark.parametrize("c", [0.0, 0.25, 0.5, 1.0])

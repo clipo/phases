@@ -1,8 +1,9 @@
 """Type origination during the occupation: generator C4 against the record (exploratory).
 
 Design: docs/superpowers/specs/2026-11-14-type-origination-generator-design.md,
-draft 1. Exploratory by the author's decision of 2026-11-14: no Codex audit
-of the spec or the build, one seed set.
+draft 1. Exploratory by the author's decision of 2026-11-14: the spec was not
+audited, the build and the first run were audited by Codex after the run
+(docs/audits/codex_audit_2026-11-14_build_ledger.md), one seed set.
 
 Generator C4 (`mls_emergence.transmission.origination`): the site dynamics of
 C3 with the regional innovation target given by a finite pool of N_R draws,
@@ -13,7 +14,10 @@ matches C3. theta = 0 is the calibration arm (C3 with exact loss).
 
 Grid per operating point: 2 span limits (L_d, 1) x 2 windows (8, 32 L_R) x 3
 date arrangements (c0, lat100N, lat100S) x 5 amplitudes x 5 values of theta =
-300 cells of 50 records. The six designs of a (window, amplitude, theta,
+300 cells of 50 records. The statement form of spec section 7 is read on all
+seven rare ranks; the five-of-seven threshold is a separate post hoc summary
+(Codex build audit 2026-11-14, F4). The matched calibration against C3 is in
+`type_origination_calibration.py` (F2). The six designs of a (window, amplitude, theta,
 record) read one simulated history. The grid was narrowed after seeing the
 drift-extension run.
 
@@ -180,6 +184,42 @@ def sets(table: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def statement(s: pd.DataFrame) -> tuple[str, str]:
+    """The statement form of spec section 7, read on R (all seven rare ranks inside), and its text.
+
+    (a) L and R together is empty; (b) it is non-empty and no such cell is
+    also in K and S3; (c) some cell is in all four sets. The five-of-seven
+    threshold R5 does not enter the form (Codex build audit 2026-11-14, F4):
+    it is reported by `r5_summary` as a separate, post hoc summary.
+    """
+    lr = s["L"] & s["R"]; full = lr & s["K"] & s["S3"]
+    if not lr.any():
+        return "a", ("At no tested origination intensity do the level of variation and the occupancy of the rare classes both lie "
+                     "inside their bands.")
+    if not full.any():
+        fails_k, fails_s = int((lr & ~s["K"]).sum()), int((lr & ~s["S3"]).sum())
+        return "b", (f"The level of variation and the occupancy of all seven rare ranks both lie inside their bands at {int(lr.sum())} "
+                     f"cells. None of those cells also has richness and the three spatial readouts inside their bands: richness is "
+                     f"outside at {fails_k} of them and space at {fails_s}.")
+    return "c", (f"The level of variation, the occupancy of all seven rare ranks, richness and the three spatial readouts each lie "
+                 f"inside their own band at {int(full.sum())} cells.")
+
+
+def r5_summary(s: pd.DataFrame) -> str:
+    """The same reading with at least five of the seven rare ranks, a threshold chosen after the drift-extension run."""
+    lr5 = s["L"] & s["R5"]
+    return (f"With the threshold relaxed to at least five of the seven rare ranks (chosen after the drift-extension run, so not part "
+            f"of the statement form): level and rare ranks together at {int(lr5.sum())} cells, of which {int((lr5 & s['K']).sum())} "
+            f"also have richness inside, {int((lr5 & s['S3']).sum())} also have the three spatial readouts inside, and "
+            f"{int((lr5 & s['K'] & s['S3']).sum())} have both. The cells are listed below.")
+
+
+def initial_pool(ctx: dict, point: str, window: str, F_W: float) -> tuple[int, int, list[str]]:
+    """Pool size, number of starting classes with at least one draw, and the classes rounded to zero draws."""
+    N = pool_size(point, window, F_W); c0 = og.largest_remainder(ctx["pooled"], N)
+    return N, int((c0 > 0).sum()), [str(ctx["classes"][k]) for k in np.flatnonzero(c0 == 0)]
+
+
 def _b(row, nd=3, signed=False) -> str:
     f = (lambda x: f"{x:+.{nd}f}") if signed else (lambda x: f"{x:.{nd}f}")
     return f"{f(row['median'])} [{f(row['lo'])}, {f(row['hi'])}] {row['status']}"
@@ -189,30 +229,31 @@ def point_section(point: str, t: pd.DataFrame, real: dict) -> list[str]:
     s = sets(t); theta = s.index.get_level_values("theta"); L = [f"## {point.capitalize()} point", ""]
     L += ["Pool sizes N_R (realized F over the window in parentheses): " + "; ".join(
         f"{w} " + ", ".join(f"F_W {a:g}: {pool_size(point, w, a)} ({realized_f(point, w, a):.3f})" for a in AMPLITUDES) for w in WINDOWS) + ".", "",
-          "### Sets by origination intensity", "",
+          "### Starting classes in the pool", "",
+          ("The pool starts from the record's pooled shares rounded to N_R draws by largest remainder. A class allocated zero draws "
+           "is absent from the start and, since a lost type cannot return, is absent from every record of that cell at every theta. This "
+           "is absence from the start, distinct from loss by drift during the window. Where a class is listed, a theta = 0 record "
+           "has at most the stated number of classes, so the occupancy of the lowest ranks is zero by construction."), "",
+          "| window | F_W | N_R | starting classes present | classes rounded to zero draws |", "|---|---|---|---|---|"]
+    for w in WINDOWS:
+        for a in AMPLITUDES:
+            N, k0, gone = initial_pool(G["ctx"], point, w, a)
+            L.append(f"| {w} | {a:g} | {N} | {k0} | {', '.join(gone) if gone else 'none'} |")
+    L += ["", "### Sets by origination intensity", "",
           ("Cells of 60 per theta at which the record's summaries each lie inside their own band. L: F of ranks 1 to 3. R: sites "
            "present for all of ranks 4 to 10. R5: at least five of those seven (a threshold chosen after the drift-extension run). "
            "K: richness and the share beyond rank 10. S3: D_dist and the latitude trends of ranks 1 and 3."), "",
-          "| theta | L | R | R5 | K | S3 | L and R | L and R5 | L and R5 and K | L and R5 and S3 | all of L, R5, K, S3 | histories behind L and R5 |",
-          "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+          "| theta | L | R | R5 | K | S3 | L and R | all of L, R, K, S3 | L and R5 | L and R5 and K | L and R5 and S3 | all of L, R5, K, S3 | histories behind L and R5 |",
+          "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for h in THETAS:
         m = s[theta == h]; lr5 = m["L"] & m["R5"]
         hist = RECORDS * len({(c[1], c[3]) for c in m.index[lr5]})
         L.append(f"| {h:g} | {int(m['L'].sum())} | {int(m['R'].sum())} | {int(m['R5'].sum())} | {int(m['K'].sum())} | {int(m['S3'].sum())} | "
-                 f"{int((m['L'] & m['R']).sum())} | {int(lr5.sum())} | {int((lr5 & m['K']).sum())} | {int((lr5 & m['S3']).sum())} | "
+                 f"{int((m['L'] & m['R']).sum())} | {int((m['L'] & m['R'] & m['K'] & m['S3']).sum())} | {int(lr5.sum())} | {int((lr5 & m['K']).sum())} | {int((lr5 & m['S3']).sum())} | "
                  f"{int((lr5 & m['K'] & m['S3']).sum())} | {hist} |")
-    lr, lr5 = s["L"] & s["R"], s["L"] & s["R5"]; full = lr5 & s["K"] & s["S3"]
-    if not lr.any() and not lr5.any():
-        form, text = "a", ("At no tested origination intensity do the level of variation and the occupancy of the rare classes both lie "
-                           "inside their bands (neither all seven rare ranks nor at least five of them).")
-    elif not full.any():
-        form, text = "b", (f"The level of variation and the occupancy of at least five of the seven rare ranks both lie inside their bands at "
-                           f"{int(lr5.sum())} cells (all seven at {int(lr.sum())}), listed below. None of those cells also has richness and the "
-                           "three spatial readouts inside their bands.")
-    else:
-        form, text = "c", (f"The level of variation, the occupancy of at least five of the seven rare ranks, richness and the three spatial "
-                           f"readouts each lie inside their own band at {int(full.sum())} cells, listed below.")
-    L += ["", f"**Statement (form {form}).** {text}", "",
+    form, text = statement(s)
+    lr5 = s["L"] & s["R5"]
+    L += ["", f"**Statement (form {form}).** {text}", "", r5_summary(s), "",
           ("Counts are of grid cells from one seed set. The six designs of a window, amplitude and theta share simulated histories, and a "
            "band excludes about one record in five by construction, so a small count can arise from the bands' own sampling."), ""]
     listed = s.index[lr5 | (s["L"] & s["S3"])]
@@ -241,15 +282,8 @@ def point_section(point: str, t: pd.DataFrame, real: dict) -> list[str]:
                      + " | ".join(_b(q.loc[x], nd=0) for x in ("occ_r4", "occ_r7", "occ_r10")) + f" | {_b(q.loc['K_obs'], nd=0)} | "
                      f"{_b(q.loc['beyond10'])} | {q.loc['originated', 'median']:.0f} | {q.loc['new_in_top10', 'median']:.0f} |")
     L += ["", "### Calibration: theta = 0 beside generator C3", "",
-          ("Median F at the baseline design: C4 at theta = 0 by rank, beside the drift-extension run of C3 by named class "
-           "(`output/findings/drift_extension_cells.csv`). Ranks and named classes coincide only when the three common classes keep "
-           "their order, the seed streams differ, and C4 starts from pooled shares rounded to the pool size, so agreement is expected "
-           "to be approximate."), "", "| F_W | C4 theta 0: ranks 1, 2, 3 | C3: classes 1, 2, 3 |", "|---|---|---|"]
-    ext = pd.read_csv(FINDD / "drift_extension_cells.csv"); ext = ext[(ext.point == point) & (ext.span == "Ld") & (ext.window == "8LR") & (ext.coupling == "c0")]
-    for a in AMPLITUDES:
-        q = t[(t.span == "Ld") & (t.window == "8LR") & (t.coupling == "c0") & np.isclose(t.F_W, a) & (t.theta == 0)].set_index("stat")
-        e = ext[np.isclose(ext.F_W, a)].set_index("stat")
-        L.append(f"| {a:g} | " + ", ".join(f"{q.loc[x, 'median']:.3f}" for x in F3) + " | " + ", ".join(f"{e.loc[f'F_{k}', 'median']:.3f}" for k in range(3)) + " |")
+          ("The comparison of C4 at theta = 0 with C3 on identical ranked readouts, with medians and bands for every statistic, is "
+           "in `output/findings/type_origination_calibration.md` (`analyses/per_type/type_origination_calibration.py`).")]
     return L + [""]
 
 
@@ -271,7 +305,7 @@ def main() -> int:
          (f"Produced by `.venv-np254/bin/python analyses/per_type/type_origination.py` at commit {rev[:12]}; NumPy {np.__version__}; data hash "
           f"{ctx['data_hash']}; run time " + ", ".join(f"{p} point {secs[p]:.0f} s" for p in secs) + ". Design: "
           "`docs/superpowers/specs/2026-11-14-type-origination-generator-design.md`, draft 1. Exploratory by the author's decision of "
-          "2026-11-14: neither the spec nor the build was audited, and each cell is 50 records from one seed set."), "",
+          "2026-11-14. The spec was not audited. The build and the first run were audited by Codex on 2026-11-14, after the run (`docs/audits/codex_audit_2026-11-14_build_ledger.md`). Each cell is 50 records from one seed set."), "",
          ("Generator C4 is the neutral copying model of C3 with the regional innovation target given by a finite pool, resampled at every "
           "stored step, in which each draw is a new type with probability theta / (2 N_R). theta = 0 has no origination. The Ewens "
           "estimate from the record's richness (ten classes in 14,101 sherds) is theta = 0.98, a reference point only, since "

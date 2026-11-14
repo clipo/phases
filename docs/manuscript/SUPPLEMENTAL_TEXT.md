@@ -12,7 +12,7 @@ The conventions of the main text apply. Posterior quantities are medians with 90
 
 ## How this supplement is organized
 
-The sections follow the order of the main text. The first three support the Data section: the minimum sample size of 75 decorated sherds, the assemblage coordinates and their datum, and the radiocarbon chronology. The next two support the first question, why culture historians saw phases in these data: how the clustering that recovers the phases was run and how the treatment of zero counts changes its answer, and the settlement record along the rivers and across the phase boundaries. The section that follows carries what the models of the main text require the supplement to hold: the defense of the spatial field model's priors, sampler diagnostics, the barrier model under six prior-by-range settings, the rim priors, and the cell-by-cell outcomes behind the neutral comparisons. A short section places Parkin in its settlement record, and the second case, on Mainfort's (2003a) table, follows it. A closing section points to the public code repository and the `phasecheck` tool. Each cross-reference in the main text names the material it refers to. The analyses of the earlier version of this study, which the restructured main text no longer carries, are not reproduced here; their scripts and findings files remain in the public repository.
+The sections follow the order of the main text. The first three support the Data section: the minimum sample size of 75 decorated sherds, the assemblage coordinates and their datum, and the radiocarbon chronology. The next two support the first question, why culture historians saw phases in these data: how the clustering that recovers the phases was run and how the treatment of zero counts changes its answer, and the settlement record along the rivers and across the phase boundaries. The section that follows carries what the models of the main text require the supplement to hold: the defense of the spatial field model's priors, sampler diagnostics, the barrier model under six prior-by-range settings, the rim priors, the cell-by-cell outcomes behind the neutral comparisons, and the settings and counts of the two further sets of simulations for the per-class comparison. A short section places Parkin in its settlement record, and the second case, on Mainfort's (2003a) table, follows it. A closing section points to the public code repository and the `phasecheck` tool. Each cross-reference in the main text names the material it refers to. The analyses of the earlier version of this study, which the restructured main text no longer carries, are not reproduced here; their scripts and findings files remain in the public repository.
 
 ## The minimum sample size, and why it is 75
 
@@ -101,7 +101,7 @@ Two limits apply. The network is modern, and channels have moved since these sit
 
 ## Supporting material for the models of the main text
 
-The analyses of the main text are those of the public repository's `output/findings/` directory, each named in Table 1 of the main text. This section carries what those analyses require the supplement to hold: the defense of the spatial field model's priors, sampler diagnostics, the prior-by-range comparison for the barrier model, the defense of the rim priors, and the cell-by-cell outcomes behind the neutral comparisons.
+The analyses of the main text are those of the public repository's `output/findings/` directory, each named in Table 1 of the main text. This section carries what those analyses require the supplement to hold: the defense of the spatial field model's priors, sampler diagnostics, the prior-by-range comparison for the barrier model, the defense of the rim priors, the cell-by-cell outcomes behind the neutral comparisons, and the settings and counts of the two further sets of simulations for the per-class comparison.
 
 **Intervals.** This section reports posterior medians with 90 percent equal-tailed intervals (the 5th to 95th percentiles), matching the main text and the findings files.
 
@@ -164,6 +164,56 @@ The analyses of the main text are those of the public repository's `output/findi
 | Vernon Paul Applique | 10 | 7 [3, 12], inside | 4 [0, 14], inside | 2 [0, 16], inside | 0 [0, 11], inside | 0 [0, 3], outside |
 | Hull Engraved | 8 | 4 [1, 6], outside | 0 [0, 11], inside | 0 [0, 8], inside | 0 [0, 3], outside | 0 [0, 3], outside |
 
+**The two further sets of simulations for the per-class comparison (Tables S7 and S8).** The main text describes two sets of simulations run after the per-class comparison. The first varies drift amplitude and occupation timing with the drifting-pool model (`drift_extension.md`, `drift_extension_joint.md`). The second lets new types enter a finite regional pool (`type_origination.md`, `type_origination_joint.md`, `type_origination_calibration.md`). Each was specified with its reading rules before it was run, and each was run once on one set of random draws. This entry records the settings and counts that the main text does not carry.
+
+*Settings.* The operating points are those of the main text. The limit on span length in the main comparison is 182 steps at the primary point and 12 at the secondary. The quarter limits are 46 and 3 steps. The decorrelation time $L_R$ is 292 steps at the primary point and 40 at the secondary, so the three occupation windows are 584, 2,336, and 9,344 steps at the primary point and 80, 320, and 1,280 at the secondary. Burn-in is 5,000 steps throughout.
+
+*Arrangements of occupation date.* The end times of the accumulation spans are drawn over the window as in the main comparison and are then assigned to sites. Each site receives a score $z = c q + (1 - c) u$. Here $q$ is the site's latitude rank scaled to lie between 0 and 1 (reversed for the arrangements with later dates in the south), $u$ is a uniform random draw, and $c$ is 1 for strict ordering and 0.5 for partial ordering. The earliest end time goes to the site with the lowest score, the next to the next, and so on, so the set of end times is the same under every latitude arrangement of a record. At $c = 0.5$ and 28 sites, the expected rank correlation between latitude and the score is 0.70 in magnitude, positive when later dates are in the north. In the two cluster arrangements, the sites of one spatial cluster draw their end times from the first half of the window and the sites of the other from the second half.
+
+*Reading.* A combination covers a summary when the record's value lies inside the 10th to 90th percentile band of the combination's 50 simulated records. No band is formed when fewer than 45 of the 50 records give a finite value, which leaves 496 of the 504 combinations of the first set readable for the common-class F values at the secondary point. The counts use four groups of summaries: the three common-class F values together; the site counts of the seven rare classes, either all seven or at least five; the number of types together with the share of sherds beyond the tenth type; and, for spatial pattern, the distance correlation together with the latitude trends of the commonest and third-commonest classes. We chose the threshold of five of seven rare classes after seeing the first set. The latitude trend of the second-commonest class is reported in the findings files and enters none of the groups.
+
+*First set.* At least five of the seven rare classes are covered in 266 combinations at the primary point and 185 at the secondary, and no common-class F value is covered in any of them. All three F values are covered in 5 and 45 combinations, all at amplitudes of 0.7 or 0.9. At the secondary point, 13 of those combinations, all with dates strictly ordered by latitude, also cover the distance correlation and the latitude trends of Parkin Punctated and the painted types. None of the seven rare classes is covered in any of the 13.
+
+*Second set.* The pool holds between 1,015 and 88,686 copies at the primary point and between 139 and 12,149 at the secondary, depending on the amplitude and the window. The pool starts from the record's pooled shares, allocated to whole copies by largest remainder. All ten classes start with at least one copy in 18 of the 20 combinations of operating point, window, and amplitude. At the secondary point with the window of 8 times $L_R$, Hull Engraved starts with no copy at an amplitude of 0.7, and Vernon Paul Appliqué and Hull Engraved start with none at 0.9. Those classes are absent from every record of those combinations, which is absence from the start and not loss by drift. Table S7 gives the counts by rate of new types. Under the rule fixed before the run, which requires all seven rare classes, the common-class F values and the rare classes are covered together in 8 combinations at the primary point and 5 at the secondary. In none of these are the number of types and the spatial summaries also covered.
+
+**Table S7.** The second set of simulations: number of the 60 combinations at each rate of new types $\theta$ in which the record's summaries lie inside their bands (`type_origination.md`). F: the three common-class F values together. Rare: at least five of the seven rare classes. Types: the number of types and the share of sherds beyond the tenth type. Space: the distance correlation and the latitude trends of the commonest and third-commonest classes.
+
+| point | $\theta$ | F | rare | types | space | F and rare | F, rare, and types | F, rare, and space |
+|---|---|---|---|---|---|---|---|---|
+| primary | 0 | 10 | 0 | 0 | 31 | 0 | 0 | 0 |
+| primary | 0.3 | 17 | 1 | 33 | 26 | 1 | 0 | 0 |
+| primary | 1 | 22 | 30 | 0 | 17 | 8 | 0 | 0 |
+| primary | 3 | 22 | 60 | 0 | 10 | 22 | 0 | 0 |
+| primary | 10 | 8 | 45 | 0 | 1 | 5 | 0 | 0 |
+| secondary | 0 | 11 | 0 | 0 | 33 | 0 | 0 | 0 |
+| secondary | 0.3 | 24 | 0 | 48 | 37 | 0 | 0 | 0 |
+| secondary | 1 | 23 | 18 | 4 | 25 | 9 | 0 | 2 |
+| secondary | 3 | 24 | 57 | 0 | 8 | 22 | 0 | 0 |
+| secondary | 10 | 7 | 49 | 0 | 3 | 4 | 0 | 0 |
+
+*Comparison of the two models without new types.* The finite-pool model at $\theta = 0$ should behave as the drifting-pool model does, apart from two differences of construction: a class is lost exactly when its count reaches zero, and the starting pool is rounded to whole copies. We compared them on the same rank-based statistics at 20 settings (two operating points, two windows, five amplitudes), with dates independent of location and the original span limit (`type_origination_calibration.md`). For every statistic at every setting, the median of each model lies inside the 10th to 90th percentile band of the other. That check is coarse, because two bands displaced by up to half their width pass it, so it shows overlap and does not show agreement to a stated tolerance. Table S8 therefore also gives the largest difference between the two medians, and the number of settings at which the record has the same reading (inside, above, or below the band) under both models. The readings agree in 307 of 320 comparisons. Five of the 13 disagreements are the latitude trend of the second-commonest class, all from inside the band under the drifting pool to below it under the finite pool. The record's value there, 0.057, lies at the lower edge of a band of absolute values, and that statistic enters none of the four groups of summaries. Each model's bands come from one set of 50 records, so readings near a band edge can differ by sampling alone.
+
+**Table S8.** The finite-pool model at $\theta = 0$ beside the drifting-pool model, by statistic, over 20 settings (`type_origination_calibration.md`). Classes are ranked by pooled count.
+
+| statistic | each median inside the other model's band | largest difference between medians | record has the same reading |
+|---|---|---|---|
+| F, rank 1 | 20 of 20 | 0.036 | 20 of 20 |
+| F, rank 2 | 20 of 20 | 0.035 | 19 of 20 |
+| F, rank 3 | 20 of 20 | 0.027 | 18 of 20 |
+| sites present, rank 4 | 20 of 20 | 6 | 19 of 20 |
+| sites present, rank 5 | 20 of 20 | 2 | 20 of 20 |
+| sites present, rank 6 | 20 of 20 | 1 | 17 of 20 |
+| sites present, rank 7 | 20 of 20 | 1 | 20 of 20 |
+| sites present, rank 8 | 20 of 20 | 1 | 20 of 20 |
+| sites present, rank 9 | 20 of 20 | 0 | 20 of 20 |
+| sites present, rank 10 | 20 of 20 | 0 | 20 of 20 |
+| number of types | 20 of 20 | 1 | 20 of 20 |
+| share of sherds beyond rank 10 | 20 of 20 | 0.000 | 20 of 20 |
+| distance correlation | 20 of 20 | 0.050 | 20 of 20 |
+| latitude trend, rank 1 | 20 of 20 | 0.057 | 19 of 20 |
+| latitude trend, rank 2 | 20 of 20 | 0.083 | 15 of 20 |
+| latitude trend, rank 3 | 20 of 20 | 0.101 | 20 of 20 |
+
 ## Parkin in the settlement record
 
 The main text concludes that decorated frequencies do not establish a boundary in ceramic learning at the edge of the Parkin phase. Two descriptions place Parkin in its regional context without bearing on that boundary.
@@ -178,9 +228,9 @@ Regional evidence on the production and exchange of stone hoes adds context: aut
 
 The main text analyzes Mainfort's [-@mainfort_2003] table and phases separately from the primary dataset, as a second case. His assignments follow Phillips's, with Smith's [-@smith_1990] Horseshoe Lake phase split out and the phases of western Tennessee added [@mainfort_2003, 176-177], and his table is not a larger sample once restricted to decorated classes. This section details that analysis. The tests are those of the earlier version of this study: whether the site map recovers his phases, and whether his phase lines separate the assemblages better than same-size divisions around random centers and compact divisions. The neutral copying model of the main text was not run on his table.
 
-Mainfort's Table 1 gives counts of ten decorated types for 39 sites with 800 or more sherds in all. His types map onto our classes as follows: Barton Incised and Kent Incised join the class that also holds Mound Place Incised, and Old Town Red and Nodena Red and White join the painted class. He does not tally Wallace Incised or Hull Engraved, which are carried as zeros so the class list matches the main analysis. Coordinates come from his own site list where it has them (30 sites), from this project's assemblage file for eight (four of them with a project correction), and from the settlement compilation for Sweat, and each row of `data/processed/mainfort2003_sites.csv` names its source. The file is written by `scripts/build_mainfort2003_sites.py`. The analysis uses decorated types only and sites with at least 100 decorated sherds, stricter than the main analysis's 75 because the second case should not be the looser test. Nine of his 39 sites fall below that, and Tipton's one remaining site, Graves Lake, is not carried as a phase of one. The tests are those of `analyses/74_phase_partition_test.py` and `analyses/76_phase_recovery.py`, run by `analyses/83_mainfort_replication.py` under his labels. A second reader checked the transcription of his table against the published page. The one row whose cells do not sum to its printed total, Hatchie (818 against 814), is transcribed correctly, and no analysis uses the printed totals (Table S7).
+Mainfort's Table 1 gives counts of ten decorated types for 39 sites with 800 or more sherds in all. His types map onto our classes as follows: Barton Incised and Kent Incised join the class that also holds Mound Place Incised, and Old Town Red and Nodena Red and White join the painted class. He does not tally Wallace Incised or Hull Engraved, which are carried as zeros so the class list matches the main analysis. Coordinates come from his own site list where it has them (30 sites), from this project's assemblage file for eight (four of them with a project correction), and from the settlement compilation for Sweat, and each row of `data/processed/mainfort2003_sites.csv` names its source. The file is written by `scripts/build_mainfort2003_sites.py`. The analysis uses decorated types only and sites with at least 100 decorated sherds, stricter than the main analysis's 75 because the second case should not be the looser test. Nine of his 39 sites fall below that, and Tipton's one remaining site, Graves Lake, is not carried as a phase of one. The tests are those of `analyses/74_phase_partition_test.py` and `analyses/76_phase_recovery.py`, run by `analyses/83_mainfort_replication.py` under his labels. A second reader checked the transcription of his table against the published page. The one row whose cells do not sum to its printed total, Hatchie (818 against 814), is transcribed correctly, and no analysis uses the printed totals (Table S9).
 
-**Table S7.** Recovery of Mainfort's (2003a) phases by clustering his sites at each weight on composition, adjusted Rand index with his phases, median over 40 starts (`analyses/83_mainfort_replication.py`).
+**Table S9.** Recovery of Mainfort's (2003a) phases by clustering his sites at each weight on composition, adjusted Rand index with his phases, median over 40 starts (`analyses/83_mainfort_replication.py`).
 
 | weight on composition | agreement with his phases (adjusted Rand index, median over 40 starts) |
 |---|---|
@@ -195,9 +245,9 @@ Mainfort's Table 1 gives counts of ten decorated types for 39 sites with 800 or 
 
 All 40 seeds return the same value at every weight.
 
-Under his phases, the cultural $F_{ST}$ is 0.0470 (direct), with a posterior median of 0.0459 (95 percent credible interval 0.0413 to 0.0505) when each site's class proportions are drawn from Dirichlet(counts + 1/2). Same-size divisions around random centers give a posterior median of 0.0297 and compact divisions 0.0315, and the posterior probability that his lines separate the assemblages better is 0.96 and 0.94 (`analyses/86_partition_posterior.py`). The compactness search returned his division in none of 1,000 starts (Table S8).
+Under his phases, the cultural $F_{ST}$ is 0.0470 (direct), with a posterior median of 0.0459 (95 percent credible interval 0.0413 to 0.0505) when each site's class proportions are drawn from Dirichlet(counts + 1/2). Same-size divisions around random centers give a posterior median of 0.0297 and compact divisions 0.0315, and the posterior probability that his lines separate the assemblages better is 0.96 and 0.94 (`analyses/86_partition_posterior.py`). The compactness search returned his division in none of 1,000 starts (Table S10).
 
-**Table S8.** Sites the two schemes assign differently: the phase under each scheme, the ceramic distance from the site to each phase's pooled profile, and the distance in km to that phase.
+**Table S10.** Sites the two schemes assign differently: the phase under each scheme, the ceramic distance from the site to each phase's pooled profile, and the distance in km to that phase.
 
 | site | Mainfort 2003a | primary analysis | ceramic distance to his phase | km | ceramic distance to the primary-analysis phase | km |
 |---|---|---|---|---|---|---|

@@ -59,7 +59,7 @@ EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh",
                  # needed to reproduce the paper, and the review logs are kept
                  # private by the policy above.
                  "MAIN_TEXT-old2.md", "MAIN_TEXT-madsen-edits-1.md",
-                 "SIMULATED_REVIEWS.md", "COVER_LETTER.md", "FIGURE_PLAN.md",
+                 "SIMULATED_REVIEWS.md", "COVER_LETTER.md", "COVER_LETTER.docx", "FIGURE_PLAN.md",
                  "references-citation-audit.md"}
 # Tracked prefixes inside a managed prefix that are not published.
 EXCLUDE_PREFIXES = ["docs/manuscript/revisions/",   # the September 2026 revision archive

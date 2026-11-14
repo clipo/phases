@@ -1,6 +1,6 @@
 # Drift extension: joint tabulations (exploratory)
 
-Produced by `.venv-np254/bin/python analyses/per_type/drift_extension_joint.py` from `output/findings/drift_extension_cells.csv`. Exploratory: the grid was run on 2026-11-14 without the Codex build audit, on one seed set of 50 records per cell, and these tabulations were chosen after the run was seen. They are not the registered reading rules, whose statements are in `output/findings/drift_extension.md`. Every count is a count of grid cells at which each named summary of the record lies inside its own 10th to 90th percentile band (marginal coverage). Cells that share a window share simulated histories, so the counts are not counts of independent confirmations.
+Produced by `.venv-np254/bin/python analyses/per_type/drift_extension_joint.py` from `output/findings/drift_extension_cells.csv`. Exploratory: the grid was run on 2026-11-14 before the Codex build audit of the same day (`docs/audits/codex_audit_2026-11-14_build_ledger.md`), on one seed set of 50 records per cell, and these tabulations were chosen after the run was seen. They are not the registered reading rules, whose statements are in `output/findings/drift_extension.md`. Every count is a count of grid cells at which each named summary of the record lies inside its own 10th to 90th percentile band (marginal coverage). Cells that share a window share simulated histories, so the counts are not counts of independent confirmations.
 
 ## Primary point
 
