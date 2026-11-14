@@ -1,6 +1,0 @@
-&REM Universal Transverse Mercator, Zone 15
-&REM UTM-15
-PROJECTION UTM
-UNITS METERS
-ZONE 15
-PARAMETERS

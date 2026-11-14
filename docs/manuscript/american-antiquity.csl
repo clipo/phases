@@ -438,6 +438,7 @@
     <sort>
       <key macro="contributors"/>
       <key variable="issued"/>
+      <key variable="title"/>
     </sort>
     <layout suffix=".">
       <group delimiter=". ">

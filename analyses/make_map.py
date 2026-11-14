@@ -1,4 +1,5 @@
-"""make_map.py — geographic study-area map (Figure 1).
+"""make_map.py — geographic study-area map (an early Figure 1; the manuscript's
+Figure 1 is now drawn by 93_phillips1970_phase_map.py, on this module's helpers).
 
 Produces figures/fig1_studyarea.png: site locations on local LMV GIS layers
 showing real river geometry (St. Francis, Tyronza, Mississippi) and
@@ -57,31 +58,35 @@ import warnings
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import matplotlib.patheffects as pe
-import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-import networkx as nx
-from scipy.spatial import cKDTree
-from pyproj import Transformer
-from shapely.geometry import box, MultiPoint, Point
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+import geopandas as gpd
+import matplotlib.lines as mlines
+import matplotlib.patches as mpatches
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import pandas as pd
+from pyproj import Transformer
+from scipy.spatial import cKDTree
+from shapely.geometry import MultiPoint, Point, box
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-from figstyle import save, OI_BLUE, OI_ORANGE, OI_GREEN, OI_VERMIL
+from figstyle import OI_BLUE, OI_GREEN, OI_ORANGE, OI_VERMIL, save
 
 warnings.filterwarnings("ignore")
 
+import itertools
+
+from mls_emergence.dataio.coords import read_assemblage_xy
 from mls_emergence.dataio.pfg import load_pfg_counts
-from mls_emergence.dataio.settlement import load_lmv, join_pfg_to_lmv, normalize_grid
+from mls_emergence.dataio.settlement import join_pfg_to_lmv, load_lmv, normalize_grid
 
 DATA = ROOT / "data"
 SHP = DATA / "Shapefiles"
@@ -135,10 +140,17 @@ def _load_broad_sites() -> pd.DataFrame:
 
     Northing/Easting are already UTM Zone 15N (EPSG:26915).
     """
-    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData_sherds.csv")
+    # PFGData_sherds.csv is the same table as the tracked PFGData.xlsx
+    # SherdData sheet (266x29, all 28 shared columns identical; the CSV
+    # writes "Old Town Red" where the sheet has a trailing space, which
+    # load_pfg_counts already strips). The CSV is not tracked, so the sheet
+    # is the reproducible source.
+    broad_counts = load_pfg_counts(DATA / "raw" / "PFGData.xlsx")
     if not broad_counts.index.is_unique:
         broad_counts = broad_counts.groupby(level=0).sum()
-    lmv = load_lmv(DATA / "LMVData_locations.csv")
+    # Same 3,030 rows as the two LMVData.xlsx zone sheets, which carry those
+    # 18 columns and 44 more. load_lmv reads the workbook.
+    lmv = load_lmv(DATA / "LMVData.xlsx")
     joined, _ = join_pfg_to_lmv(broad_counts, lmv)
     bm = joined.dropna(subset=["Easting", "Northing"]).copy()
 
@@ -184,7 +196,7 @@ def _load_curated_sites() -> pd.DataFrame:
     The 'lat' column is retained on the returned DataFrame, but basin
     membership is applied by the caller via the drainage rule (_within_drainage).
     """
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     xy["lat"] = pd.to_numeric(xy["Latitude"], errors="coerce")
@@ -315,7 +327,7 @@ def _add_scale_bar(ax: plt.Axes, extent: tuple, bar_km: int = 50) -> None:
     Placed at bottom-left of the axes in axes-fraction coordinates.
     In UTM15N, 1 m = 1 m so we convert km -> m directly.
     """
-    e_min, e_max, n_min, n_max = extent
+    e_min, e_max, _n_min, _n_max = extent
     width_m = e_max - e_min
     bar_m = bar_km * 1000
     frac = bar_m / width_m   # fraction of axes width
@@ -326,7 +338,7 @@ def _add_scale_bar(ax: plt.Axes, extent: tuple, bar_km: int = 50) -> None:
         xy=(x0 + frac, y0),
         xytext=(x0, y0),
         xycoords="axes fraction",
-        arrowprops=dict(arrowstyle="-", lw=2.0, color="black"),
+        arrowprops={"arrowstyle": "-", "lw": 2.0, "color": "black"},
     )
     # Tick ends
     for xf in (x0, x0 + frac):
@@ -335,7 +347,7 @@ def _add_scale_bar(ax: plt.Axes, extent: tuple, bar_km: int = 50) -> None:
             xy=(xf, y0 + 0.012),
             xytext=(xf, y0 - 0.012),
             xycoords="axes fraction",
-            arrowprops=dict(arrowstyle="-", lw=1.5, color="black"),
+            arrowprops={"arrowstyle": "-", "lw": 1.5, "color": "black"},
         )
     ax.text(
         x0 + frac / 2, y0 + 0.022,
@@ -353,7 +365,7 @@ def _add_north_arrow(ax: plt.Axes, x0: float = 0.93, y0: float = 0.10) -> None:
         xycoords="axes fraction",
         ha="center", va="center",
         fontsize=9, fontweight="bold",
-        arrowprops=dict(arrowstyle="-|>", lw=1.5, color="black"),
+        arrowprops={"arrowstyle": "-|>", "lw": 1.5, "color": "black"},
     )
 
 
@@ -462,7 +474,14 @@ def basin_basemap(ax: plt.Axes, extent: tuple, geology: bool = True,
 # ---------------------------------------------------------------------------
 # Consistent HydroRIVERS hydrography (shared by Figures 1, 9, 10)
 # ---------------------------------------------------------------------------
-HYDRORIVERS = DATA / "HydroRIVERS_v10_na.gdb.zip"
+# Hydrography source. The full HydroRIVERS North America extract is 70 MB and
+# is NOT tracked, so a clean clone would be unable to draw Figures 1, 9 and 10.
+# scripts/clip_hydrorivers.py writes a 2.6 MB clip of the study area, which is,
+# and that clip is preferred when present. The full source still works for
+# anyone who has it, and the two give the same lines within the figure extents.
+HYDRORIVERS_FULL = DATA / "HydroRIVERS_v10_na.gdb.zip"
+HYDRORIVERS_CLIP = DATA / "Shapefiles" / "hydrorivers_lmv_cmv.gpkg"
+HYDRORIVERS = HYDRORIVERS_CLIP if HYDRORIVERS_CLIP.exists() else HYDRORIVERS_FULL
 
 # Line width (points) per HydroRIVERS flow order. Lower ORD_FLOW = larger river,
 # so the Mississippi (order ~2) reads as the heaviest line and small tributaries
@@ -536,15 +555,14 @@ def river_distance_matrix(coords_latlon, tol: float = 250.0,
     G = nx.Graph()
 
     def add_line(coords):
-        for (ax, ay), (bx, by) in zip(coords[:-1], coords[1:]):
+        for (ax, ay), (bx, by) in itertools.pairwise(coords):
             a = (round(ax, 1), round(ay, 1))
             b = (round(bx, 1), round(by, 1))
             if a == b:
                 continue
             w = float(np.hypot(a[0] - b[0], a[1] - b[1]))
             if G.has_edge(a, b):
-                if w < G[a][b]["weight"]:
-                    G[a][b]["weight"] = w
+                G[a][b]["weight"] = min(G[a][b]["weight"], w)
             else:
                 G.add_edge(a, b, weight=w)
 
@@ -732,7 +750,7 @@ def make_map() -> None:
     try:
         from shapely import concave_hull as _concave_hull
         _hull = _concave_hull(_mp, ratio=0.35)
-    except Exception:
+    except Exception:  # noqa: BLE001  any concave-hull failure falls back to the convex hull
         _hull = _mp.convex_hull
     parkin_region = _hull.buffer(BUFFER_M)
 

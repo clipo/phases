@@ -1,49 +1,53 @@
 cff-version: 1.2.0
-message: "If you use this software or data, please cite both the paper and this archived repository."
-title: "phases: analysis code and data for \"Are the phases real?\""
+message: "If you use this software or data, please cite both the paper and this repository."
+title: "phases: analysis code and data for \"What Are Phases? Geographic Structure, Neutral Copying, and the Search for Social Boundaries in the Lower Mississippi Valley\""
 abstract: >-
-  Analysis code and data for the study distinguishing bounded interaction
-  groups from spatially structured drift in late pre-contact lower Mississippi
-  Valley decorated-ceramic assemblages.
+  Analysis code and data for a study of the late pre-contact phases of the
+  St. Francis basin, Lower Mississippi Valley: whether decorated-ceramic
+  assemblages record geographic structure, neutral copying, or bounded social
+  units. Includes the decorated-class matrix and its provenance, the neutral
+  copying model, the spatial field, latent-unit and barrier Stan models, the
+  findings files every reported number traces to, and the manuscript figures.
 type: software
 authors:
   - family-names: Lipo
     given-names: Carl P.
     affiliation: Binghamton University
   - family-names: DiNapoli
-    given-names: Robert J.
+    given-names: Beau
     affiliation: Binghamton University
   - family-names: Madsen
     given-names: Mark E.
-version: 1.0.0
-date-released: "2026-06-22"
+version: 2.0.0-dev
+date-released: "2026-11-01"
 license: MIT
 repository-code: "https://github.com/clipo/phases"
-doi: 10.5281/zenodo.20796240
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20796240
+    description: "Zenodo deposit of version 1.0.0 (22 June 2026), the code and data of the earlier version of the paper. A new version will be deposited on publication."
 keywords:
   - cultural transmission
   - neutral models
-  - spatially structured drift
   - isolation by distance
-  - frequency seriation
-  - cultural FST
-  - bounded interaction groups
-  - archaeological systematics
   - archaeological phase concept
+  - archaeological systematics
+  - spatial Gaussian process
+  - cultural FST
   - Mississippian archaeology
   - Parkin phase
   - lower Mississippi Valley
 preferred-citation:
   type: article
   title: >-
-    Are the phases real? Distinguishing bounded interaction groups from
-    spatially structured drift in lower Mississippi Valley decorated ceramics
+    What Are Phases? Geographic Structure, Neutral Copying, and the Search for
+    Social Boundaries in the Lower Mississippi Valley
   authors:
     - family-names: Lipo
       given-names: Carl P.
       affiliation: Binghamton University
     - family-names: DiNapoli
-      given-names: Robert J.
+      given-names: Beau
       affiliation: Binghamton University
     - family-names: Madsen
       given-names: Mark E.

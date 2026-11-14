@@ -14,7 +14,7 @@ Bottom: observed between-cluster F_ST for each region against the 95% nulls from
 neutral spatial-drift model and a bounded-groups model run on the real
 coordinates (time-averaged, rarefied to the observed counts).
 
-Read-only on the manuscript. Writes figures/fig11_within_region.png.
+Read-only on the manuscript. Writes figures/31_within_region_structure.png.
 
 Usage: .venv/bin/python analyses/31_within_region_structure.py
 """
@@ -31,14 +31,18 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+import matplotlib.pyplot as plt
+
 demo = importlib.import_module("25_drift_vs_groups_demo")
 g26 = importlib.import_module("26_cmv_phase_groupness")
 
-OUT = ROOT / "figures" / "fig11_within_region.png"
+# This script's own figure. Until 2026-10-02 it was written to figures/figS8_within_region.*,
+# which `50_revision_figures.py` also writes (the revision figure of the same name), so run order decided the file.
+OUT = ROOT / "figures" / "31_within_region_structure.png"
 C_DRIFT = "#0072B2"
 C_GROUP = "#D55E00"
 LEN, MB = 24.0, 0.02
@@ -99,8 +103,8 @@ def main():
         lab = mf._kmeans_labels(cc_c, k, seed=7)
         obs = fst_by(counts, lab)
         drift, grp = region_nulls(counts, coords, lab)
-        regions.append(dict(name=name, counts=counts, lab=lab, k=k, obs=obs,
-                            drift=drift, grp=grp, n=len(counts)))
+        regions.append({"name": name, "counts": counts, "lab": lab, "k": k, "obs": obs,
+                            "drift": drift, "grp": grp, "n": len(counts)})
 
     plt.rcParams.update({"font.family": "sans-serif",
                          "font.sans-serif": ["Arial", "DejaVu Sans"], "font.size": 8})

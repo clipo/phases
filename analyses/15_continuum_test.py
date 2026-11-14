@@ -23,10 +23,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
-from mls_emergence.signatures.assortativity import _kmeans_once  # noqa: E402
+import make_figures as mf
+
+from mls_emergence.signatures.assortativity import _kmeans_once
 
 OUT = ROOT / "output" / "continuum_test.md"
 RNG = np.random.default_rng(7)
@@ -54,7 +56,7 @@ def kmeans_inertia(X, k, n_init=10):
 
 
 def hopkins(X, m=None):
-    n, d = X.shape
+    n, _d = X.shape
     m = m or max(5, n // 5)
     mins = X.min(0); maxs = X.max(0)
     # nearest-neighbour distances for random points (u) and sampled data points (w)
@@ -93,19 +95,19 @@ def gap_statistic(X, kmax=6, B=50):
 
 
 def main():
-    counts, coords = mf._load_curated()  # basin 53
+    counts, _coords = mf._load_curated()  # basin 53
     M = counts.to_numpy(float)
     X = ca_scores(M, n_axes=4)
 
     H = hopkins(X)
     sils = {k: mf.silhouette_mean(X, mf._kmeans_labels(X, k, seed=7)) for k in range(2, 7)}
     best_k_sil = max(sils, key=sils.get)
-    best_k_gap, gaps, sk = gap_statistic(X, kmax=6, B=50)
+    best_k_gap, gaps, _sk = gap_statistic(X, kmax=6, B=50)
 
     L = ["# Discrete clusters vs gradational continuum (basin decorated assemblages)", "",
          f"Clustering-tendency tests on the first 4 CA axes of {M.shape[0]} basin assemblages.", "",
-         f"- **Hopkins statistic = {H:.2f}** (0.5 = no clustering tendency / continuum; "
-         f">0.75 = clustered). ",
+         (f"- **Hopkins statistic = {H:.2f}** (0.5 = no clustering tendency / continuum; "
+         f">0.75 = clustered). "),
          "- **Silhouette by k**: " + ", ".join(f"k={k}:{v:.2f}" for k, v in sils.items()) +
          f"; best k = {best_k_sil} (max silhouette {sils[best_k_sil]:.2f}).",
          f"- **Gap statistic**: best k = {best_k_gap} "

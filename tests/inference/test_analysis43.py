@@ -1,4 +1,6 @@
 import importlib
+from typing import ClassVar
+
 import numpy as np
 
 
@@ -16,8 +18,8 @@ def test_group_counts_builder_shapes():
     class _Inp:
         # minimal synthetic stand-in for prepare_inputs() output
         import pandas as pd
-        have_coords_ids = ["a", "b", "c", "d"]
-        cluster_of = {"a": 0, "b": 0, "c": 1, "d": 1}
+        have_coords_ids: ClassVar[list] = ["a", "b", "c", "d"]
+        cluster_of: ClassVar[dict] = {"a": 0, "b": 0, "c": 1, "d": 1}
         counts = pd.DataFrame(
             [[10, 0, 2], [8, 1, 1], [0, 9, 3], [1, 8, 2]],
             index=["a", "b", "c", "d"], columns=["t1", "t2", "t3"],
@@ -41,8 +43,8 @@ def test_basin_scope_rejects_ids_outside_the_membership():
 
     class _Inp:
         import pandas as pd
-        have_coords_ids = ["a", "b", "c", "d"]
-        cluster_of = {"a": 0, "b": 0, "c": 1, "d": 1}
+        have_coords_ids: ClassVar[list] = ["a", "b", "c", "d"]
+        cluster_of: ClassVar[dict] = {"a": 0, "b": 0, "c": 1, "d": 1}
         cc_c = np.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
         counts = pd.DataFrame(
             [[10, 0, 2], [8, 1, 1], [0, 9, 3], [1, 8, 2]],

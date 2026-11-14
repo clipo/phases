@@ -19,7 +19,7 @@ emergent F_ST brackets the observed value rather than depending on a tuned corne
 Raw per-run results are cached to output/emergence_robustness.csv so the figure
 can be regenerated without re-simulating; delete that file to force a fresh run.
 
-Writes output/emergence_robustness.{csv,md} and figures/figS5_emergence_robustness.png.
+Writes output/emergence_robustness.{csv,md} and figures/34_emergence_robustness.png.
 
 Usage: PYTHONPATH=src python3 analyses/34_emergence_robustness.py
 """
@@ -36,17 +36,22 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import make_figures as mf  # noqa: E402  (applies house style on import)
-import make_map as mm  # noqa: E402  (river-network distance)
+import make_figures as mf
+import make_map as mm
+import matplotlib.pyplot as plt
+
 m33 = importlib.import_module("33_time_aware_emergence")
-from scipy.stats import spearmanr  # noqa: E402
+res = importlib.import_module("17_basin_results")
+from scipy.stats import spearmanr
 
 OUT_MD = ROOT / "output" / "emergence_robustness.md"
 OUT_CSV = ROOT / "output" / "emergence_robustness.csv"
-OUT_FIG = ROOT / "figures" / "figS5_emergence_robustness.png"
+# This script's own figure. Until 2026-10-02 it was written to figures/figS4_emergence_robustness.*,
+# which `50_revision_figures.py` also writes (Supplemental Figure S7), so run order decided the file.
+OUT_FIG = ROOT / "figures" / "34_emergence_robustness.png"
 
 # Factor grid, centered on the positive-control corner (24 km, 0.02, 0.012).
 LEN_GRID = [12.0, 18.0, 24.0, 36.0]   # interaction length (km)
@@ -73,6 +78,7 @@ def simulate(coords, ranks, totals):
                         dist_km=river_km)
                     Mtt = m33.sample_time_transgressive(freqs, ranks, totals, rng)
                     _, nc, fst = m33.fst_communities(Mtt, seed=s)
+                    # Simulated: orientation-invariant, rho is used as abs().
                     ca, _, _ = mf.correspondence_axis(Mtt)
                     rho = spearmanr(ranks, ca).correlation
                     rows.append((lk, mx, mu, s, nc, fst,
@@ -91,8 +97,8 @@ def box_by_factor(ax, levels, factor_col, val_col, obs, xlabel, title, fmt="%g")
             for lv in levels]
     pos = np.arange(len(levels))
     ax.boxplot(data, positions=pos, widths=0.6,
-               medianprops=dict(color="#0072B2"))
-    ax.axhline(obs, ls="--", c="#D55E00", lw=1.2, label=f"observed ({obs:.2f})")
+               medianprops={"color": "0.5"})
+    ax.axhline(obs, ls="--", c="0.0", lw=1.2, label=f"observed ({obs:.2f})")
     ax.set_xticks(pos)
     ax.set_xticklabels([fmt % lv for lv in levels])
     ax.set_xlabel(xlabel, fontsize=8)
@@ -116,7 +122,9 @@ def main():
     n = counts.shape[0]
     totals = counts.sum(1).astype(int)
 
-    ca1, _, _ = mf.correspondence_axis(counts)
+    # Oriented against the pooled 14C medians; see the note in 33 on why the
+    # sign matters for `ranks`.
+    ca1 = res.oriented_ca(counts_df)[0].to_numpy(float)
     order = np.argsort(ca1)
     ranks = np.empty(n)
     ranks[order] = np.linspace(0, 1, n)
@@ -131,10 +139,18 @@ def main():
     lk_c, mx_c, mu_c, _, nc_c, fst_c, rho_c = (arr[:, i] for i in range(7))
     fin = np.isfinite(fst_c)
 
-    frac_phase = float(np.mean(nc_c >= 2))
-    frac_le_obs = float(np.mean(fst_c[fin] <= obs_fst))
-    frac_bracket = float(np.mean((fst_c[fin] >= 0.5 * obs_fst)
-                                 & (fst_c[fin] <= 2.0 * obs_fst)))
+    # Counts alongside the fractions. The two groups have different
+    # denominators: the community count is defined for every run, while the
+    # F_ST comparisons are over runs with a finite F_ST.
+    n_all = int(nc_c.size)
+    n_fin = int(fin.sum())
+    n_phase = int((nc_c >= 2).sum())
+    n_le_obs = int((fst_c[fin] <= obs_fst).sum())
+    n_bracket = int(((fst_c[fin] >= 0.5 * obs_fst)
+                     & (fst_c[fin] <= 2.0 * obs_fst)).sum())
+    frac_phase = n_phase / n_all
+    frac_le_obs = n_le_obs / n_fin
+    frac_bracket = n_bracket / n_fin
 
     # ---- figure (2x2) ----
     fig, axes = plt.subplots(2, 2, figsize=(7.0, 5.4))
@@ -147,7 +163,7 @@ def main():
                   "innovation rate", "B. $F_{ST}$ vs innovation", fmt="%g")
 
     vals, cnts = np.unique(nc_c.astype(int), return_counts=True)
-    axC.bar(vals, cnts / cnts.sum(), width=0.7, color="#0072B2",
+    axC.bar(vals, cnts / cnts.sum(), width=0.7, color="0.5",
             edgecolor="black", linewidth=0.3)
     axC.set_xlabel("drift-detected groups (per run)", fontsize=8)
     axC.set_ylabel("fraction of runs", fontsize=8)
@@ -156,9 +172,9 @@ def main():
     axC.set_xticks(vals)
     axC.tick_params(labelsize=7)
 
-    axD.hist(rho_c[np.isfinite(rho_c)], bins=16, color="#0072B2",
+    axD.hist(rho_c[np.isfinite(rho_c)], bins=16, color="0.5",
              edgecolor="black", linewidth=0.3)
-    axD.axvline(np.nanmean(rho_c), ls="--", c="#D55E00", lw=1.2,
+    axD.axvline(np.nanmean(rho_c), ls="--", c="0.0", lw=1.2,
                 label=f"mean {np.nanmean(rho_c):.2f}")
     axD.set_xlabel("seriation recovery |Spearman rho|", fontsize=8)
     axD.set_ylabel("runs", fontsize=8)
@@ -177,19 +193,24 @@ def main():
     L = [
         f"# Robustness of phase-like emergence to contingency and factors (n = {n})",
         "",
-        f"Grid: interaction length {LEN_GRID} km, between-node mixing {MIX_GRID}, "
+        (f"Grid: interaction length {LEN_GRID} km, between-node mixing {MIX_GRID}, "
         f"innovation {MU_GRID}; {N_SEEDS} seeds per cell; {len(arr)} "
-        "time-transgressive runs total.",
+        "time-transgressive runs total."),
         f"Observed data: {obs_ncom} communities, between-group F_ST = {obs_fst:.3f}.",
         "",
         "## Headline robustness",
-        f"- Phase-like structure (>= 2 emergent communities): {frac_phase*100:.1f}% of runs.",
-        f"- Emergent F_ST at or below the observed value: {frac_le_obs*100:.0f}% of runs.",
-        f"- Emergent F_ST within a factor of two of observed "
-        f"({0.5*obs_fst:.3f}-{2*obs_fst:.3f}): {frac_bracket*100:.0f}% of runs.",
-        f"- Mean emergent communities {np.nanmean(nc_c):.1f} "
+        # Counts, not just percentages: at :.0f a 430/432 rounds to "100%" and
+        # hides the two runs that produced a single community (rule 1).
+        (f"- Phase-like structure (>= 2 emergent communities): "
+        f"{n_phase} of {n_all} runs ({frac_phase*100:.1f}%)."),
+        (f"- Emergent F_ST at or below the observed value: "
+        f"{n_le_obs} of {n_fin} runs ({frac_le_obs*100:.1f}%)."),
+        (f"- Emergent F_ST within a factor of two of observed "
+        f"({0.5*obs_fst:.3f}-{2*obs_fst:.3f}): "
+        f"{n_bracket} of {n_fin} runs ({frac_bracket*100:.1f}%)."),
+        (f"- Mean emergent communities {np.nanmean(nc_c):.1f} "
         f"(range {int(np.nanmin(nc_c))}-{int(np.nanmax(nc_c))}); "
-        f"mean F_ST {np.nanmean(fst_c):.3f}; mean seriation |rho| {np.nanmean(rho_c):.2f}.",
+        f"mean F_ST {np.nanmean(fst_c):.3f}; mean seriation |rho| {np.nanmean(rho_c):.2f}."),
         "",
         "## Marginal effects (mean +/- sd)",
         f"- F_ST by interaction length (km): {fmt3(marg(LEN_GRID, lk_c, fst_c))}",
@@ -197,14 +218,14 @@ def main():
         f"- F_ST by innovation rate: {fmt3(marg(MU_GRID, mu_c, fst_c))}",
         f"- communities by interaction length (km): {fmt3(marg(LEN_GRID, lk_c, nc_c))}",
         "",
-        "Interpretation: across stochastic replicates and the full factor grid, "
+        ("Interpretation: across stochastic replicates and the full factor grid, "
         "neutral drift on the real geography reliably produces phase-like, spatially "
         "coherent communities, and the between-group F_ST stays at or near the observed "
         "level rather than the much higher value bounded groups would leave. The "
         "appearance of phase structure is a generic outcome of distance-structured "
         "drift on this layout, not an artifact of one tuned parameter set. F_ST is "
         "essentially flat across interaction length and falls with more mixing or "
-        "more innovation, as expected.",
+        "more innovation, as expected."),
         "",
         f"Figure: {OUT_FIG.relative_to(ROOT)}",
     ]

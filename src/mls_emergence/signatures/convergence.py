@@ -1,13 +1,15 @@
-"""Convergence scoring across the four transmission signatures.
+"""Combining the four signatures into one convergence readout.
 
-Standardizes each signature across the ordinal sequence and averages them, so
-convergence measures the co-movement of all four rather than any single one, and
-returns the time-ordered slope used to test whether the signatures rise
-together.
+Provides ``convergence_score`` (the mean of column-standardized signatures in a
+time-ordered panel) and ``time_derivative`` (the least-squares slope of a series
+on its index). Used by ``transmission.model``, ``validation.harness`` and
+analyses 05, 06 and 09.
 """
 from __future__ import annotations
+
 import numpy as np
 import pandas as pd
+
 
 def convergence_score(panel: pd.DataFrame) -> pd.Series:
     """Mean of column-standardized signatures: high where all four are jointly high.

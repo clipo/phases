@@ -32,25 +32,21 @@ treated as flat rather than as unimodality violations.
 """
 
 from __future__ import annotations
+
 import numpy as np
 
 
 def _col_violations(freqs: np.ndarray) -> int:
-    """Direction changes beyond a single peak in one frequency column.
+    """Count valleys: each fall-to-rise reversal violates a single peak.
 
-    A perfectly unimodal column has at most one direction change (ascending
-    then descending, or monotone in one direction).  Each change beyond the
-    first counts as one violation.
+    Flat steps are ignored. Zero agrees with ``is_unimodal`` at tolerance zero,
+    and the count is invariant under reversal of the entire ordering.
     """
     diffs = np.sign(np.diff(freqs))
     diffs = diffs[diffs != 0]
     if len(diffs) < 2:
         return 0
-    # Number of sign changes in the non-zero-difference sequence.
-    n_changes = int((np.diff(diffs) != 0).sum())
-    # A unimodal column has at most 1 change (rise then fall); violations are
-    # any changes beyond that first one.
-    return max(0, n_changes - 1)
+    return int(((diffs[:-1] < 0) & (diffs[1:] > 0)).sum())
 
 
 def unimodality_violation(matrix: np.ndarray) -> int:
@@ -72,7 +68,8 @@ def is_unimodal(freqs: np.ndarray, tol: float = 0.0) -> bool:
     f = np.asarray(freqs, dtype=float)
     if f.size < 3:
         return True
-    # Reduce the sequence to its significant direction changes.
+    # Scan for a second peak: once the sequence has fallen, any later rise is
+    # a second peak and breaks unimodality.
     seen_fall = False
     prev = f[0]
     for x in f[1:]:
@@ -137,9 +134,7 @@ def _order_is_valid(matrix: np.ndarray, order: list[int], tol: float = 0.0,
     if not co_present.any(axis=1).all():
         return False
     jumps = np.abs(np.diff(f, axis=0))
-    if (jumps > cont).any():
-        return False
-    return True
+    return not (jumps > cont).any()
 
 
 def _canonical(order: list[int]) -> tuple[int, ...]:
@@ -190,13 +185,12 @@ def _extend(matrix, order, remaining, tol, cont, found, visited, limits, prep):
                         visited, limits, prep)
                 if limits["truncated"]:
                     return
-    if not extended:
-        # No assemblage can be appended at either end: this ordering is maximal
-        # under end-extension. Record it; orderings that turn out to be subsets
-        # of a larger group (reached from a different seed) are pruned once at
-        # the end of ``seriation_solutions``.
-        if key not in found:
-            found[key] = list(order)
+    # No assemblage can be appended at either end: this ordering is maximal
+    # under end-extension. Record it; orderings that turn out to be subsets
+    # of a larger group (reached from a different seed) are pruned once at
+    # the end of ``seriation_solutions``.
+    if not extended and key not in found:
+        found[key] = list(order)
 
 
 def seriation_solutions(matrix: np.ndarray, tol: float = 0.0,

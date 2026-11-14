@@ -15,6 +15,20 @@ import pymc as pm
 
 def build_convergence_model(y, se, t, b_ser_obs, se_ser, *,
                             mu_sd=1.0, tau_sd=1.0, sigma_sd=0.5, a_sd=1.0):
+    """Build (do not sample) the hierarchical convergence model.
+
+    Arguments: ``y`` and ``se`` are (n_panel, T) arrays of panel-signature
+    values and their known standard errors, one row per signature; ``t`` is the
+    (T,) slice position; ``b_ser_obs`` and ``se_ser`` are the observed seriation
+    fragmentation slope and its standard error. Slopes are partially pooled,
+    non-centered: b = mu + tau * z_b, with mu ~ Normal(0, mu_sd), tau ~
+    HalfNormal(tau_sd), z_b ~ Normal(0, 1). Each panel row is a_j + b_j * t with
+    a_j ~ Normal(0, a_sd), observed with sd sqrt(se^2 + sigma^2), sigma ~
+    HalfNormal(sigma_sd). The last element of ``b`` is the seriation slope.
+
+    Sign: a positive slope means the signature rises with ``t``. Returns the
+    ``pm.Model``.
+    """
     y = np.asarray(y, float)          # (n_panel, T)
     se = np.asarray(se, float)        # (n_panel, T)
     t = np.asarray(t, float)          # (T,)
@@ -34,7 +48,19 @@ def build_convergence_model(y, se, t, b_ser_obs, se_ser, *,
 
 
 def sample_convergence(y, se, t, b_ser_obs, se_ser, *, draws=2000, tune=2000,
-                       chains=4, target_accept=0.9, random_seed=0, **priors):
+                       chains=4, target_accept=0.99, random_seed=0, **priors):
+    """Sample the convergence model. See build_convergence_model.
+
+    target_accept defaults to 0.99, not PyMC's 0.9. Measured 2026-08-31: at 0.9
+    this model produces 7 divergences per 1000 draws and a tau R-hat of 1.0112
+    on clean synthetic data with a strong correctly-specified signal, which is
+    the easiest case it will ever see. Divergences fall to 1 at 0.95 and to zero
+    at 0.99, with ESS improving monotonically, so the geometry is sound and the
+    default step size was simply too coarse for the funnel in tau. The only
+    production call site (analyses/40_hierarchical_convergence.py) already
+    passed 0.99 explicitly; a default every real caller must override is not a
+    default (rule 4). See output/findings/convergence_model_geometry.md.
+    """
     model = build_convergence_model(y, se, t, b_ser_obs, se_ser, **priors)
     with model:
         idata = pm.sample(draws=draws, tune=tune, chains=chains,
@@ -44,6 +70,14 @@ def sample_convergence(y, se, t, b_ser_obs, se_ser, *, draws=2000, tune=2000,
 
 
 def convergence_summary(idata) -> dict:
+    """Posterior summary of the slopes from ``sample_convergence``.
+
+    Returns ``p_convergence``, the fraction of draws in which every slope
+    (the panel slopes and, last, the seriation slope) is above zero; per-slope
+    posterior means, P(slope > 0) and 95 percent HDIs (ArviZ ``hdi``); the mean
+    and P(mu > 0) of the pooled mean slope; and the mean and P(> 0) of the
+    per-draw average slope (``cscore``). Sampler diagnostics are not included.
+    """
     post = idata.posterior
     b = post["b"].stack(s=("chain", "draw")).values      # (n_panel+1, S)
     mu = post["mu"].stack(s=("chain", "draw")).values     # (S,)

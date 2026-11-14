@@ -33,9 +33,11 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 sd = importlib.import_module("23_phases_vs_spatial_drift")  # geo_km, stats_for_matrix, ...
 
 OUT = ROOT / "output" / "phases_drift_robustness.md"
@@ -135,12 +137,12 @@ def null_cell(coords, geo_dist, totals, obs, K, *, length_km, m_between, mu,
         # when time-averaging collapses the synthetic basin to one community)
         defined = len(v) / max(1, n_seeds)
         if len(v) < 3:
-            res[k] = dict(mean=float("nan"), lo=float("nan"), hi=float("nan"),
-                          inside=None, defined=defined)
+            res[k] = {"mean": float("nan"), "lo": float("nan"), "hi": float("nan"),
+                          "inside": None, "defined": defined}
             continue
         lo, hi = np.percentile(v, [2.5, 97.5])
-        res[k] = dict(mean=float(v.mean()), lo=float(lo), hi=float(hi),
-                      inside=bool(lo <= obs[k] <= hi), defined=defined)
+        res[k] = {"mean": float(v.mean()), "lo": float(lo), "hi": float(hi),
+                      "inside": bool(lo <= obs[k] <= hi), "defined": defined}
     return res
 
 
@@ -155,9 +157,9 @@ def main():
 
     L = ["# Robustness of the phases-vs-spatial-drift test",
          "",
-         f"Observed (n = {counts.shape[0]} curated assemblages): "
+         (f"Observed (n = {counts.shape[0]} curated assemblages): "
          f"distance-decay r = {obs['dd_r']:+.3f}, modularity Q = {obs['Q']:.3f}, "
-         f"boundary excess = {obs['be']:+.1f} BR, cultural F_ST = {obs['fst']:+.3f}.",
+         f"boundary excess = {obs['be']:+.1f} BR, cultural F_ST = {obs['fst']:+.3f}."),
          "",
          "Each cell = 100 seeds. 'inside' means the observed statistic falls within",
          "the spatial-drift 95% null. A result robust to interaction parameters is",
@@ -185,14 +187,14 @@ def main():
                     done += 1
                     print(f"  [{done}/{ncells}] {tag[:9]} len={lk:.0f} "
                           f"m={mb:.2f} mu={mu:.3f}", flush=True)
-                    def cell(k):
+                    def cell(k, r=r):
                         d = r[k]
                         if d["inside"] is None:
                             return f"n/a (def {d['defined']:.0%})"
                         mark = "yes" if d["inside"] else "NO"
                         return f"{mark} ({d['lo']:+.2f},{d['hi']:+.2f})"
-                    L += [f"| {lk:.0f} | {mb:.2f} | {mu:.3f} | "
-                          f"{cell('dd_r')} | {cell('Q')} | {cell('be')} | {cell('fst')} |"]
+                    L += [(f"| {lk:.0f} | {mb:.2f} | {mu:.3f} | "
+                          f"{cell('dd_r')} | {cell('Q')} | {cell('be')} | {cell('fst')} |")]
         L += [""]
 
     # ---- summary tallies -------------------------------------------------- #

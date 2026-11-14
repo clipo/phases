@@ -1,0 +1,43 @@
+{
+ "_note": "D22 (Beau, 2026-10-17). Operating points for the probe's S0 generator, chosen from the self-consistent screen (resemblance_screen.py; every cell at its own measured time scales) after the 50-seed recheck (resemblance_stage2.py) by the pre-stated rule: smallest four-summary loss among cells matched on the three diversity summaries with an accepted time-scale measurement. The top eight cells are not distinguishable at 50 seeds. Rates are an operating point matched to four summaries; population is not identified separately from innovation and mixing; the only demographic anchor in the record is Morse and Morse 1996, p. 17. The secondary point is a declared second S0 generator (different kernel and population). No cell reaches the observed two-cluster F_ST (0.0062) at its median; the best plateau at about two thirds of it with the observed value near the 70th percentile of the seed-to-seed spread; the consequence is measured in the model's own terms at pilot step 7.",
+ "primary": {
+  "kernel": "gaussian",
+  "length": 6.0,
+  "n_ind": 2000,
+  "innovation": 0.002,
+  "mixing": 0.4,
+  "stage2": {
+   "fst_median": 0.0042,
+   "fst_frac_ge_observed": 0.26,
+   "loss4": 0.1083,
+   "L_d": 180,
+   "S": 2540
+  }
+ },
+ "secondary": {
+  "kernel": "exponential",
+  "length": 6.0,
+  "n_ind": 120,
+  "innovation": 0.024,
+  "mixing": 0.4,
+  "stage2": {
+   "fst_median": 0.0039,
+   "fst_frac_ge_observed": 0.26,
+   "loss4": 0.1477,
+   "L_d": 12,
+   "S": 390
+  }
+ },
+ "inherited_not_used": {
+  "kernel": "exponential",
+  "length": 24.0,
+  "n_ind": 2000,
+  "innovation": 0.001,
+  "mixing": 0.02,
+  "stage2": {
+   "fst_median": 0.0007,
+   "fst_frac_ge_observed": 0.0,
+   "loss4": 0.7924
+  }
+ }
+}

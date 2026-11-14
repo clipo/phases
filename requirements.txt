@@ -6,7 +6,7 @@
 # GEOS and PROJ libraries. On macOS:  brew install geos proj
 # On Debian/Ubuntu:  apt-get install libgeos-dev libproj-dev proj-data proj-bin
 
-numpy>=1.26          # (tested 2.4.6)
+numpy>=1.26,<2.5     # (tested 2.4.6; pinned below 2.5 with pyproject.toml, 2026-10-31)
 scipy>=1.12          # (tested 1.17.1)
 pandas>=2.0          # (tested 3.0.3)
 matplotlib>=3.8      # (tested 3.10.9)

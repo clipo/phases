@@ -1,4 +1,16 @@
-"""20_tempo_mode_ews.py — tempo-and-mode model selection and early-warning signals.
+"""
+PARTLY SUPERSEDED 2026-09-02 by analyses/54_tempo_mode_posterior.py.
+
+The tempo-and-mode section here compares four time-series models by AICc and
+Akaike weights. Under rule 18 that is replaced: the four models are regions of
+one parameter space (unbiased motion as the mean-reversion rate goes to zero,
+stasis as it grows large), so 54 fits the nesting model and reports the two
+parameters instead of selecting a winner. Its output/tempo_posterior.npz now
+feeds Figure S6 panel C; output/tempo_akaike.npz is orphaned.
+
+The early-warning-signal section of this script is NOT superseded and is still
+the source for its own result.
+20_tempo_mode_ews.py — tempo-and-mode model selection and early-warning signals.
 
 Two dynamic-sufficiency probes on the basin decorated-ceramic sequence, both
 asking whether the transmission trajectory along the seriation axis carries the
@@ -45,17 +57,19 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.ndimage import gaussian_filter1d
 from scipy.optimize import minimize
 from scipy.stats import kendalltau
-from scipy.ndimage import gaussian_filter1d
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")  # headless backend for make_figures' pyplot use
-import make_figures as mf  # noqa: E402
+import make_figures as mf
+
 res = importlib.import_module("17_basin_results")
 
 OUT = ROOT / "output" / "tempo_mode_ews.md"
@@ -147,7 +161,7 @@ def ews_indicators(x, w_frac, bw):
     resid = x - trend
     w = max(5, int(round(w_frac * n)))
     pos, sds, ar = [], [], []
-    for s in range(0, n - w + 1):
+    for s in range(n - w + 1):
         seg = resid[s:s + w]
         sds.append(seg.std(ddof=1))
         a = np.corrcoef(seg[:-1], seg[1:])[0, 1] if seg.std() > 0 else 0.0
@@ -164,7 +178,7 @@ def ews_surrogate_p(resid, w, obs_tv, obs_ta, nsurr=3000):
     for _ in range(nsurr):
         sh = RNG.permutation(resid)
         s2, a2, p2 = [], [], []
-        for s in range(0, n - w + 1):
+        for s in range(n - w + 1):
             seg = sh[s:s + w]
             s2.append(seg.std(ddof=1))
             a2.append(np.corrcoef(seg[:-1], seg[1:])[0, 1] if seg.std() > 0 else 0.0)
@@ -176,11 +190,22 @@ def ews_surrogate_p(resid, w, obs_tv, obs_ta, nsurr=3000):
     return cv / nsurr, ca / nsurr
 
 
+def _trend(tau, rng):
+    """Words for a Kendall tau and its range over the sensitivity sweep. The
+    direction is read from the sign across the whole sweep, never assumed: a
+    hard-coded "rises" stood beside a tau of -0.75 here until 2026-10-02."""
+    lo, hi = rng
+    if lo > 0:
+        return "rises"
+    if hi < 0:
+        return "falls"
+    return "shows no consistent trend, its sign changing across the sensitivity sweep"
+
+
 def main():
-    counts, coords = mf._load_curated()
+    counts, _coords = mf._load_curated()
     ca, _ = res.oriented_ca(counts)
     n = counts.shape[0]
-    counts.to_numpy(float)
     types = list(counts.columns)
 
     # ---- binned trajectory for tempo-and-mode ----
@@ -230,7 +255,7 @@ def main():
     order = ca.sort_values().index
     div_seq = np.array([gini_simpson(counts.loc[a].to_numpy(float)) for a in order])
     bw0, wf0 = 3.0, 0.5
-    pos, sds, ar, tv, ta, resid, w = ews_indicators(div_seq, wf0, bw0)
+    _pos, _sds, _ar, tv, ta, resid, w = ews_indicators(div_seq, wf0, bw0)
     pv, pa = ews_surrogate_p(resid, w, tv, ta)
     # sensitivity sweep
     sweep = []
@@ -245,8 +270,8 @@ def main():
     L = ["# Tempo-and-mode and early-warning-signal tests", "",
          f"Basin curated set (n = {n}), {len(types)} decorated types, oriented CA axis.", "",
          "## (1) Tempo and mode (Hunt 2006/2008; OU-vs-BM model selection)", "",
-         f"Per-type trajectories tested: {n_typetested}. Models fit on the {len(blabs)}-bin "
-         "level vector with sampling variances; comparison by AICc.", "",
+         (f"Per-type trajectories tested: {n_typetested}. Models fit on the {len(blabs)}-bin "
+         "level vector with sampling variances; comparison by AICc."), "",
          "**Decorated-type trajectories, best-model tally:**", "",
          "| model | types selecting it | mean Akaike weight |", "|---|---|---|"]
     for m in MODELS:
@@ -259,11 +284,11 @@ def main():
         L.append(f"| {m} | {aicc_div[m]:.1f} | {w_div[m]:.2f} |")
     direct = type_winners["GRW"]
     L += ["",
-          f"- Diversity trajectory best model: **{best_div}** (weight {w_div[best_div]:.2f}), "
-          f"directional GRW weight {w_div['GRW']:.2f}.",
+          (f"- Diversity trajectory best model: **{best_div}** (weight {w_div[best_div]:.2f}), "
+          f"directional GRW weight {w_div['GRW']:.2f}."),
           f"- Directional (GRW) is selected for {direct} of {n_typetested} type trajectories.",
           "",
-          "**Reading.** We lead with the Gini-Simpson diversity trajectory, which the "
+          ("**Reading.** We lead with the Gini-Simpson diversity trajectory, which the "
           f"correspondence-analysis ordering does not arrange by construction. It selects "
           f"the unbiased random walk decisively (BM weight {w_div['BM']:.2f}), the neutral-drift "
           "expectation, with negligible support for the directional, stasis, or OU "
@@ -273,36 +298,39 @@ def main():
           "almost by construction, and only a few types are abundant enough across the "
           "sequence to fit. A regime transition would register as a coherent directional shift "
           "in the aggregate trait, which it does not. The robust reading is drift, not a "
-          "sustained directional transition.", ""]
+          "sustained directional transition."), ""]
 
     verdict_ews = ("rising in both variance and autocorrelation (an early-warning signal)"
                    if (pv < 0.05 and pa < 0.05) else
                    "not jointly rising beyond the permutation null (no early-warning signal)")
     L += ["## (2) Early-warning signals (Scheffer et al. 2009; Dakos et al. 2012)", "",
-          f"Trait: Gini-Simpson diversity of the {n} assemblages ordered by CA position. "
-          f"Gaussian detrending (bandwidth {bw0:.0f}), rolling window {w} of {n}.", "",
+          (f"Trait: Gini-Simpson diversity of the {n} assemblages ordered by CA position. "
+          f"Gaussian detrending (bandwidth {bw0:.0f}), rolling window {w} of {n}."), "",
           f"- Rolling-variance trend: Kendall tau = {tv:+.2f} (permutation p = {pv:.3f}).",
           f"- Lag-1 autocorrelation trend: Kendall tau = {ta:+.2f} (permutation p = {pa:.3f}).",
-          f"- Sensitivity across window 0.4-0.6 and bandwidth 2-4: variance tau in "
-          f"[{tv_rng[0]:+.2f}, {tv_rng[1]:+.2f}], AR(1) tau in [{ta_rng[0]:+.2f}, {ta_rng[1]:+.2f}].",
+          (f"- Sensitivity across window 0.4-0.6 and bandwidth 2-4: variance tau in "
+          f"[{tv_rng[0]:+.2f}, {tv_rng[1]:+.2f}], AR(1) tau in [{ta_rng[0]:+.2f}, {ta_rng[1]:+.2f}]."),
           "",
           f"**Reading.** The indicators are {verdict_ews}. Critical slowing down toward a "
           "bifurcation inflates the variance and the lag-1 autocorrelation together, and a "
-          "reliable signal requires both. Here the rolling variance shows no rising trend "
-          f"(tau {tv:+.2f}, p {pv:.2f}) and is unstable in sign across the sensitivity sweep, "
-          f"while the autocorrelation rises (tau {ta:+.2f}, p {pa:.2f}). The lone "
-          "autocorrelation trend is the less diagnostic of the two and is partly expected from "
-          "the CA ordering itself, which places compositionally similar assemblages adjacent "
-          "and so structures short-range autocorrelation. With the two indicators not rising "
-          "together, and with only 29 ordinal points, there is no robust early-warning signal "
-          "of an approaching transition. The result is concordant with the static criterion "
-          "and the tempo test.", "",
+          f"reliable signal requires both. Here the rolling variance {_trend(tv, tv_rng)} "
+          f"(tau {tv:+.2f}, p {pv:.2f}; {tv_rng[0]:+.2f} to {tv_rng[1]:+.2f} across the sweep), "
+          f"and the lag-1 autocorrelation {_trend(ta, ta_rng)} (tau {ta:+.2f}, p {pa:.2f}; "
+          f"{ta_rng[0]:+.2f} to {ta_rng[1]:+.2f}). A positive tau is a rise along the sequence "
+          "and a negative one a fall. The autocorrelation is the less diagnostic of the two "
+          "here in any case, because the CA ordering places compositionally similar "
+          "assemblages adjacent and so structures short-range autocorrelation by itself. "
+          + ("Both indicators rise. " if (tv_rng[0] > 0 and ta_rng[0] > 0) else
+             "The two indicators do not rise together. ")
+          + f"With {n} ordered assemblages and a rolling window of {w}, the test has little to "
+          "work with, and it shows no robust early-warning signal of an approaching transition. "
+          "The result is concordant with the static criterion and the tempo test.", "",
           "## Verdict", "",
-          "Neither dynamic probe recovers a transition the static criterion missed. The "
+          ("Neither dynamic probe recovers a transition the static criterion missed. The "
           "aggregate diversity trajectory is best described by neutral drift (BM) rather than "
           "a directional shift, and the early-warning indicators do not rise together toward "
           "contact. Both are concordant with the no-convergence reading, now tested in the "
-          "time domain rather than only on static states."]
+          "time domain rather than only on static states.")]
     OUT.write_text("\n".join(L), encoding="utf-8")
 
     # ---- persist the tempo-and-mode Akaike weights for the manuscript figure ----

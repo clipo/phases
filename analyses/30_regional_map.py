@@ -15,7 +15,7 @@ A North America locator inset is reused from make_map.
 Powers-phase is shown only as Powers Fort (a point); no Powers-phase polygon is
 held by the project, so no area is drawn.
 
-Read-only on the manuscript. Writes figures/fig10_regional.png.
+Read-only on the manuscript. Writes figures/figS7_regional.png.
 
 Usage: .venv/bin/python analyses/30_regional_map.py
 """
@@ -25,10 +25,10 @@ import importlib
 import sys
 from pathlib import Path
 
+import cartopy.io.shapereader as shpreader
+import geopandas as gpd
 import numpy as np
 import pandas as pd
-import geopandas as gpd
-import cartopy.io.shapereader as shpreader
 from pyproj import Transformer
 from shapely.geometry import box
 
@@ -36,16 +36,18 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import matplotlib.patheffects as pe  # noqa: E402
-import make_figures as mf  # noqa: E402
-from figstyle import save_all  # noqa: E402
+import make_figures as mf
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+from figstyle import save_all
+
 mm = importlib.import_module("make_map")
 
 UTM = "EPSG:26915"
-OUT = ROOT / "figures" / "fig10_regional.png"
+OUT = ROOT / "figures" / "figS7_regional.png"
 C_LMV = "#D55E00"
 C_CMV = "#0072B2"
 RIVER = "#2E6DA4"
@@ -65,7 +67,7 @@ def ne(resolution, category, name):
 
 def main():
     # --- assemblages first, to center and zoom the extent on the data ---
-    cdf, codf = mf._load_curated()
+    _cdf, codf = mf._load_curated()
     cc = pd.read_csv(ROOT / "data" / "processed" / "williams1954_cmv_coords.tsv", sep="\t")
     all_lon = np.concatenate([codf["Longitude"].to_numpy(float), cc["lon"].to_numpy(float)])
     all_lat = np.concatenate([codf["Latitude"].to_numpy(float), cc["lat"].to_numpy(float)])
@@ -104,9 +106,9 @@ def main():
         ne_states.plot(ax=ax, color="#8a8a8a", linewidth=1.0, zorder=3)
 
     ax.scatter(cmv_e, cmv_n, s=22, c=C_CMV, edgecolor="white", linewidth=0.35,
-               zorder=6, label="CMV assemblages (Williams 1954)")
+               zorder=6, label="southeast Missouri (Williams 1954)")
     ax.scatter(lmv_e, lmv_n, s=22, c=C_LMV, edgecolor="white", linewidth=0.35,
-               zorder=6, label="LMV St. Francis basin (Parkin phase)")
+               zorder=6, label="St. Francis basin")
     ax.scatter([par_e], [par_n], marker="*", s=180, c="black", edgecolor="white",
                linewidth=0.6, zorder=7)
 
@@ -116,7 +118,12 @@ def main():
                 weight=weight, ha="center", va="center", zorder=9,
                 path_effects=[pe.withStroke(linewidth=2.4, foreground="white")])
 
-    lab(-90.45, 35.30, "Parkin", color="black", style="normal", weight="bold", fs=8)
+    # Parkin labeled to the west with a leader line: placed beside the star it
+    # sat on the neighboring basin markers. West of the basin is empty.
+    ax.annotate("Parkin", (par_e, par_n), xytext=(-38, 6), textcoords="offset points",
+                fontsize=8, weight="bold", color="black", ha="right", va="center", zorder=9,
+                arrowprops={"arrowstyle": "-", "color": "black", "lw": 0.6, "shrinkB": 5},
+                path_effects=[pe.withStroke(linewidth=2.4, foreground="white")])
     lab(-89.30, 36.92, "Cairo Lowland", color=C_CMV)
     lab(-89.62, 36.55, "Sikeston Ridge", color=C_CMV)
     lab(-90.18, 36.40, "Malden Plain", color=C_CMV)
@@ -157,7 +164,7 @@ def main():
                 pos.y0 + 0.50 * pos.height - 0.5 * ih,
                 iw, ih]
         mm._add_na_inset(fig, ext, rect=rect)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001  the inset is decorative; any failure is printed and skipped
         print("inset skipped:", exc)
 
     save_all(fig, OUT)

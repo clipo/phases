@@ -18,7 +18,7 @@ drift-and-hydrology effect rather than a social boundary.
 Per-run results cache to output/basin_pullout_runs.csv and the per-assemblage
 probabilities to output/basin_pullout_prob.csv; delete those to force a rerun.
 
-Writes output/basin_pullout.md and figures/fig9_parkin_pullout.png.
+Writes output/basin_pullout.md and figures/35_basin_pullout.png.
 
 Usage: PYTHONPATH=src python3 analyses/35_basin_pullout.py
 """
@@ -35,39 +35,47 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "analyses"))
 sys.path.insert(0, str(ROOT / "src"))
 
-import matplotlib  # noqa: E402
+import matplotlib
+
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.colors import Normalize, LinearSegmentedColormap  # noqa: E402
-from matplotlib.cm import ScalarMappable  # noqa: E402
-import matplotlib.patheffects as pe  # noqa: E402
-import pandas as pd  # noqa: E402
-import geopandas as gpd  # noqa: E402
-import make_figures as mf  # noqa: E402  (house style + DECORATED_TYPES, basin members)
-import make_map as mm  # noqa: E402  (river basemap + river-network distance)
+import geopandas as gpd
+import make_figures as mf
+import make_map as mm
+import matplotlib.patheffects as pe
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import LinearSegmentedColormap, Normalize
+
 m33 = importlib.import_module("33_time_aware_emergence")
+res17 = importlib.import_module("17_basin_results")
 m36 = importlib.import_module("36_canonical_phase_map")
-from scipy.stats import mannwhitneyu  # noqa: E402
-from mls_emergence.signatures.variance import cultural_fst  # noqa: E402
+from scipy.stats import mannwhitneyu
+
+from mls_emergence.dataio.coords import read_assemblage_xy
+from mls_emergence.dataio.matrix import read_analysis_matrix
+from mls_emergence.signatures.variance import cultural_fst
 
 DATA = ROOT / "data"
 OUT_MD = ROOT / "output" / "basin_pullout.md"
 OUT_RUNS = ROOT / "output" / "basin_pullout_runs.csv"
 OUT_PROB = ROOT / "output" / "basin_pullout_prob.csv"
-OUT_FIG = ROOT / "figures" / "fig9_parkin_pullout.png"
+# This script's own figure. Until 2026-10-02 it was written to figures/fig9_parkin_pullout.*,
+# which `50_revision_figures.py` also writes (the revision figure of the same name), so run order decided the file.
+OUT_FIG = ROOT / "figures" / "35_basin_pullout.png"
 N_CONS = 500
 
 
 def load_full():
     """All Mainfort-PFG decorated assemblages with coordinates, WITHOUT the
     drainage-basin restriction (the inverse of make_figures._load_curated)."""
-    cur = pd.read_csv(DATA / "raw" / "mainfort-pfg-cpl.csv").dropna(subset=["Assemblages"])
+    cur = read_analysis_matrix().dropna(subset=["Assemblages"])
     cur["Assemblages"] = cur["Assemblages"].astype(str).str.strip()
     cur = cur.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     type_cols = [c for c in mf.DECORATED_TYPES if c in cur.columns]
     counts = cur[type_cols].apply(pd.to_numeric, errors="coerce").fillna(0.0)
     counts = counts[counts.sum(axis=1) > 0]
-    xy = pd.read_csv(DATA / "raw" / "mainfort-pfg-cplXY.txt", sep="\t")
+    xy = read_assemblage_xy(DATA / "raw" / "mainfort-pfg-cplXY.txt")
     xy["Assemblages"] = xy["Assemblages"].astype(str).str.strip()
     xy = xy.drop_duplicates(subset=["Assemblages"], keep="first").set_index("Assemblages")
     coords = xy.reindex(counts.index)[["Latitude", "Longitude"]].apply(
@@ -123,11 +131,22 @@ def main():
     coords = coords_df[["Latitude", "Longitude"]].to_numpy(float)
     n = counts.shape[0]
     totals = counts.sum(1).astype(int)
-    is_parkin = m36.assign_phases(names, coords) == "Parkin"  # Mainfort Parkin phase
+    # Phillips's Parkin phase: the assemblages inside his Parkin area, not
+    # those the nearest-outline rule adds.
+    _lab, _der = m36.assign_primary_phases(names, coords)
+    is_parkin = (_lab == "Parkin") & ~_der
     pk = m33.parkin_index(names)
     lon, lat = coords[:, 1], coords[:, 0]
 
-    ca1, _, _ = mf.correspondence_axis(counts)
+    # Oriented against the pooled 14C medians rather than taken from the raw
+    # CA1, whose sign is arbitrary. On this 55-assemblage set the raw axis
+    # already happens to point the right way (Spearman(raw, oriented) = +1.000
+    # measured 2026-09-04), so this changes no number today. It is not left to
+    # luck: `ranks` sets the time axis sample_time_transgressive draws against,
+    # and the identical construction in 33, 34, 54 and 56 WAS reversed on the
+    # 29-assemblage basin set, which flipped a reported conclusion (3379a82,
+    # 9b8673d).
+    ca1 = res17.oriented_ca(counts_df)[0].to_numpy(float)
     order = np.argsort(ca1)
     ranks = np.empty(n)
     ranks[order] = np.linspace(0, 1, n)
@@ -228,7 +247,7 @@ def main():
                   f"({N_CONS} river-network drift runs, no boundary imposed)", fontsize=8.5)
 
     axB.boxplot([P_basin, P_off], positions=[0, 1], widths=0.6,
-                medianprops=dict(color="0.15"))
+                medianprops={"color": "0.15"})
     axB.scatter(np.zeros(len(P_basin)), P_basin, s=14, c="0.15", alpha=0.55, zorder=3)
     axB.scatter(np.ones(len(P_off)), P_off, s=14, c="0.55", alpha=0.55, zorder=3)
     axB.set_xticks([0, 1])
@@ -239,7 +258,7 @@ def main():
     axB.set_title("B. Parkin vs other phases", fontsize=8.5)
     axB.tick_params(labelsize=7)
     axB.text(0.04, 0.04, f"AUC = {auc:.2f}", transform=axB.transAxes, fontsize=8,
-             bbox=dict(boxstyle="round", fc="white", ec="0.6", alpha=0.9))
+             bbox={"boxstyle": "round", "fc": "white", "ec": "0.6", "alpha": 0.9})
 
     # Panel C: observed basin-vs-neighbors F_ST against the drift null
     axC.hist(nullf, bins=20, color="0.72", edgecolor="0.3", linewidth=0.3)
@@ -284,34 +303,34 @@ def main():
     L = [
         f"# Does the Parkin phase pull out of the wider LMV set under drift? (n = {n})",
         "",
-        f"All {n} Mainfort-PFG decorated LMV assemblages ({int(is_parkin.sum())} "
-        f"Parkin-phase, {int((~is_parkin).sum())} in other phases, after Mainfort 1996); "
+        (f"All {n} Mainfort-PFG decorated LMV assemblages ({int(is_parkin.sum())} "
+        f"inside Phillips's (1970) Parkin area, {int((~is_parkin).sum())} outside it); "
         f"neutral time-transgressive drift on the river network, no boundary imposed, "
-        f"{N_CONS} realizations. Focal node: Parkin.",
+        f"{N_CONS} realizations. Focal node: Parkin."),
         "",
         "## Pull-out of the Parkin phase",
-        f"- Mean P(shares Parkin's community): Parkin phase {P_basin.mean():.2f} "
+        (f"- Mean P(shares Parkin's community): Parkin phase {P_basin.mean():.2f} "
         f"(range {P_basin.min():.2f}-{P_basin.max():.2f}) vs other phases "
-        f"{P_off.mean():.2f} (range {P_off.min():.2f}-{P_off.max():.2f}).",
-        f"- Separation of Parkin from other phases by P: AUC = {auc:.2f} "
+        f"{P_off.mean():.2f} (range {P_off.min():.2f}-{P_off.max():.2f})."),
+        (f"- Separation of Parkin from other phases by P: AUC = {auc:.2f} "
         f"(Mann-Whitney p = {p_mw:.1e}). This separation is what drift on the river "
         f"network predicts: Parkin-phase assemblages lie near Parkin and so co-occur "
-        f"in its community more than distant assemblages do.",
-        f"- Per run, Parkin's emergent community is {prec.mean()*100:.0f}% Parkin-phase "
+        f"in its community more than distant assemblages do."),
+        (f"- Per run, Parkin's emergent community is {prec.mean()*100:.0f}% Parkin-phase "
         f"(precision) and captures {rec.mean()*100:.0f}% of Parkin-phase assemblages "
-        f"(recall); mean {nc.mean():.1f} communities (range {int(nc.min())}-{int(nc.max())}).",
-        f"- Observed Parkin-vs-others F_ST = {obs_fst_bo:.3f} against a drift null of "
+        f"(recall); mean {nc.mean():.1f} communities (range {int(nc.min())}-{int(nc.max())})."),
+        (f"- Observed Parkin-vs-others F_ST = {obs_fst_bo:.3f} against a drift null of "
         f"{nullf.mean():.3f} (95% {np.percentile(nullf, 2.5):.3f} to "
         f"{np.percentile(nullf, 97.5):.3f}, max {nullf.max():.3f}); {null_p*100:.1f}% of "
         f"drift runs reach or exceed the observed value (observed at the "
-        f"{100*np.mean(nullf < obs_fst_bo):.1f}th percentile of the null).",
-        f"- Leave-one-out jackknife (matched per-drop null): relabeling single Parkin "
+        f"{100*np.mean(nullf < obs_fst_bo):.1f}th percentile of the null)."),
+        (f"- Leave-one-out jackknife (matched per-drop null): relabeling single Parkin "
         f"assemblages into the comparison group moves the observed F_ST to "
         f"{jk[0][1]:.3f}-{jk[-1][1]:.3f}; {len(jk) - n_jk_inside} of {len(jk)} single "
         f"drops stay outside their matched drift null, so the contrast is not driven by any "
-        f"one assemblage. Dropping {jk[0][0]} gives the lowest value, F_ST = {jk[0][1]:.3f}.",
+        f"one assemblage. Dropping {jk[0][0]} gives the lowest value, F_ST = {jk[0][1]:.3f}."),
         "",
-        "Interpretation: with no boundary imposed, drift on the river network already "
+        ("Interpretation: with no boundary imposed, drift on the river network already "
         "makes the Parkin-phase assemblages share Parkin's emergent community more often "
         "than the other-phase (Nodena, Kent, Walls, Tipton, Jones Bayou, Parchman) "
         "assemblages do. The pull-out (AUC) is therefore a drift-and-hydrology effect: "
@@ -322,7 +341,7 @@ def main():
         "Time-averaging, which is not modeled in the null and tends to deflate between-group "
         "variance, and the small Parkin sample (n = 8) further limit the claim. We read the "
         "data as consistent with drift structured by geography, with at most a weak hint of "
-        "structure beyond drift at Parkin rather than a demonstrated social boundary.",
+        "structure beyond drift at Parkin rather than a demonstrated social boundary."),
         "",
         f"Figure: {OUT_FIG.relative_to(ROOT)}",
     ]
