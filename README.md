@@ -9,31 +9,51 @@ attribute counts and radiocarbon data the paper uses; every analysis script
 with the findings file it writes; the Stan programs for the spatial field,
 latent-unit and barrier models; the manuscript figures and the scripts that
 draw them; and the manuscript sources with their built Word and PDF files.
-`MANIFEST.md` names the script that produces each result and figure. Every
-number in the paper is traceable to a findings file under `output/findings/`.
+`MANIFEST.md` names the script that produces each result and figure. The
+numbers in the paper come from the findings files under `output/findings/`.
 
-## The question
+**Contents:** [The questions](#the-questions) ·
+[Three levels of reproduction](#three-levels-of-reproduction) ·
+[Quick start](#quick-start) · [Figures and tables](#figures-and-tables) ·
+[Reproducing the analyses](#reproducing-the-analyses) ·
+[Use the tests on your own data](#use-the-tests-on-your-own-data) ·
+[Installation](#installation) · [Data](#data) · [Manuscript](#manuscript) ·
+[Repository layout](#repository-layout) · [Licensing](#licensing) ·
+[Citing](#citing)
+
+## The questions
 
 Culture historians built phases to describe continuous spatial and temporal
-variation in artifact classes, yet phases are interpreted as social units and
-treated as communities. The paper asks, in order: what phases are; why culture
-historians saw them in these data; why the Lower Mississippi Valley is the
-classic case; whether the St. Francis basin phases are more than geographic
-clumps, that is, whether there is evidence of social boundaries beyond
-geography; and what it would take to detect such boundaries on a record like
-this one.
+variation in artifact classes, yet researchers still often treat phases as
+social units and communities. The paper asks three questions about the late
+pre-contact phases of the St. Francis basin in the Lower Mississippi Valley:
 
-On 28 time-averaged decorated-ceramic assemblages, clustering on site
-coordinates alone recovers Phillips's phases for all but two, a spatial field
-model places 93 percent of between-site compositional variation on a smooth
-geographic surface, and the phase boundaries run through the least-occupied
-ground between settlement clusters. The difference between the basin's two
-spatial clusters falls within what neutral copying at matched diversity
-produces. Recovery tests on the same site geometry show that no model which
-respects distance decay can separate a step from a gradient when the step
-falls in a gap with no assemblages. The phases are real as a geographic
-pattern, unresolvable as bounded units on this sample, and not demonstrated as
-social units.
+1. Why did culture historians see phases in these data?
+2. Is there evidence of social boundaries between the phases beyond the
+   geographic distribution of settlement?
+3. What would it take to detect such boundaries in a record like this one?
+
+The answers, on 28 time-averaged decorated-ceramic assemblages:
+
+1. **Geography.** Clustering on site coordinates alone recovers Phillips's
+   phases for all but two assemblages. A spatial field model assigns 93
+   percent of the between-site variance in composition to a smooth geographic
+   surface, and the phase boundaries run through the least-occupied ground
+   between settlement clusters.
+2. **No evidence of social boundaries.** The difference between the basin's
+   two spatial clusters is one that neutral copying at matched diversity can
+   produce, although most settings produce less. Three common decorated types,
+   and rim attributes tabulated separately on 19 sites, vary between sites
+   more than the tested neutral settings produce. The two share no pattern and
+   support no phase boundary.
+3. **Data this record lacks.** Neither of the two models built to detect
+   bounded units reliably recovered known units on records simulated at these
+   sites, plausibly because of the gaps between settlement clusters. Detecting
+   a boundary would take assemblages from those gaps, dated or stratified
+   contexts, and trait systems recorded separately from the decorated types.
+
+The phases are real as a geographic pattern, not resolved as bounded units by
+the two models tested, and not demonstrated as social units.
 
 ## Three levels of reproduction
 
@@ -54,9 +74,10 @@ committed, so a reader can stop at any of them.
    further sets of simulations of Tables S7 and S8), the rim analysis, and the
    Stan data contracts. `./run_all.sh --analyses` runs them.
 3. **The Stan fits (R, rstan, a C++ toolchain; hours to days).** The spatial
-   field model A0 on the basin with its prior defense and recovery runs, the
-   latent-unit model A1 and the barrier model A3 on their own generators, and
-   the prior and range sensitivity refits. `./run_all.sh --stan` runs them
+   field model on the basin with its prior checks and recovery runs, the
+   latent-unit model and the barrier model on records from their own
+   generators, and the prior and range sensitivity refits. File names and
+   findings files call these three models A0, A1 and A3. `./run_all.sh --stan` runs them
    after the Python analyses. The fits are cached by content in
    `output/gp_cache/`, which is not published; the findings files carry every
    posterior summary together with its sampler diagnostics (R-hat, bulk and
@@ -158,14 +179,20 @@ matrix and its provenance file); `analyses/16_basin_membership.py` (the
 `80_boundaries_in_settlement_gaps.py` and `81_settlement_and_rivers.py`;
 `analyses/11_chronology_14c.py`; `scripts/build_mainfort2003_sites.py` and
 `analyses/83_mainfort_replication.py`; `analyses/49_write_stan_data.py` (the
-Stan data contracts under `data/stan/`); then the neutral copying
-simulations: `analyses/probe_latent_groups/resemblance_screen.py` (the
+Stan data contracts under `data/stan/`); then
+`analyses/probe_latent_groups/time_scales.py` (the simulator time scales the
+later scripts read); then the neutral copying simulations:
+`analyses/probe_latent_groups/resemblance_screen.py` (the
 297-cell screen at six seeds for each copying-network family, 2,970 cells in
 all), `resemblance_stage2.py`, `per_class_resemblance.py`,
 `site_fst_decomposition.py`, the per-class tables with regional drift and
 planted markers (`analyses/per_type/per_class_table.py`, generators C3 and M
-at the two operating points, then `drift_sensitivity_figure.py`), and
-`analyses/per_type/composition_by_collection.py`. The simulations are the
+at the two operating points, then `drift_sensitivity_figure.py`),
+`analyses/per_type/composition_by_collection.py`, the two further sets of
+simulations (`drift_extension.py` and `type_origination.py` with their
+`_joint` and `_calibration` scripts, Tables S7 and S8), and the rim analysis
+(`scripts/build_mainfort_rim_counts.py`, then `analyses/rims/rim_r1.py` at
+both operating points and with `--readings`). The simulations are the
 slow part; they use `multiprocessing` and every record is seeded from a
 `SeedSequence` named in the script's header, so reruns reproduce the committed
 findings files. The operating points are registered in
@@ -174,8 +201,9 @@ findings files. The operating points are registered in
 ### Level 3: the Stan fits
 
 The models are Stan programs under `stan/spatial/`: `composition_gp_marginal.stan`
-(A0, the spatial field), `composition_gp_groups.stan` (A1, latent units) and
-`composition_gp_barrier.stan` (A3, a barrier), sharing `kernels.stanfunctions`.
+(the spatial field model, A0), `composition_gp_groups.stan` (the latent-unit
+model, A1) and `composition_gp_barrier.stan` (the barrier model, A3), sharing
+`kernels.stanfunctions`.
 They are fitted through `R/fit_spatial.R`, which attaches the diagnostics to
 every fit and applies the diagnostic gate the paper states (R-hat at most
 1.01, bulk and tail effective sample size at least 400, no divergences,
@@ -187,8 +215,8 @@ Rscript analyses/00_setup/01_verify_toolchain.R    # compiles and samples a mode
 ./run_all.sh --stan
 ```
 
-`--stan` runs `analyses/probe_latent_groups/refit_a0_basin.R` (A0 on the basin
-and the prior defense of Table S4), `a0_intercept_prior.R` (the three
+`--stan` runs `analyses/probe_latent_groups/refit_a0_basin.R` (the spatial
+field model on the basin and the prior checks of Table S4), `a0_intercept_prior.R` (the three
 intercept priors of Figure 5), `validate_a1.R` and `validate_a3.R` (the
 recovery tests of Figure 8), `a1_prior_check.R`, `a3_pinned_range.R` at 6 and
 12 km (Table S5), and then the Python summaries that read the fit records,
@@ -208,7 +236,9 @@ Rscript -e 'testthat::test_file("tests/testthat/test-kernels.R")'
 Known issue: `tests/phasecheck/test_copying_model.py::test_model_comparison_tells_a_restricted_record_from_an_unrestricted_one`
 fails on 3 of its 80 records under numpy 2.4.6, scipy 1.18.1 and pandas 3.0.6.
 The code has not changed since the test passed; the difference is in the
-numerical libraries, and it is under investigation. `pyproject.toml` pins numpy
+numerical libraries, and it is under investigation. Under numpy 2.5, two more
+tests in that file fail because seeded results change with the numpy version
+(checked 2026-11-14 with numpy 2.5.4). `pyproject.toml` therefore pins numpy
 below 2.5.
 
 ## Use the tests on your own data
@@ -309,7 +339,8 @@ survey counts (`data/raw/PFGData.xlsx`) and Lipo's (2001) compilation of those
 counts with his 1996 to 1997 collections (`data/raw/mainfort-pfg-cpl.xlsx`),
 one source per assemblage and never summed; Mainfort's (2003a) published table
 is a separate comparison set; the rim attribute counts for beveling and
-notching are Mainfort's (2003b) Table 1; the radiocarbon is the Mainfort
+notching are Mainfort's (2003b) Table 1, and those for lip form and paste are
+from his unpublished tabulation (`data/raw/mainfort_miss_rims.xls`); the radiocarbon is the Mainfort
 (2001) compilation calibrated against IntCal20; the settlement tables are the
 regional compilation of Lipo and Dunnell (2007) with the published corrections
 in `data/raw/`; the geospatial layers are the project's Lower Mississippi
@@ -330,8 +361,14 @@ pandoc MAIN_TEXT.md --citeproc --bibliography=references.bib \
   --csl=american-antiquity.csl --include-in-header=_pdf_header.tex -o MAIN_TEXT.pdf
 ```
 
-Build the Supplemental Text the same way. `docs/manuscript/BUILD.md` has the
-details, and `scripts/check_figure_claims.py` and `scripts/check_signs.py`
+Build the Supplemental Text the same way. Two things differ between a fresh
+build and the committed files. The committed `.docx` files were adjusted by
+hand in Word after the pandoc build (table widths and similar styling, with
+the text edits carried back into the Markdown), so a rebuilt `.docx` has the
+same content in pandoc's default layout. The committed `.pdf` files were made
+from those Word files with LibreOffice
+(`soffice --headless --convert-to pdf MAIN_TEXT.docx`), not with the LaTeX
+command above. `docs/manuscript/BUILD.md` has the details, and `scripts/check_figure_claims.py` and `scripts/check_signs.py`
 check the figures' printed values and the text's signed values against the
 findings files.
 
@@ -342,7 +379,7 @@ analyses/                 numbered analysis and figure scripts; per_type/, probe
 analyses/00_setup/        R dependency install, toolchain check, environment recording
 src/mls_emergence/        the package: transmission (the copying model), probe (generators, readouts, rivals), per_type, rims, signatures, dataio
 src/phasecheck/           the phase tests as a tool for other data (docs/PHASECHECK.md)
-stan/spatial/             the A0, A1 and A3 Stan programs and shared kernel functions
+stan/spatial/             the Stan programs for the spatial field (A0), latent-unit (A1) and barrier (A3) models, and shared kernel functions
 R/                        fit_spatial.R (fitting, diagnostics, gate, cache) and diagnostic_plots.R
 scripts/                  matrix and table builders, the manifest builder, the figure-claim and sign checks, the release sync
 tests/                    pytest suites; tests/testthat/ for R

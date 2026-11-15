@@ -92,7 +92,7 @@ def main() -> int:
 
     x = np.arange(len(FW))
     shade = {1.5: "0.72", 2.0: "0.45", 3.0: "0.0"}
-    fig = plt.figure(figsize=(7.0, 8.6))
+    fig = plt.figure(figsize=(7.0, 8.35))
     gs = fig.add_gridspec(3, 3, height_ratios=[1.25, 1.0, 1.1], hspace=0.5, wspace=0.32)
     axA = [fig.add_subplot(gs[0, j]) for j in range(3)]
     axB = [fig.add_subplot(gs[1, j]) for j in range(3)]
@@ -167,7 +167,7 @@ def main() -> int:
                       label="the record (C)"),
                Line2D([0], [0], marker="^", color="none", markerfacecolor="white", markeredgecolor="black", ms=6,
                       label="Walls Engraved with a marker, multiplier 3, larger / smaller cluster (C)")]
-    fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=6.4, frameon=False, bbox_to_anchor=(0.5, -0.01))
+    fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=6.4, frameon=False, bbox_to_anchor=(0.5, -0.03))
     fig.subplots_adjust(bottom=0.12, top=0.96, left=0.09, right=0.98)
     png = fs.save_all(fig, FIG, close=True)
     print(f"written {png}; record F {rec}; neutral medians at F_W 0.3 "
