@@ -50,7 +50,8 @@ committed, so a reader can stop at any of them.
    recovery and settlement analyses, the minimum sample size, the radiocarbon
    chronology, the Mainfort (2003a) comparison, the neutral copying
    simulations (the resemblance screen, the per-class tables with regional
-   drift and planted markers, the composition-by-collection analysis), and the
+   drift and planted markers, the composition-by-collection analysis, the two
+   further sets of simulations of Tables S7 and S8), the rim analysis, and the
    Stan data contracts. `./run_all.sh --analyses` runs them.
 3. **The Stan fits (R, rstan, a C++ toolchain; hours to days).** The spatial
    field model A0 on the basin with its prior defense and recovery runs, the
@@ -61,19 +62,18 @@ committed, so a reader can stop at any of them.
    posterior summary together with its sampler diagnostics (R-hat, bulk and
    tail effective sample size, divergences, treedepth saturation, E-BFMI).
 
-`run_all.sh` does not run the rim-attribute analysis
-(`analyses/rims/rim_r1.py`, Figure 7). Its data are in the release: the
-lip-form and paste counts come from an unpublished tabulation by Robert
+The rim-attribute analysis (`analyses/rims/rim_r1.py`, Figure 7) runs at level
+2. Its lip-form and paste counts come from an unpublished tabulation by Robert
 Mainfort (`data/raw/mainfort_miss_rims.xls`), the counts for beveling and
 notching come from his published Table 1
 (`data/raw/mainfort2003_rim_table1_counts.csv`), and
 `scripts/build_mainfort_rim_counts.py` combines the two into
-`data/processed/mainfort_rim_counts.csv`. The script also reads the simulator
-time scales that `analyses/probe_latent_groups/time_scales.py` writes to
-`output/probe_latent_groups/`, which are not published and must be generated
-first. Its findings file, `output/findings/rim_r1.md`, is committed and
-Figure 7 redraws from it. We have not rerun this analysis from a clean copy of
-the release. See `data/README.md`.
+`data/processed/mainfort_rim_counts.csv`. See `data/README.md`.
+
+The neutral copying model's scripts and the rim analysis read simulator time
+scales from `output/probe_latent_groups/`, which is not published. Level 2
+writes them first (`analyses/probe_latent_groups/time_scales.py`, under a
+minute), so run that script before running any of the others alone.
 
 ## Quick start
 

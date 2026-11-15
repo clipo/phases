@@ -18,11 +18,11 @@
 # any single failure and reports the count at the end. MANIFEST.md names the
 # script that writes every output.
 #
-# Not run here: analyses/rims/rim_r1.py (Figure 7's findings file,
-# output/findings/rim_r1.md). Its rim counts are in the release (see
-# data/README.md); it also needs the simulator time scales written by
-# analyses/probe_latent_groups/time_scales.py, which this script does not
-# run. The figure is redrawn from the committed findings file in level 1.
+# Level 2 first measures the simulator time scales
+# (analyses/probe_latent_groups/time_scales.py), which the neutral copying
+# model's scripts and the rim analysis read from output/probe_latent_groups/.
+# That directory is not published, so level 2 must run before any of those
+# scripts is run alone.
 
 set -u
 cd "$(dirname "$0")"
@@ -68,6 +68,7 @@ if [ "$LEVEL" -ge 2 ]; then
   # The neutral copying model: the screen, its second stage and the per-class
   # comparison (Table 1's neutral comparisons), then regional drift and the
   # planted markers (Figure 6, Tables 2 and S6), then composition by collection.
+  py analyses/probe_latent_groups/time_scales.py                    # simulator time scales, read by the scripts below
   py analyses/probe_latent_groups/resemblance_screen.py
   py analyses/probe_latent_groups/resemblance_stage2.py
   py analyses/probe_latent_groups/per_class_resemblance.py
@@ -82,6 +83,17 @@ if [ "$LEVEL" -ge 2 ]; then
   done
   py analyses/per_type/drift_sensitivity_figure.py
   py analyses/per_type/composition_by_collection.py
+  # The two further sets of simulations (Tables S7 and S8).
+  py analyses/per_type/drift_extension.py
+  py analyses/per_type/drift_extension_joint.py
+  py analyses/per_type/type_origination.py                          # Table S7
+  py analyses/per_type/type_origination_joint.py
+  py analyses/per_type/type_origination_calibration.py              # Table S8
+  # The rim attributes (Figure 7's findings file).
+  py scripts/build_mainfort_rim_counts.py
+  py analyses/rims/rim_r1.py --points primary --kinds rim,decoration_current,decoration_pfg --records 50
+  py analyses/rims/rim_r1.py --points secondary --kinds rim,decoration_current,decoration_pfg --records 50
+  py analyses/rims/rim_r1.py --readings
 fi
 
 if [ "$LEVEL" -ge 3 ]; then

@@ -40,6 +40,11 @@ pandoc SUPPLEMENTAL_TEXT.md --citeproc --bibliography=references.bib \
 pandoc COVER_LETTER.md --reference-doc=reference.docx -o COVER_LETTER.docx
 ```
 
+On a machine without `pdflatex`, the PDFs can be made from the Word files instead:
+`soffice --headless --convert-to pdf --outdir . MAIN_TEXT.docx SUPPLEMENTAL_TEXT.docx`.
+That PDF follows the Word layout (Times New Roman, 12 pt), not the LaTeX layout of the
+commands above. The PDFs of 2026-11-14 were made this way.
+
 `reference.docx` was built from `pandoc --print-default-data-file reference.docx`
 with the theme Latin fonts set to Times New Roman, `docDefaults` forced to
 Times New Roman / 12 pt / black, every style size normalized to 12 pt, and a
