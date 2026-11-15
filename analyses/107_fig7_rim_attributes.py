@@ -87,7 +87,7 @@ def main() -> int:
     meds = [v[i][0] for v in adj.values() for i in (0, 1)]
     assert -0.075 <= min(meds) and max(meds) <= 0.145, meds
 
-    fig, axes = plt.subplots(1, 3, figsize=(7.0, 3.9), gridspec_kw=dict(width_ratios=[1.0, 1.0, 0.8], wspace=0.6))
+    fig, axes = plt.subplots(1, 3, figsize=(6.65, 3.9), gridspec_kw=dict(width_ratios=[1.0, 1.0, 0.8], wspace=0.6))
     order = RIMS + DECOR
     ypos = [0, 1, 2, 3, 4.6, 5.6, 6.6]
     axA, axB, axC = axes

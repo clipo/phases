@@ -120,7 +120,7 @@ def main() -> None:
         "from the figure files the manuscripts embed. Rebuild after any figure script runs.",
         "",
         "Each figure is supplied twice. The TIFF (LZW, RGB, 300 dpi) is the exact render shown in "
-        "the manuscript, flattened onto white. The PDF is the vector version, with text as paths, "
+        "the manuscript, flattened onto white. The PDF is the vector version, with its fonts embedded (text as paths where the PDF was converted from an SVG), "
         "and is the file to prefer for line and combination artwork at any resolution. Colour is "
         "RGB; the Cambridge Journals Artwork Guide asks for CMYK, and the conversion is left to "
         "the press because a numerical conversion shifts the Okabe-Ito palette. Captions are in "

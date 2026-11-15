@@ -44,6 +44,12 @@ mpl.rcParams.update(
         "xtick.labelsize": 8,
         "ytick.labelsize": 8,
         "legend.fontsize": 8,
+        # Math text in the same face as the rest (the default set is DejaVu Sans,
+        # which put a second font into every figure with an italic symbol)
+        "mathtext.fontset": "custom",
+        "mathtext.rm": "Arial",
+        "mathtext.it": "Arial:italic",
+        "mathtext.bf": "Arial:bold",
         # Resolution
         "figure.dpi": 150,       # screen preview; save() overrides to 300
         "savefig.dpi": 300,
