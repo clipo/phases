@@ -83,7 +83,7 @@ cd phases
 conda env create -f environment.yml      # or the pip path under Installation
 conda activate phases
 pip install -e .                          # makes the mls_emergence package importable
-./run_all.sh                              # level 1: Figures 1 to 7 and S1 from the committed findings
+./run_all.sh                              # level 1: Figures 1 to 8 and S1 from the committed findings
 ```
 
 To redraw one figure, run its script (see [Figures and tables](#figures-and-tables)).
