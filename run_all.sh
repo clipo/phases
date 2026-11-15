@@ -5,7 +5,7 @@
 #    for Social Boundaries in the Lower Mississippi Valley"
 #
 # Usage:
-#   ./run_all.sh              # level 1: Figures 1 to 7 and S1 from the committed findings files (minutes)
+#   ./run_all.sh              # level 1: Figures 1 to 8 and S1 from the committed findings files (minutes)
 #   ./run_all.sh --analyses   # level 2: also rerun the Python analyses that write those findings files (hours)
 #   ./run_all.sh --stan       # level 3: also refit the Stan models (R, rstan; hours to days)
 #   PYTHON=.venv/bin/python ./run_all.sh
