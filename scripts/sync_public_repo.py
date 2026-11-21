@@ -60,7 +60,11 @@ EXCLUDE_NAMES = {"CLAUDE.md", "STATUS.md", "sync_drive.sh", "rerun_pipeline.sh",
                  # private by the policy above.
                  "MAIN_TEXT-old2.md", "MAIN_TEXT-madsen-edits-1.md",
                  "SIMULATED_REVIEWS.md", "COVER_LETTER.md", "COVER_LETTER.docx", "FIGURE_PLAN.md",
-                 "references-citation-audit.md"}
+                 "references-citation-audit.md",
+                 # The journal upload archive (2026-11-21). It sits beside
+                 # docs/manuscript/submission/, which EXCLUDE_PREFIXES keeps
+                 # private, and holds the same files.
+                 "submission.zip"}
 # Tracked prefixes inside a managed prefix that are not published.
 EXCLUDE_PREFIXES = ["docs/manuscript/revisions/",   # the September 2026 revision archive
                     "docs/manuscript/submission/"]   # journal submission package (figures renamed for upload)

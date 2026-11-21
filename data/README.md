@@ -36,7 +36,7 @@ versions of this release and is included from 2026-11-14.
 `processed/mainfort_rim_counts.csv` holds the counts
 `scripts/build_mainfort_rim_counts.py` derives from it together with his
 published Table 1. The current rim analysis (`analyses/rims/rim_r1.py`) reads
-lip form and Bell paste from the derived file. Its findings file,
+lip form from the derived file. It lists the paste counts and does not analyze them. Its findings file,
 `output/findings/rim_r1.md`, and the figure drawn from it are committed.
 
 ## How the analysis matrix is built

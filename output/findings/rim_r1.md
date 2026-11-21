@@ -1,6 +1,6 @@
 # Rim attributes R1: readings beside decoration on the 19 rim sites
 
-Produced by `analyses/rims/rim_r1.py --readings` (git 32142d4acb3d) from the cell CSVs and the rim and decorated tables. Three kinds of number appear and are named: the observed count-based moment F (binomial sampling variance removed; `mls_emergence.signatures.variance.moment_f`); the generator band of the same statistic (10th to 90th percentile of 50 records, NumPy linear rule, endpoints inclusive, eligible at 45 finite values), with status below, inside, above or unavailable, of which only 'above' is read as more variation than the baseline; and posterior summaries of latent site frequencies under Beta(k + 1/2, N - k + 1/2) per site and Dirichlet(counts + 1/2) per composition (4,000 direct draws, two seeds, the Monte Carlo error of each median shown), with Beta(1, 1) and Dirichlet(1) sensitivities. The yardstick is the fixed-target copying simulator with all 28 populations transmitting and the 19 rim sites observed, at the frozen step 0 time scales, two windows (T1: ends over the last L_d; 8LR: the last 8 L_R). Everything is conditional on the 19-site sample (absent: Commerce, Cramor_Place, Cummins, Grant, Holden_Lake, Hollywood, Lake_Cormorant, Nickel, Turnbow), on that yardstick and on that population model; Woodlyn (27 rims) is below Mainfort's 45-rim minimum and Mound Place (48) just above it, so every statistic is also given on the 18 sites without Woodlyn. Nothing here is phrased as a choice among causes (spec section 1). Descriptive summaries under rule 18.
+Produced by `analyses/rims/rim_r1.py --readings` (git 93809fc1cab2) from the cell CSVs and the rim and decorated tables. Three kinds of number appear and are named: the observed count-based moment F (binomial sampling variance removed; `mls_emergence.signatures.variance.moment_f`); the generator band of the same statistic (10th to 90th percentile of 50 records, NumPy linear rule, endpoints inclusive, eligible at 45 finite values), with status below, inside, above or unavailable, of which only 'above' is read as more variation than the baseline; and posterior summaries of latent site frequencies under Beta(k + 1/2, N - k + 1/2) per site and Dirichlet(counts + 1/2) per composition (4,000 direct draws, two seeds, the Monte Carlo error of each median shown), with Beta(1, 1) and Dirichlet(1) sensitivities. The yardstick is the fixed-target copying simulator with all 28 populations transmitting and the 19 rim sites observed, at the frozen step 0 time scales, two windows (T1: ends over the last L_d; 8LR: the last 8 L_R). Everything is conditional on the 19-site sample (absent: Commerce, Cramor_Place, Cummins, Grant, Holden_Lake, Hollywood, Lake_Cormorant, Nickel, Turnbow), on that yardstick and on that population model; Woodlyn (27 rims) is below Mainfort's 45-rim minimum and Mound Place (48) just above it, so every statistic is also given on the 18 sites without Woodlyn. Nothing here is phrased as a choice among causes (spec section 1). Descriptive summaries under rule 18.
 
 ## A. Per-attribute F against the band, beside the common decorated classes on the same sites
 
@@ -11,7 +11,6 @@ Produced by `analyses/rims/rim_r1.py --readings` (git 32142d4acb3d) from the cel
 | interior bevel | 0.105 | [-0.001, 0.025] n 50 | **above** | 0.083 | [-0.001, 0.028] n 50 | above |
 | exterior notching | 0.069 | [-0.002, 0.024] n 50 | **above** | 0.075 | [-0.001, 0.022] n 50 | above |
 | lip flat | 0.031 | [-0.001, 0.027] n 50 | **above** | 0.031 | [-0.001, 0.026] n 50 | above |
-| paste Bell (of N) (read separately) | 0.266 | [-0.001, 0.028] n 50 | **above** | 0.243 | [-0.001, 0.022] n 50 | above |
 | Parkin_Punctated, current counts | 0.107 | [0.002, 0.027] n 50 | **above** | 0.107 | [0.002, 0.022] n 50 | above |
 | Barton/Kent/MPI, current counts | 0.044 | [0.002, 0.029] n 50 | **above** | 0.038 | [0.002, 0.026] n 50 | above |
 | Painted, current counts | 0.208 | [0.003, 0.026] n 50 | **above** | 0.211 | [0.002, 0.026] n 50 | above |
@@ -26,7 +25,6 @@ Produced by `analyses/rims/rim_r1.py --readings` (git 32142d4acb3d) from the cel
 | interior bevel | 0.105 | [0.004, 0.031] n 50 | **above** | 0.083 | [0.003, 0.029] n 50 | above |
 | exterior notching | 0.069 | [0.007, 0.027] n 50 | **above** | 0.075 | [0.005, 0.023] n 50 | above |
 | lip flat | 0.031 | [0.004, 0.027] n 50 | **above** | 0.031 | [0.005, 0.027] n 50 | above |
-| paste Bell (of N) (read separately) | 0.266 | [0.005, 0.030] n 50 | **above** | 0.243 | [0.005, 0.026] n 50 | above |
 | Parkin_Punctated, current counts | 0.107 | [0.005, 0.026] n 50 | **above** | 0.107 | [0.006, 0.025] n 50 | above |
 | Barton/Kent/MPI, current counts | 0.044 | [0.006, 0.023] n 50 | **above** | 0.038 | [0.006, 0.020] n 50 | above |
 | Painted, current counts | 0.208 | [0.005, 0.024] n 50 | **above** | 0.211 | [0.005, 0.024] n 50 | above |
@@ -41,7 +39,6 @@ Produced by `analyses/rims/rim_r1.py --readings` (git 32142d4acb3d) from the cel
 | interior bevel | 0.105 | [0.004, 0.025] n 50 | **above** | 0.083 | [0.004, 0.021] n 50 | above |
 | exterior notching | 0.069 | [0.002, 0.023] n 50 | **above** | 0.075 | [0.003, 0.023] n 50 | above |
 | lip flat | 0.031 | [0.002, 0.031] n 50 | **above** | 0.031 | [0.003, 0.028] n 50 | above |
-| paste Bell (of N) (read separately) | 0.266 | [0.003, 0.022] n 50 | **above** | 0.243 | [0.001, 0.023] n 50 | above |
 | Parkin_Punctated, current counts | 0.107 | [0.004, 0.025] n 50 | **above** | 0.107 | [0.003, 0.026] n 50 | above |
 | Barton/Kent/MPI, current counts | 0.044 | [0.005, 0.023] n 50 | **above** | 0.038 | [0.004, 0.023] n 50 | above |
 | Painted, current counts | 0.208 | [0.004, 0.018] n 50 | **above** | 0.211 | [0.004, 0.019] n 50 | above |
@@ -56,7 +53,6 @@ Produced by `analyses/rims/rim_r1.py --readings` (git 32142d4acb3d) from the cel
 | interior bevel | 0.105 | [0.007, 0.030] n 50 | **above** | 0.083 | [0.006, 0.032] n 50 | above |
 | exterior notching | 0.069 | [0.005, 0.029] n 50 | **above** | 0.075 | [0.005, 0.029] n 50 | above |
 | lip flat | 0.031 | [0.003, 0.029] n 50 | **above** | 0.031 | [0.004, 0.029] n 50 | above |
-| paste Bell (of N) (read separately) | 0.266 | [0.005, 0.033] n 50 | **above** | 0.243 | [0.005, 0.035] n 50 | above |
 | Parkin_Punctated, current counts | 0.107 | [0.007, 0.026] n 50 | **above** | 0.107 | [0.007, 0.026] n 50 | above |
 | Barton/Kent/MPI, current counts | 0.044 | [0.006, 0.025] n 50 | **above** | 0.038 | [0.007, 0.025] n 50 | above |
 | Painted, current counts | 0.208 | [0.008, 0.025] n 50 | **above** | 0.211 | [0.007, 0.027] n 50 | above |
@@ -71,7 +67,6 @@ Smallest margin of the observed F to the band edge it was read against, over the
 - interior bevel: +0.0512 at the secondary point, window 8LR, 18 sites (observed 0.0828, band [0.0058, 0.0316]); 8 of 8 cells above.
 - exterior notching: +0.0395 at the secondary point, window 8LR, 19 sites (observed 0.0686, band [0.0050, 0.0291]); 8 of 8 cells above.
 - lip flat: +0.0001 at the secondary point, window T1, 19 sites (observed 0.0309, band [0.0020, 0.0308]); 8 of 8 cells above; the lip reconstruction range 0.0302 to 0.0317 contains that band edge (0.0308), so the status at this cell is not resolved by the record.
-- paste Bell (of N): +0.2077 at the secondary point, window 8LR, 18 sites (observed 0.2427, band [0.0048, 0.0350]); 8 of 8 cells above.
 
 ## B. Association with geography
 
@@ -85,8 +80,6 @@ Spearman of |p_i - p_j| with straight-line distance over the 171 pairs (positive
 | exterior notching, 18 sites | 0.14 | -0.46 | 0.44 | |
 | lip flat | -0.09; posterior -0.05 [-0.12, 0.05] (MC error of the median 0.002) | -0.23; posterior -0.20 [-0.38, -0.01] (MC error of the median 0.001) | 0.39; posterior 0.39 [0.21, 0.57] (MC error of the median 0.006) | -0.19, +0.39, -0.05 |
 | lip flat, 18 sites | -0.04 | -0.23 | 0.52 | |
-| paste Bell (of N) | 0.31; posterior 0.28 [0.20, 0.36] (MC error of the median 0.001) | -0.41; posterior -0.39 [-0.49, -0.27] (MC error of the median 0.000) | 0.61; posterior 0.61 [0.53, 0.71] (MC error of the median 0.002) | -0.39, +0.61, +0.28 |
-| paste Bell (of N), 18 sites | 0.27 | -0.42 | 0.54 | |
 | Parkin_Punctated, current counts | 0.29; posterior 0.29 [0.25, 0.33] (MC error of the median 0.001) | 0.66; posterior 0.65 [0.58, 0.72] (MC error of the median 0.002) | 0.18; posterior 0.15 [0.06, 0.25] (MC error of the median 0.002) | +0.67, +0.13, +0.29 |
 | Barton/Kent/MPI, current counts | 0.05; posterior 0.07 [-0.01, 0.13] (MC error of the median 0.002) | 0.08; posterior 0.16 [0.02, 0.29] (MC error of the median 0.002) | -0.31; posterior -0.26 [-0.36, -0.16] (MC error of the median 0.002) | +0.16, -0.26, +0.07 |
 | Painted, current counts | 0.35; posterior 0.33 [0.28, 0.38] (MC error of the median 0.001) | -0.75; posterior -0.74 [-0.78, -0.70] (MC error of the median 0.000) | -0.28; posterior -0.29 [-0.35, -0.24] (MC error of the median 0.004) | -0.74, -0.29, +0.33 |
@@ -103,11 +96,10 @@ Rim difference |p_i - p_j|; decoration difference the total variation 0.5 sum_c 
 | interior bevel | 0.17; posterior 0.14 [0.05, 0.23] (MC error of the median 0.001); adjusted 0.09; posterior 0.06 [-0.04, 0.16] (MC error of the median 0.002) | 0.25; posterior 0.20 [0.10, 0.31] (MC error of the median 0.002); adjusted 0.18; posterior 0.14 [0.02, 0.26] (MC error of the median 0.002) | +0.05, +0.13 |
 | exterior notching | 0.10; posterior 0.07 [-0.01, 0.15] (MC error of the median 0.000); adjusted 0.04; posterior 0.02 [-0.06, 0.10] (MC error of the median 0.001) | 0.15; posterior 0.12 [0.03, 0.21] (MC error of the median 0.001); adjusted 0.09; posterior 0.08 [-0.01, 0.17] (MC error of the median 0.000) | +0.01, +0.07 |
 | lip flat | -0.09; posterior -0.08 [-0.15, 0.00] (MC error of the median 0.001); adjusted -0.06; posterior -0.07 [-0.15, 0.02] (MC error of the median 0.000) | -0.06; posterior -0.06 [-0.14, 0.03] (MC error of the median 0.001); adjusted -0.03; posterior -0.04 [-0.13, 0.05] (MC error of the median 0.002) | -0.07, -0.05 |
-| paste Bell (of N) | 0.25; posterior 0.21 [0.12, 0.30] (MC error of the median 0.000); adjusted 0.14; posterior 0.11 [0.02, 0.21] (MC error of the median 0.002) | 0.26; posterior 0.22 [0.13, 0.31] (MC error of the median 0.000); adjusted 0.15; posterior 0.12 [0.02, 0.22] (MC error of the median 0.002) | +0.11, +0.12 |
 
-## D. Paste, separately
+## D. Paste, recorded and not analyzed
 
-Paste is a type-level distinction of the 1951 typology (Bell Plain against Neeley's Ferry Plain) and is not independent of how the phases were drawn; the file's paste percentages leave 550 of 2065 rims unresolved, which are not negative Bell observations. The tables above read Bell of N; here Bell is also given with the named pastes as denominator (two denominators). Bell of N: mean site frequency 0.283; Bell of named: 0.371. Moment F of Bell: 0.2663 of N; 0.2205 of the named pastes, for which no neutral band was computed. Rims in neither named paste run from 0 to 81 percent by site; what they are is not established.
+The rim table records paste (Bell Plain, Neeley's Ferry Plain, and neither). It is not simulated or read here (author decision, 2026-11-21): paste and temper can reflect firing conditions and vessel function, which is the reason the study excludes plain sherds, and Bell Plain against Neeley's Ferry Plain is a type-level distinction of the 1951 typology, not independent of how the phases were drawn. Description of the field only: 641 rims Bell, 874 Neeley's Ferry, and 550 of 2065 in neither, the last running from 0 to 81 percent by site; what those rims are is not established.
 
 ## E. Published attributes reported but not read
 

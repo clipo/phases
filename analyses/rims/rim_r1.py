@@ -13,7 +13,8 @@ observed site draws its sample from its own stream.
 - rim cells: two classes at the attribute's pooled frequency; each site's
   rim N is its sample size; per record the binary moment F over the 19
   sites and over the 18 without Woodlyn. Attributes read: interior bevel,
-  exterior notching, lip flat, paste Bell (the last read separately).
+  exterior notching, lip flat. Paste is in the rim table and is not
+  simulated or read (author decision, 2026-11-21).
 - decoration reference cells: the ten classes at the record's pooled
   shares, each site's decorated sherd total (current counts) or its 1940
   PFG part's total; per record the three common classes' F over the 19
@@ -77,7 +78,10 @@ SEED_BASE_R1 = 2026101970
 POINT_INDEX = {"primary": 0, "secondary": 1}
 KINDS = ("rim", "decoration_current", "decoration_pfg")
 WINDOWS = ("T1", "8LR")
-ATTRIBUTES = ("beveled", "notched_exterior", "lip_flat", "paste_bell")   # read by F; paste separately (spec 2)
+# Paste (paste_bell) was the fourth attribute until 2026-11-21 and is no longer simulated: the paper excludes paste and temper as
+# technological and functional variation (author decision). It was last in the tuple, so the attribute indices, and with them
+# the record keys and every simulated value of the three remaining attributes, are unchanged.
+ATTRIBUTES = ("beveled", "notched_exterior", "lip_flat")
 NOT_READ = ("beaded", "noded", "wide_nodes", "notched_top")
 LIP_AMBIGUOUS = ("Beck", "Irby", "Starkley")                              # file percentages sum to 99, 101, 98 (spec 2)
 SMALL_SITE = "Woodlyn"                                                    # below Mainfort's 45-rim minimum (spec 2)

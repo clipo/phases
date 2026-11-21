@@ -32,7 +32,9 @@ from matplotlib.lines import Line2D  # noqa: E402
 FIG = "fig7_rim_attributes"
 SRC = ROOT / "output" / "findings" / "rim_r1.md"
 RIMS = [("interior bevel", "interior beveling"), ("exterior notching", "exterior notching"),
-        ("lip flat", "lip form (flat)"), ("paste Bell (of N)", "Bell paste")]
+        ("lip flat", "lip form (flat)")]
+# Paste (Bell Plain against Neeley's Ferry Plain) is in rim_r1.md and is not drawn: the paper excludes paste
+# and temper as technological and functional variation (author decision, 2026-11-21).
 DECOR = [("Parkin_Punctated, current counts", "Parkin Punctated"),
          ("Barton/Kent/MPI, current counts", "Barton, Kent, Mound Place Inc."),
          ("Painted, current counts", "painted types")]
@@ -66,7 +68,7 @@ def main() -> int:
             m = re.match(r"\[([-0-9.]+), ([-0-9.]+)\] n (\d+)", cells[2])
             band[key] = (float(m.group(1)), float(m.group(2)))
     assert set(F) == set(keys), sorted(F)
-    assert [round(F[k], 3) for k, _ in RIMS] == [0.105, 0.069, 0.031, 0.266], F
+    assert [round(F[k], 3) for k, _ in RIMS] == [0.105, 0.069, 0.031], F
 
     lat = {}
     for cells in rows_of(secB):
@@ -83,13 +85,14 @@ def main() -> int:
             cur = re.search(r"adjusted [-0-9.]+; " + POST.pattern, cells[1])
             pfg = re.search(r"adjusted [-0-9.]+; " + POST.pattern, cells[2])
             adj[cells[0]] = (tuple(float(g) for g in cur.groups()), tuple(float(g) for g in pfg.groups()))
-    assert len(adj) == 4, adj
+    assert len(adj) == len(RIMS), adj
     meds = [v[i][0] for v in adj.values() for i in (0, 1)]
     assert -0.075 <= min(meds) and max(meds) <= 0.145, meds
 
     fig, axes = plt.subplots(1, 3, figsize=(6.65, 3.9), gridspec_kw=dict(width_ratios=[1.0, 1.0, 0.8], wspace=0.6))
     order = RIMS + DECOR
-    ypos = [0, 1, 2, 3, 4.6, 5.6, 6.6]
+    n = len(RIMS)
+    ypos = list(range(n)) + [n + 0.6 + i for i in range(len(DECOR))]
     axA, axB, axC = axes
     for y, (k, lab) in zip(ypos, order):
         axA.plot(band[k], [y, y], color="0.75", lw=6, solid_capstyle="butt", zorder=1)
@@ -100,8 +103,8 @@ def main() -> int:
                      ecolor="black", elinewidth=1.0, capsize=2, markersize=5)
     for ax in (axA, axB):
         ax.set_yticks(ypos)
-        ax.set_ylim(7.3, -0.7)
-        ax.axhline(3.8, color="0.85", lw=0.8)
+        ax.set_ylim(ypos[-1] + 0.7, -0.7)
+        ax.axhline(n - 0.2, color="0.85", lw=0.8)
     axA.set_yticklabels([lab for _, lab in order], fontsize=7)
     axB.set_yticklabels([])
     axA.set_xlabel("site-weighted moment F (19 sites)")
@@ -109,15 +112,15 @@ def main() -> int:
     axB.axvline(0, color="0.6", lw=0.8)
     axB.set_xlabel("rank correlation with latitude\n(positive: higher to the north)")
     axB.set_xlim(-0.9, 0.9)
-    for y, (k, lab) in zip(range(4), RIMS):
+    for y, (k, lab) in zip(range(n), RIMS):
         (mc, loc, hic), (mp, lop, hip) = adj[k]
         axC.errorbar([mc], [y - 0.15], xerr=[[mc - loc], [hic - mc]], fmt="o", color="black", ecolor="black",
                      elinewidth=1.0, capsize=2, markersize=5)
         axC.errorbar([mp], [y + 0.15], xerr=[[mp - lop], [hip - mp]], fmt="o", color="black", ecolor="black",
                      markerfacecolor="white", elinewidth=1.0, capsize=2, markersize=5)
-    axC.set_yticks(range(4))
+    axC.set_yticks(range(n))
     axC.set_yticklabels([lab for _, lab in RIMS], fontsize=7)
-    axC.set_ylim(3.6, -0.6)
+    axC.set_ylim(n - 0.4, -0.6)
     axC.axvline(0, color="0.6", lw=0.8)
     axC.set_xlim(-0.3, 0.3)
     axC.set_xlabel("rank correlation, rim against\ndecoration pair differences,\nadjusted for distance")
@@ -136,6 +139,7 @@ def main() -> int:
         fs.panel_label(ax, letter, y=1.20)  # above the legends anchored at 1.02
     fig.subplots_adjust(left=0.2, right=0.97, top=0.80, bottom=0.25, wspace=0.6)
     png = fs.save_all(fig, FIG, close=True)
+    print("adjusted medians", {k: (v[0][0], v[1][0]) for k, v in adj.items()})
     print(f"written {png}; F {[F[k] for k, _ in RIMS]}; lat {[lat[k][0] for k, _ in RIMS]}")
     return 0
 
