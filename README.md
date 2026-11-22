@@ -206,9 +206,13 @@ slow part; they use `multiprocessing` and every record is seeded from a
 
 **A seeded rerun reproduces a committed findings file only under the NumPy
 version that produced it.** NumPy 2.5 changed the draws
-`Generator.multinomial` returns from a given state. The per-class,
+`Generator.multinomial` returns from a given state. The simulator time
+scales (`analyses/probe_latent_groups/time_scales.py`,
+`output/findings/simulator_time_scales.md`) and the per-class,
 regional-drift and rim tables (`analyses/per_type/` and `analyses/rims/`)
-were produced under NumPy 2.5.4. The simulation results carried from the
+were produced under NumPy 2.5.4. The later scripts read the time scales, so
+a run under another version differs both in its draws and in the settings
+derived from them. The simulation results carried from the
 earlier version of the study were produced under NumPy 2.4.6, which is the
 version `requirements-lock.txt` pins. The two sets have not been regenerated
 under one version. To reproduce the first set value for value, run those
@@ -222,10 +226,13 @@ python -m venv .venv254
 PYTHON=.venv254/bin/python ./run_all.sh --analyses
 ```
 
-Checked on 2026-11-21 for the rim analysis: under NumPy 2.5.4,
+Checked on 2026-11-21 for the time scales and the rim analysis: under NumPy
+2.5.4, `time_scales.py` reproduces `simulator_time_scales.md`, and
 `analyses/rims/rim_r1.py` at both operating points and with `--readings`
-reproduces every value of `output/findings/rim_r1.md`. Under NumPy 2.4.6 the
-same commands give different neutral bands. The per-class and regional-drift
+reproduces every value of `output/findings/rim_r1.md`. Under NumPy 2.4.6,
+`time_scales.py` gives a local time scale of 171 steps at the primary
+operating point where the committed file has 182, and the rim commands give
+different neutral bands. The per-class and regional-drift
 tables were not rerun on that date. Scripts that draw no random numbers, such
 as the data products and `painted_by_type.py`, do not depend on the version.
 
@@ -259,6 +266,7 @@ with are recorded in `output/findings/environment_r.md` (R 4.3.3, rstan
 ### Tests
 
 ```bash
+pip install -e ".[dev]"                                       # pytest is in the dev extras, not in requirements.txt or environment.yml
 pytest                                                        # Python: the package, the data loaders, the probe, the per-class and rim code, phasecheck
 Rscript -e 'testthat::test_file("tests/testthat/test-fit-layer.R")'   # R: the diagnostics layer on synthetic draws with analytic answers
 Rscript -e 'testthat::test_file("tests/testthat/test-kernels.R")'
