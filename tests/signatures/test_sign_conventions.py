@@ -204,6 +204,7 @@ def test_painted_type_latitude_correlation_is_positive_when_the_share_rises_nort
     pbt = importlib.import_module("painted_by_type")
     t = pd.DataFrame({"latitude": [34.8, 34.9, 35.0, 35.1, 35.2], "Old Town Red": [5, 15, 25, 35, 45],
                       "Nodena Red and White": [0, 0, 0, 0, 0], "Avenue Polychrome": [45, 35, 25, 15, 5],
+                      "Carson Red-on-Buff": [0] * 5, "Hollywood White Slipped": [0] * 5,
                       "decorated, 1940": [100] * 5, "painted, matrix": [50] * 5, "painted, Lipo addition": [0] * 5},
                      index=list("abcde"))
     s = pbt.summary(t)

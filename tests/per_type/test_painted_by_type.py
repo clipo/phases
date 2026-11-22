@@ -53,3 +53,19 @@ def test_types_and_additions_account_for_every_painted_sherd_of_the_matrix(table
     # The sentence in the paper: nine-tenths of the 1940 painted sherds are Old Town Red. Below one half would mean
     # the pooled class is mainly something else and its latitude trend could not be read as Old Town Red's.
     assert 0.89 < s["share"]["Old Town Red"] < 0.91
+
+
+def test_the_two_further_painted_types_are_counted_at_hollywood_and_left_out_at_williamson(table, sheet):
+    """Lipo (2001: Table 7.4, note a) pools Carson Red-and-Buff and Hollywood White into Painted. Expected counts are
+    read from the sheet here, not through the script."""
+    def extra(site_number):
+        r = sheet[sheet["Site Number"] == site_number][["Carson Red-on-Buff", "Hollywood White Slipped"]]
+        return int(r.apply(pd.to_numeric, errors="coerce").fillna(0).to_numpy().sum())
+    s = pbt.summary(table)
+    assert s["extra_counted"] == {"Hollywood": extra("13-O-10")} and extra("13-O-10") > 0
+    assert s["extra_left_out"] == {"Williamson": extra("11-N-13")} and extra("11-N-13") > 0
+    # If the matrix pooled three types everywhere, Hollywood's painted count would equal its three-type 1940 count
+    # and extra_counted would be empty; if it pooled five everywhere, Williamson would not be left out.
+    assert int(table.loc["Hollywood", "painted, matrix"]) == int(table.loc["Hollywood", TYPES].sum()) + extra("13-O-10")
+    assert int(table.loc["Williamson", "painted, matrix"]) == int(table.loc["Williamson", TYPES].sum())
+    assert s["addition_painted_own"] + sum(s["extra_counted"].values()) == s["addition_painted"]
