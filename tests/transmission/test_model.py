@@ -8,7 +8,13 @@ both valid initial conditions on opposite sides of the saddle.
 from __future__ import annotations
 
 import numpy as np
-from signaling.emergence import phi_star
+import pytest
+
+# The coupling to the parent model belongs to the earlier version of the study. The parent package
+# (monument-mls, module `signaling`) is installed separately (pyproject.toml), so without it these
+# tests are skipped, not failed. The current paper's analyses do not import it.
+pytest.importorskip("signaling", reason="monument-mls (module signaling) is not installed")
+from signaling.emergence import phi_star  # noqa: E402
 
 from mls_emergence.signatures import convergence
 from mls_emergence.transmission.model import (

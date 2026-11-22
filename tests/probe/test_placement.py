@@ -1,4 +1,5 @@
 """Placements from geography (A3 design, section 3)."""
+import pytest
 import csv
 from pathlib import Path
 
@@ -31,7 +32,10 @@ def test_kmeans2_regions_are_the_screens_two_clusters_and_split_walls_off():
     counts, coords = load_curated(); xy = coords.to_numpy(float)
     reg = pl.kmeans2_regions(xy)
     assert set(reg.tolist()) == {1, 2}
-    with open(ROOT / "codex" / "basin_membership_check.csv", newline="") as f:
+    area_file = ROOT / "codex" / "basin_membership_check.csv"
+    if not area_file.is_file():      # the audit workspace is not part of the public release
+        pytest.skip("codex/basin_membership_check.csv is absent, so the phase areas cannot be read")
+    with open(area_file, newline="") as f:
         area = {r["assemblage"]: r["phase"] for r in csv.DictReader(f)}
     names = list(counts.index)
     # The eastern cluster (label 2, larger easting) must contain every Walls site.

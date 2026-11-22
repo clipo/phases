@@ -31,6 +31,8 @@ def loaded():
 
 
 def _read_audit(path):
+    if not path.is_file():      # the audit workspace is not part of the public release
+        pytest.skip(f"{path.name} from the audit workspace is absent, so there is no independent copy to compare with")
     with open(path, newline="") as f:
         rows = list(csv.reader(f))
     header, body = rows[0], rows[1:]
