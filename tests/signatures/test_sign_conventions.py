@@ -189,3 +189,24 @@ def test_distance_decay_rank_is_positive_when_distant_sites_differ_more():
     x = np.arange(4.0); Dn = np.abs(x[:, None] - x[None, :])
     val_n, _ = sr.distance_decay_rank(y, Dn)
     assert val_n < 0
+
+
+def test_painted_type_latitude_correlation_is_positive_when_the_share_rises_northward():
+    """`painted_by_type.summary` correlates a type's share of the 1940 decorated sherds with latitude.
+
+    Five assemblages of 100 decorated sherds in which Old Town Red rises from 5 to 45 sherds with latitude: positive.
+    The opposite sign would mean the type is a larger share to the south, which is what the record shows (-0.71).
+    """
+    import pandas as pd
+    for p in (ROOT / "analyses" / "per_type", ROOT / "scripts"):
+        if str(p) not in sys.path:
+            sys.path.insert(0, str(p))
+    pbt = importlib.import_module("painted_by_type")
+    t = pd.DataFrame({"latitude": [34.8, 34.9, 35.0, 35.1, 35.2], "Old Town Red": [5, 15, 25, 35, 45],
+                      "Nodena Red and White": [0, 0, 0, 0, 0], "Avenue Polychrome": [45, 35, 25, 15, 5],
+                      "decorated, 1940": [100] * 5, "painted, matrix": [50] * 5, "painted, Lipo addition": [0] * 5},
+                     index=list("abcde"))
+    s = pbt.summary(t)
+    assert s["rho_latitude"]["Old Town Red"] == pytest.approx(1.0)
+    assert s["rho_latitude"]["Avenue Polychrome"] == pytest.approx(-1.0)   # falls northward in the same record
+    assert np.isnan(s["rho_latitude"]["Nodena Red and White"])             # absent everywhere: not computed, never 0

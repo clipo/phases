@@ -29,7 +29,10 @@ def test_gabriel_edges_on_the_28_sites_reproduce_the_design_measurement():
     D = geo_km(coords.to_numpy(float))
     E = g.gabriel_edges(D)
     assert len(E) == 41
-    with open(ROOT / "codex" / "basin_membership_check.csv", newline="") as f:
+    area_file = ROOT / "codex" / "basin_membership_check.csv"
+    if not area_file.is_file():      # the audit workspace is not part of the public release
+        pytest.skip("codex/basin_membership_check.csv is absent, so the phase areas cannot be read")
+    with open(area_file, newline="") as f:
         area = {r["assemblage"]: r["phase"] for r in csv.DictReader(f)}
     names = list(counts.index)
     assert sum(area[names[i]] != area[names[j]] for i, j in E) == 8

@@ -65,6 +65,9 @@ def test_reference_cell_gives_ten_class_counts_at_sherd_totals_and_common_class_
 
 
 def test_output_names_carry_kind_and_point_and_scales_come_frozen():
+    if not (ROOT / "output" / "probe_latent_groups" / "time_scales_primary.json").is_file():
+        # Written by analyses/probe_latent_groups/time_scales.py (level 2 of run_all.sh) and not committed.
+        pytest.skip("the simulator time scales have not been generated; run analyses/probe_latent_groups/time_scales.py")
     assert r1.output_stem("rim", "primary") == "rim_r1_rim_primary" and r1.output_stem("decoration_pfg", "secondary") == "rim_r1_decoration_pfg_secondary"
     sc = r1.scales_for("primary")
     assert (sc["L_d"], sc["L_R"], sc["S"], sc["burnin"]) == (182, 292, 2600, 5000) and r1.window_steps("T1", sc) == 182 and r1.window_steps("8LR", sc) == 2336

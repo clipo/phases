@@ -70,7 +70,8 @@ committed, so a reader can stop at any of them.
    recovery and settlement analyses, the minimum sample size, the radiocarbon
    chronology, the Mainfort (2003a) comparison, the neutral copying
    simulations (the resemblance screen, the per-class tables with regional
-   drift and planted markers, the composition-by-collection analysis, the two
+   drift and planted markers, the composition-by-collection analysis, the
+   breakdown of the painted class by type, the two
    further sets of simulations of Tables S7 and S8), the rim analysis, and the
    Stan data contracts. `./run_all.sh --analyses` runs them.
 3. **The Stan fits (R, rstan, a C++ toolchain; hours to days).** The spatial
@@ -84,12 +85,16 @@ committed, so a reader can stop at any of them.
    tail effective sample size, divergences, treedepth saturation, E-BFMI).
 
 The rim-attribute analysis (`analyses/rims/rim_r1.py`, Figure 7) runs at level
-2. Its lip-form and paste counts come from an unpublished tabulation by Robert
+2. It covers three attributes: interior beveling, exterior notching and lip
+form. Its lip-form counts come from an unpublished tabulation by Robert
 Mainfort (`data/raw/mainfort_miss_rims.xls`), the counts for beveling and
 notching come from his published Table 1
 (`data/raw/mainfort2003_rim_table1_counts.csv`), and
 `scripts/build_mainfort_rim_counts.py` combines the two into
-`data/processed/mainfort_rim_counts.csv`. See `data/README.md`.
+`data/processed/mainfort_rim_counts.csv`. See `data/README.md`. The tabulation
+also records paste (Bell or Neeley's Ferry). The paper treats paste as a
+technological attribute and does not analyze it, so the findings file lists
+the paste counts and reports no statistic for them.
 
 The neutral copying model's scripts and the rim analysis read simulator time
 scales from `output/probe_latent_groups/`, which is not published. Level 2
@@ -188,15 +193,51 @@ all), `resemblance_stage2.py`, `per_class_resemblance.py`,
 `site_fst_decomposition.py`, the per-class tables with regional drift and
 planted markers (`analyses/per_type/per_class_table.py`, generators C3 and M
 at the two operating points, then `drift_sensitivity_figure.py`),
-`analyses/per_type/composition_by_collection.py`, the two further sets of
+`analyses/per_type/composition_by_collection.py`,
+`analyses/per_type/painted_by_type.py` (the painted class by type in the 1940
+collections), the two further sets of
 simulations (`drift_extension.py` and `type_origination.py` with their
 `_joint` and `_calibration` scripts, Tables S7 and S8), and the rim analysis
 (`scripts/build_mainfort_rim_counts.py`, then `analyses/rims/rim_r1.py` at
 both operating points and with `--readings`). The simulations are the
 slow part; they use `multiprocessing` and every record is seeded from a
-`SeedSequence` named in the script's header, so reruns reproduce the committed
-findings files. The operating points are registered in
+`SeedSequence` named in the script's header. The operating points are registered in
 `analyses/probe_latent_groups/operating_points.json`.
+
+**A seeded rerun reproduces a committed findings file only under the NumPy
+version that produced it.** NumPy 2.5 changed the draws
+`Generator.multinomial` returns from a given state. The simulator time
+scales (`analyses/probe_latent_groups/time_scales.py`,
+`output/findings/simulator_time_scales.md`) and the per-class,
+regional-drift and rim tables (`analyses/per_type/` and `analyses/rims/`)
+were produced under NumPy 2.5.4. The later scripts read the time scales, so
+a run under another version differs in its draws, and the scripts that read
+the time scales stop with an error because the regenerated values do not
+match the registered operating points. **Level 2 therefore needs the NumPy
+2.5.4 environment below.** Level 1 and the test suite run under the pinned
+environment. The simulation results carried from the
+earlier version of the study were produced under NumPy 2.4.6, which is the
+version `requirements-lock.txt` pins. The two sets have not been regenerated
+under one version. To reproduce the first set value for value, run those
+scripts in a second environment that differs only in NumPy:
+
+```bash
+python -m venv .venv254
+.venv254/bin/pip install -r requirements.txt
+.venv254/bin/pip install --no-deps "numpy==2.5.4"     # after the requirements, because they pin numpy below 2.5
+.venv254/bin/pip install --no-deps -e .
+PYTHON=.venv254/bin/python ./run_all.sh --analyses
+```
+
+Checked on 2026-11-21 for the time scales and the rim analysis: under NumPy
+2.5.4, `time_scales.py` reproduces `simulator_time_scales.md`, and
+`analyses/rims/rim_r1.py` at both operating points and with `--readings`
+reproduces every value of `output/findings/rim_r1.md`. Under NumPy 2.4.6,
+`time_scales.py` gives a local time scale of 171 steps at the primary
+operating point where the committed file has 182, and the rim commands give
+different neutral bands. The per-class and regional-drift
+tables were not rerun on that date. Scripts that draw no random numbers, such
+as the data products and `painted_by_type.py`, do not depend on the version.
 
 ### Level 3: the Stan fits
 
@@ -228,10 +269,20 @@ with are recorded in `output/findings/environment_r.md` (R 4.3.3, rstan
 ### Tests
 
 ```bash
+pip install -e ".[dev]"                                       # pytest is in the dev extras, not in requirements.txt or environment.yml
 pytest                                                        # Python: the package, the data loaders, the probe, the per-class and rim code, phasecheck
 Rscript -e 'testthat::test_file("tests/testthat/test-fit-layer.R")'   # R: the diagnostics layer on synthetic draws with analytic answers
 Rscript -e 'testthat::test_file("tests/testthat/test-kernels.R")'
 ```
+
+Some tests are skipped in a fresh clone, each with its reason printed by
+`pytest -rs`: two that read the simulator time scales (generated at level 2
+and not committed), four that compare against files of the authors' audit
+workspace (not published), two that need the parent model package of the
+earlier version of the study (`monument-mls`, see `pyproject.toml`), and three
+that compare against tables produced under NumPy 2.5.4. Checked in a fresh
+clone on 2026-11-21 under the pinned environment: 441 passed, 11 skipped, 1
+failed, the failure being the known issue below.
 
 Known issue: `tests/phasecheck/test_copying_model.py::test_model_comparison_tells_a_restricted_record_from_an_unrestricted_one`
 fails on 3 of its 80 records under numpy 2.4.6, scipy 1.18.1 and pandas 3.0.6.
@@ -339,7 +390,7 @@ survey counts (`data/raw/PFGData.xlsx`) and Lipo's (2001) compilation of those
 counts with his 1996 to 1997 collections (`data/raw/mainfort-pfg-cpl.xlsx`),
 one source per assemblage and never summed; Mainfort's (2003a) published table
 is a separate comparison set; the rim attribute counts for beveling and
-notching are Mainfort's (2003b) Table 1, and those for lip form and paste are
+notching are Mainfort's (2003b) Table 1, and those for lip form are
 from his unpublished tabulation (`data/raw/mainfort_miss_rims.xls`); the radiocarbon is the Mainfort
 (2001) compilation calibrated against IntCal20; the settlement tables are the
 regional compilation of Lipo and Dunnell (2007) with the published corrections

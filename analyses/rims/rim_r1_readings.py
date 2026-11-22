@@ -24,11 +24,10 @@ for _p in (ROOT, ROOT / "analyses" / "per_type"):
 import readings as rd
 
 from mls_emergence.rims import stats as st
-from mls_emergence.signatures.variance import moment_f
 
 OUTD = ROOT / "output" / "probe_latent_groups"
 FINDINGS = ROOT / "output" / "findings" / "rim_r1.md"
-ATTRIBUTES = ("beveled", "notched_exterior", "lip_flat", "paste_bell")
+ATTRIBUTES = ("beveled", "notched_exterior", "lip_flat")
 READ_BY_F = ("beveled", "notched_exterior", "lip_flat")
 NOT_READ = ("beaded", "noded", "wide_nodes", "notched_top")
 LIP_AMBIGUOUS = ("Beck", "Irby", "Starkley")
@@ -36,7 +35,7 @@ SMALL_SITE = "Woodlyn"
 WINDOWS = ("T1", "8LR")
 POINTS = ("primary", "secondary")
 COMMON = 3
-LABEL = {"beveled": "interior bevel", "notched_exterior": "exterior notching", "lip_flat": "lip flat", "paste_bell": "paste Bell (of N)"}
+LABEL = {"beveled": "interior bevel", "notched_exterior": "exterior notching", "lip_flat": "lip flat"}
 
 
 def observed_f(rims: pd.DataFrame, attr: str, sites=None) -> float:
@@ -154,12 +153,12 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
         for window in WINDOWS:
             L += [f"### {point} point, window {window}", "",
                   "| trait | observed F (19) | band (19) | status | observed F (18) | band (18) | status (18) |", "|---|---|---|---|---|---|---|"]
-            for a in READ_BY_F + ("paste_bell",):
+            for a in READ_BY_F:
                 c = cells[(cells.point == point) & (cells.kind == "rim") & (cells.attribute == a) & (cells.window == window)]
                 if c.empty:
                     continue
                 o19, o18 = observed_f(rims, a), observed_f(rims, a, keep18); s = cell_status(c, o19, o18)
-                L.append(f"| {LABEL[a]}{' (read separately)' if a == 'paste_bell' else ''} | {_fmt(o19)} | {_band(s['band19'])} | **{s['status19']}** | {_fmt(o18)} | {_band(s['band18'])} | {s['status18']} |")
+                L.append(f"| {LABEL[a]} | {_fmt(o19)} | {_band(s['band19'])} | **{s['status19']}** | {_fmt(o18)} | {_band(s['band18'])} | {s['status18']} |")
             for kind, tab, label in (("decoration_current", counts19, "current counts"), ("decoration_pfg", pfg19, "1940 PFG parts")):
                 c = cells[(cells.point == point) & (cells.kind == kind) & (cells.window == window)]
                 if c.empty:
@@ -172,10 +171,10 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
     lo, hi, ncomb = lip_sensitivity(rims)
     L += [(f"Lip form is a reconstructed field: the file's flat and round percentages sum to 99, 101 and 98 at {', '.join(LIP_AMBIGUOUS)}; over "
            f"the {ncomb} combinations of one rim more or fewer at those sites the lip-flat F ranges {lo:.3f} to {hi:.3f}."), ""]
-    M = margins(cells, rims, counts19, pfg19, classes); M_rim = M[M.trait.isin(READ_BY_F + ("paste_bell",))]
+    M = margins(cells, rims, counts19, pfg19, classes); M_rim = M[M.trait.isin(READ_BY_F)]
     L += [("Smallest margin of the observed F to the band edge it was read against, over the points, windows and both site sets (observed minus "
           "the upper edge when above; four decimals, since a status at the third decimal can rest on the fourth):"), ""]
-    for a in READ_BY_F + ("paste_bell",):
+    for a in READ_BY_F:
         g = M_rim[M_rim.trait == a].dropna(subset=["margin"])
         if g.empty:
             L.append(f"- {LABEL[a]}: no eligible cell."); continue
@@ -192,7 +191,7 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
            "[5%, 95%]; the Beta(1, 1) or Dirichlet(1) posterior median in the last column. Rows for the 18 sites give observed values only."), "",
           "| trait | rho pair difference vs distance | rho vs latitude | rho vs longitude | alpha 1 medians (lat, lon, dist) |", "|---|---|---|---|---|"]
     geo_rows = []
-    for a in READ_BY_F + ("paste_bell",):
+    for a in READ_BY_F:
         k = rims[a].to_numpy(int); N = rims["N"].to_numpy(int)
         summ = {key: st.posterior_summary(lambda p, key=key: st.geography_stats(p, D, lat, lon)[key], k, N, draws, seeds=(11, 12)) for key in ("rho_pair_distance", "rho_latitude", "rho_longitude")}
         alt = {key: st.posterior_summary(lambda p, key=key: st.geography_stats(p, D, lat, lon)[key], k, N, draws, seeds=(13, 14), alpha=1.0)["median"] for key in ("rho_pair_distance", "rho_latitude", "rho_longitude")}
@@ -216,7 +215,7 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
            "Positive: pairs that differ more in the attribute also differ more in decoration. Each rim attribute separately; no combined rim "
            "measure, since the marginal table carries no co-occurrence and the two collections' physical overlap is unknown."), "",
           "| trait | against current counts: plain, adjusted | against 1940 PFG parts: plain, adjusted | alpha 1 adjusted medians |", "|---|---|---|---|"]
-    for a in READ_BY_F + ("paste_bell",):
+    for a in READ_BY_F:
         k = rims[a].to_numpy(int); N = rims["N"].to_numpy(int); cells_txt = []; alts = []
         for tab in (counts19, pfg19):
             Y = tab.to_numpy(int)
@@ -226,17 +225,15 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
             cells_txt.append(f"{_post(s_plain)}; adjusted {_post(s_adj)}"); alts.append(f"{alt:+.2f}")
         L.append(f"| {LABEL[a]} | {cells_txt[0]} | {cells_txt[1]} | {', '.join(alts)} |")
     L.append("")
-    # ---- D. paste
-    pf = paste_frequencies(rims); n_named = len(rims) - pf["sites_without_named"]
-    named_note = "" if pf["sites_without_named"] == 0 else f" over the {n_named} of {len(rims)} sites with any named paste"
-    L += ["## D. Paste, separately", "",
-          (f"Paste is a type-level distinction of the 1951 typology (Bell Plain against Neeley's Ferry Plain) and is not independent of how the "
-           f"phases were drawn; the file's paste percentages leave {pf['unresolved_rims']} of {int(rims['N'].sum())} rims unresolved, which are not "
-           "negative Bell observations. The tables above read Bell of N; here Bell is also given with the named pastes as denominator (two "
-           f"denominators). Bell of N: mean site frequency {np.nanmean(pf['bell_of_N']):.3f}; Bell of named: {np.nanmean(pf['bell_of_named']):.3f}{named_note}. "
-           f"Moment F of Bell: {moment_f(np.column_stack([rims['paste_bell'], rims['N'] - rims['paste_bell']]))[0]:.4f} of N; "
-           f"{moment_f(np.column_stack([rims['paste_bell'], rims['paste_nf']]))[0]:.4f} of the named pastes, for which no neutral band was computed. "
-           f"Rims in neither named paste run from {100 * (rims['paste_other'] / rims['N']).min():.0f} to {100 * (rims['paste_other'] / rims['N']).max():.0f} percent by site; what they are is not established."), ""]
+    # ---- D. paste (recorded, not analyzed)
+    pf = paste_frequencies(rims)
+    L += ["## D. Paste, recorded and not analyzed", "",
+          (f"The rim table records paste (Bell Plain, Neeley's Ferry Plain, and neither). It is not simulated or read here (author decision, "
+           f"2026-11-21): paste and temper can reflect firing conditions and vessel function, which is the reason the study excludes plain sherds, "
+           f"and Bell Plain against Neeley's Ferry Plain is a type-level distinction of the 1951 typology, not independent of how the phases were "
+           f"drawn. Description of the field only: {int(rims['paste_bell'].sum())} rims Bell, {int(rims['paste_nf'].sum())} Neeley's Ferry, and "
+           f"{pf['unresolved_rims']} of {int(rims['N'].sum())} in neither, the last running from {100 * (rims['paste_other'] / rims['N']).min():.0f} "
+           f"to {100 * (rims['paste_other'] / rims['N']).max():.0f} percent by site; what those rims are is not established."), ""]
     # ---- E. not read
     L += ["## E. Published attributes reported but not read", "", "| attribute | rims | sites with any (of 19) | pooled frequency |", "|---|---|---|---|"]
     for a in NOT_READ:

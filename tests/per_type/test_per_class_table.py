@@ -1,4 +1,5 @@
 """The per-class table (spec 6.5): a class absent everywhere is reported absent, never nan, never dropped."""
+import pytest
 import importlib
 import sys
 from pathlib import Path
@@ -102,6 +103,9 @@ def test_c3_and_m_settings_parse():
 
 
 def test_frozen_scales_and_lengths():
+    if not (ROOT / "output" / "probe_latent_groups" / "time_scales_primary.json").is_file():
+        # Written by analyses/probe_latent_groups/time_scales.py (level 2 of run_all.sh) and not committed.
+        pytest.skip("the simulator time scales have not been generated; run analyses/probe_latent_groups/time_scales.py")
     p = pct.frozen_scales("primary"); s = pct.frozen_scales("secondary")
     assert (p["L_d"], p["L_R"], p["W"], p["S"], p["burnin"]) == (182, 292, 2336, 2600, 5000)
     assert (s["L_d"], s["L_R"], s["W"], s["S"], s["burnin"]) == (12, 40, 320, 340, 5000)

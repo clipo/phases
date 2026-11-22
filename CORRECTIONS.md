@@ -6,6 +6,51 @@ manuscript is affected.
 
 ---
 
+## 2026-11-21 — paste removed from the rim analysis; reproduction instructions corrected
+
+**Affects:** `analyses/rims/rim_r1.py`, `analyses/rims/rim_r1_readings.py`,
+`output/findings/rim_r1.md`, Figure 7, `README.md`, `run_all.sh`,
+`data/stan/basin_composition.json`.
+**Manuscript affected:** **Yes, by removal only.** The paper no longer reports
+paste (Bell against Neeley's Ferry). The values for interior beveling, exterior
+notching, lip form and the decorated classes are unchanged.
+
+### What was wrong
+
+1. The rim analysis reported paste beside the three rim attributes. The paper
+   excludes plain sherds because paste and temper can reflect firing conditions
+   and vessel function, and the Bell and Neeley's Ferry pastes are type-level
+   distinctions of the 1951 typology. Reporting paste was inconsistent with
+   that exclusion.
+2. `README.md` said that reruns reproduce the committed findings files. That
+   holds only under the NumPy version that produced each file. The simulator
+   time scales and the per-class, regional-drift and rim tables were produced
+   under NumPy 2.5.4, and the repository pins NumPy below 2.5.
+3. `README.md` gave `pytest` as the test command, and neither
+   `requirements.txt` nor `environment.yml` installs pytest.
+4. `data/stan/basin_composition.json` was an older write of
+   `analyses/49_write_stan_data.py`. It lacked the `prior_alpha_mean` and
+   `prior_alpha_sd` fields the spatial field model's Stan program declares,
+   and the provenance block.
+
+### What changed
+
+1. Paste is removed from the rim simulations, the readings and Figure 7. The
+   findings file lists the paste counts and reports no statistic for them.
+2. `README.md` states the version each seeded result needs and gives the
+   commands for a NumPy 2.5.4 environment. Checked on 2026-11-21: under 2.5.4
+   the time scales and the rim analysis are reproduced; the per-class and
+   regional-drift tables were not rerun.
+3. `README.md` installs the `dev` extras before running `pytest`.
+4. `data/stan/basin_composition.json` is the current output of
+   `analyses/49_write_stan_data.py`. The counts are identical to the earlier
+   file. Distances involving three sites differ in the twelfth decimal place.
+5. New: `analyses/per_type/painted_by_type.py` and
+   `output/findings/painted_by_type.md`, the painted class by type in the 1940
+   collections.
+
+---
+
 ## 2026-11-01 — the repository now carries the restructured paper
 
 **Affects:** the whole release.

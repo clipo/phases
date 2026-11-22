@@ -73,7 +73,10 @@ def test_findings_writer_runs_on_synthetic_cells(tmp_path):
     cells = pd.DataFrame(rows)
     out = tmp_path / "rim_r1.md"
     text = rr.write_findings(G, cells=cells, out=out, draws=200, recovery=False)
-    assert out.exists() and "below, inside, above or unavailable" in text and "Woodlyn" in text and "two denominators" in text
+    assert out.exists() and "below, inside, above or unavailable" in text and "Woodlyn" in text
+    # Paste is described and not analyzed (author decision, 2026-11-21). A writer that still read it would print a
+    # "paste Bell" row in the status, geography and association tables.
+    assert "Paste, recorded and not analyzed" in text and "paste Bell" not in text
 
 
 def test_margins_report_the_smallest_distance_to_the_band_edge_and_the_lip_range_crossing():
