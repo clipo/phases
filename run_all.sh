@@ -78,8 +78,10 @@ if [ "$LEVEL" -ge 2 ]; then
   py analyses/per_type/per_class_table.py --generator C3 --settings 0,0.01,0.03,0.1,0.3 --records 50 --points secondary
   for cls in "Parkin_Punctated" "Barton/Kent/MPI" "Painted" "Walls_Engraved"; do
     for cl in small large; do
-      py analyses/per_type/per_class_table.py --generator M --settings 0/1.5,0/2,0/3 --marker-class "$cls" --marker-cluster "$cl" --records 50 --points primary
-      py analyses/per_type/per_class_table.py --generator M --settings 0/1.5,0/2,0/3 --marker-class "$cls" --marker-cluster "$cl" --records 50 --points secondary
+      # The settings are the ones the committed tables record in their own headers: the full amplitude-by-strength
+      # grid at the primary point, and amplitude 0.1 only at the secondary point.
+      py analyses/per_type/per_class_table.py --generator M --settings 0/1.5,0/2,0/3,0.01/1.5,0.01/2,0.01/3,0.03/1.5,0.03/2,0.03/3,0.1/1.5,0.1/2,0.1/3,0.3/1.5,0.3/2,0.3/3 --marker-class "$cls" --marker-cluster "$cl" --records 50 --points primary
+      py analyses/per_type/per_class_table.py --generator M --settings 0.1/1.5,0.1/2,0.1/3 --marker-class "$cls" --marker-cluster "$cl" --records 50 --points secondary
     done
   done
   py analyses/per_type/drift_sensitivity_figure.py
