@@ -5,6 +5,7 @@ Writes, under docs/manuscript/submission/:
 
     LMV-Phases.docx / .pdf                      from MAIN_TEXT.md
     LMV-Phases_Supplemental_Text.docx / .pdf    from SUPPLEMENTAL_TEXT.md
+    COVER_LETTER.docx                           from COVER_LETTER.md
 
 and docs/manuscript/submission.zip, holding the submission folder (the two
 manuscripts in both formats, the cover letter and the figure package).
@@ -20,8 +21,10 @@ each file before and after the change.
 The PDFs are converted from the Word files with LibreOffice, so they follow
 the Word layout.
 
-The cover letter (submission/COVER_LETTER.docx) is edited by hand in Word and
-is not rebuilt here. The figure package is built by
+The cover letter is built from COVER_LETTER.md, which is the authoritative
+copy by author ruling of 2026-11-22; edits made to the Word letter by hand are
+overwritten on the next run. It has no tables and no citations, so it gets no
+table sizing and no bibliography. The figure package is built by
 scripts/build_submission_figures.py; run that first if a figure changed.
 
 Usage: .venv/bin/python scripts/build_submission_docs.py
@@ -116,6 +119,12 @@ def build(md: str, stem: str) -> dict:
     return {"stem": stem, "words": len(plain(out).split()), "tables": tables}
 
 
+def build_letter() -> int:
+    out = SUB / "COVER_LETTER.docx"
+    run(["pandoc", "COVER_LETTER.md", "--reference-doc=reference.docx", "-o", str(out)], cwd=MS, strict=True)
+    return len(plain(out).split())
+
+
 def archive() -> int:
     files = sorted(p for p in SUB.rglob("*") if p.is_file() and p.name not in SKIP)
     ARCHIVE.unlink(missing_ok=True)
@@ -134,6 +143,10 @@ def main() -> int:
         r = build(md, stem)
         print(f"{r['stem']}.docx and .pdf written: {r['words']} words by whitespace count of the plain text; "
               f"tables (columns, half-points): {r['tables']}")
+    if (MS / "COVER_LETTER.md").is_file():
+        print(f"COVER_LETTER.docx written: {build_letter()} words by whitespace count of the plain text")
+    else:                                     # the public release does not carry the letter
+        print("COVER_LETTER.md is absent, so no cover letter was built")
     print(f"{ARCHIVE.relative_to(ROOT)} written with {archive()} files")
     return 0
 

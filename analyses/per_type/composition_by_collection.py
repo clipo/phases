@@ -195,6 +195,31 @@ def decompose() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd
     return counts.astype(int), pfg_part.astype(int), addition.round().astype(int), pd.Series(cls, name="collection"), pd.DataFrame(prov)
 
 
+UNPOOLED_1940 = ("Manly Punctated", "Tyronza Punctated", "Carson Red-on-Buff", "Hollywood White Slipped")
+
+
+def unpooled_1940_types(prov: pd.DataFrame, names: list[str]) -> pd.DataFrame:
+    """Counts, in the PFGData rows that make up each named assemblage's 1940 part, of four types that
+    scripts/build_analysis_matrix.py assigns to no analysis class.
+
+    Lipo (2001: Table 7.4, note a) states that his Painted category includes Carson Red-and-Buff and Hollywood White
+    with Nodena Red-and-White, Old Town Red and Avenue Polychrome. The cpl-pfg tab is his table, so a matrix row taken
+    from it can exceed this project's ten-class reading of the same 1940 rows by the counts of such types. This
+    function reports those counts so the difference can be compared with the "addition" of `decompose`.
+    """
+    d = pd.read_excel(ROOT / "data" / "raw" / "PFGData.xlsx", sheet_name="SherdData")
+    d.columns = [str(c).strip() for c in d.columns]
+    d["Site Number"] = d["Site Number"].astype(str).str.strip()
+    pv = prov.set_index("assemblage"); out = {}
+    for name in names:
+        ids = [i for i in str(pv.loc[name, "PFG rows"]).split("; ") if i and i != "none"]
+        rows = d[d["Site Number"].isin(ids)]
+        if len(rows) != len(ids):
+            raise ValueError(f"{name}: PFGData rows {ids} were not each found exactly once")
+        out[name] = {t: int(pd.to_numeric(rows[t], errors="coerce").fillna(0).sum()) for t in UNPOOLED_1940}
+    return pd.DataFrame(out).T
+
+
 def _check_counts(y: np.ndarray, what: str) -> np.ndarray:
     y = np.asarray(y, float)
     if y.size == 0 or not np.isfinite(y).all() or (y < 0).any() or not np.equal(y, np.rint(y)).all():
@@ -260,11 +285,29 @@ def main() -> int:
     matched = [a for a in counts.index if a not in lipo_only and pfg.loc[a].sum() >= MIN_SHERDS]
     below = [a for a in counts.index if a not in lipo_only and pfg.loc[a].sum() < MIN_SHERDS]
     rng = np.random.default_rng(SEED); pp = prior_predictive(rng)
+    un = unpooled_1940_types(prov, small)
+    acct = []
+    for a_ in small:
+        diff = ", ".join(f"{c} +{int(v)}" for c, v in add.loc[a_].items() if v > 0)
+        have = ", ".join(f"{t} {int(v)}" for t, v in un.loc[a_].items() if v > 0) or "none"
+        acct.append(f"{a_}: matrix row minus the ten-class reading of its 1940 rows is {diff}; the same 1940 rows hold {have}")
+    small_note = ("**The small differences are type pooling, not collections.** Lipo (2001: Table 7.4, note a) states that his Painted "
+                  "category includes Nodena Red-and-White, Carson Red-and-Buff, Old Town Red, Hollywood White, and Avenue Polychrome. "
+                  "`scripts/build_analysis_matrix.py` assigns Carson Red-on-Buff, Hollywood White Slipped, Manly Punctated and Tyronza "
+                  "Punctated to no class, and the matrix rows of these assemblages come from his table. " + ". ".join(acct) + ". "
+                  "Reading: Carson Red-on-Buff and Hollywood White Slipped are counted as Painted, and Manly Punctated as Parkin Punctated, "
+                  "in the rows taken from his table. That Manly Punctated was pooled is inferred from the equal counts at two sites and is "
+                  "not stated on the page cited. The incised sherd added at Hollywood is not explained with certainty: its 1940 row holds "
+                  "Tyronza Punctated in the same count, but Neeleys_Ferry's Tyronza Punctated sherds were not added. Lipo (2001: Table 7.4) lists "
+                  f"collections of his own at the {len(large)} large-addition sites and at {', '.join(lipo_only)} only. "
+                  "The tables below keep the label 'addition' for the matrix row minus the 1940 part at all nine sites; for these "
+                  f"{len(small)} it means this pooling difference. Rows built from PFGData by name do not include these types; "
+                  "`output/findings/painted_by_type.md` counts them per assemblage.")
     L = ["# Composition by collection: the 1940 PFG surface collections against Lipo's later additions", "",
          (f"Produced by `analyses/per_type/composition_by_collection.py`. Of the 28 basin assemblages, {len(only)} are the 1940 "
           f"Phillips-Ford-Griffin collections alone; {len(large)} are those plus a large-count addition from Lipo's 1996 to 1997 collections ("
-          + ", ".join(f"{a} +{int(add.loc[a].sum())}" for a in mixed if a in large) + f"); {len(small)} carry a small one ("
-          + ", ".join(f"{a} +{int(add.loc[a].sum())}" for a in small) + f"); {', '.join(lipo_only)} is Lipo's alone. Large and small "
+          + ", ".join(f"{a} +{int(add.loc[a].sum())}" for a in mixed if a in large) + f"); {len(small)} exceed their 1940 part by a small count ("
+          + ", ".join(f"{a} +{int(add.loc[a].sum())}" for a in small) + f"), which the next paragraph shows are 1940 sherds of types his table pools and not collections he made; {', '.join(lipo_only)} is Lipo's alone. Large and small "
           f"are count-size labels at {LARGE} sherds, not a judgment of compositional weight: Hollywood's 25 added sherds are 24 Painted, the "
           "largest change in any site's Painted share among the nine. Decomposition checked on this run: one cpl-pfg id per assemblage, "
           "the matrix row equal to that id's row, disjoint collection letters within and across assemblages, every addition non-negative "
@@ -341,6 +384,9 @@ def main() -> int:
     for _, r in prov.iterrows():
         L.append(f"| {r['assemblage']} | {r['cpl-pfg id']} | {r['PFG rows']} | {r['PFG part']} | {r['addition']} |")
     L.append("")
+    if L[3] != "":
+        raise RuntimeError("the findings header no longer has the layout the pooling note is inserted into")
+    L[3:3] = ["", small_note]
     OUT.write_text("\n".join(L)); print("\n".join(L)); print(f"wrote {OUT}")
     return 0
 

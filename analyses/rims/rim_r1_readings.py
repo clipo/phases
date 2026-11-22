@@ -267,8 +267,8 @@ def write_findings(G: dict, cells: pd.DataFrame | None = None, out: Path | None 
     # ---- G. limits
     L += ["## G. Limits stated in advance", "",
           ("19 sites of 28; rims from collections Mainfort names only in aggregate, never per site and never as the 1940 survey collections, so "
-           "whether a site's rims and its decorated counts share material is unknown; one observer, which helps consistency but does not make "
-           "recording independent across sites; totals 27 to 277, so per-site frequencies carry wide intervals and the F estimator's own variance "
+           "whether a site's rims and its decorated counts share material is unknown; the rims were recorded for one study, and the source does not say by how many observers, so "
+           "recording is not independent across sites; totals 27 to 277, so per-site frequencies carry wide intervals and the F estimator's own variance "
            "at 19 sites is large; the yardstick is the fixed-target baseline (no regional drift) under one population model; interior beveling "
            "is spatially as well as temporally patterned by Mainfort's own account (p. 37), so no clock reading is made."), ""]
     text = "\n".join(L)

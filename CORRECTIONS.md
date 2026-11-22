@@ -6,6 +6,51 @@ manuscript is affected.
 
 ---
 
+## 2026-11-22 — the painted class and the count of assemblages with later collections were misdescribed
+
+**Affects:** `analyses/per_type/painted_by_type.py`,
+`analyses/per_type/composition_by_collection.py`,
+`output/findings/painted_by_type.md`,
+`output/findings/composition_by_collection.md`,
+`analyses/rims/rim_r1_readings.py`, `output/findings/rim_r1.md`,
+`docs/manuscript/`.
+**Manuscript affected:** **Yes, in wording and two counts. No reported
+statistic changed, and the analysis matrix is unchanged.**
+
+### What was wrong
+
+1. The paper and `painted_by_type.md` said the painted class pools three types
+   (Old Town Red, Nodena Red and White, Avenue Polychrome). Lipo (2001: Table
+   7.4, note a) defines his painted category as five types, adding Carson
+   Red-and-Buff and Hollywood White, and the matrix rows taken from his table
+   follow it. Rows built from the survey spreadsheet by name use three. In the
+   1940 collections of the 28 assemblages the two further types total 36
+   sherds: 24 at Hollywood, counted in the painted class, and 12 at Williamson,
+   not counted.
+2. The paper and `composition_by_collection.md` said nine assemblages combine
+   a 1940 collection with one Lipo made in 1996 and 1997. Six do. The three
+   small differences (Hollywood +25, Barton Ranch +9, Neeleys Ferry +4) equal,
+   in all but one sherd, 1940 counts of types his table pools: Carson
+   Red-on-Buff and Hollywood White Slipped at Hollywood, and Manly Punctated at
+   the other two. That Manly Punctated was pooled with Parkin Punctated is
+   inferred from the equal counts.
+3. The rim findings file and the paper said the rims were recorded by one
+   observer. The source does not state that.
+4. A sentence cited House (1993) for the Hollywood radiocarbon ranges, which
+   that paper does not report, and a sentence on time-averaging stated its
+   dependence on variant lifetime the wrong way round.
+
+### What changed
+
+Both scripts now compute and report the account in items 1 and 2, and a test
+reads the expected counts from the spreadsheet directly. The manuscript states
+the class definition, the six assemblages, and the size of the inconsistency.
+The other sentences were corrected. The paper now spells site 12-O-5 Cranor
+Place, following Lipo (2001); the data and findings files keep the survey's
+spelling in the row name `Cramor_Place`.
+
+---
+
 ## 2026-11-21 — paste removed from the rim analysis; reproduction instructions corrected
 
 **Affects:** `analyses/rims/rim_r1.py`, `analyses/rims/rim_r1_readings.py`,
