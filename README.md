@@ -211,8 +211,11 @@ scales (`analyses/probe_latent_groups/time_scales.py`,
 `output/findings/simulator_time_scales.md`) and the per-class,
 regional-drift and rim tables (`analyses/per_type/` and `analyses/rims/`)
 were produced under NumPy 2.5.4. The later scripts read the time scales, so
-a run under another version differs both in its draws and in the settings
-derived from them. The simulation results carried from the
+a run under another version differs in its draws, and the scripts that read
+the time scales stop with an error because the regenerated values do not
+match the registered operating points. **Level 2 therefore needs the NumPy
+2.5.4 environment below.** Level 1 and the test suite run under the pinned
+environment. The simulation results carried from the
 earlier version of the study were produced under NumPy 2.4.6, which is the
 version `requirements-lock.txt` pins. The two sets have not been regenerated
 under one version. To reproduce the first set value for value, run those
@@ -271,6 +274,15 @@ pytest                                                        # Python: the pack
 Rscript -e 'testthat::test_file("tests/testthat/test-fit-layer.R")'   # R: the diagnostics layer on synthetic draws with analytic answers
 Rscript -e 'testthat::test_file("tests/testthat/test-kernels.R")'
 ```
+
+Some tests are skipped in a fresh clone, each with its reason printed by
+`pytest -rs`: two that read the simulator time scales (generated at level 2
+and not committed), four that compare against files of the authors' audit
+workspace (not published), two that need the parent model package of the
+earlier version of the study (`monument-mls`, see `pyproject.toml`), and three
+that compare against tables produced under NumPy 2.5.4. Checked in a fresh
+clone on 2026-11-21 under the pinned environment: 441 passed, 11 skipped, 1
+failed, the failure being the known issue below.
 
 Known issue: `tests/phasecheck/test_copying_model.py::test_model_comparison_tells_a_restricted_record_from_an_unrestricted_one`
 fails on 3 of its 80 records under numpy 2.4.6, scipy 1.18.1 and pandas 3.0.6.
