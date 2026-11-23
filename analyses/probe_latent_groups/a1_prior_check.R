@@ -1,5 +1,10 @@
 # A1 under the corrected intercept prior (D25 follow-up; closing step 3, item 1 of D36).
 #
+# Not a pipeline step since 2026-11-22. validate_a1.R now fits all 14 recovery records under
+# Normal(0, 10), so a1_validation_summary.json no longer holds Normal(0, 2) posteriors and this
+# script's comparison columns would both be Normal(0, 10). The committed a1_prior_check.md is the
+# October comparison, kept as written. The Normal(0, 2) table is a1_validation_alphaN0-2.md.
+#
 # D24 closes A1 on recovery tables fitted under the inherited Normal(0, 2)
 # intercept prior, which D25 replaced with Normal(0, 10). The A1 records in
 # data/stan/ were regenerated under D25 (prior_alpha_sd = 10), so the old

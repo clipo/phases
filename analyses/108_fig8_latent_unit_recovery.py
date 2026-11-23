@@ -78,14 +78,19 @@ def main() -> int:
     r1, null = a1_rows()
     r3 = a3_rows()
     half = [r["med"] for r in r1 if r["true"] == 0.5]
-    assert (round(min(half), 2), round(max(half), 2)) == (0.27, 0.48), half
-    assert round(null["med"], 2) == 0.52 and not null["passed"], null
+    assert (round(min(half), 2), round(max(half), 2)) == (0.25, 0.58), half
+    assert round(null["med"], 2) == 0.46 and not null["passed"], null
+    assert sum(null["med"] > r["med"] for r in r1) == 10          # the supplement: larger than 10 of the 14
     assert sum(not r["passed"] for r in r1) == 12
     om0 = [r["med"] for r in r3 if r["true"] == 0.0]
     om1 = [r["med"] for r in r3 if r["true"] == 1.0]
-    assert (round(min(om0), 2), round(max(om0), 2)) == (0.48, 1.21), om0
-    assert (round(min(om1), 2), round(max(om1), 2)) == (0.70, 2.28), om1
+    assert (round(min(om0), 2), round(max(om0), 2)) == (0.45, 0.78), om0
+    assert (round(min(om1), 2), round(max(om1), 2)) == (0.82, 2.31), om1
     assert all(r["passed"] for r in r3)
+    # The supplement: three barrier-1.0 medians lie inside the 90 percent interval of every no-barrier record.
+    lo0 = max(r["lo"] for r in r3 if r["true"] == 0.0); hi0 = min(r["hi"] for r in r3 if r["true"] == 0.0)
+    inside = sorted(round(m, 2) for m in om1 if lo0 < m < hi0)
+    assert inside == [0.82, 0.84, 1.09], (inside, lo0, hi0)
 
     fig, (axA, axB) = plt.subplots(1, 2, figsize=(7.0, 3.5))
     # A1

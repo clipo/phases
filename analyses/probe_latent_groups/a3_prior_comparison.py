@@ -99,8 +99,16 @@ def main() -> int:
     a0 = json.loads((OUTD / "a0_intercept_prior.json").read_text())
     L += ["## Contrast scale of the generating field", "",
           "| field | sigma | rho (km) | between-site contrast SD (logits) |", "|---|---|---|---|",
-          (f"| own-generator records (A0 point under Normal(0, 2), `a0_pinned_nuisances.json`) | {pin['sigma']:.2f} | "
+          (f"| own-generator records of the Normal(0, 10) column (the A0 medians in `a0_pinned_nuisances.json`, "
+           f"written from `{pin['source']}`) | {pin['sigma']:.2f} | "
            f"{pin['rho']:.1f} | {contrast_sd(D, pin['sigma'], pin['rho']):.2f} |")]
+    # The Normal(0, 2) column is read from the kept copies, whose own-generator records state their range in the table.
+    old = set(re.findall(r"\| own_\S+ \|[^|]*\|[^|]*\| omega [0-9.]+, rho ([0-9.]+) \|",
+                         (FINDINGS / "a3_validation_alphaN0-2.md").read_text()))
+    if len(old) != 1:
+        raise ValueError(f"the kept Normal(0, 2) table does not state one range for its own-generator records: {old}")
+    L.append(f"| own-generator records of the Normal(0, 2) column (range as printed in `a3_validation_alphaN0-2.md`; "
+             f"its sigma is not printed there) | not printed | {float(old.pop()):.1f} | not computed |")
     for rr in sorted({v["rho"] for k, v in truth.items() if k.startswith("slope_")}):
         s = {v["sigma"] for k, v in truth.items() if k.startswith("slope_") and v["rho"] == rr}
         if len(s) != 1:

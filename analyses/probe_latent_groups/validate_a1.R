@@ -79,6 +79,7 @@ write_json(list(edges = dz$edges, draws = lapply(idx, function(s) list(
 # ---------------------------------------------------------------------------
 cat("\n[iii] recovery on ten nonzero records\n")
 rec_files <- sort(list.files(here("data", "stan"), pattern = "^a1_sg.*\\.json$", full.names = TRUE))
+if (length(rec_files) == 0) stop("no validation records in data/stan; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R and then a1_contracts.py")
 recovery <- list()
 for (f in rec_files) {
   tag <- sub("^a1_(.*)\\.json$", "\\1", basename(f)); d <- read_a1(f); tr <- attr(d, "provenance")$`_truth`

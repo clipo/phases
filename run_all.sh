@@ -105,13 +105,18 @@ if [ "$LEVEL" -ge 3 ]; then
   echo "=== level 3: the Stan fits (every fit passes through R/fit_spatial.R) ==="
   run Rscript analyses/probe_latent_groups/refit_a0_basin.R           # A0 on the basin; Table S4
   run Rscript analyses/probe_latent_groups/a0_intercept_prior.R       # Figure 5
+  # The validation records take their field scale and range from the basin fit above, so these
+  # three steps must follow it and precede the validation fits.
+  run Rscript analyses/probe_latent_groups/a0_pinned_nuisances.R      # medians of the basin fit
+  py analyses/probe_latent_groups/a1_contracts.py                     # latent-unit validation records, data/stan/a1_*.json
+  py analyses/probe_latent_groups/a3_contracts.py                     # barrier validation records, data/stan/a3_*.json
   run Rscript analyses/probe_latent_groups/validate_a1.R              # Figure 8A
   run Rscript analyses/probe_latent_groups/validate_a3.R              # Figure 8B
-  run Rscript analyses/probe_latent_groups/a1_prior_check.R
   run Rscript analyses/probe_latent_groups/a3_pinned_range.R 6        # Table S5
   run Rscript analyses/probe_latent_groups/a3_pinned_range.R 12       # Table S5
   py analyses/probe_latent_groups/a0_predictive_summaries.py
   py analyses/probe_latent_groups/a3_prior_comparison.py
+  py analyses/probe_latent_groups/export_fit_diagnostics.py           # fit_diagnostics.md, from the fit records
 fi
 
 echo "=== level 1: the figures, from the committed findings files ==="

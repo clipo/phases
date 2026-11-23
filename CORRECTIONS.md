@@ -6,6 +6,72 @@ manuscript is affected.
 
 ---
 
+## 2026-11-22 — the Stan validation fits and four per-class tables rerun in pipeline order
+
+**Affects:** `run_all.sh`, `README.md`,
+`analyses/probe_latent_groups/` (`refit_a0_basin.R`, `validate_a1.R`,
+`validate_a3.R`, `a3_pinned_range.R`, `a3_prior_comparison.py`,
+`a1_prior_check.R`), `analyses/108_fig8_latent_unit_recovery.py`,
+`output/findings/` (the `a0_`, `a1_`, `a3_` and `fit_diagnostics` files and
+four `per_type_generators_*_secondary*` tables), `figures/`,
+`docs/manuscript/`.
+**Manuscript affected:** **Yes, in reported values. No conclusion changed.**
+
+### What was wrong
+
+1. `./run_all.sh --stan` could not run from a fresh clone. It omitted
+   `a0_pinned_nuisances.R`, `a1_contracts.py` and `a3_contracts.py`, which
+   write the simulated validation records, so the first validation fit stopped
+   for lack of its data. `a3_pinned_range.R`, given no records, wrote an empty
+   table over the committed one and exited normally.
+2. The committed validation tables were fitted to records simulated with the
+   field scale and range of the spatial field model's basin fit under the
+   earlier Normal(0, 2) intercept prior (range 204 km). Run in order, the
+   pipeline simulates them from the basin fit under the paper's Normal(0, 10)
+   prior (range 99 km). The latent-unit validation of Figure 8A had been
+   fitted under Normal(0, 2), with three fits repeated under Normal(0, 10).
+3. `./run_all.sh --analyses` ran the planted-marker tables with three settings
+   at both operating points. The committed tables record fifteen at the
+   primary point and three at the secondary (corrected in pull request 12).
+4. `refit_a0_basin.R` embedded a git diff against a commit this repository
+   does not contain, which printed an error into its findings file.
+
+### What changed
+
+- Every Stan fit of level 3 was rerun on 2026-11-22 in the corrected order
+  (R 4.6.2, rstan 2.32.7, StanHeaders 2.39.1.1), and the findings files,
+  Figures 5 and 8 and the diagnostic figures are the results of that run. All
+  14 latent-unit recovery fits now use Normal(0, 10). The October table under
+  Normal(0, 2) is kept as `a1_validation_alphaN0-2.md`, and the October
+  per-fit diagnostics as `fit_diagnostics_2026-10.md`.
+- Conclusions that hold: all 39 free-range barrier fits pass the diagnostic
+  gate and the barrier model does not separate no barrier from a barrier of
+  1.0. Twelve of the 14 latent-unit recovery fits fail the gate. The spatial
+  share is 0.93 under the main prior.
+- Values that changed in the paper: the spatial-share intervals by 0.01. In
+  the supplement, the prior-predictive and sensitivity values, Table S4, the
+  recovery paragraphs, the diagnostics entries and the Normal(0, 10) column of
+  Table S5. Barrier medians with the range free are 0.45 to 0.78 at no barrier
+  and 0.82 to 2.31 at a barrier of 1.0. These ranges of medians do not
+  overlap, so the supplement now states the overlap on the intervals: three of
+  the six medians at 1.0 lie inside the 90 percent interval of every
+  no-barrier record. With the range pinned at 12 km, 31 of 39 fits pass (37
+  before).
+- One spatial-field recovery fit (share 0.9, range 5 km) ended its third
+  sampler setting with 12 divergent transitions in 24,000 draws under the
+  current R and StanHeaders versions. A fourth setting was added and passes.
+- Four secondary-point per-class tables differ from the earlier committed
+  files in five band endpoints (four in the last printed digit, one lower
+  endpoint 0.0050 against 0.0033). The difference persists with the original
+  code, identical inputs and two sets of scipy and pandas versions. Its cause
+  was not found. The tables are regenerated to the values a rerun under NumPy
+  2.5.4 gives. The paper quotes none of the five values. The ten
+  primary-point tables and the regional-drift summary reproduce exactly.
+- The three validation scripts now stop with an error when their records are
+  absent.
+
+---
+
 ## 2026-11-22 — the painted class and the count of assemblages with later collections were misdescribed
 
 **Affects:** `analyses/per_type/painted_by_type.py`,
