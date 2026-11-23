@@ -1,12 +1,12 @@
-"""A3 under the inherited and the corrected intercept prior: a descriptive comparison (D25 follow-up).
+"""A3 under the two class-intercept priors: a descriptive comparison (D25 follow-up).
 
 Reads the six A3 findings tables written by validate_a3.R and
 a3_pinned_range.R (free range, range pinned at 6 km and at 12 km; the
-Normal(0, 2) copies kept as *_alphaN0-2.md, the Normal(0, 10) runs under the
-plain names) and reports, per run: gate passes and rungs, and the posterior
-medians of omega pooled by record type, gate-passing fits only. The tables
-are parsed rather than the JSON summaries because the Normal(0, 2) JSON was
-overwritten by the rerun; only its markdown copies remain.
+Normal(0, 2) arm, run with --alpha-sd=2, as *_alphaN0-2.md, the Normal(0, 10)
+arm under the plain names) and reports, per run: gate passes and rungs, and
+the posterior medians of omega pooled by record type, gate-passing fits only.
+Each arm is fitted to its own records, simulated at the field scale and range
+of the basin fit under that arm's prior.
 
 It also reports the between-site contrast SD of the field that generated the
 own-generator and step-against-slope records, sigma * sqrt(c(rho)) with
@@ -33,7 +33,7 @@ OUTD = ROOT / "output" / "probe_latent_groups"
 OUT = FINDINGS / "a3_prior_comparison.md"
 RUNS = (("a3_validation", "free range"), ("a3_pinned_rho6", "range pinned at 6 km"),
         ("a3_pinned_rho12", "range pinned at 12 km"))
-PRIORS = (("_alphaN0-2", "Normal(0, 2), inherited"), ("", "Normal(0, 10), corrected"))
+PRIORS = (("_alphaN0-2", "Normal(0, 2)"), ("", "Normal(0, 10)"))
 GROUPS = (("own-generator, omega 0", r"own_(G1|L)_om0_r"), ("own-generator, omega 0.25", r"own_(G1|L)_om0\.25_r"),
           ("own-generator, omega 0.5", r"own_(G1|L)_om0\.5_r"), ("own-generator, omega 1", r"own_(G1|L)_om1_r"),
           ("smooth slope, rho 30 km, no barrier", r"slope_rho30_r"), ("smooth slope, rho 60 km, no barrier", r"slope_rho60_r"),
@@ -69,7 +69,7 @@ def contrast_sd(D: np.ndarray, sigma: float, rho: float) -> float:
 
 
 def main() -> int:
-    L = ["# A3 under the inherited and the corrected intercept prior", "",
+    L = ["# A3 under the two class-intercept priors", "",
          ("Produced by `analyses/probe_latent_groups/a3_prior_comparison.py` from the findings tables of "
          "`validate_a3.R` and `a3_pinned_range.R`. Posterior medians of omega (SD in logits of a region-level shift), "
          "pooled by record type over gate-passing fits only. Descriptive; exploratory design validation, not evidence "
@@ -102,13 +102,18 @@ def main() -> int:
           (f"| own-generator records of the Normal(0, 10) column (the A0 medians in `a0_pinned_nuisances.json`, "
            f"written from `{pin['source']}`) | {pin['sigma']:.2f} | "
            f"{pin['rho']:.1f} | {contrast_sd(D, pin['sigma'], pin['rho']):.2f} |")]
-    # The Normal(0, 2) column is read from the kept copies, whose own-generator records state their range in the table.
-    old = set(re.findall(r"\| own_\S+ \|[^|]*\|[^|]*\| omega [0-9.]+, rho ([0-9.]+) \|",
-                         (FINDINGS / "a3_validation_alphaN0-2.md").read_text()))
-    if len(old) != 1:
-        raise ValueError(f"the kept Normal(0, 2) table does not state one range for its own-generator records: {old}")
-    L.append(f"| own-generator records of the Normal(0, 2) column (range as printed in `a3_validation_alphaN0-2.md`; "
-             f"its sigma is not printed there) | not printed | {float(old.pop()):.1f} | not computed |")
+    # The Normal(0, 2) column's records are simulated at that prior's basin-fit values (a0_pinned_nuisances.R --alpha-sd=2).
+    pin2 = json.loads((OUTD / "a0_pinned_nuisances_alphaN0-2.json").read_text())
+    if float(pin2["prior_alpha_sd"]) != 2.0:
+        raise ValueError("a0_pinned_nuisances_alphaN0-2.json was not written for the Normal(0, 2) prior")
+    truth2 = json.loads((ROOT / "data" / "stan" / "alphaN0-2" / "a3_truth.json").read_text())
+    for name, pn, tr in (("Normal(0, 10)", pin, truth), ("Normal(0, 2)", pin2, truth2)):
+        used = {(v["sigma"], v["rho"]) for k, v in tr.items() if k.startswith("own_")}
+        if used != {(float(pn["sigma"]), float(pn["rho"]))}:
+            raise ValueError(f"the {name} own-generator records were not simulated at the pinned values: {used}")
+    L.append(f"| own-generator records of the Normal(0, 2) column (the A0 medians in `a0_pinned_nuisances_alphaN0-2.json`, "
+             f"written from `{pin2['source']}`) | {pin2['sigma']:.2f} | {pin2['rho']:.1f} | "
+             f"{contrast_sd(D, pin2['sigma'], pin2['rho']):.2f} |")
     for rr in sorted({v["rho"] for k, v in truth.items() if k.startswith("slope_")}):
         s = {v["sigma"] for k, v in truth.items() if k.startswith("slope_") and v["rho"] == rr}
         if len(s) != 1:

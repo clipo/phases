@@ -13,22 +13,29 @@
 #        record's realized between-group contrast.
 # Twenty draws of one fit are exported for the Stan-versus-numpy readout
 # cross-check (a1_readout_crosscheck.py).
-# Run: Rscript analyses/probe_latent_groups/validate_a1.R
+# Run: Rscript analyses/probe_latent_groups/validate_a1.R [--alpha-sd=2]
+# With --alpha-sd=2 the records of the Normal(0, 2) arm (data/stan/alphaN0-2/)
+# are fitted under that prior and the table is written to
+# a1_validation_alphaN0-2.md. That arm writes no diagnostic figures and no
+# cross-check draws; its numeric diagnostics are in the table and in
+# fit_diagnostics.md.
 suppressPackageStartupMessages({ library(here); library(rstan); library(posterior); library(jsonlite) })
 here::i_am("pyproject.toml")
-source(here("R", "fit_spatial.R")); source(here("R", "diagnostic_plots.R"))
+source(here("R", "fit_spatial.R")); source(here("R", "diagnostic_plots.R")); source(here("R", "intercept_arm.R"))
+ARM <- intercept_arm(commandArgs(trailingOnly = TRUE))
 options(mc.cores = 4L)
 A0 <- here("stan", "spatial", "composition_gp_marginal.stan")
 A1 <- here("stan", "spatial", "composition_gp_groups.stan")
 OUTD <- here("output", "probe_latent_groups"); FIG <- here("figures", "probe_latent_groups")
-FIND <- here("output", "findings", "a1_validation.md")
+FIND <- here("output", "findings", sprintf("a1_validation%s.md", ARM$tag))
+SUMMARY <- here("output", "probe_latent_groups", sprintf("a1_validation_summary%s.json", ARM$tag))
 SEED <- 20261017L
 GATED_A0 <- c("sigma", "tau", "rho", "alpha", "lp__", "f", "log_lik")
 GATED_A1 <- c(GATED_A0, "sigma_g", "Delta", "Delta_w", "coherence", "comembership")
 EXEMPT_A1 <- c("delta", "pi", "resp", "z_g", "sigma_g_free", "z_draw", "coherence_hard", "y_rep")
 A1_KEYS <- c("G", "prior_group_sd", "fix_group_scale", "group_scale_fixed", "M", "edges")
 sm0 <- compile_model(A0); sm1 <- compile_model(A1)
-read_a1 <- function(f) { d <- read_stan_data(f); d$edges <- matrix(as.integer(unlist(d$edges)), nrow = d$M, byrow = FALSE); d }
+read_a1 <- function(f) { d <- read_stan_data(f); check_arm(d, ARM, f); d$edges <- matrix(as.integer(unlist(d$edges)), nrow = d$M, byrow = FALSE); d }
 strip_a1 <- function(d) { p <- attr(d, "provenance"); pa <- attr(d, "path"); d <- d[setdiff(names(d), A1_KEYS)]; attr(d, "provenance") <- p; attr(d, "path") <- pa; d }
 post <- function(fit, pars) {
   d <- posterior::subset_draws(posterior::as_draws_array(fit), variable = pars)
@@ -47,7 +54,8 @@ timing <- list(); note <- function(l, r) timing[[l]] <<- list(rung = r$rung, sec
 
 # ---------------------------------------------------------------------------
 cat("\n[i] code equivalence at zero group scale\n")
-dz <- read_a1(here("data", "stan", "a1_zero.json")); truth0 <- attr(dz, "provenance")$`_truth`
+if (!file.exists(file.path(ARM$dir, "a1_zero.json"))) stop(sprintf("no validation records in %s; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R%s and then a1_contracts.py%s", ARM$dir, ARM$flag, sub("=", " ", ARM$flag)))
+dz <- read_a1(file.path(ARM$dir, "a1_zero.json")); truth0 <- attr(dz, "provenance")$`_truth`
 r0 <- fit_cached("a1val_a0_on_zero", A0, strip_a1(dz), gated = GATED_A0, chains = 4L, seed = SEED, sm = sm0); note("A0 on zero", r0)
 dzf <- dz; dzf$fix_group_scale <- 1L; dzf$group_scale_fixed <- 0
 r1f <- fit_cached("a1val_a1_fixed0_on_zero", A1, dzf, gated = GATED_A0,
@@ -66,6 +74,7 @@ r1 <- fit_cached("a1val_a1_on_zero", A1, dz, gated = GATED_A1, exempt = EXEMPT_A
 cat(diag_line(r1$diag, "A1 on zero"), "\n")
 null_post <- post(r1$fit, c("sigma_g", "Delta", "Delta_w", "coherence", "coherence_hard", "sigma", "tau[1]", "rho"))
 null_marg <- margins(r1$fit, truth0$z)
+if (ARM$sd == 10) {   # figures and cross-check draws are written for the paper's prior only
 figs <- plot_diagnostics(r1$fit, pars = c("sigma", "rho", "tau[1]", "sigma_g", "Delta", "coherence", "alpha[1]", "alpha[2]"),
                          out_dir = FIG, prefix = "a1_null", pairs_pars = c("sigma", "rho", "tau[1]", "sigma_g"))
 # Export 20 draws for the numpy cross-check.
@@ -75,11 +84,12 @@ write_json(list(edges = dz$edges, draws = lapply(idx, function(s) list(
   delta = ex$delta[s, , ], pi = ex$pi[s, ], resp = ex$resp[s, , ], z_draw = ex$z_draw[s, ],
   Delta = ex$Delta[s], Delta_w = ex$Delta_w[s], coherence = ex$coherence[s], coherence_hard = ex$coherence_hard[s]))),
   file.path(OUTD, "a1_crosscheck_draws.json"), digits = NA, auto_unbox = TRUE)
+}
 
 # ---------------------------------------------------------------------------
 cat("\n[iii] recovery on ten nonzero records\n")
-rec_files <- sort(list.files(here("data", "stan"), pattern = "^a1_sg.*\\.json$", full.names = TRUE))
-if (length(rec_files) == 0) stop("no validation records in data/stan; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R and then a1_contracts.py")
+rec_files <- sort(list.files(ARM$dir, pattern = "^a1_sg.*\\.json$", full.names = TRUE))
+if (length(rec_files) == 0) stop(sprintf("no validation records in %s; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R%s and then a1_contracts.py%s", ARM$dir, ARM$flag, sub("=", " ", ARM$flag)))
 recovery <- list()
 for (f in rec_files) {
   tag <- sub("^a1_(.*)\\.json$", "\\1", basename(f)); d <- read_a1(f); tr <- attr(d, "provenance")$`_truth`
@@ -95,7 +105,7 @@ for (f in rec_files) {
 # ---------------------------------------------------------------------------
 cell <- function(p, v) { i <- which(p$variable == v); sprintf("%.3f [%.3f, %.3f]", p$median[i], p$q5[i], p$q95[i]) }
 L <- c("# A1 validated on its own generator (pilot step 6; spec 4.1c)", "",
-       sprintf("Produced by `analyses/probe_latent_groups/validate_a1.R` on %s. Records from `a1_contracts.py` (nuisances pinned to the A0 refit's identified quantities; field centered per class; membership = Phillips's partition 12/11/5; Gabriel edges for coherence). Exploratory design validation, not evidence about the record.", format(Sys.Date())),
+       sprintf("Produced by `analyses/probe_latent_groups/validate_a1.R%s` on %s, fitted under the Normal(0, %g) class-intercept prior. Records from `a1_contracts.py%s` (nuisances pinned to the A0 refit's identified quantities; field centered per class; membership = Phillips's partition 12/11/5; Gabriel edges for coherence). Exploratory design validation, not evidence about the record.", ARM$flag, format(Sys.Date()), ARM$sd, sub("=", " ", ARM$flag)),
        "", "## (i) Code equivalence at zero group scale", "",
        sprintf("A0 and A1 with the group scale fixed at zero, same record, same seed. Largest |z| over %d shared posterior means (difference over combined MCSE): **%.2f** at `%s`. Values above 3 would mean the two programs disagree.", nrow(equiv), max(abs(zsc)), equiv$variable[which.max(abs(zsc))]),
        "", "| quantity | A0 mean | A1 (fixed 0) mean | z |", "|---|---|---|---|",
@@ -109,7 +119,7 @@ L <- c("# A1 validated on its own generator (pilot step 6; spec 4.1c)", "",
        sprintf("| separation margins vs generating labels (12, 11, 5) | %s |", paste(sprintf("%.3f", null_marg$margin), collapse = ", ")),
        sprintf("| per-chain co-membership split (max abs diff) | %.3f |", r1$diag$comembership_split$max_abs_diff), "",
        diag_line(r1$diag, "A1 on zero"),
-       sprintf("Visual set: %s.", paste(sprintf("`%s`", basename(figs$file)), collapse = ", ")), "",
+       if (ARM$sd == 10) sprintf("Visual set: %s.", paste(sprintf("`%s`", basename(figs$file)), collapse = ", ")) else "No figures are written for this arm.", "",
        "## (iii) Recovery against the prior (sigma_g = 0.25 and 0.5, five records each)", "",
        "| record | true sigma_g | realized between-group F_ST | Delta true | sigma_g post | Delta post | Delta_w post | coherence | margins (12, 11, 5) | gate | chain split |",
        "|---|---|---|---|---|---|---|---|---|---|---|",
@@ -124,5 +134,5 @@ L <- c("# A1 validated on its own generator (pilot step 6; spec 4.1c)", "",
 writeLines(L, FIND)
 write_json(list(equivalence = equiv, null = list(post = null_post, margin = null_marg$margin, block = null_marg$block),
                 recovery = lapply(recovery, function(x) x[c("truth_sigma_g", "Delta_true", "realized_fst", "post", "margin", "block", "split")]),
-                timing = timing), file.path(OUTD, "a1_validation_summary.json"), auto_unbox = TRUE, digits = NA, pretty = TRUE, na = "null")
+                timing = timing), auto_unbox = TRUE, digits = NA, pretty = TRUE, na = "null", path = SUMMARY)
 cat("\nwrote", FIND, "\n")

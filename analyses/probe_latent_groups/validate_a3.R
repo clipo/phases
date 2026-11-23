@@ -5,18 +5,24 @@
 # the code-equivalence pair (A0 against A3 with omega fixed at 0) on one
 # zero-omega record. Reads omega against the truth, the identified field
 # quantities, and the gate. Everything through the layer and the cache.
-# Run: Rscript analyses/probe_latent_groups/validate_a3.R
+# Run: Rscript analyses/probe_latent_groups/validate_a3.R [--alpha-sd=2]
+# With --alpha-sd=2 the records of the Normal(0, 2) arm (data/stan/alphaN0-2/)
+# are fitted under that prior and the table is written to
+# a3_validation_alphaN0-2.md. That arm writes no diagnostic figures; its
+# numeric diagnostics are in the table and in fit_diagnostics.md.
 suppressPackageStartupMessages({ library(here); library(rstan); library(posterior); library(jsonlite) })
-here::i_am("pyproject.toml"); source(here("R", "fit_spatial.R")); source(here("R", "diagnostic_plots.R")); options(mc.cores = 4L)
+here::i_am("pyproject.toml"); source(here("R", "fit_spatial.R")); source(here("R", "diagnostic_plots.R")); source(here("R", "intercept_arm.R")); options(mc.cores = 4L)
+ARM <- intercept_arm(commandArgs(trailingOnly = TRUE))
 A0 <- here("stan", "spatial", "composition_gp_marginal.stan"); A3 <- here("stan", "spatial", "composition_gp_barrier.stan")
 sm0 <- compile_model(A0); sm3 <- compile_model(A3)
-OUTD <- here("output", "probe_latent_groups"); FIG <- here("figures", "probe_latent_groups"); FIND <- here("output", "findings", "a3_validation.md")
+OUTD <- here("output", "probe_latent_groups"); FIG <- here("figures", "probe_latent_groups"); FIND <- here("output", "findings", sprintf("a3_validation%s.md", ARM$tag))
+SUMMARY <- here("output", "probe_latent_groups", sprintf("a3_validation_summary%s.json", ARM$tag))
 SEED <- 20261017L
 A3_KEYS <- c("P", "region", "prior_group_sd", "fix_omega")
 GATED0 <- c("sigma", "tau", "rho", "alpha", "lp__", "f", "log_lik")
 GATED3 <- c(GATED0, "omega")
 EXEMPT3 <- c("resp", "m_draw", "lp_m", "f_draw", "y_rep", "omega_free")
-read_a3 <- function(f) { d <- read_stan_data(f); d$region <- matrix(as.integer(unlist(d$region)), nrow = d$P, byrow = TRUE); d }
+read_a3 <- function(f) { d <- read_stan_data(f); check_arm(d, ARM, f); d$region <- matrix(as.integer(unlist(d$region)), nrow = d$P, byrow = TRUE); d }
 strip_a3 <- function(d) { p <- attr(d, "provenance"); pa <- attr(d, "path"); d <- d[setdiff(names(d), A3_KEYS)]; attr(d, "provenance") <- p; attr(d, "path") <- pa; d }
 post <- function(fit, pars) { dd <- posterior::subset_draws(posterior::as_draws_array(fit), variable = pars)
   as.data.frame(posterior::summarise_draws(dd, "mean", "median", "mcse_mean", ~posterior::quantile2(.x, probs = c(0.05, 0.95)))) }
@@ -24,7 +30,8 @@ ll <- function(fit) mean(rowSums(rstan::extract(fit, pars = "log_lik")$log_lik))
 timing <- list(); rows <- list()
 
 # Code equivalence on a zero-omega record.
-dz <- read_a3(here("data", "stan", "a3_own_G1_om0_r1.json"))
+if (!file.exists(file.path(ARM$dir, "a3_own_G1_om0_r1.json"))) stop(sprintf("no validation records in %s; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R%s and then a3_contracts.py%s", ARM$dir, ARM$flag, sub("=", " ", ARM$flag)))
+dz <- read_a3(file.path(ARM$dir, "a3_own_G1_om0_r1.json"))
 r0 <- fit_cached("a3val_a0_on_om0", A0, strip_a3(dz), gated = GATED0, chains = 4L, seed = SEED, sm = sm0)
 dzf <- dz; dzf$fix_omega <- 1L
 r3f <- fit_cached("a3val_a3_fixed0_on_om0", A3, dzf, gated = GATED0, exempt = c(EXEMPT3, "omega"), chains = 4L, seed = SEED, sm = sm3)
@@ -33,8 +40,8 @@ p0 <- post(r0$fit, shared); p3 <- post(r3f$fit, shared)
 zsc <- (p3$mean - p0$mean) / sqrt(p0$mcse_mean^2 + p3$mcse_mean^2)
 cat(sprintf("equivalence: max |z| over %d shared quantities %.2f (%s)\n", length(zsc), max(abs(zsc)), p0$variable[which.max(abs(zsc))]))
 
-files <- sort(list.files(here("data", "stan"), pattern = "^a3_(own|slope|sim)_.*\\.json$", full.names = TRUE))
-if (length(files) == 0) stop("no validation records in data/stan; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R and then a3_contracts.py")
+files <- sort(list.files(ARM$dir, pattern = "^a3_(own|slope|sim)_.*\\.json$", full.names = TRUE))
+if (length(files) == 0) stop(sprintf("no validation records in %s; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R%s and then a3_contracts.py%s", ARM$dir, ARM$flag, sub("=", " ", ARM$flag)))
 exemplar_done <- character()
 for (f in files) {
   tag <- sub("^a3_(.*)\\.json$", "\\1", basename(f)); d <- read_a3(f); tr <- attr(d, "provenance")$`_truth`
@@ -43,7 +50,7 @@ for (f in files) {
   cat(diag_line(r$diag, tag), "\n")
   pt <- post(r$fit, c("omega", "sigma", "tau[1]", "rho", "spatial_share"))
   kind <- sub("_r[0-9]+$", "", tag)
-  if (!(kind %in% exemplar_done)) {
+  if (ARM$sd == 10 && !(kind %in% exemplar_done)) {
     plot_diagnostics(r$fit, pars = c("omega", "sigma", "rho", "tau[1]"), out_dir = FIG, prefix = paste0("a3_", kind), pairs_pars = c("omega", "sigma", "rho", "tau[1]"))
     exemplar_done <- c(exemplar_done, kind)
   }
@@ -54,7 +61,7 @@ for (f in files) {
 }
 cell <- function(p, v) { i <- which(p$variable == v); sprintf("%.3f [%.3f, %.3f]", p$median[i], p$q5[i], p$q95[i]) }
 L <- c("# A3 identification test with the placement supplied (step 6b; design section 4)", "",
-       sprintf("Produced by `analyses/probe_latent_groups/validate_a3.R` on %s. Records from `a3_contracts.py`. Exploratory design validation, not evidence about the record.", format(Sys.Date())),
+       sprintf("Produced by `analyses/probe_latent_groups/validate_a3.R%s` on %s. Records from `a3_contracts.py%s`, fitted under the Normal(0, %g) class-intercept prior. Exploratory design validation, not evidence about the record.", ARM$flag, format(Sys.Date()), sub("=", " ", ARM$flag), ARM$sd),
        "", "## Code equivalence", "",
        sprintf("A0 against A3 with omega fixed at 0 on `a3_own_G1_om0_r1`: largest |z| over %d shared posterior means %.2f at `%s` (threshold 3).", length(zsc), max(abs(zsc)), p0$variable[which.max(abs(zsc))]),
        diag_line(r0$diag, "A0"), diag_line(r3f$diag, "A3 fixed 0"), "",
@@ -70,5 +77,5 @@ for (x in rows) {
 }
 writeLines(L, FIND)
 write_json(list(equivalence = data.frame(variable = p0$variable, z = zsc), rows = rows, timing = timing),
-           file.path(OUTD, "a3_validation_summary.json"), auto_unbox = TRUE, digits = NA, pretty = TRUE, na = "null")
+           auto_unbox = TRUE, digits = NA, pretty = TRUE, na = "null", path = SUMMARY)
 cat("\nwrote", FIND, "\n")

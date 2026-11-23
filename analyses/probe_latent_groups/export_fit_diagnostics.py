@@ -7,19 +7,18 @@ divergences, treedepth saturation against the configured maximum, E-BFMI
 per chain, the per-chain co-membership split for A1, the sampler rung and
 its settings, and the ladder of earlier rungs. The committed findings
 tables (a1_validation.md, a3_validation.md, a3_pinned_rho6.md,
-a3_pinned_rho12.md, a1_prior_check.md) print the gate outcome and, for most
-fits, only its reasons. This script copies the numbers out of the records
+a3_pinned_rho12.md and their *_alphaN0-2.md counterparts) print the gate
+outcome and, for most fits, only its reasons. This script copies the numbers out of the records
 into one committed table so the supplement's promise of diagnostics for
 every fit is kept by a file in the repository rather than by the cache.
 
-One row per record. A label can have two records when the same fit was
-run under two versions of the Stan source: the A3 and A1 families were
-first fitted with the class-intercept prior hard-coded as Normal(0, 2) and
-rerun after D25 (2026-10-18) made the prior data with default Normal(0,
-10). The source version is told from the record's Stan source hash; for a
-data-driven version the prior SD is read from the data file the record
-names (every such file was written on 2026-10-18 with prior_alpha_sd = 10,
-after D25, so it cannot predate the fit that read it).
+One row per record. A validation label has two records, one per
+class-intercept prior: the Normal(0, 10) arm and the Normal(0, 2) arm (the
+validation scripts run with --alpha-sd=2), each fitted to its own records.
+The prior SD is read from the data file the record names (data/stan/ for
+Normal(0, 10), data/stan/alphaN0-2/ for Normal(0, 2)). A record made with
+an older Stan source that hard-coded the prior is told from its source hash
+and labelled as such.
 
 Descriptive export; no inference. Exploratory design validation, not
 evidence about the record.
@@ -53,8 +52,7 @@ SOURCE_VERSIONS = {
 }
 FAMILIES = [
     ("a0_", "A0 spatial field: basin fit, prior predictive, sensitivity, recovery, intercept priors (refit_a0_basin.R, a0_intercept_prior.R)"),
-    ("a1val_", "A1 latent-unit recovery and equivalence fits (validate_a1.R; a1_validation.md)"),
-    ("a1prior_", "A1 refits under the Normal(0, 10) intercept prior (a1_prior_check.R; a1_prior_check.md)"),
+    ("a1val_", "A1 latent-unit recovery and equivalence fits (validate_a1.R; a1_validation.md and a1_validation_alphaN0-2.md)"),
     ("a3val_", "A3 barrier recovery and equivalence fits, range free (validate_a3.R; a3_validation.md and a3_validation_alphaN0-2.md)"),
     ("a3pin6_", "A3 with the range pinned at 6 km (a3_pinned_range.R 6; a3_pinned_rho6.md and _alphaN0-2.md)"),
     ("a3pin12_", "A3 with the range pinned at 12 km (a3_pinned_range.R 12; a3_pinned_rho12.md and _alphaN0-2.md)"),
@@ -159,9 +157,9 @@ def main() -> None:
          "the gate thresholds are R-hat at most 1.01 on gated variables, bulk and tail ESS at least 400, no divergent transitions, "
          "E-BFMI at least 0.3 and, for A1, a per-chain co-membership split of at most 0.5. Treedepth saturation is reported, not gated. "
          "Rung settings are iterations per chain / warmup, adapt_delta and max_treedepth; four chains throughout. "
-         "A label with two rows was fitted under two versions of the Stan source, with the class-intercept prior hard-coded as Normal(0, 2) "
-         "and, after D25 (2026-10-18), read from the data (default Normal(0, 10)); the findings tables named per family report the "
-         "data-driven version under the plain name and the hard-coded version as `*_alphaN0-2.md`. "
+         "A validation label has two rows, one per class-intercept prior, each fitted to records simulated at that prior's basin-fit values; "
+         "the findings tables named per family report the Normal(0, 10) fits under the plain name and the Normal(0, 2) fits "
+         "(the validation scripts run with `--alpha-sd=2`) as `*_alphaN0-2.md`. "
          "Descriptive export; exploratory design validation, not evidence about the record. Columns in `fit_diagnostics.csv`.", ""]
     for prefix, desc in FAMILIES:
         fam = prefix.rstrip("_") or "other"

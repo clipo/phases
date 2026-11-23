@@ -114,6 +114,17 @@ if [ "$LEVEL" -ge 3 ]; then
   run Rscript analyses/probe_latent_groups/validate_a3.R              # Figure 8B
   run Rscript analyses/probe_latent_groups/a3_pinned_range.R 6        # Table S5
   run Rscript analyses/probe_latent_groups/a3_pinned_range.R 12       # Table S5
+  # The same validation under the Normal(0, 2) intercept prior (the supplement's prior-sensitivity
+  # entries and the Normal(0, 2) column of Table S5). Its records are simulated at the values of
+  # the Normal(0, 2) basin fit, which a0_intercept_prior.R wrote above, and are kept in
+  # data/stan/alphaN0-2/; its tables are the *_alphaN0-2.md files.
+  run Rscript analyses/probe_latent_groups/a0_pinned_nuisances.R --alpha-sd=2
+  py analyses/probe_latent_groups/a1_contracts.py --alpha-sd 2
+  py analyses/probe_latent_groups/a3_contracts.py --alpha-sd 2
+  run Rscript analyses/probe_latent_groups/validate_a1.R --alpha-sd=2
+  run Rscript analyses/probe_latent_groups/validate_a3.R --alpha-sd=2
+  run Rscript analyses/probe_latent_groups/a3_pinned_range.R 6 --alpha-sd=2
+  run Rscript analyses/probe_latent_groups/a3_pinned_range.R 12 --alpha-sd=2
   py analyses/probe_latent_groups/a0_predictive_summaries.py
   py analyses/probe_latent_groups/a3_prior_comparison.py
   py analyses/probe_latent_groups/export_fit_diagnostics.py           # fit_diagnostics.md, from the fit records

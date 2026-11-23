@@ -9,7 +9,7 @@ Which script produces which artifact, and the order they run in.
     .venv/bin/python scripts/build_manifest.py --check   # in CI
 ```
 
-154 scripts produce 277 tracked artifacts.
+154 scripts produce 278 tracked artifacts.
 
 Writes are detected from the call that performs them (`write_text`, `to_csv`, `savefig`, `save_all`, `savez`, `writeLines`, `saveRDS`, `write_json`), with paths resolved through each script's own module-level constants. A script whose output names come from its arguments declares its artifact families in a `MANIFEST_OUTPUTS` list of templates, listed here with their `{placeholders}`; the commands that fill them are in that script's docstring and in each findings file's header. Reads are deliberately NOT counted: an earlier regex version credited `21_signal_recovery.py` with producing `output/closure_posterior.npz`, which it only consumes and `53` writes.
 
@@ -72,7 +72,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 45 | `analyses/per_type/type_origination_calibration.py` | `output/findings/type_origination_calibration.csv`<br>`output/findings/type_origination_calibration.md` |
 | 46 | `analyses/per_type/type_origination_joint.py` | `output/findings/type_origination_joint.md` |
 | 47 | `analyses/probe_latent_groups/a0_intercept_prior.R` | `output/findings/a0_intercept_prior.md`<br>`output/probe_latent_groups/a0_intercept_prior.json` |
-| 48 | `analyses/probe_latent_groups/a0_pinned_nuisances.R` | `output/probe_latent_groups/a0_pinned_nuisances.json` |
+| 48 | `analyses/probe_latent_groups/a0_pinned_nuisances.R` | `output/probe_latent_groups/a0_pinned_nuisances%s.json` |
 | 49 | `analyses/probe_latent_groups/a1_mechanism_check.R` | `output/probe_latent_groups/a1_mechanism_check.json` |
 | 50 | `analyses/probe_latent_groups/a1_mode_check.R` | `output/probe_latent_groups/a1_mode_check.json` |
 | 51 | `analyses/probe_latent_groups/a1_mode_check_scattered.R` | `output/probe_latent_groups/a1_mode_check_scattered.json` |
@@ -80,14 +80,14 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | 53 | `analyses/probe_latent_groups/a1_nonugget_check.R` | `output/probe_latent_groups/a1_nonugget_check.json` |
 | 54 | `analyses/probe_latent_groups/a1_prior_check.R` | `output/findings/a1_prior_check.md`<br>`output/probe_latent_groups/a1_prior_check.json` |
 | 55 | `analyses/probe_latent_groups/a1_readout_crosscheck.py` | `output/findings/a1_readout_crosscheck.md` |
-| 56 | `analyses/probe_latent_groups/a3_pinned_range.R` | `output/findings/a3_pinned_rho%g.md` |
+| 56 | `analyses/probe_latent_groups/a3_pinned_range.R` | `output/findings/a3_pinned_rho%g%s.md`<br>`output/probe_latent_groups/a3_pinned_rho%g%s.json` |
 | 57 | `analyses/probe_latent_groups/a3_prior_comparison.py` | `output/findings/a3_prior_comparison.md` |
 | 58 | `analyses/probe_latent_groups/export_fit_diagnostics.py` | `output/findings/fit_diagnostics.csv`<br>`output/findings/fit_diagnostics.md` |
 | 59 | `analyses/probe_latent_groups/refit_a0_basin.R` | `figures/probe_latent_groups/a0_basin_pairs_alpha.png`<br>`output/findings/a0_basin_refit.md`<br>`output/probe_latent_groups/a0_refit_summary.json` |
 | 60 | `analyses/probe_latent_groups/site_fst_decomposition.py` | `output/findings/site_fst_decomposition.md` |
 | 61 | `analyses/probe_latent_groups/softmax_drift_check.py` | `output/findings/softmax_drift_check.md` |
-| 62 | `analyses/probe_latent_groups/validate_a1.R` | `output/findings/a1_validation.md`<br>`output/probe_latent_groups/a1_crosscheck_draws.json`<br>`output/probe_latent_groups/a1_validation_summary.json` |
-| 63 | `analyses/probe_latent_groups/validate_a3.R` | `output/findings/a3_validation.md`<br>`output/probe_latent_groups/a3_validation_summary.json` |
+| 62 | `analyses/probe_latent_groups/validate_a1.R` | `output/findings/a1_validation%s.md`<br>`output/probe_latent_groups/a1_crosscheck_draws.json`<br>`output/probe_latent_groups/a1_validation_summary%s.json` |
+| 63 | `analyses/probe_latent_groups/validate_a3.R` | `output/findings/a3_validation%s.md`<br>`output/probe_latent_groups/a3_validation_summary%s.json` |
 | 64 | `analyses/rims/rim_r1.py` | `output/probe_latent_groups/rim_r1_{kind}_{point}.csv` |
 | 65 | `analyses/rims/rim_r1_readings.py` | `output/findings/rim_r1.md` |
 | 66 | `analyses/14_drainage_basin.py` | `output/drainage_basin.md` |
@@ -298,10 +298,10 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/findings/a0_predictive_summaries.md` | `probe_latent_groups/a0_predictive_summaries.py` |
 | `output/findings/a1_prior_check.md` | `probe_latent_groups/a1_prior_check.R` |
 | `output/findings/a1_readout_crosscheck.md` | `probe_latent_groups/a1_readout_crosscheck.py` |
-| `output/findings/a1_validation.md` | `probe_latent_groups/validate_a1.R` |
-| `output/findings/a3_pinned_rho%g.md` | `probe_latent_groups/a3_pinned_range.R` |
+| `output/findings/a1_validation%s.md` | `probe_latent_groups/validate_a1.R` |
+| `output/findings/a3_pinned_rho%g%s.md` | `probe_latent_groups/a3_pinned_range.R` |
 | `output/findings/a3_prior_comparison.md` | `probe_latent_groups/a3_prior_comparison.py` |
-| `output/findings/a3_validation.md` | `probe_latent_groups/validate_a3.R` |
+| `output/findings/a3_validation%s.md` | `probe_latent_groups/validate_a3.R` |
 | `output/findings/abc_stability.md` | `55_abc_stability.py` |
 | `output/findings/area_logits.md` | `probe_latent_groups/area_logits.py` |
 | `output/findings/assemblage_phase_fit.md` | `96_assemblage_phase_fit.py` |
@@ -412,7 +412,7 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/phases_drift_robustness.md` | `24_phases_drift_robustness.py` |
 | `output/phases_vs_spatial_drift.md` | `23_phases_vs_spatial_drift.py` |
 | `output/probe_latent_groups/a0_intercept_prior.json` | `probe_latent_groups/a0_intercept_prior.R` |
-| `output/probe_latent_groups/a0_pinned_nuisances.json` | `probe_latent_groups/a0_pinned_nuisances.R` |
+| `output/probe_latent_groups/a0_pinned_nuisances%s.json` | `probe_latent_groups/a0_pinned_nuisances.R` |
 | `output/probe_latent_groups/a0_predictive_summaries.csv` | `probe_latent_groups/a0_predictive_summaries.py` |
 | `output/probe_latent_groups/a0_refit_summary.json` | `probe_latent_groups/refit_a0_basin.R` |
 | `output/probe_latent_groups/a1_crosscheck_draws.json` | `probe_latent_groups/validate_a1.R` |
@@ -422,8 +422,9 @@ Topologically sorted by sibling import: a script may be run at any point after e
 | `output/probe_latent_groups/a1_mode_check_scattered_nonugget.json` | `probe_latent_groups/a1_mode_check_scattered_nonugget.R` |
 | `output/probe_latent_groups/a1_nonugget_check.json` | `probe_latent_groups/a1_nonugget_check.R` |
 | `output/probe_latent_groups/a1_prior_check.json` | `probe_latent_groups/a1_prior_check.R` |
-| `output/probe_latent_groups/a1_validation_summary.json` | `probe_latent_groups/validate_a1.R` |
-| `output/probe_latent_groups/a3_validation_summary.json` | `probe_latent_groups/validate_a3.R` |
+| `output/probe_latent_groups/a1_validation_summary%s.json` | `probe_latent_groups/validate_a1.R` |
+| `output/probe_latent_groups/a3_pinned_rho%g%s.json` | `probe_latent_groups/a3_pinned_range.R` |
+| `output/probe_latent_groups/a3_validation_summary%s.json` | `probe_latent_groups/validate_a3.R` |
 | `output/probe_latent_groups/drift_extension_{point}.csv` | `per_type/drift_extension.py` |
 | `output/probe_latent_groups/per_class_resemblance.csv` | `probe_latent_groups/per_class_resemblance.py` |
 | `output/probe_latent_groups/per_type_table_C3_{point}.csv` | `per_type/per_class_table.py` |
