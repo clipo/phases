@@ -6,6 +6,61 @@ manuscript is affected.
 
 ---
 
+## 2026-11-23 — the validation fits under the Normal(0, 2) intercept prior rerun
+
+**Affects:** `run_all.sh`, `README.md`, `R/intercept_arm.R` (new),
+`analyses/probe_latent_groups/` (`a0_pinned_nuisances.R`, `a1_contracts.py`,
+`a3_contracts.py`, `validate_a1.R`, `validate_a3.R`, `a3_pinned_range.R`,
+`a3_prior_comparison.py`, `export_fit_diagnostics.py`),
+`tests/probe/test_intercept_arm.py` (new), `output/findings/` (the four
+validation tables named `*_alphaN0-2.md`, `a3_prior_comparison.md`,
+`fit_diagnostics.md` and `.csv`), `docs/manuscript/SUPPLEMENTAL_TEXT.*`,
+`MANIFEST.md`.
+**Manuscript affected:** **Yes, in values reported in the supplement. No
+conclusion changed. The main text is unchanged.**
+
+### What was wrong
+
+The entry of 2026-11-22 left the validation tables under the Normal(0, 2)
+class-intercept prior as the fits of October 2026. No committed script option
+could rerun them, so the Normal(0, 2) column of Table S5 and the supplement's
+latent-unit entry under that prior could not be reproduced from this
+repository.
+
+### What changed
+
+- The record writers and the validation scripts take the argument
+  `--alpha-sd=2` (`--alpha-sd 2` for the two Python scripts). With it they
+  simulate the records at the field scale and range of the spatial field
+  model's basin fit under Normal(0, 2), keep them in `data/stan/alphaN0-2/`,
+  fit them under that prior and write the `*_alphaN0-2` tables. Each
+  validation script stops if a record's stated prior is not the prior of the
+  run. `./run_all.sh --stan` now runs both priors.
+- The four validation tables under Normal(0, 2) were fitted on 2026-11-23
+  (R 4.6.2, rstan 2.32.7, StanHeaders 2.39.1.1) and replace the October
+  tables. Their records are simulated at a range of 202.6 km, where the
+  October tables print 204 km.
+- Latent-unit model under Normal(0, 2): 13 of the 14 recovery fits fail the
+  diagnostic gate (12 in October), all on R-hat, and so does the fit to the
+  record with no units. On that record the posterior median of the
+  between-unit scale is 0.44 (0.04 to 1.20), where October gave 0.52 (0.05 to
+  1.39). The medians on the five records at a true value of 0.5 are 0.27 to
+  0.48, as before.
+- Barrier model under Normal(0, 2): all 39 fits pass the gate at each of the
+  three range settings, as before. Every Normal(0, 2) cell of Table S5 moved.
+  The largest change is the upper end of the free-range row at a true value
+  of 0.25, 0.84 where October gave 1.14. The two statements the table
+  supports hold on the new values: with the range pinned, every range of
+  medians lies above the prior median of 1.35, and the ranges of medians at
+  adjacent true values overlap in every setting.
+- `fit_diagnostics.md` now lists 283 fits: 145 under Normal(0, 10), 137 under
+  Normal(0, 2) and one under the prior centered on the pooled log-odds. The
+  October file remains as `fit_diagnostics_2026-10.md`.
+- Supplement: the latent-unit entry under Normal(0, 2), the recovery-fits
+  entry of the sampler diagnostics, and the Normal(0, 2) column of Table S5.
+
+---
+
 ## 2026-11-22 — the Stan validation fits and four per-class tables rerun in pipeline order
 
 **Affects:** `run_all.sh`, `README.md`,

@@ -252,7 +252,7 @@ The latent-unit model could not tell a record with units from one without. On fi
 
 The barrier model's sampler passed every diagnostic check, but its estimates tracked the true value only weakly. Over six records simulated with no barrier, the posterior medians of the barrier parameter were 0.45 to 0.78. Over six records simulated with a barrier of 1.0, the posterior medians ranged from 0.82 to 2.31 (Figure 8B of the main text). The posteriors are wide. Three of the six medians at a barrier of 1.0 (0.82, 0.84 and 1.09) lie inside the 90 percent interval of every record simulated with no barrier, so an estimate near 1.0 from this model could come from a record with a large barrier or one with none. Other priors and other settings of the distance over which similarity declines shifted the estimates and did not separate the two cases (Table S5).
 
-**The latent-unit model under the Normal(0, 2) intercept prior.** The 14 recovery fits and the fit to the no-unit record were also run with a Normal(0, 2) class-intercept prior, on records simulated with the field scale and range that the basin fit gives under that prior (`a1_validation_alphaN0-2.md`). Twelve of the 14 recovery fits fail the sampler diagnostics under this prior as well, and so does the fit to the no-unit record. On the no-unit record, the posterior median of *σ*~g~ is 0.52 (0.05 to 1.39). On the five records simulated with a true value of 0.5, the medians are 0.27 to 0.48.
+**The latent-unit model under the Normal(0, 2) intercept prior.** The 14 recovery fits and the fit to the no-unit record were also run with a Normal(0, 2) class-intercept prior, on records simulated with the field scale and range that the basin fit gives under that prior (`a1_validation_alphaN0-2.md`). Thirteen of the 14 recovery fits fail the sampler diagnostics under this prior, one more than under Normal(0, 10), and so does the fit to the no-unit record. On the no-unit record, the posterior median of *σ*~g~ is 0.44 (0.04 to 1.20). On the five records simulated with a true value of 0.5, the medians are 0.27 to 0.48.
 
 **Sampler diagnostics.** Every Stan fit reported in the main text is reported with R-hat, bulk and tail effective sample size, divergent transitions, tree depth saturation, and the energy Bayesian fraction of missing information (E-BFMI). The values below are the largest R-hat and the smallest effective sample sizes and E-BFMI over all parameters in a fit, with the parameter of concern in parentheses. No fit listed here has a parameter with zero variance where variance is expected.
 
@@ -262,7 +262,7 @@ The barrier model's sampler passed every diagnostic check, but its estimates tra
 
 *The barrier model's equivalence fits* (`a3_validation.md`). These are two fits to the same record. The spatial field model: R-hat 1.0022 (a field value), bulk 1,129 (log posterior) and tail 2,042 (the range), no divergent transitions in 6,000 draws, none at the maximum tree depth of 12, and E-BFMI 0.715. The barrier model with the barrier fixed at zero: R-hat 1.0029 (a field value), bulk 1,182 and tail 1,495 (both for *τ*), no divergent transitions in 6,000 draws, none at the maximum tree depth of 12, and E-BFMI 0.760.
 
-*Recovery fits.* The latent-unit model has 14 recovery fits, and the barrier model has 39 recovery and pinned-range fits per prior-by-range setting. The committed recovery tables record whether each fit passed and, for a failure, which diagnostics failed. The numeric values of every diagnostic for every fit are tabulated in `fit_diagnostics.md` (147 fits, one row per fit, with the final sampler settings). The fits under the Normal(0, 2) intercept prior are tabulated in `fit_diagnostics_2026-10.md`. Twelve of the 14 latent-unit recovery fits fail. All twelve fail on R-hat. Seven of them also fail on effective sample size, two also on divergent transitions, and one also on the per-chain co-membership split. All 39 barrier-model free-range fits pass under both intercept priors. With the range pinned at 12 km under the Normal(0, 10) prior, 31 of 39 pass, and the eight that fail do so on divergent transitions.
+*Recovery fits.* The latent-unit model has 14 recovery fits, and the barrier model has 39 recovery and pinned-range fits per prior-by-range setting. The committed recovery tables record whether each fit passed and, for a failure, which diagnostics failed. The numeric values of every diagnostic for every fit are tabulated in `fit_diagnostics.md` (283 fits, one row per fit, with the final sampler settings: 145 under the Normal(0, 10) intercept prior, 137 under Normal(0, 2), and one under the prior centered on the pooled log-odds). The Normal(0, 2) fits of October 2026, which the fits of 2026-11-23 replace, remain tabulated in `fit_diagnostics_2026-10.md`. Under the Normal(0, 10) prior, twelve of the 14 latent-unit recovery fits fail. All twelve fail on R-hat. Seven of them also fail on effective sample size, two also on divergent transitions, and one also on the per-chain co-membership split. Under the Normal(0, 2) prior, thirteen of the 14 fail, all on R-hat. Eight of the thirteen also fail on effective sample size and two also on divergent transitions. All 39 barrier-model free-range fits pass under both intercept priors. With the range pinned at 12 km, 31 of 39 pass under the Normal(0, 10) prior, the eight failures all on divergent transitions, and all 39 pass under Normal(0, 2).
 
 *Rim posteriors.* The rim posteriors are direct conjugate draws (4,000 draws, two seeds), for which sampler diagnostics do not apply. Their Monte Carlo errors are given beside each median in `rim_r1.md`.
 
@@ -272,21 +272,21 @@ The barrier model's sampler passed every diagnostic check, but its estimates tra
 
 | range | true *ω* | Normal(0, 2) intercept prior: posterior medians | Normal(0, 10) intercept prior: posterior medians |
 |---|---|---|---|
-| free | 0 | 0.47 to 1.16 (n 6) | 0.45 to 0.78 (n 6) |
-| free | 0.25 | 0.44 to 1.14 (n 6) | 0.51 to 0.84 (n 6) |
-| free | 0.5 | 0.64 to 2.05 (n 6) | 0.43 to 1.66 (n 6) |
-| free | 1 | 0.76 to 2.59 (n 6) | 0.82 to 2.31 (n 6) |
-| free | diagnostics | 39 of 39 pass (at the first sampler setting in 27) | 39 of 39 pass (at the first sampler setting in 25) |
-| 6 km | 0 | 2.83 to 3.49 (n 6) | 0.78 to 1.37 (n 6) |
-| 6 km | 0.25 | 2.58 to 3.35 (n 6) | 0.72 to 1.31 (n 6) |
-| 6 km | 0.5 | 3.12 to 3.72 (n 6) | 1.09 to 1.92 (n 6) |
-| 6 km | 1 | 3.01 to 4.20 (n 6) | 1.07 to 2.52 (n 6) |
+| free | 0 | 0.53 to 1.13 (n 6) | 0.45 to 0.78 (n 6) |
+| free | 0.25 | 0.45 to 0.84 (n 6) | 0.51 to 0.84 (n 6) |
+| free | 0.5 | 0.65 to 2.48 (n 6) | 0.43 to 1.66 (n 6) |
+| free | 1 | 0.80 to 2.58 (n 6) | 0.82 to 2.31 (n 6) |
+| free | diagnostics | 39 of 39 pass (at the first sampler setting in 25) | 39 of 39 pass (at the first sampler setting in 25) |
+| 6 km | 0 | 2.87 to 3.43 (n 6) | 0.78 to 1.37 (n 6) |
+| 6 km | 0.25 | 2.49 to 3.45 (n 6) | 0.72 to 1.31 (n 6) |
+| 6 km | 0.5 | 3.14 to 3.81 (n 6) | 1.09 to 1.92 (n 6) |
+| 6 km | 1 | 3.00 to 4.21 (n 6) | 1.07 to 2.52 (n 6) |
 | 6 km | diagnostics | 39 of 39 pass (at the first sampler setting in 34) | 39 of 39 pass (at the first sampler setting in 32) |
-| 12 km | 0 | 2.74 to 3.40 (n 6) | 0.82 to 1.24 (n 2) |
-| 12 km | 0.25 | 2.34 to 3.25 (n 6) | 0.62 to 1.10 (n 4) |
-| 12 km | 0.5 | 2.91 to 3.58 (n 6) | 0.72 to 1.84 (n 6) |
-| 12 km | 1 | 2.93 to 4.19 (n 6) | 1.09 to 2.35 (n 5) |
-| 12 km | diagnostics | 39 of 39 pass (at the first sampler setting in 30) | 31 of 39 pass (at the first sampler setting in 20); fail: own_G1_om0_r3, own_L_om0_r1, own_L_om0_r2, own_L_om0_r3, own_L_om0.25_r1, own_L_om0.25_r2, own_L_om1_r3, slope_rho60_r2 |
+| 12 km | 0 | 2.81 to 3.33 (n 6) | 0.82 to 1.24 (n 2) |
+| 12 km | 0.25 | 2.39 to 3.40 (n 6) | 0.62 to 1.10 (n 4) |
+| 12 km | 0.5 | 3.02 to 3.77 (n 6) | 0.72 to 1.84 (n 6) |
+| 12 km | 1 | 2.91 to 4.21 (n 6) | 1.09 to 2.35 (n 5) |
+| 12 km | diagnostics | 39 of 39 pass (at the first sampler setting in 33) | 31 of 39 pass (at the first sampler setting in 20); fail: own_G1_om0_r3, own_L_om0_r1, own_L_om0_r2, own_L_om0_r3, own_L_om0.25_r1, own_L_om0.25_r2, own_L_om1_r3, slope_rho60_r2 |
 
 **The rim priors.** Each site frequency of a rim attribute has a Beta(1/2, 1/2) prior, and each composition has a Dirichlet(1/2) prior. We examined them in the same four ways.
 

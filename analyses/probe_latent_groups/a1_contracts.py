@@ -20,10 +20,14 @@ Gabriel edges, group scale free). The real-data A1 contract is the A0
 contract plus the same A1 fields.
 
 Seeds: record r of level L uses SeedSequence(2026101700 + 100 L + r).
-Usage: .venv/bin/python analyses/probe_latent_groups/a1_contracts.py
+Usage: .venv/bin/python analyses/probe_latent_groups/a1_contracts.py [--alpha-sd 2]
+With --alpha-sd 2 the records are simulated at the Normal(0, 2) basin fit's
+values and written to data/stan/alphaN0-2/ with that prior (the
+prior-sensitivity arm).
 """
 from __future__ import annotations
 
+import argparse
 import importlib
 import json
 import sys
@@ -39,6 +43,10 @@ from mls_emergence.probe import generators as gen
 from mls_emergence.probe import readouts as ro
 from mls_emergence.signatures.variance import cultural_fst
 
+BASE = ROOT / "data" / "stan"
+PINDIR = ROOT / "output" / "probe_latent_groups"
+# The Normal(0, 10) arm's records directory and pinned values. main() uses the arm's own pair
+# (intercept_arm); these module-level names are what scripts/build_manifest.py resolves.
 OUT = ROOT / "data" / "stan"
 PIN = ROOT / "output" / "probe_latent_groups" / "a0_pinned_nuisances.json"
 G = 3
@@ -48,6 +56,34 @@ LEVELS = {0: [0.0], 1: [0.25] * 5, 2: [0.5] * 5, 3: [1.0] * 2, 4: [2.0] * 2}   #
 # labelings), at sigma_g 0.5 and 1.0, to test whether A1 recovers groups the smooth field cannot mimic.
 SCATTERED = {5: [0.5, 1.0]}
 SEED_BASE = 2026101700
+
+
+def intercept_arm(alpha_sd: float) -> dict:
+    """Records directory, pinned-values file and prior SD for one intercept-prior arm.
+
+    10 is the paper's Normal(0, 10) prior (the default paths). 2 is the
+    prior-sensitivity arm: records simulated at the Normal(0, 2) basin fit's
+    values, written to data/stan/alphaN0-2/ with prior_alpha_sd 2. Any other
+    value raises.
+    """
+    if alpha_sd == 10:
+        return {"sd": 10.0, "out": BASE, "pin": PINDIR / "a0_pinned_nuisances.json"}
+    if alpha_sd == 2:
+        return {"sd": 2.0, "out": BASE / "alphaN0-2", "pin": PINDIR / "a0_pinned_nuisances_alphaN0-2.json"}
+    raise ValueError("alpha_sd takes 10 (the paper's prior) or 2 (the prior-sensitivity arm)")
+
+
+def arm_fields(base: dict, pin: dict, arm: dict) -> dict:
+    """The basin contract's fields with the arm's intercept prior; refuses pinned values from the other prior's fit."""
+    if float(base["prior_alpha_sd"]) != 10.0:
+        raise ValueError(f"basin_composition.json carries prior_alpha_sd {base['prior_alpha_sd']}, expected the paper's 10")
+    if float(pin.get("prior_alpha_sd", arm["sd"])) != arm["sd"]:
+        raise ValueError(f"the pinned values were written for Normal(0, {pin['prior_alpha_sd']:g}), not Normal(0, {arm['sd']:g})")
+    if arm["sd"] != 10.0 and "prior_alpha_sd" not in pin:
+        raise ValueError("the pinned values do not state their prior; rerun a0_pinned_nuisances.R --alpha-sd=2")
+    f = {k: v for k, v in base.items() if not k.startswith("_") and k != "y"}
+    f["prior_alpha_sd"] = arm["sd"]
+    return f
 
 
 def a1_fields(edges):
@@ -68,7 +104,10 @@ def simulate(D, totals, alpha_sum, sigma, tau, rho, sigma_g, z, rng):
     return y, f, delta
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--alpha-sd", type=float, default=10.0, help="intercept prior SD of the arm: 10 (default, the paper's prior) or 2")
+    arm = intercept_arm(ap.parse_args(argv).alpha_sd); OUT, PIN = arm["out"], arm["pin"]
     counts, coords = load_curated(); fp = data_fingerprint(counts, coords)
     y_real = counts.to_numpy(int); totals = y_real.sum(1); D = geo_km(coords.to_numpy(float))
     pin = json.loads(PIN.read_text())
@@ -77,8 +116,8 @@ def main() -> int:
     names = sorted(set(labels)); z = np.array([names.index(v) for v in labels])
     sizes = np.bincount(z, minlength=G); pi_true = sizes / sizes.sum()
     edges = gen.gabriel_edges(D)
-    base = json.loads((OUT / "basin_composition.json").read_text())
-    a0_fields = {k: v for k, v in base.items() if not k.startswith("_") and k not in ("y",)}
+    base = json.loads((BASE / "basin_composition.json").read_text())
+    a0_fields = arm_fields(base, pin, arm)
     alpha_sum = np.asarray(pin["alpha_plus_field_mean"], float)
     sigma, tau, rho = float(pin["sigma"]), float(pin["tau"]), float(pin["rho"])
     OUT.mkdir(parents=True, exist_ok=True)
@@ -114,7 +153,7 @@ def main() -> int:
             payload["_truth"] = truth; payload["_provenance"] = {"derived_from": fp, "note": "simulated from A1 at the real geometry and totals; scattered groups"}
             (OUT / f"a1_{tag}.json").write_text(json.dumps(payload)); truth_all[tag] = {k: v for k, v in truth.items() if k != "delta"}
             print(f"  {tag}: sigma_g {sg:g}, Delta_true {truth['Delta_true']:.3f}, true hard coherence {truth['coherence_true_hard']:.3f}, realized between-group F_ST {truth['realized_fst_between_true_groups']:.4f}")
-    real = dict(base); real.update(a1_fields(edges)); real["_edges_note"] = "Gabriel graph on geo_km distances (D14)"
+    real = dict(base); real["prior_alpha_sd"] = arm["sd"]; real.update(a1_fields(edges)); real["_edges_note"] = "Gabriel graph on geo_km distances (D14)"
     (OUT / "basin_composition_a1.json").write_text(json.dumps(real))
     (OUT / "a1_truth.json").write_text(json.dumps(truth_all, indent=1))
     print(f"wrote {len(truth_all)} own-generator records and basin_composition_a1.json to {OUT}")

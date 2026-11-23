@@ -18,10 +18,15 @@ omega free) and "_truth":
    S2 is Phillips's three areas (their truth), for S0 the G1 split.
 
 Seeds: SeedSequence(2026101720 + 1000 * kind + 100 * level + r).
-Usage: .venv/bin/python analyses/probe_latent_groups/a3_contracts.py
+Usage: .venv/bin/python analyses/probe_latent_groups/a3_contracts.py [--alpha-sd 2]
+With --alpha-sd 2 the records are simulated at the Normal(0, 2) basin fit's
+values and written to data/stan/alphaN0-2/ with that prior (the
+prior-sensitivity arm). The simulator records (kind 2) do not depend on the
+prior and are the same in both arms apart from the prior field.
 """
 from __future__ import annotations
 
+import argparse
 import importlib
 import json
 import sys
@@ -39,6 +44,10 @@ from mls_emergence.probe import spans
 from mls_emergence.signatures.variance import cultural_fst
 from mls_emergence.transmission.spatial import drift_record
 
+BASE = ROOT / "data" / "stan"
+PINDIR = ROOT / "output" / "probe_latent_groups"
+# The Normal(0, 10) arm's records directory and pinned values. main() uses the arm's own pair
+# (intercept_arm); these module-level names are what scripts/build_manifest.py resolves.
 OUT = ROOT / "data" / "stan"
 PIN = ROOT / "output" / "probe_latent_groups" / "a0_pinned_nuisances.json"
 POINTS = ROOT / "analyses" / "probe_latent_groups" / "operating_points.json"
@@ -49,6 +58,34 @@ SLOPE_RHOS = (30.0, 60.0)
 LEAKS = {"S0": 1.0, "S1": 0.1, "S2": 0.03}
 N_REC = 3
 SEED_BASE = 2026101720
+
+
+def intercept_arm(alpha_sd: float) -> dict:
+    """Records directory, pinned-values file and prior SD for one intercept-prior arm.
+
+    10 is the paper's Normal(0, 10) prior (the default paths). 2 is the
+    prior-sensitivity arm: records simulated at the Normal(0, 2) basin fit's
+    values, written to data/stan/alphaN0-2/ with prior_alpha_sd 2. Any other
+    value raises.
+    """
+    if alpha_sd == 10:
+        return {"sd": 10.0, "out": BASE, "pin": PINDIR / "a0_pinned_nuisances.json"}
+    if alpha_sd == 2:
+        return {"sd": 2.0, "out": BASE / "alphaN0-2", "pin": PINDIR / "a0_pinned_nuisances_alphaN0-2.json"}
+    raise ValueError("alpha_sd takes 10 (the paper's prior) or 2 (the prior-sensitivity arm)")
+
+
+def arm_fields(base: dict, pin: dict, arm: dict) -> dict:
+    """The basin contract's fields with the arm's intercept prior; refuses pinned values from the other prior's fit."""
+    if float(base["prior_alpha_sd"]) != 10.0:
+        raise ValueError(f"basin_composition.json carries prior_alpha_sd {base['prior_alpha_sd']}, expected the paper's 10")
+    if float(pin.get("prior_alpha_sd", arm["sd"])) != arm["sd"]:
+        raise ValueError(f"the pinned values were written for Normal(0, {pin['prior_alpha_sd']:g}), not Normal(0, {arm['sd']:g})")
+    if arm["sd"] != 10.0 and "prior_alpha_sd" not in pin:
+        raise ValueError("the pinned values do not state their prior; rerun a0_pinned_nuisances.R --alpha-sd=2")
+    f = {k: v for k, v in base.items() if not k.startswith("_") and k != "y"}
+    f["prior_alpha_sd"] = arm["sd"]
+    return f
 
 
 def a3_fields(regions):
@@ -78,7 +115,10 @@ def choose_line(labels, cands) -> dict:
     return pl.best_line_for(np.where(np.asarray(labels) == "Parkin", 1, 2), cands)
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--alpha-sd", type=float, default=10.0, help="intercept prior SD of the arm: 10 (default, the paper's prior) or 2")
+    arm = intercept_arm(ap.parse_args(argv).alpha_sd); OUT, PIN = arm["out"], arm["pin"]; OUT.mkdir(parents=True, exist_ok=True)
     counts, coords = load_curated(); fp = data_fingerprint(counts, coords)
     y_real = counts.to_numpy(int); totals = y_real.sum(1); xy = coords.to_numpy(float); D = geo_km(xy)
     pin = json.loads(PIN.read_text()); alpha_sum = np.asarray(pin["alpha_plus_field_mean"], float)
@@ -90,8 +130,8 @@ def main() -> int:
     cands = pl.candidate_lines(xy)
     line = choose_line(labels, cands)
     placements = {"G1": g1, "L": line["regions"]}
-    base = json.loads((OUT / "basin_composition.json").read_text())
-    a0_fields = {k: v for k, v in base.items() if not k.startswith("_") and k != "y"}
+    base = json.loads((BASE / "basin_composition.json").read_text())
+    a0_fields = arm_fields(base, pin, arm)
     truth_all = {}
 
     def write(tag, y, regions, truth):
