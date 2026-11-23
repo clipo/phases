@@ -258,13 +258,20 @@ Rscript analyses/00_setup/01_verify_toolchain.R    # compiles and samples a mode
 
 `--stan` runs `analyses/probe_latent_groups/refit_a0_basin.R` (the spatial
 field model on the basin and the prior checks of Table S4), `a0_intercept_prior.R` (the three
-intercept priors of Figure 5), `validate_a1.R` and `validate_a3.R` (the
-recovery tests of Figure 8), `a1_prior_check.R`, `a3_pinned_range.R` at 6 and
-12 km (Table S5), and then the Python summaries that read the fit records,
-`a0_predictive_summaries.py` and `a3_prior_comparison.py`. Each script sets
-`options(mc.cores = 4L)`. The versions the committed findings were produced
-with are recorded in `output/findings/environment_r.md` (R 4.3.3, rstan
-2.32.7, aarch64 Linux) and `output/findings/environment_python.md`.
+intercept priors of Figure 5), `a0_pinned_nuisances.R`, `a1_contracts.py` and
+`a3_contracts.py` (the simulated validation records, which take their field
+scale and range from the basin fit), `validate_a1.R` and `validate_a3.R` (the
+recovery tests of Figure 8), `a3_pinned_range.R` at 6 and 12 km (Table S5),
+and then the Python summaries that read the fit records,
+`a0_predictive_summaries.py`, `a3_prior_comparison.py` and
+`export_fit_diagnostics.py`. Each script sets `options(mc.cores = 4L)`. The
+committed Stan findings were produced on 2026-11-22 with R 4.6.2, rstan
+2.32.7 and StanHeaders 2.39.1.1 on macOS (arm64), as the header of each
+findings file records. Sampler output differs in the second or third digit
+between R and StanHeaders versions at the same seed, so a rerun reproduces
+the conclusions and the gate outcomes of most fits, not the files. The
+Normal(0, 2) tables (`*_alphaN0-2.md`) and `a1_prior_check.md` are the fits
+of October 2026 and are not rerun by `--stan`.
 
 ### Tests
 

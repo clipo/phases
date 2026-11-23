@@ -34,6 +34,7 @@ zsc <- (p3$mean - p0$mean) / sqrt(p0$mcse_mean^2 + p3$mcse_mean^2)
 cat(sprintf("equivalence: max |z| over %d shared quantities %.2f (%s)\n", length(zsc), max(abs(zsc)), p0$variable[which.max(abs(zsc))]))
 
 files <- sort(list.files(here("data", "stan"), pattern = "^a3_(own|slope|sim)_.*\\.json$", full.names = TRUE))
+if (length(files) == 0) stop("no validation records in data/stan; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R and then a3_contracts.py")
 exemplar_done <- character()
 for (f in files) {
   tag <- sub("^a3_(.*)\\.json$", "\\1", basename(f)); d <- read_a3(f); tr <- attr(d, "provenance")$`_truth`

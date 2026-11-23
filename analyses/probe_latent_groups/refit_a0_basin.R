@@ -24,7 +24,6 @@ source(here("R", "diagnostic_plots.R"))
 options(mc.cores = 4L)
 
 MODEL <- here("stan", "spatial", "composition_gp_marginal.stan")
-BASE_COMMIT <- "bb2fd21"   # last commit before the 2026-10-16 additions to the model file
 FIG  <- here("figures", "probe_latent_groups")
 OUTD <- here("output", "probe_latent_groups")
 FIND <- here("output", "findings", "a0_basin_refit.md")
@@ -135,8 +134,11 @@ for (f in rec_files) {
   d <- read_stan_data(f); truth <- attr(d, "provenance")$`_truth`
   # Third rung added 2026-11-03: under the Normal(0, 10) intercept prior the share 0.9, rho 5 km
   # record stopped at rung 2 with 11 divergences and tail ESS 205 on rho (rule 17: fix, not report).
+  # Fourth rung added 2026-11-22: under R 4.6.2 and StanHeaders 2.39.1.1 the same record ended rung 3
+  # with 12 divergent transitions in 24,000 draws.
   r <- fit_cached(paste0("a0_recovery_", tag), MODEL, d, gated = GATED, chains = 4L, seed = SEED, sm = sm,
-                  ladder = c(GP_LADDER, list(list(iter = 12000L, warmup = 6000L, adapt_delta = 0.999, max_treedepth = 14L))))
+                  ladder = c(GP_LADDER, list(list(iter = 12000L, warmup = 6000L, adapt_delta = 0.999, max_treedepth = 14L),
+                                             list(iter = 16000L, warmup = 8000L, adapt_delta = 0.9999, max_treedepth = 15L))))
   note(paste0("a0_recovery_", tag), r); cat(diag_line(r$diag, tag), "\n")
   pt <- post_table(r$fit, c("spatial_share", "rho", "sigma", "tau[1]"))
   tv <- c(spatial_share = truth$spatial_share, rho = truth$rho, sigma = truth$sigma, `tau[1]` = truth$tau)
@@ -148,8 +150,6 @@ for (f in rec_files) {
 # ---------------------------------------------------------------------------
 # Findings file
 # ---------------------------------------------------------------------------
-diff_txt <- tryCatch(system2("git", c("diff", BASE_COMMIT, "--", "stan/spatial/composition_gp_marginal.stan"),
-                             stdout = TRUE, stderr = TRUE), error = function(e) "git diff unavailable")
 ver <- software_versions()
 L <- c(
   "# A0 refit on the real basin data, with corrected diagnostics and the rule-20 program",
@@ -170,8 +170,6 @@ L <- c(
   sprintf("Software: %s; rstan %s; StanHeaders %s; posterior %s; loo %s; bayesplot %s. Stan source sha256 `%s`; fit layer sha256 `%s`.",
           ver$R, ver$rstan, ver$StanHeaders, ver$posterior, ver$loo, ver$bayesplot, stan_source_hash(MODEL)$sha256, layer_hash()),
   "",
-  sprintf("## Changes to the model file since %s (model block unchanged except the third rho-prior case)", BASE_COMMIT),
-  "", "```diff", diff_txt, "```", "",
   "## 1. The refit",
   "",
   sprintf("Gate: %s%s. Rung %d (iter %d, warmup %d, adapt_delta %.2f, max_treedepth %d); %.0f s wall time (4 chains in parallel); %s.",

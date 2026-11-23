@@ -19,6 +19,7 @@ read_a3 <- function(f) { d <- read_stan_data(f); d$region <- matrix(as.integer(u
 post <- function(fit, pars) { dd <- posterior::subset_draws(posterior::as_draws_array(fit), variable = pars)
   as.data.frame(posterior::summarise_draws(dd, "median", ~posterior::quantile2(.x, probs = c(0.05, 0.95)))) }
 files <- sort(list.files(here("data", "stan"), pattern = "^a3_(own|slope|sim)_.*\\.json$", full.names = TRUE))
+if (length(files) == 0) stop("no validation records in data/stan; write them first with analyses/probe_latent_groups/a0_pinned_nuisances.R and then a3_contracts.py")
 rows <- list()
 for (f in files) {
   tag <- sub("^a3_(.*)\\.json$", "\\1", basename(f)); d <- read_a3(f); tr <- attr(d, "provenance")$`_truth`
