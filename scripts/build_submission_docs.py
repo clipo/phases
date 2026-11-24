@@ -51,6 +51,15 @@ HALF_POINTS_OTHER = 20    # 10 pt
 SKIP = {".DS_Store"}
 
 
+def skipped(name: str) -> bool:
+    """Files in the submission folder that are not part of the upload archive.
+
+    "~$" files are the lock files Word leaves beside an open document. "AQ-S-*.pdf"
+    is the PDF the journal's submission system builds from the uploaded files.
+    """
+    return name in SKIP or name.startswith("~$") or (name.startswith("AQ-S-") and name.endswith(".pdf"))
+
+
 def run(cmd: list[str], cwd: Path, strict: bool = False) -> None:
     r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
     if r.returncode != 0:
@@ -126,7 +135,7 @@ def build_letter() -> int:
 
 
 def archive() -> int:
-    files = sorted(p for p in SUB.rglob("*") if p.is_file() and p.name not in SKIP)
+    files = sorted(p for p in SUB.rglob("*") if p.is_file() and not skipped(p.name))
     ARCHIVE.unlink(missing_ok=True)
     with zipfile.ZipFile(ARCHIVE, "w", zipfile.ZIP_DEFLATED) as z:
         for p in files:

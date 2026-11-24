@@ -122,6 +122,12 @@ four `per_type_generators_*_secondary*` tables), `figures/`,
   was not found. The tables are regenerated to the values a rerun under NumPy
   2.5.4 gives. The paper quotes none of the five values. The ten
   primary-point tables and the regional-drift summary reproduce exactly.
+  *Note added 2026-11-24:* the cause was found on 2026-11-23, and the count
+  above is a miscount. Six cells differ, not five. The cause is the CPU
+  architecture of the NumPy build: an x86_64 build of NumPy 2.5.4 reproduces
+  the October tables in every cell, and the committed tables are the arm64
+  values. `README.md` (Level 2) gives the detail. The paper quotes none of
+  the six values.
 - The three validation scripts now stop with an error when their records are
   absent.
 

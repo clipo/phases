@@ -205,7 +205,8 @@ slow part; they use `multiprocessing` and every record is seeded from a
 `analyses/probe_latent_groups/operating_points.json`.
 
 **A seeded rerun reproduces a committed findings file only under the NumPy
-version that produced it.** NumPy 2.5 changed the draws
+version that produced it, and for a few cells only on the same CPU
+architecture.** NumPy 2.5 changed the draws
 `Generator.multinomial` returns from a given state. The simulator time
 scales (`analyses/probe_latent_groups/time_scales.py`,
 `output/findings/simulator_time_scales.md`) and the per-class,
@@ -235,9 +236,24 @@ Checked on 2026-11-21 for the time scales and the rim analysis: under NumPy
 reproduces every value of `output/findings/rim_r1.md`. Under NumPy 2.4.6,
 `time_scales.py` gives a local time scale of 171 steps at the primary
 operating point where the committed file has 182, and the rim commands give
-different neutral bands. The per-class and regional-drift
-tables were not rerun on that date. Scripts that draw no random numbers, such
+different neutral bands. Scripts that draw no random numbers, such
 as the data products and `painted_by_type.py`, do not depend on the version.
+
+The per-class and regional-drift tables were rerun on 2026-11-22 under NumPy
+2.5.4 on macOS (arm64). The ten primary-point tables and the regional-drift
+summary reproduced exactly. Four secondary-point tables
+(`per_type_generators_C3_secondary.md` and three of the
+`per_type_generators_M_secondary_*` tables) differed from the files committed
+in October in six cells, and the committed files are now the arm64 values.
+The cause is the CPU architecture of the NumPy build. An x86_64 build of
+NumPy 2.5.4, run on 2026-11-23, reproduces the October tables in every cell.
+In the two records traced, `Generator.multinomial` returned sherd counts that
+differ by one sherd in two classes at one site between the two builds, from
+identical probabilities and an identical generator state. A rerun on an
+x86_64 machine therefore gives the October values in those six cells. Five of
+them are band endpoints that differ in the last printed digit, and the sixth
+is a lower endpoint of 0.0033 where the committed table has 0.0050. The paper
+quotes none of the six.
 
 ### Level 3: the Stan fits
 
@@ -293,7 +309,9 @@ workspace (not published), two that need the parent model package of the
 earlier version of the study (`monument-mls`, see `pyproject.toml`), and three
 that compare against tables produced under NumPy 2.5.4. Checked in a fresh
 clone on 2026-11-21 under the pinned environment: 441 passed, 11 skipped, 1
-failed, the failure being the known issue below.
+failed, the failure being the known issue below. That count predates
+`tests/probe/test_intercept_arm.py`, added on 2026-11-23, and the full suite
+has not been counted again since.
 
 Known issue: `tests/phasecheck/test_copying_model.py::test_model_comparison_tells_a_restricted_record_from_an_unrestricted_one`
 fails on 3 of its 80 records under numpy 2.4.6, scipy 1.18.1 and pandas 3.0.6.
@@ -442,7 +460,7 @@ analyses/00_setup/        R dependency install, toolchain check, environment rec
 src/mls_emergence/        the package: transmission (the copying model), probe (generators, readouts, rivals), per_type, rims, signatures, dataio
 src/phasecheck/           the phase tests as a tool for other data (docs/PHASECHECK.md)
 stan/spatial/             the Stan programs for the spatial field (A0), latent-unit (A1) and barrier (A3) models, and shared kernel functions
-R/                        fit_spatial.R (fitting, diagnostics, gate, cache) and diagnostic_plots.R
+R/                        fit_spatial.R (fitting, diagnostics, gate, cache), intercept_arm.R (the --alpha-sd argument of the validation scripts) and diagnostic_plots.R
 scripts/                  matrix and table builders, the manifest builder, the figure-claim and sign checks, the release sync
 tests/                    pytest suites; tests/testthat/ for R
 data/                     source tables and geospatial layers (data/README.md)
